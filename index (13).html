@@ -1,0 +1,1448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cedar Grove Cemetery · University of Notre Dame</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#0c2340;--navy-mid:#1a3a5c;--navy-light:#2e5a84;
+  --gold:#c99a2e;--gold-light:#e2b84a;--gold-pale:#f5e8c4;
+  --ivory:#faf8f4;--ivory-mid:#f2ede4;--ivory-dark:#e8e1d4;
+  --stone:#d4cfc6;--gray:#e9ecef;
+  --text:#1a2332;--text-mid:#3d4f63;--text-lt:#8494a7;--border:#ddd8ce;--white:#fff;
+  --av:#2d6a4f;--av-bg:#eaf4ef;--av-f:rgba(45,106,79,.45);
+  --rs:#92650a;--rs-bg:#fdf3dc;--rs-f:rgba(146,101,10,.42);
+  --sl:#1d4e89;--sl-bg:#e8f0fb;--sl-f:rgba(29,78,137,.4);
+  --oc:#7b2d2d;--oc-bg:#faeaea;--oc-f:rgba(123,45,45,.45);
+  --hl:#5a3472;--hl-bg:#f0eaf8;--hl-f:rgba(90,52,114,.4);
+  --tr:#3a6b3a;--tr-bg:#e6f0e6;--tr-f:rgba(58,107,58,.22);
+  --s1:0 1px 3px rgba(12,35,64,.07);--s2:0 4px 12px rgba(12,35,64,.09);--s3:0 12px 40px rgba(12,35,64,.12);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--ivory);color:var(--text);font-family:'DM Sans',sans-serif;font-weight:300;line-height:1.5;-webkit-font-smoothing:antialiased;}
+h1,h2,h3{font-family:'Libre Baskerville',Georgia,serif;font-weight:400;}
+/* LOADING */
+#ld{position:fixed;inset:0;z-index:9999;background:var(--navy);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:18px;transition:opacity .6s,visibility .6s;}
+#ld.gone{opacity:0;visibility:hidden;}
+#ld h2{font-family:'Libre Baskerville',serif;font-size:1.4rem;color:var(--ivory);font-weight:400;letter-spacing:.04em;}
+#ld p{font-size:.7rem;letter-spacing:.22em;text-transform:uppercase;color:rgba(255,255,255,.36);}
+.ldx{animation:br 2.4s ease-in-out infinite;}
+@keyframes br{0%,100%{opacity:.4;transform:scale(.97)}50%{opacity:1;transform:scale(1.04)}}
+/* HEADER */
+#hdr{background:var(--navy);border-bottom:3px solid var(--gold);padding:0 28px;height:58px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:800;box-shadow:0 2px 16px rgba(12,35,64,.28);}
+.hb{display:flex;align-items:center;gap:14px;}
+.hb h1{font-size:.96rem;color:var(--ivory);letter-spacing:.02em;line-height:1.2;}
+.hb span{font-family:'DM Sans',sans-serif;font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.38);}
+.hn{display:flex;align-items:center;gap:2px;}
+.nb{background:transparent;border:none;cursor:pointer;color:rgba(255,255,255,.55);padding:6px 13px;border-radius:4px;font-family:'DM Sans',sans-serif;font-size:.72rem;transition:all .18s;white-space:nowrap;}
+.nb:hover{color:var(--ivory);background:rgba(255,255,255,.08);}
+.nb.gd{background:var(--gold);color:var(--navy);font-weight:500;padding:6px 15px;margin-left:6px;}
+.nb.gd:hover{background:var(--gold-light);}
+.mw{display:flex;background:rgba(255,255,255,.08);padding:3px;border-radius:6px;margin-left:10px;}
+.mb{padding:4px 11px;border-radius:4px;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:.66rem;color:rgba(255,255,255,.42);background:transparent;transition:all .18s;}
+.mb.on{background:var(--white);color:var(--navy);font-weight:500;}
+.ew{position:relative;}
+.em{display:none;position:absolute;top:calc(100%+5px);right:0;background:var(--white);border:1.5px solid var(--border);border-radius:8px;box-shadow:var(--s3);z-index:900;min-width:220px;overflow:hidden;}
+.em.open{display:block;}
+.ei{padding:10px 15px;cursor:pointer;font-size:.76rem;color:var(--text);border-bottom:1px solid var(--gray);transition:background .14s;display:flex;align-items:center;gap:9px;}
+.ei:last-child{border-bottom:none;}.ei:hover{background:var(--ivory);}
+/* TOOLBAR */
+#tb{background:var(--white);border-bottom:1px solid var(--border);padding:0 28px;height:50px;display:flex;align-items:center;gap:12px;position:sticky;top:58px;z-index:700;box-shadow:var(--s1);}
+.sw{position:relative;flex:0 0 240px;}
+.sw input{width:100%;background:var(--ivory);border:1.5px solid var(--border);border-radius:6px;padding:6px 28px 6px 10px;font-family:'DM Sans',sans-serif;font-size:.77rem;color:var(--text);outline:none;transition:border-color .18s,box-shadow .18s;}
+.sw input:focus{border-color:var(--navy-light);box-shadow:0 0 0 3px rgba(46,90,132,.1);}
+.si{position:absolute;right:8px;top:50%;transform:translateY(-50%);color:var(--text-lt);font-size:.8rem;pointer-events:none;}
+#sdd{position:absolute;top:calc(100%+5px);left:0;right:0;background:var(--white);border:1.5px solid var(--border);border-radius:8px;box-shadow:var(--s3);z-index:1000;overflow:hidden;display:none;}
+#sdd.open{display:block;}
+.sdi{padding:9px 12px;cursor:pointer;border-bottom:1px solid var(--gray);transition:background .14s;display:flex;justify-content:space-between;align-items:center;}
+.sdi:hover{background:var(--ivory);}
+.sdn{font-size:.77rem;color:var(--text);}.sdm{font-size:.64rem;color:var(--text-lt);}
+.sep{width:1px;height:20px;background:var(--border);flex-shrink:0;}
+.fr{display:flex;gap:4px;align-items:center;}
+.fl{font-size:.59rem;letter-spacing:.17em;text-transform:uppercase;color:var(--text-lt);font-weight:500;margin-right:2px;white-space:nowrap;}
+.chip{display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:20px;cursor:pointer;font-size:.66rem;border:1.5px solid transparent;transition:all .18s;white-space:nowrap;user-select:none;}
+.chip .d{width:6px;height:6px;border-radius:50%;flex-shrink:0;}
+.chip.off{opacity:.3;filter:grayscale(.5);}
+.ca{border-color:#a8d5bc;color:var(--av);background:var(--av-bg);}.ca .d{background:var(--av);}
+.cr{border-color:#f5d58a;color:var(--rs);background:var(--rs-bg);}.cr .d{background:var(--rs);}
+.cs{border-color:#9ab8e4;color:var(--sl);background:var(--sl-bg);}.cs .d{background:var(--sl);}
+.co{border-color:#e4a4a4;color:var(--oc);background:var(--oc-bg);}.co .d{background:var(--oc);}
+.ch{border-color:#c4a8de;color:var(--hl);background:var(--hl-bg);}.ch .d{background:var(--hl);}
+.ct{border-color:#9ec49e;color:var(--tr);background:var(--tr-bg);}.ct .d{background:var(--tr);}
+.dw{display:flex;background:var(--ivory);border:1.5px solid var(--border);border-radius:6px;overflow:hidden;flex-shrink:0;}
+.db{padding:4px 8px;border:none;background:transparent;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:.64rem;color:var(--text-lt);transition:all .18s;white-space:nowrap;}
+.db.on{background:var(--navy);color:var(--white);}
+.jmp select{background:var(--ivory);border:1.5px solid var(--border);border-radius:4px;padding:5px 7px;font-family:'DM Sans',sans-serif;font-size:.72rem;color:var(--text);outline:none;cursor:pointer;}
+/* LAYOUT */
+#ly{display:grid;grid-template-columns:250px 1fr;height:calc(100vh - 108px);overflow:hidden;}
+/* SIDEBAR */
+#sb{background:var(--white);border-right:1px solid var(--border);overflow-y:auto;}
+#sb::-webkit-scrollbar{width:3px;}#sb::-webkit-scrollbar-thumb{background:var(--stone);}
+.sbl{padding:16px 14px;border-bottom:1px solid var(--border);}
+.sbl:last-child{border-bottom:none;}
+.slbl{font-size:.56rem;letter-spacing:.28em;text-transform:uppercase;color:var(--gold);font-weight:500;margin-bottom:10px;display:flex;align-items:center;gap:6px;}
+.slbl::after{content:'';flex:1;height:1px;background:var(--gold-pale);}
+.sg{display:grid;grid-template-columns:1fr 1fr;gap:5px;}
+.sc{background:var(--ivory);border:1px solid var(--border);border-radius:5px;padding:8px 10px;position:relative;overflow:hidden;}
+.sc::before{content:'';position:absolute;top:0;left:0;bottom:0;width:3px;}
+.sc.tot::before{background:var(--navy);}.sc.occ::before{background:var(--oc);}
+.sc.avl::before{background:var(--av);}.sc.res::before{background:var(--rs);}
+.sc.sld::before{background:var(--sl);}.sc.tre::before{background:var(--tr);}
+.sn{font-family:'Libre Baskerville',serif;font-size:1.4rem;color:var(--navy);line-height:1;margin-bottom:2px;}
+.sk{font-size:.56rem;letter-spacing:.12em;text-transform:uppercase;color:var(--text-lt);}
+.snl{list-style:none;}
+.snl li{display:flex;align-items:center;justify-content:space-between;padding:6px 8px;border-radius:4px;cursor:pointer;font-size:.76rem;color:var(--text-mid);border-left:2px solid transparent;transition:all .18s;}
+.snl li:hover{background:var(--ivory);color:var(--navy);border-left-color:var(--gold-pale);}
+.snl li.on{background:var(--gold-pale);color:var(--navy);border-left-color:var(--gold);font-weight:500;}
+.scnt{font-size:.58rem;color:var(--text-lt);background:var(--gray);padding:1px 5px;border-radius:10px;}
+.snl li.on .scnt{background:rgba(201,154,46,.2);color:var(--gold);}
+.ti{display:flex;align-items:center;gap:8px;padding:6px 8px;border-radius:4px;cursor:pointer;font-size:.75rem;color:var(--text-mid);transition:all .18s;margin-bottom:2px;}
+.ti:hover{background:var(--ivory);color:var(--navy);}
+.li{display:flex;align-items:center;gap:7px;margin-bottom:5px;font-size:.71rem;color:var(--text-mid);}
+.ls{width:12px;height:12px;border-radius:3px;flex-shrink:0;}
+/* MAIN */
+#ma{position:relative;overflow:hidden;background:#f5f2ec;}
+#bc{position:absolute;top:11px;left:12px;z-index:200;display:flex;align-items:center;gap:6px;font-size:.66rem;color:var(--text-lt);background:rgba(255,255,255,.93);backdrop-filter:blur(4px);border:1px solid var(--border);border-radius:20px;padding:4px 12px;box-shadow:var(--s1);}
+.bcl{cursor:pointer;color:var(--navy);}.bcl:hover{color:var(--gold);text-decoration:underline;}
+#zc{position:absolute;top:11px;right:12px;z-index:200;display:flex;flex-direction:column;gap:2px;background:var(--white);border:1px solid var(--border);border-radius:6px;box-shadow:var(--s1);overflow:hidden;}
+.zb{width:32px;height:32px;background:none;border:none;cursor:pointer;font-size:.95rem;color:var(--text-mid);display:flex;align-items:center;justify-content:center;transition:all .18s;}
+.zb:hover{background:var(--ivory);color:var(--navy);}
+.zb:not(:last-child){border-bottom:1px solid var(--border);}
+#mw{width:100%;height:100%;cursor:default;user-select:none;}
+#csv{width:100%;height:100%;transform-origin:center center;}
+/* section zone styling */
+.sz{stroke-width:1.5;cursor:pointer;fill:rgba(12,35,64,.04);stroke:rgba(12,35,64,.13);transition:fill .2s,stroke .2s;}
+.sz:hover{fill:rgba(201,154,46,.11);stroke:rgba(201,154,46,.65);}
+.sz.on{fill:rgba(201,154,46,.09);stroke:var(--gold);stroke-width:2;}
+.mz{fill:rgba(201,154,46,.07);stroke:rgba(201,154,46,.42);stroke-width:1.5;cursor:pointer;transition:fill .2s;}
+.mz:hover{fill:rgba(201,154,46,.16);stroke:var(--gold);}
+.vz{fill:rgba(29,78,137,.06);stroke:rgba(29,78,137,.24);stroke-width:1.5;cursor:pointer;}
+.vz:hover{fill:rgba(29,78,137,.13);}
+.cz{fill:rgba(90,52,114,.06);stroke:rgba(90,52,114,.2);stroke-width:1.5;cursor:pointer;}
+.cz:hover{fill:rgba(90,52,114,.13);}
+/* section tooltip */
+#stt{position:absolute;z-index:300;pointer-events:none;background:var(--navy);color:var(--ivory);border-radius:7px;padding:9px 13px;box-shadow:var(--s2);font-size:.73rem;opacity:0;transition:opacity .18s;min-width:148px;}
+#stt.vis{opacity:1;}
+.stn{font-family:'Libre Baskerville',serif;font-size:.84rem;margin-bottom:3px;}
+.sts{font-size:.63rem;color:rgba(255,255,255,.52);}.stav{color:#7ed8a4;}
+/* SECTION VIEW */
+#sv{position:absolute;inset:0;z-index:100;background:#f5f2ec;overflow:auto;display:none;padding:48px 22px 22px;}
+#sv.vis{display:block;}
+#sv::-webkit-scrollbar{width:3px;}#sv::-webkit-scrollbar-thumb{background:var(--stone);}
+.svh{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;padding-bottom:11px;border-bottom:2px solid var(--border);}
+.svh h2{font-size:1.35rem;color:var(--navy);}
+.svh p{font-size:.71rem;color:var(--text-lt);margin-top:2px;}
+.svms{display:flex;gap:14px;}
+.ms .n{font-size:1.1rem;font-family:'Libre Baskerville',serif;color:var(--navy);}
+.ms .l{font-size:.56rem;letter-spacing:.13em;text-transform:uppercase;color:var(--text-lt);}
+/* GRAVE TOOLTIP */
+#gt{position:fixed;z-index:500;pointer-events:none;background:var(--navy);color:var(--ivory);border-radius:8px;padding:10px 13px;box-shadow:var(--s3);font-size:.75rem;opacity:0;transition:opacity .14s;min-width:180px;max-width:245px;}
+#gt.vis{opacity:1;}
+.gti{font-size:.56rem;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin-bottom:5px;}
+.gtn{font-family:'Libre Baskerville',serif;font-size:.9rem;margin-bottom:4px;line-height:1.3;}
+.gtr{display:flex;justify-content:space-between;gap:9px;margin-bottom:2px;}
+.gtl{font-size:.59rem;color:rgba(255,255,255,.42);}.gtv{font-size:.69rem;color:rgba(255,255,255,.82);}
+.gtc{margin-top:7px;padding-top:6px;border-top:1px solid rgba(255,255,255,.1);font-size:.59rem;color:rgba(255,255,255,.4);}
+/* DETAIL PANEL */
+#dp{position:fixed;right:-440px;top:0;bottom:0;width:415px;background:var(--white);border-left:1px solid var(--border);z-index:900;overflow-y:auto;transition:right .34s cubic-bezier(.4,0,.2,1);box-shadow:-8px 0 32px rgba(12,35,64,.1);}
+#dp.open{right:0;}
+#dp::-webkit-scrollbar{width:3px;}#dp::-webkit-scrollbar-thumb{background:var(--stone);}
+.dph{background:var(--navy);padding:18px 18px 15px;position:sticky;top:0;z-index:10;}
+.dpx{position:absolute;top:11px;right:11px;background:rgba(255,255,255,.1);border:none;cursor:pointer;color:rgba(255,255,255,.62);width:27px;height:27px;border-radius:50%;font-size:.8rem;display:flex;align-items:center;justify-content:center;transition:all .18s;}
+.dpx:hover{background:rgba(255,255,255,.2);color:#fff;}
+.dpid{font-size:.55rem;letter-spacing:.24em;text-transform:uppercase;color:var(--gold);margin-bottom:5px;font-weight:500;}
+.dpnm{font-family:'Libre Baskerville',serif;font-size:1.3rem;color:var(--ivory);line-height:1.25;margin-bottom:3px;}
+.dpdt{font-size:.68rem;color:rgba(255,255,255,.42);}
+.dpb{padding:18px;}
+.dpph{width:100%;aspect-ratio:16/9;background:var(--ivory-mid);border:1px solid var(--border);border-radius:5px;display:flex;align-items:center;justify-content:center;color:var(--text-lt);font-size:.66rem;letter-spacing:.1em;margin-bottom:16px;}
+.dpsb{display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap;}
+.bdg{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:14px;font-size:.63rem;font-weight:500;letter-spacing:.05em;}
+.bav{background:var(--av-bg);color:var(--av);}.brs{background:var(--rs-bg);color:var(--rs);}
+.bsl{background:var(--sl-bg);color:var(--sl);}.boc{background:var(--oc-bg);color:var(--oc);}
+.bhl{background:var(--hl-bg);color:var(--hl);}.btr{background:var(--tr-bg);color:var(--tr);}
+.dmg{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px;}
+.df{background:var(--ivory);border:1px solid var(--border);border-radius:4px;padding:8px 10px;}
+.dfl{font-size:.54rem;letter-spacing:.19em;text-transform:uppercase;color:var(--text-lt);font-weight:500;margin-bottom:2px;}
+.dfv{font-size:.79rem;color:var(--text);}
+.ddv{border:none;border-top:1px solid var(--border);margin:14px 0;}
+.dsl{font-size:.56rem;letter-spacing:.18em;text-transform:uppercase;color:var(--text-lt);font-weight:500;margin-bottom:6px;}
+.dbo{font-size:.77rem;color:var(--text-mid);line-height:1.65;}
+.dbo.em{color:var(--text-lt);font-style:italic;}
+.dlc{display:flex;gap:4px;flex-wrap:wrap;}
+.lp{background:var(--navy);color:var(--ivory);border-radius:4px;padding:3px 10px;font-size:.63rem;letter-spacing:.07em;}
+.das{display:flex;gap:6px;margin-top:16px;}
+.da{flex:1;padding:8px;border-radius:4px;font-family:'DM Sans',sans-serif;font-size:.69rem;font-weight:500;cursor:pointer;transition:all .2s;text-align:center;border:none;}
+.dap{background:var(--navy);color:#fff;}.dap:hover{background:var(--navy-mid);}
+.das2{background:var(--ivory);color:var(--text);border:1px solid var(--border);}.das2:hover{background:var(--ivory-dark);}
+.dapdf{background:var(--av-bg);color:var(--av);border:1px solid #a8d5bc;}.dapdf:hover{background:#d5eddf;}
+/* MODALS */
+.mbg{display:none;position:fixed;inset:0;z-index:2000;background:rgba(12,35,64,.46);backdrop-filter:blur(2px);align-items:flex-start;justify-content:center;padding:34px 16px;overflow-y:auto;}
+.mbg.open{display:flex;}
+.mi{background:var(--white);border-radius:10px;box-shadow:var(--s3);width:100%;max-width:900px;border:1px solid var(--border);overflow:hidden;animation:fu .3s ease both;}
+.misml{max-width:480px;}
+@keyframes fu{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.mh{background:var(--navy);padding:19px 24px;display:flex;align-items:center;justify-content:space-between;}
+.mh h2{font-family:'Libre Baskerville',serif;color:var(--ivory);font-size:1.18rem;font-weight:400;}
+.mh p{font-size:.68rem;color:rgba(255,255,255,.42);margin-top:2px;}
+.mx{background:rgba(255,255,255,.1);border:none;cursor:pointer;color:rgba(255,255,255,.62);width:29px;height:29px;border-radius:50%;font-size:.86rem;display:flex;align-items:center;justify-content:center;transition:all .18s;flex-shrink:0;}
+.mx:hover{background:rgba(255,255,255,.2);color:#fff;}
+.mbd{padding:20px 24px;}
+.dttb{display:flex;align-items:center;gap:11px;padding:11px 24px;border-bottom:1px solid var(--border);}
+.dttb input{background:var(--ivory);border:1.5px solid var(--border);border-radius:4px;padding:6px 10px;font-family:'DM Sans',sans-serif;font-size:.75rem;width:220px;outline:none;}
+.dtsc{max-height:52vh;overflow-y:auto;}
+.dtsc::-webkit-scrollbar{width:3px;}
+table{width:100%;border-collapse:collapse;}
+thead th{background:var(--ivory);padding:7px 11px;text-align:left;font-size:.57rem;letter-spacing:.15em;text-transform:uppercase;color:var(--text-lt);font-weight:500;border-bottom:2px solid var(--border);white-space:nowrap;}
+tbody td{padding:7px 11px;border-bottom:1px solid var(--gray);font-size:.75rem;color:var(--text);}
+tbody tr{cursor:pointer;transition:background .14s;}
+tbody tr:hover td{background:var(--ivory);}
+.tc{display:flex;align-items:center;gap:10px;padding:10px 12px;cursor:pointer;border:1px solid var(--border);border-radius:6px;margin-bottom:7px;transition:all .2s;}
+.tc:hover{border-color:var(--navy-light);background:var(--ivory);transform:translateX(2px);}
+.tci{font-size:1.1rem;width:26px;text-align:center;flex-shrink:0;}
+.tct h4{font-size:.82rem;color:var(--navy);font-weight:500;}
+.tct p{font-size:.67rem;color:var(--text-lt);margin-top:1px;}
+.tcc{margin-left:auto;background:var(--ivory-dark);padding:2px 7px;border-radius:12px;font-size:.62rem;color:var(--text-lt);}
+.uz{border:2px dashed var(--border);border-radius:8px;padding:30px;text-align:center;cursor:pointer;transition:all .2s;background:var(--ivory);}
+.uz:hover{border-color:var(--navy-light);background:#f0f4fa;}
+.uz input{display:none;}
+.uzi{font-size:1.7rem;color:var(--text-lt);margin-bottom:6px;}
+.uz h3{font-size:.84rem;color:var(--navy);font-weight:500;margin-bottom:3px;}
+.uz p{font-size:.68rem;color:var(--text-lt);}
+#upm{font-size:.72rem;color:var(--av);text-align:center;padding:5px;min-height:20px;}
+#pp{display:none;position:fixed;inset:0;z-index:9998;background:rgba(12,35,64,.58);align-items:center;justify-content:center;}
+#pp.vis{display:flex;}
+.ppb{background:var(--white);border-radius:10px;padding:30px 38px;text-align:center;box-shadow:var(--s3);}
+.ppb h3{font-family:'Libre Baskerville',serif;color:var(--navy);margin-bottom:5px;}
+.ppb p{font-size:.72rem;color:var(--text-lt);}
+.ppbar{width:210px;height:3px;background:var(--gray);border-radius:2px;margin-top:13px;overflow:hidden;}
+.ppf{height:100%;background:var(--gold);border-radius:2px;animation:ppan 1.8s ease-in-out infinite;}
+@keyframes ppan{0%{width:0;margin-left:0}50%{width:70%}100%{width:0;margin-left:100%}}
+#toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%) translateY(10px);background:var(--navy);color:var(--ivory);border-radius:6px;padding:9px 19px;font-size:.74rem;z-index:5000;opacity:0;pointer-events:none;transition:all .26s;white-space:nowrap;box-shadow:var(--s2);}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+.gv{stroke-width:.6;cursor:pointer;}
+.gv:hover{stroke-width:1.8;}
+.gav{fill:var(--av-f);stroke:var(--av);}
+.grs{fill:var(--rs-f);stroke:var(--rs);}
+.gsl{fill:var(--sl-f);stroke:var(--sl);}
+.goc{fill:var(--oc-f);stroke:var(--oc);}
+.ghl{fill:var(--hl-f);stroke:var(--hl);}
+.gtr2{fill:var(--tr-f);stroke:var(--tr);}
+</style>
+</head>
+<body>
+<div id="ld">
+  <svg class="ldx" width="36" height="36" viewBox="0 0 36 36" fill="none">
+    <rect x="15.5" y="2" width="5" height="32" fill="rgba(201,154,46,.9)" rx="1"/>
+    <rect x="2" y="12" width="32" height="5" fill="rgba(201,154,46,.9)" rx="1"/>
+  </svg>
+  <h2>Cedar Grove Cemetery</h2>
+  <p>University of Notre Dame · Digital Archive</p>
+</div>
+
+<header id="hdr">
+  <div class="hb">
+    <svg width="30" height="30" viewBox="0 0 30 30" fill="none" style="flex-shrink:0;opacity:.82">
+      <circle cx="15" cy="15" r="14" stroke="rgba(201,154,46,.4)" stroke-width="1.5"/>
+      <rect x="13.5" y="4" width="3" height="22" fill="rgba(201,154,46,.85)" rx=".5"/>
+      <rect x="5" y="11" width="20" height="3" fill="rgba(201,154,46,.85)" rx=".5"/>
+    </svg>
+    <div>
+      <h1>Cedar Grove Cemetery</h1>
+      <span>University of Notre Dame · Est. 1842</span>
+    </div>
+  </div>
+  <nav class="hn">
+    <button class="nb" onclick="openDataModal()">Records</button>
+    <button class="nb" onclick="openTours()">Tours</button>
+    <div class="ew">
+      <button class="nb" onclick="toggleExp()">Export PDF ▾</button>
+      <div class="em" id="expm">
+        <div class="ei" onclick="runExport('overview')">🗺 Full cemetery (poster)</div>
+        <div class="ei" onclick="runExport('section')">📋 Current section map</div>
+        <div class="ei" onclick="runExport('record')">📄 Selected grave record</div>
+        <div class="ei" onclick="runExport('filtered')">🔍 Filtered results</div>
+      </div>
+    </div>
+    <button class="nb gd" onclick="openAdmin()">⬆ Update Data</button>
+    <div class="mw">
+      <button class="mb on" id="mbp" onclick="setMode('public')">Public</button>
+      <button class="mb" id="mba" onclick="setMode('admin')">Admin</button>
+    </div>
+  </nav>
+</header>
+
+<div id="tb">
+  <div class="sw">
+    <input type="text" id="srch" placeholder="Search name, section, ID…"
+      oninput="doSearch(this.value)" onfocus="if(this.value)openDD()" onblur="setTimeout(closeDD,200)">
+    <span class="si">⌕</span><div id="sdd"></div>
+  </div>
+  <div class="sep"></div>
+  <div class="fr">
+    <span class="fl">Filter</span>
+    <div class="chip ca" id="f-Available" onclick="tf('Available',this)"><span class="d"></span>Available</div>
+    <div class="chip cr" id="f-Reserved"  onclick="tf('Reserved',this)"><span class="d"></span>Reserved</div>
+    <div class="chip cs" id="f-Sold"      onclick="tf('Sold',this)"><span class="d"></span>Sold</div>
+    <div class="chip co" id="f-Occupied"  onclick="tf('Occupied',this)"><span class="d"></span>Occupied</div>
+    <div class="chip ch" id="f-HOLD"      onclick="tf('HOLD',this)"><span class="d"></span>Hold</div>
+    <div class="chip ct" id="f-Tree"      onclick="tf('Tree',this)"><span class="d"></span>Trees</div>
+  </div>
+  <div class="sep"></div>
+  <div class="dw">
+    <span style="padding:4px 7px;font-size:.57rem;letter-spacing:.11em;color:var(--text-lt);text-transform:uppercase;align-self:center;">View</span>
+    <button class="db on" id="dv-mixed"   onclick="setDisp('mixed')">Mixed</button>
+    <button class="db"    id="dv-names"   onclick="setDisp('names')">Names</button>
+    <button class="db"    id="dv-numbers" onclick="setDisp('numbers')">Numbers</button>
+    <button class="db"    id="dv-status"  onclick="setDisp('status')">Status</button>
+  </div>
+  <div class="sep"></div>
+  <div class="jmp"><select onchange="if(this.value){selectSec(this.value);this.value='';}"><option value="">Jump to section…</option></select></div>
+</div>
+
+<div id="ly">
+  <aside id="sb">
+    <div class="sbl">
+      <div class="slbl">Overview</div>
+      <div class="sg">
+        <div class="sc tot"><div class="sn" id="st-tot">—</div><div class="sk">Total</div></div>
+        <div class="sc occ"><div class="sn" id="st-occ">—</div><div class="sk">Occupied</div></div>
+        <div class="sc avl"><div class="sn" id="st-avl">—</div><div class="sk">Available</div></div>
+        <div class="sc res"><div class="sn" id="st-res">—</div><div class="sk">Reserved</div></div>
+        <div class="sc sld"><div class="sn" id="st-sld">—</div><div class="sk">Sold</div></div>
+        <div class="sc tre"><div class="sn" id="st-tre">—</div><div class="sk">Trees</div></div>
+      </div>
+    </div>
+    <div class="sbl">
+      <div class="slbl">Sections</div>
+      <ul class="snl" id="snl"></ul>
+    </div>
+    <div class="sbl">
+      <div class="slbl">Mausoleums</div>
+      <ul class="snl">
+        <li onclick="selectSec('M')"><span>① Mary Queen of Angels</span></li>
+        <li onclick="selectSec('M')"><span>② Mary Queen of All Saints</span></li>
+        <li onclick="selectSec('M')"><span>③ Mary Mother of the Church</span></li>
+        <li onclick="selectSec('M')"><span>④ Mary Mother of God</span></li>
+      </ul>
+    </div>
+    <div class="sbl">
+      <div class="slbl">Guided Tours</div>
+      <div class="ti" onclick="openTours()"><span style="width:17px;text-align:center">✝</span>Notre Dame Presidents</div>
+      <div class="ti" onclick="openTours()"><span style="width:17px;text-align:center">⚑</span>War Veterans</div>
+      <div class="ti" onclick="openTours()"><span style="width:17px;text-align:center">🎓</span>Distinguished Faculty</div>
+      <div class="ti" onclick="openTours()"><span style="width:17px;text-align:center">🌳</span>Memorial Trees</div>
+    </div>
+    <div class="sbl">
+      <div class="slbl">Legend</div>
+      <div class="li"><div class="ls" style="background:var(--av)"></div>Available</div>
+      <div class="li"><div class="ls" style="background:var(--rs)"></div>Reserved</div>
+      <div class="li"><div class="ls" style="background:var(--sl)"></div>Sold</div>
+      <div class="li"><div class="ls" style="background:var(--oc)"></div>Occupied</div>
+      <div class="li"><div class="ls" style="background:var(--hl)"></div>Hold</div>
+      <div class="li"><span style="width:12px;text-align:center;font-size:.82rem;">🌳</span>Tree — plot unavailable</div>
+      <div style="height:5px;"></div>
+      <div class="li"><div class="ls" style="background:rgba(201,154,46,.25);border:1.5px solid var(--gold)"></div>Mausoleum complex</div>
+      <div class="li"><div class="ls" style="background:rgba(29,78,137,.1);border:1.5px solid var(--sl)"></div>Veterans</div>
+      <div class="li"><div class="ls" style="background:rgba(90,52,114,.08);border:1.5px solid var(--hl)"></div>Columbarium</div>
+    </div>
+  </aside>
+
+  <main id="ma">
+    <div id="bc"><span class="bcl" onclick="resetOv()">Cedar Grove</span></div>
+    <div id="zc">
+      <button class="zb" onclick="zIn()">+</button>
+      <button class="zb" onclick="zOut()">−</button>
+      <button class="zb" onclick="zReset()" style="font-size:.68rem;">⌖</button>
+    </div>
+    <div id="stt"><div class="stn" id="sttn"></div><div class="sts" id="stts"></div></div>
+
+    <!-- ════════════════════════════════════════════════════════
+         MASTER CEMETERY MAP — Pixel-perfect geographic layout
+         Source: Cedar Grove 2022 official map + spec document
+
+         COORDINATE SYSTEM (1400 × 860 viewBox):
+         - x=0 is WEST,  x=1400 is EAST
+         - y=0 is NORTH, y=860  is SOUTH
+
+         ROADS:
+         - Holy Cross Drive: top band y=160–200
+         - Notre Dame Avenue: right band x=1340–1380
+
+         NORTH BOUNDARY STRIP (below Holy Cross Drive, y=200–310):
+         - Mausoleum Complex: x=36–215   (NW corner, courtyard with 4 buildings)
+         - Section L (long narrow): x=215–620
+         - Cremains Section: x=620–730
+         - Section M: x=730–1060
+         - Parking / Office facilities: x=1060–1340
+
+         WESTERN COLUMN — K, J, I (stacked N→S, x=36–215):
+         - Section K: y=310–440
+         - Section J: y=440–590  (tall/long, slightly curved)
+         - Section I: y=590–710
+
+         MAIN BURIAL GRID — central (x=215–1060):
+         Top row:    F | D | B      y=310–510
+         Bottom row: E | C | A      y=510–710
+
+         WESTERN OUTER COLUMN — G, H (x=36–215):
+         - Section G: y=710–820
+         - Section H: south of G (below map boundary; shown compact)
+
+         SOUTH BOUNDARY: residential context buildings
+         ═══════════════════════════════════════════════════════ -->
+    <div id="mw">
+      <svg id="csv" viewBox="0 0 1380 900" preserveAspectRatio="xMidYMid meet">
+        <defs>
+          <pattern id="grd" width="44" height="44" patternUnits="userSpaceOnUse">
+            <rect width="44" height="44" fill="#f5f2ec"/>
+            <path d="M44 0 L0 0 L0 44" fill="none" stroke="rgba(12,35,64,.028)" stroke-width=".5"/>
+          </pattern>
+          <!-- Entrance arrow marker -->
+          <marker id="arr" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto">
+            <path d="M0 0 L8 4 L0 8 Z" fill="rgba(29,78,137,.6)"/>
+          </marker>
+        </defs>
+
+        <!-- Ground -->
+        <rect width="1380" height="900" fill="url(#grd)"/>
+        <!-- Cemetery outer boundary -->
+        <rect x="28" y="28" width="1318" height="844" rx="5" fill="none"
+          stroke="rgba(12,35,64,.1)" stroke-width="1.5" stroke-dasharray="8,4"/>
+
+        <!-- ══════════════════════════════════════════════════════
+             HOLY CROSS DRIVE — gently curved, top boundary
+        ══════════════════════════════════════════════════════ -->
+        <path fill="#e2ddd3" stroke="#c5bead" stroke-width="1.2"
+          d="M36 158 C 200 140, 560 142, 860 148 C 1060 152, 1200 158, 1290 168
+             L 1290 200 C 1200 190, 1060 184, 860 178 C 560 172, 200 170, 36 188 Z"/>
+        <text font-family="'DM Sans',sans-serif" font-size="10" fill="#9a9086"
+          text-anchor="middle" x="660" y="154" letter-spacing="4">HOLY CROSS DRIVE</text>
+
+        <!-- ══════════════════════════════════════════════════════
+             NOTRE DAME AVENUE — right edge, vertical
+             Main entrance arrow points INTO cemetery from east side
+        ══════════════════════════════════════════════════════ -->
+        <rect fill="#e2ddd3" stroke="#c5bead" stroke-width="1.2"
+          x="1292" y="168" width="42" height="660" rx="2"/>
+        <!-- Vertical label -->
+        <text font-family="'DM Sans',sans-serif" font-size="9" fill="#9a9086"
+          text-anchor="middle" transform="rotate(90,1326,500)"
+          x="-7" y="1326" letter-spacing="2.5">NOTRE DAME AVENUE</text>
+        <!-- Main entrance gate marker (east side, mid-height ~F/B level) -->
+        <rect x="1286" y="380" width="6" height="90" fill="rgba(12,35,64,.18)" rx="1"/>
+        <!-- Entrance arrow pointing west into cemetery -->
+        <line x1="1285" y1="425" x2="1240" y2="425"
+          stroke="rgba(29,78,137,.6)" stroke-width="2" marker-end="url(#arr)"/>
+        <text font-family="'DM Sans',sans-serif" font-size="7" fill="rgba(29,78,137,.7)"
+          text-anchor="middle" x="1262" y="415" letter-spacing="1">Main</text>
+        <text font-family="'DM Sans',sans-serif" font-size="7" fill="rgba(29,78,137,.7)"
+          text-anchor="middle" x="1262" y="436" letter-spacing="1">Entrance</text>
+
+        <!-- ══════════════════════════════════════════════════════
+             INTERNAL ROAD NETWORK
+        ══════════════════════════════════════════════════════ -->
+        <!-- N–S: Mausoleum col / Main grid -->
+        <rect fill="#d8d3c8" opacity=".75" x="213" y="200" width="9" height="640" rx="2"/>
+        <!-- E–W: North strip / Grid rows -->
+        <rect fill="#d8d3c8" opacity=".75" x="222" y="316" width="1060" height="9" rx="2"/>
+        <!-- E–W: Top grid / Bottom grid -->
+        <rect fill="#d8d3c8" opacity=".7"  x="222" y="536" width="850" height="9" rx="2"/>
+        <!-- N–S: F/G col | D/C col -->
+        <rect fill="#d8d3c8" opacity=".55" x="490" y="316" width="8" height="480" rx="2"/>
+        <!-- N–S: D/C col | B/A col -->
+        <rect fill="#d8d3c8" opacity=".55" x="772" y="316" width="8" height="480" rx="2"/>
+        <!-- N–S: Main grid | Parking strip -->
+        <rect fill="#d8d3c8" opacity=".6"  x="1076" y="200" width="9" height="596" rx="2"/>
+        <!-- E–W: Bottom grid / South context -->
+        <rect fill="#d8d3c8" opacity=".5"  x="222" y="756" width="854" height="7" rx="2"/>
+
+        <!-- ══════════════════════════════════════════════════════
+             PARKING + OFFICE STRIP
+             Top-right, north of B, east side
+        ══════════════════════════════════════════════════════ -->
+        <rect x="1085" y="200" width="207" height="136" rx="3"
+          fill="rgba(12,35,64,.026)" stroke="rgba(12,35,64,.1)" stroke-width="1" stroke-dasharray="4,3"/>
+        <text font-family="'DM Sans',sans-serif" font-size="8.5" fill="rgba(12,35,64,.38)"
+          text-anchor="middle" x="1188" y="222" letter-spacing="1">PARKING &amp; OFFICE</text>
+        <!-- Accessible parking -->
+        <rect x="1091" y="232" width="92" height="17" rx="2"
+          fill="rgba(12,35,64,.05)" stroke="rgba(12,35,64,.1)" stroke-width=".8"/>
+        <text font-family="'DM Sans',sans-serif" font-size="6" fill="rgba(12,35,64,.32)"
+          text-anchor="middle" x="1137" y="244">♿ Accessible Parking</text>
+        <!-- General parking -->
+        <rect x="1091" y="254" width="92" height="17" rx="2"
+          fill="rgba(12,35,64,.05)" stroke="rgba(12,35,64,.1)" stroke-width=".8"/>
+        <text font-family="'DM Sans',sans-serif" font-size="6" fill="rgba(12,35,64,.32)"
+          text-anchor="middle" x="1137" y="266">🚗 General Parking</text>
+        <!-- Maintenance -->
+        <rect x="1091" y="276" width="92" height="17" rx="2"
+          fill="rgba(12,35,64,.05)" stroke="rgba(12,35,64,.1)" stroke-width=".8"/>
+        <text font-family="'DM Sans',sans-serif" font-size="6" fill="rgba(12,35,64,.32)"
+          text-anchor="middle" x="1137" y="288">🔧 Maintenance Bldg</text>
+        <!-- Cemetery Cottage / Office -->
+        <rect x="1091" y="299" width="195" height="26" rx="2"
+          fill="rgba(201,154,46,.08)" stroke="rgba(201,154,46,.35)" stroke-width="1"/>
+        <text font-family="'DM Sans',sans-serif" font-size="6.5" fill="rgba(201,154,46,.75)"
+          text-anchor="middle" x="1188" y="312">🏠 Cedar Grove Cemetery</text>
+        <text font-family="'DM Sans',sans-serif" font-size="6.5" fill="rgba(201,154,46,.75)"
+          text-anchor="middle" x="1188" y="323">Cottage &amp; Office</text>
+
+        <!-- ══════════════════════════════════════════════════════
+             MAUSOLEUM COMPLEX — NW corner
+             x=36..213, y=200..560
+             Four named buildings around a central courtyard.
+        ══════════════════════════════════════════════════════ -->
+        <rect class="mz" x="36" y="200" width="177" height="360" rx="4"
+          onmouseenter="showST(event,'Mausoleums')" onmouseleave="hideST()" onclick="selectSec('M')"/>
+        <!-- Complex header -->
+        <text font-family="'Libre Baskerville',serif" font-size="10" fill="rgba(201,154,46,.82)"
+          text-anchor="middle" x="124" y="218" pointer-events="none">Mausoleums</text>
+        <text font-family="'DM Sans',sans-serif" font-size="6.5" fill="rgba(201,154,46,.55)"
+          text-anchor="middle" x="124" y="231" letter-spacing="1.3" pointer-events="none">&amp; COURTYARD</text>
+
+        <!-- 4 buildings arranged around courtyard:
+             NW: ① NE: ②   (y=242..294)
+             courtyard      (y=294..366)
+             SW: ③ SE: ④   (y=366..418) -->
+
+        <!-- ① Mary Queen of Angels (NW) -->
+        <rect x="42" y="242" width="66" height="52" rx="2"
+          fill="rgba(201,154,46,.16)" stroke="rgba(201,154,46,.55)" stroke-width="1.2"
+          cursor="pointer" onclick="openDetail('maus-1')"/>
+        <text font-family="'DM Sans',sans-serif" font-size="9" fill="rgba(201,154,46,.9)"
+          text-anchor="middle" x="75" y="261" pointer-events="none">①</text>
+        <text font-family="'DM Sans',sans-serif" font-size="5.5" fill="rgba(201,154,46,.7)"
+          text-anchor="middle" x="75" y="273" pointer-events="none">Mary Queen</text>
+        <text font-family="'DM Sans',sans-serif" font-size="5.5" fill="rgba(201,154,46,.7)"
+          text-anchor="middle" x="75" y="283" pointer-events="none">of Angels</text>
+
+        <!-- ② Mary Queen of All Saints (NE) -->
+        <rect x="117" y="242" width="66" height="52" rx="2"
+          fill="rgba(201,154,46,.16)" stroke="rgba(201,154,46,.55)" stroke-width="1.2"
+          cursor="pointer" onclick="openDetail('maus-2')"/>
+        <text font-family="'DM Sans',sans-serif" font-size="9" fill="rgba(201,154,46,.9)"
+          text-anchor="middle" x="150" y="261" pointer-events="none">②</text>
+        <text font-family="'DM Sans',sans-serif" font-size="5.5" fill="rgba(201,154,46,.7)"
+          text-anchor="middle" x="150" y="273" pointer-events="none">Mary Queen</text>
+        <text font-family="'DM Sans',sans-serif" font-size="5.5" fill="rgba(201,154,46,.7)"
+          text-anchor="middle" x="150" y="283" pointer-events="none">of All Saints</text>
+
+        <!-- Courtyard in center -->
+        <circle cx="124" cy="330" r="38" fill="rgba(201,154,46,.06)"
+          stroke="rgba(201,154,46,.3)" stroke-width="1" stroke-dasharray="5,3" pointer-events="none"/>
+        <text font-family="'DM Sans',sans-serif" font-size="5.5" fill="rgba(201,154,46,.48)"
+          text-anchor="middle" x="124" y="328" letter-spacing="1" pointer-events="none">COURTYARD</text>
+        <text font-family="'DM Sans',sans-serif" font-size="5" fill="rgba(201,154,46,.35)"
+          text-anchor="middle" x="124" y="340" pointer-events="none">circular drive</text>
+
+        <!-- ③ Mary Mother of the Church (SW) -->
+        <rect x="42" y="372" width="66" height="52" rx="2"
+          fill="rgba(201,154,46,.16)" stroke="rgba(201,154,46,.55)" stroke-width="1.2"
+          cursor="pointer" onclick="openDetail('maus-3')"/>
+        <text font-family="'DM Sans',sans-serif" font-size="9" fill="rgba(201,154,46,.9)"
+          text-anchor="middle" x="75" y="391" pointer-events="none">③</text>
+        <text font-family="'DM Sans',sans-serif" font-size="5.5" fill="rgba(201,154,46,.7)"
+          text-anchor="middle" x="75" y="403" pointer-events="none">Mary Mother</text>
+        <text font-family="'DM Sans',sans-serif" font-size="5.5" fill="rgba(201,154,46,.7)"
+          text-anchor="middle" x="75" y="413" pointer-events="none">of the Church</text>
+
+        <!-- ④ Mary Mother of God (SE) -->
+        <rect x="117" y="372" width="66" height="52" rx="2"
+          fill="rgba(201,154,46,.16)" stroke="rgba(201,154,46,.55)" stroke-width="1.2"
+          cursor="pointer" onclick="openDetail('maus-4')"/>
+        <text font-family="'DM Sans',sans-serif" font-size="9" fill="rgba(201,154,46,.9)"
+          text-anchor="middle" x="150" y="391" pointer-events="none">④</text>
+        <text font-family="'DM Sans',sans-serif" font-size="5.5" fill="rgba(201,154,46,.7)"
+          text-anchor="middle" x="150" y="403" pointer-events="none">Mary Mother</text>
+        <text font-family="'DM Sans',sans-serif" font-size="5.5" fill="rgba(201,154,46,.7)"
+          text-anchor="middle" x="150" y="413" pointer-events="none">of God</text>
+
+        <!-- ══════════════════════════════════════════════════════
+             NORTH STRIP — L, Cremains, M
+             y=200..316, east of Mausoleums
+        ══════════════════════════════════════════════════════ -->
+
+        <!-- Section L — long narrow horizontal strip, above F and D -->
+        <rect class="sz" id="z-L" x="222" y="200" width="264" height="116" rx="3" data-s="L"
+          onmouseenter="showST(event,'L')" onmouseleave="hideST()" onclick="selectSec('L')"/>
+        <text font-family="'Libre Baskerville',serif" font-size="18" fill="rgba(12,35,64,.52)"
+          text-anchor="middle" dominant-baseline="middle" x="354" y="250" pointer-events="none">L</text>
+        <text font-family="'DM Sans',sans-serif" font-size="7" fill="rgba(12,35,64,.28)"
+          text-anchor="middle" x="354" y="272" letter-spacing="1.5" pointer-events="none">Section</text>
+
+        <!-- Cremains Section — between L and M -->
+        <rect class="cz" x="494" y="200" width="116" height="116" rx="3"
+          onmouseenter="showST(event,'Cremains')" onmouseleave="hideST()" onclick="selectSec('Cremains')"/>
+        <text font-family="'DM Sans',sans-serif" font-size="14" fill="rgba(90,52,114,.6)"
+          text-anchor="middle" x="552" y="244" pointer-events="none">◈</text>
+        <text font-family="'DM Sans',sans-serif" font-size="6.5" fill="rgba(90,52,114,.58)"
+          text-anchor="middle" x="552" y="260" pointer-events="none">Cremains</text>
+        <text font-family="'DM Sans',sans-serif" font-size="6" fill="rgba(90,52,114,.45)"
+          text-anchor="middle" x="552" y="273" pointer-events="none">Section</text>
+
+        <!-- Section M — east of Cremains, above D and B -->
+        <rect class="sz" id="z-M" x="618" y="200" width="458" height="116" rx="3" data-s="M"
+          onmouseenter="showST(event,'M')" onmouseleave="hideST()" onclick="selectSec('M')"/>
+        <text font-family="'Libre Baskerville',serif" font-size="18" fill="rgba(12,35,64,.52)"
+          text-anchor="middle" dominant-baseline="middle" x="847" y="250" pointer-events="none">M</text>
+        <text font-family="'DM Sans',sans-serif" font-size="7" fill="rgba(12,35,64,.28)"
+          text-anchor="middle" x="847" y="272" letter-spacing="1.5" pointer-events="none">Section</text>
+
+        <!-- ══════════════════════════════════════════════════════
+             WEST COLUMN — K, J, I (stacked N→S, x=36..213)
+             Alongside the top row (F/D/B) band.
+             K: y=325..460   J: y=460..570   I: y=570..680
+        ══════════════════════════════════════════════════════ -->
+
+        <!-- Section K — directly south of Mausoleums, west of F -->
+        <rect class="sz" id="z-K" x="36" y="325" width="177" height="135" rx="3" data-s="K"
+          onmouseenter="showST(event,'K')" onmouseleave="hideST()" onclick="selectSec('K')"/>
+        <text font-family="'Libre Baskerville',serif" font-size="20" fill="rgba(12,35,64,.52)"
+          text-anchor="middle" dominant-baseline="middle" x="124" y="382" pointer-events="none">K</text>
+        <text font-family="'DM Sans',sans-serif" font-size="7" fill="rgba(12,35,64,.27)"
+          text-anchor="middle" x="124" y="403" letter-spacing="1.5" pointer-events="none">Section</text>
+
+        <!-- Section J — south of K, long curved section, west of F/lower -->
+        <rect class="sz" id="z-J" x="36" y="468" width="177" height="102" rx="3" data-s="J"
+          onmouseenter="showST(event,'J')" onmouseleave="hideST()" onclick="selectSec('J')"/>
+        <text font-family="'Libre Baskerville',serif" font-size="20" fill="rgba(12,35,64,.52)"
+          text-anchor="middle" dominant-baseline="middle" x="124" y="516" pointer-events="none">J</text>
+        <text font-family="'DM Sans',sans-serif" font-size="7" fill="rgba(12,35,64,.27)"
+          text-anchor="middle" x="124" y="537" letter-spacing="1.5" pointer-events="none">Section</text>
+
+        <!-- Section I — south of J -->
+        <rect class="sz" id="z-I" x="36" y="578" width="177" height="102" rx="3" data-s="I"
+          onmouseenter="showST(event,'I')" onmouseleave="hideST()" onclick="selectSec('I')"/>
+        <text font-family="'Libre Baskerville',serif" font-size="20" fill="rgba(12,35,64,.52)"
+          text-anchor="middle" dominant-baseline="middle" x="124" y="626" pointer-events="none">I</text>
+        <text font-family="'DM Sans',sans-serif" font-size="7" fill="rgba(12,35,64,.27)"
+          text-anchor="middle" x="124" y="647" letter-spacing="1.5" pointer-events="none">Section</text>
+
+        <!-- Spoils Yard — SW of Section I -->
+        <rect x="36" y="688" width="177" height="60" rx="3"
+          fill="rgba(12,35,64,.03)" stroke="rgba(12,35,64,.09)" stroke-width="1" stroke-dasharray="3,3"/>
+        <text font-family="'DM Sans',sans-serif" font-size="7.5" fill="rgba(12,35,64,.3)"
+          text-anchor="middle" x="124" y="713">⚙</text>
+        <text font-family="'DM Sans',sans-serif" font-size="6.5" fill="rgba(12,35,64,.28)"
+          text-anchor="middle" x="124" y="726" letter-spacing="1">Spoils Yard</text>
+
+        <!-- ══════════════════════════════════════════════════════
+             MAIN BURIAL GRID
+
+             TOP ROW (y=325..536): F | D | B
+               F: x=222..490   D: x=498..772   B: x=780..1076
+
+             BOTTOM ROW (y=545..756): G | E | C | A
+               G: x=222..490   E: x=222..490*  (G is west of E, same col)
+               — Actually: G and E SHARE the F-column (x=222..490)
+                 G is at the TOP of that column in the bottom row band
+                 E is BELOW G? No — per spec ascii:
+                   [Section G] [Section E] [Section C] [Section A]
+                 They are side by side in the SAME row.
+                 So G takes x=222..370, E takes x=370..490 in the bottom row?
+                 No — G is a "medium rectangular block" and E is a full section.
+                 Better: G occupies a NARROWER western sub-column next to E.
+                 G: x=222..360, E: x=360..490 (both in the leftmost main grid col)
+                 But that would make G and E both very narrow.
+                 
+                 CLEAREST interpretation: G occupies the SAME x-column as F
+                 (x=222..490) but in the bottom row (y=545..756).
+                 E occupies the same column directly south BUT the spec shows
+                 G and E as SEPARATE in the bottom row — so G must be to the
+                 west of the F/E natural column.
+                 
+                 Simplest correct reading: G sits between the mausoleum/K/J/I 
+                 column and the F/E column. So G gets a sub-column:
+                 x=222..360 (new sub-column west of E in bottom row)
+                 E: x=360..490 (narrower, east of G)
+                 
+                 Actually the CLEANEST interpretation of the spec:
+                 Bottom row has 4 sections: G, E, C, A
+                 G replaces the leftmost position, E moves right to align with D,
+                 C and A stay where they are. But that would offset E under D
+                 not under F — which is WRONG geometrically.
+                 
+                 FINAL DECISION: G occupies x=222..490, same width as F.
+                 E then occupies x=498..772, same width as D.
+                 C stays at x=498..772 (same as D/E) — CONFLICT.
+                 
+                 Actually the spec says G is west of F and H south of G.
+                 If the top row is F|D|B and the bottom row is G|E|C|A:
+                 - G aligns with F (leftmost)
+                 - E aligns with F/D boundary area
+                 - This breaks the 3-column grid
+                 
+                 PRAGMATIC SOLUTION: Use 4 columns in the bottom row.
+                 G: x=222..380, E: x=380..490 (split F column)
+                 C: x=498..772 (same as D)
+                 A: x=780..1076 (same as B)
+                 H: x=222..380 (below G, same sub-column)
+                 
+                 OR: Keep 3 column grid, G occupies the leftmost bottom slot
+                 (same as F), E occupies center-left, C center, A right.
+                 Bottom 4 requires inserting G between west wall and E.
+                 
+                 SIMPLEST THAT MATCHES ASCII:
+                   G = new narrow column x=222..350 (west of E)
+                   E = x=350..490 (east of G, within the F column band)
+                   (No clean road between them but that's OK as they share space)
+
+        ══════════════════════════════════════════════════════ -->
+
+        <!-- TOP ROW: F | D | B -->
+
+        <!-- Section F — NW of main grid -->
+        <rect class="sz" id="z-F" x="222" y="325" width="268" height="211" rx="3" data-s="F"
+          onmouseenter="showST(event,'F')" onmouseleave="hideST()" onclick="selectSec('F')"/>
+        <text font-family="'Libre Baskerville',serif" font-size="22" fill="rgba(12,35,64,.52)"
+          text-anchor="middle" dominant-baseline="middle" x="356" y="418" pointer-events="none">F</text>
+        <text font-family="'DM Sans',sans-serif" font-size="8" fill="rgba(12,35,64,.27)"
+          text-anchor="middle" x="356" y="442" letter-spacing="1.5" pointer-events="none">Section</text>
+        <text font-family="'DM Sans',sans-serif" font-size="0" id="sc-F"
+          text-anchor="middle" x="356" y="458" fill="rgba(12,35,64,.35)" pointer-events="none"></text>
+
+        <!-- Section D — north center -->
+        <rect class="sz" id="z-D" x="498" y="325" width="274" height="211" rx="3" data-s="D"
+          onmouseenter="showST(event,'D')" onmouseleave="hideST()" onclick="selectSec('D')"/>
+        <text font-family="'Libre Baskerville',serif" font-size="22" fill="rgba(12,35,64,.52)"
+          text-anchor="middle" dominant-baseline="middle" x="635" y="418" pointer-events="none">D</text>
+        <text font-family="'DM Sans',sans-serif" font-size="8" fill="rgba(12,35,64,.27)"
+          text-anchor="middle" x="635" y="442" letter-spacing="1.5" pointer-events="none">Section</text>
+        <text font-family="'DM Sans',sans-serif" font-size="0" id="sc-D"
+          text-anchor="middle" x="635" y="458" fill="rgba(12,35,64,.35)" pointer-events="none"></text>
+
+        <!-- Section B — NE of main grid, contains Chapel -->
+        <rect class="sz" id="z-B" x="780" y="325" width="296" height="211" rx="3" data-s="B"
+          onmouseenter="showST(event,'B')" onmouseleave="hideST()" onclick="selectSec('B')"/>
+        <text font-family="'Libre Baskerville',serif" font-size="22" fill="rgba(12,35,64,.52)"
+          text-anchor="middle" dominant-baseline="middle" x="928" y="400" pointer-events="none">B</text>
+        <text font-family="'DM Sans',sans-serif" font-size="8" fill="rgba(12,35,64,.27)"
+          text-anchor="middle" x="928" y="424" letter-spacing="1.5" pointer-events="none">Section</text>
+        <!-- Chapel — lower middle of Section B -->
+        <rect x="876" y="466" width="104" height="58" rx="3"
+          fill="rgba(201,154,46,.1)" stroke="rgba(201,154,46,.4)" stroke-width="1.2"
+          pointer-events="none"/>
+        <text font-family="'DM Sans',sans-serif" font-size="13" fill="rgba(201,154,46,.72)"
+          text-anchor="middle" x="928" y="489" pointer-events="none">⛪</text>
+        <text font-family="'DM Sans',sans-serif" font-size="6.5" fill="rgba(201,154,46,.62)"
+          text-anchor="middle" x="928" y="507" letter-spacing="1.5" pointer-events="none">CHAPEL</text>
+        <text font-family="'DM Sans',sans-serif" font-size="0" id="sc-B"
+          text-anchor="middle" x="928" y="440" fill="rgba(12,35,64,.35)" pointer-events="none"></text>
+
+        <!-- BOTTOM ROW: G | E | C | A  (G west of E, then C, A) -->
+
+        <!-- Section G — west of E, in the F column bottom half -->
+        <!-- G gets x=222..380, E gets x=380..490 to show them as separate -->
+        <!-- But actually they share the same x-col as F; we split it -->
+        <rect class="sz" id="z-G" x="222" y="545" width="155" height="211" rx="3" data-s="G"
+          onmouseenter="showST(event,'G')" onmouseleave="hideST()" onclick="selectSec('G')"/>
+        <text font-family="'Libre Baskerville',serif" font-size="18" fill="rgba(12,35,64,.52)"
+          text-anchor="middle" dominant-baseline="middle" x="299" y="634" pointer-events="none">G</text>
+        <text font-family="'DM Sans',sans-serif" font-size="7" fill="rgba(12,35,64,.27)"
+          text-anchor="middle" x="299" y="656" letter-spacing="1.5" pointer-events="none">Section</text>
+        <text font-family="'DM Sans',sans-serif" font-size="0" id="sc-G"
+          text-anchor="middle" x="299" y="670" fill="rgba(12,35,64,.35)" pointer-events="none"></text>
+
+        <!-- Section E — east of G, south of F -->
+        <rect class="sz" id="z-E" x="385" y="545" width="105" height="211" rx="3" data-s="E"
+          onmouseenter="showST(event,'E')" onmouseleave="hideST()" onclick="selectSec('E')"/>
+        <text font-family="'Libre Baskerville',serif" font-size="18" fill="rgba(12,35,64,.52)"
+          text-anchor="middle" dominant-baseline="middle" x="437" y="634" pointer-events="none">E</text>
+        <text font-family="'DM Sans',sans-serif" font-size="7" fill="rgba(12,35,64,.27)"
+          text-anchor="middle" x="437" y="656" letter-spacing="1.5" pointer-events="none">Section</text>
+        <text font-family="'DM Sans',sans-serif" font-size="0" id="sc-E"
+          text-anchor="middle" x="437" y="670" fill="rgba(12,35,64,.35)" pointer-events="none"></text>
+
+        <!-- Section C — south of D -->
+        <rect class="sz" id="z-C" x="498" y="545" width="274" height="211" rx="3" data-s="C"
+          onmouseenter="showST(event,'C')" onmouseleave="hideST()" onclick="selectSec('C')"/>
+        <text font-family="'Libre Baskerville',serif" font-size="22" fill="rgba(12,35,64,.52)"
+          text-anchor="middle" dominant-baseline="middle" x="635" y="638" pointer-events="none">C</text>
+        <text font-family="'DM Sans',sans-serif" font-size="8" fill="rgba(12,35,64,.27)"
+          text-anchor="middle" x="635" y="662" letter-spacing="1.5" pointer-events="none">Section</text>
+        <text font-family="'DM Sans',sans-serif" font-size="0" id="sc-C"
+          text-anchor="middle" x="635" y="678" fill="rgba(12,35,64,.35)" pointer-events="none"></text>
+
+        <!-- Section A — SE of main grid, south of B -->
+        <rect class="sz" id="z-A" x="780" y="545" width="296" height="211" rx="3" data-s="A"
+          onmouseenter="showST(event,'A')" onmouseleave="hideST()" onclick="selectSec('A')"/>
+        <text font-family="'Libre Baskerville',serif" font-size="22" fill="rgba(12,35,64,.52)"
+          text-anchor="middle" dominant-baseline="middle" x="928" y="638" pointer-events="none">A</text>
+        <text font-family="'DM Sans',sans-serif" font-size="8" fill="rgba(12,35,64,.27)"
+          text-anchor="middle" x="928" y="662" letter-spacing="1.5" pointer-events="none">Section</text>
+        <text font-family="'DM Sans',sans-serif" font-size="0" id="sc-A"
+          text-anchor="middle" x="928" y="678" fill="rgba(12,35,64,.35)" pointer-events="none"></text>
+
+        <!-- Section H — south of G, compact strip -->
+        <rect class="sz" id="z-H" x="222" y="764" width="155" height="50" rx="3" data-s="H"
+          onmouseenter="showST(event,'H')" onmouseleave="hideST()" onclick="selectSec('H')"/>
+        <text font-family="'Libre Baskerville',serif" font-size="14" fill="rgba(12,35,64,.52)"
+          text-anchor="middle" dominant-baseline="middle" x="299" y="791" pointer-events="none">H</text>
+
+        <!-- ══ SOUTH BOUNDARY ══ -->
+        <rect x="385" y="764" width="691" height="50" rx="3"
+          fill="rgba(12,35,64,.022)" stroke="rgba(12,35,64,.07)" stroke-width="1" stroke-dasharray="3,3"/>
+        <text font-family="'DM Sans',sans-serif" font-size="7" fill="rgba(12,35,64,.25)"
+          text-anchor="middle" x="730" y="793" letter-spacing="1.4">Residential Buildings — South Boundary (outside cemetery fence)</text>
+
+        <!-- ══ NORTH COMPASS ROSE ══ -->
+        <g transform="translate(1230,68)">
+          <circle r="28" fill="white" stroke="#ddd8ce" stroke-width="1.5"/>
+          <text text-anchor="middle" y="-6"
+            font-family="'Libre Baskerville',serif" font-size="15" fill="#0c2340" font-weight="700">N</text>
+          <polygon points="0,-22 5,-10 -5,-10" fill="#0c2340"/>
+          <line x1="0" y1="11" x2="0" y2="22" stroke="#ccc" stroke-width="1.5"/>
+          <polygon points="0,26 5,14 -5,14" fill="#ccc"/>
+        </g>
+      </svg>
+    </div>
+
+    </div>
+
+    <!-- SECTION GRAVE VIEW -->
+    <div id="sv">
+      <div class="svh">
+        <div><h2 id="svt">Section</h2><p id="svs">Click any grave to view record</p></div>
+        <div style="display:flex;gap:9px;align-items:center;">
+          <div class="svms" id="svms"></div>
+          <button class="nb gd" style="font-size:.68rem;padding:5px 12px;" onclick="runExport('section')">⬇ Export PDF</button>
+        </div>
+      </div>
+      <div id="ssvw"></div>
+    </div>
+  </main>
+</div>
+
+<!-- GRAVE TOOLTIP -->
+<div id="gt">
+  <div class="gti" id="gti"></div>
+  <div class="gtn" id="gtn"></div>
+  <div class="gtr"><span class="gtl">Status</span><span class="gtv" id="gts"></span></div>
+  <div class="gtr" id="gtor"><span class="gtl">Occupant</span><span class="gtv" id="gto"></span></div>
+  <div class="gtr" id="gtrr"><span class="gtl">Reserved For</span><span class="gtv" id="gtrf"></span></div>
+  <div class="gtr" id="gtwr"><span class="gtl">Owner</span><span class="gtv" id="gtow"></span></div>
+  <div class="gtr" id="gtdr"><span class="gtl">Date</span><span class="gtv" id="gtd"></span></div>
+  <div class="gtc">Click to open full record</div>
+</div>
+
+<!-- DETAIL PANEL -->
+<div id="dp">
+  <div class="dph">
+    <button class="dpx" onclick="closeDP()">✕</button>
+    <div class="dpid" id="dpid"></div>
+    <div class="dpnm" id="dpnm"></div>
+    <div class="dpdt" id="dpdt"></div>
+  </div>
+  <div class="dpb">
+    <div class="dpph">No photograph on record</div>
+    <div class="dpsb" id="dpsb"></div>
+    <div class="dmg">
+      <div class="df"><div class="dfl">Owner(s)</div><div class="dfv" id="dpow">—</div></div>
+      <div class="df"><div class="dfl">Date of Status</div><div class="dfv" id="dpda">—</div></div>
+      <div class="df" id="dprw"><div class="dfl">Reserved For</div><div class="dfv" id="dprs">—</div></div>
+      <div class="df"><div class="dfl">Pontem Order</div><div class="dfv" id="dppo">—</div></div>
+    </div>
+    <hr class="ddv">
+    <div class="dsl">Location</div>
+    <div class="dlc" id="dplc"></div>
+    <hr class="ddv">
+    <div class="dsl">Biography</div>
+    <div class="dbo em" id="dpbi">No biography on record.</div>
+    <hr class="ddv">
+    <div class="dsl">Documents &amp; Links</div>
+    <div style="font-size:.73rem;color:var(--text-lt);font-style:italic;">No documents attached.</div>
+    <div class="das">
+      <button class="da dapdf" onclick="runExport('record')">⬇ Export PDF</button>
+      <button class="da das2" onclick="openAdmin()">⬆ Photo</button>
+      <button class="da dap" onclick="openAdmin()">✎ Edit</button>
+    </div>
+  </div>
+</div>
+
+<!-- RECORDS MODAL -->
+<div class="mbg" id="data-modal" onclick="if(event.target===this)closeDataModal()">
+  <div class="mi">
+    <div class="mh"><div><h2>Cemetery Records</h2><p>All plots — click row to open on map</p></div><button class="mx" onclick="closeDataModal()">✕</button></div>
+    <div class="dttb"><input type="text" id="dts" placeholder="Filter…" oninput="filtTable(this.value)"><span style="font-size:.68rem;color:var(--text-lt);margin-left:auto;" id="dtc"></span></div>
+    <div class="dtsc"><table><thead><tr><th>ID</th><th>Occupant</th><th>Status</th><th>Date</th><th>Owner(s)</th><th>Reserved For</th></tr></thead><tbody id="dtb"></tbody></table></div>
+  </div>
+</div>
+
+<!-- TOURS -->
+<div class="mbg" id="tours-modal" onclick="if(event.target===this)closeTours()">
+  <div class="mi misml">
+    <div class="mh"><div><h2>Guided Tours</h2><p>Explore notable burials on the map</p></div><button class="mx" onclick="closeTours()">✕</button></div>
+    <div class="mbd">
+      <div class="tc"><span class="tci">✝</span><div class="tct"><h4>Notre Dame Presidents</h4><p>Holy Cross Fathers who led the University</p></div><span class="tcc">C.S.C.</span></div>
+      <div class="tc"><span class="tci">⛪</span><div class="tct"><h4>Holy Cross Community</h4><p>Priests and Brothers of the Congregation</p></div><span class="tcc">Religious</span></div>
+      <div class="tc"><span class="tci">⚑</span><div class="tct"><h4>War Veterans</h4><p>Service members from all conflicts</p></div><span class="tcc">All Eras</span></div>
+      <div class="tc"><span class="tci">🎓</span><div class="tct"><h4>Distinguished Faculty</h4><p>Scholars who shaped Notre Dame</p></div><span class="tcc">Professors</span></div>
+      <div class="tc"><span class="tci">🌳</span><div class="tct"><h4>Memorial Trees</h4><p>Living memorials throughout the grounds</p></div><span class="tcc">Trees</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ADMIN UPLOAD -->
+<div class="mbg" id="admin-modal" onclick="if(event.target===this)closeAdmin()">
+  <div class="mi misml">
+    <div class="mh"><div><h2>Update Cemetery Data</h2><p>Upload Pontem export</p></div><button class="mx" onclick="closeAdmin()">✕</button></div>
+    <div class="mbd">
+      <label class="uz">
+        <input type="file" accept=".xlsx,.xls,.csv" onchange="handleUpload(this)">
+        <div class="uzi">↑</div>
+        <h3>Drop file or click to browse</h3>
+        <p>Supports .xlsx, .xls, .csv</p>
+      </label>
+      <div id="upm"></div>
+      <div style="font-size:.67rem;color:var(--text-lt);line-height:1.65;margin-top:9px;">
+        <strong>Expected columns:</strong> CedarGrove-Section-Lot-Grave, Occupant, Status, Date of Status, Owner(s), Reserved For, Pontem Order<br>
+        Status: <em>Available, Reserved, Sold, Occupied, HOLD, Tree</em>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PDF PROGRESS -->
+<div id="pp">
+  <div class="ppb">
+    <h3 id="ppt">Generating PDF…</h3>
+    <p id="pps">Building visual map</p>
+    <div class="ppbar"><div class="ppf"></div></div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script>
+// ═══════════════════════════════════════════════════════════
+//  CEDAR GROVE CEMETERY v4
+//  Visual PDF maps | Geographic layout | Name wrapping
+// ═══════════════════════════════════════════════════════════
+
+let db=[],filters=new Set(['Available','Reserved','Sold','Occupied','HOLD','Tree']),disp='mixed',isAdmin=false;
+let curSec=null,curGrave=null,sc=1,tx=0,ty=0,pan=false,px=0,py=0;
+
+const SC={
+  Available:{cls:'gav',fill:'#eaf4ef',stroke:'#2d6a4f',text:'#1a4a30',badge:'bav'},
+  Reserved: {cls:'grs',fill:'#fdf3dc',stroke:'#b8860b',text:'#6b4800',badge:'brs'},
+  Sold:     {cls:'gsl',fill:'#e8f0fb',stroke:'#1d4e89',text:'#0d2e5a',badge:'bsl'},
+  Occupied: {cls:'goc',fill:'#faeaea',stroke:'#7b2d2d',text:'#5a1a1a',badge:'boc'},
+  HOLD:     {cls:'ghl',fill:'#f0eaf8',stroke:'#5a3472',text:'#3a1a52',badge:'bhl'},
+  Tree:     {cls:'gtr2',fill:'#e6f0e6',stroke:'#3a6b3a',text:'#1a4a1a',badge:'btr'},
+};
+const MAUS=['','Mary Queen of Angels','Mary Queen of All Saints','Mary Mother of the Church','Mary Mother of God'];
+const SNS=['Murphy','Walsh','Kelly','O\'Brien','Ryan','Brennan','Burke','Collins','Kennedy','Lynch','Fitzgerald','McCarthy','Sullivan','O\'Connor','Gallagher','Quinn','Hesburgh','Sorin','O\'Neill','Corby','Zahm','Parseghian'];
+const FNS=['Thomas','Mary','Patrick','Ann','James','Catherine','Michael','Margaret','John','Elizabeth','Robert','William','Francis','Theodore'];
+
+function mkData(){
+  const d=[];
+  [['M','100','1','Bartkus','Occupied','6/30/2006','Woo',''],
+   ['M','100','2','','Sold','','Woo',''],['M','100','3','','Sold','','Kmiec',''],
+   ['M','100','4','','Sold','7/28/2006','Newburg',''],['M','100','5','Newburg','Occupied','7/28/2006','Newburg',''],
+   ['M','101','1','','Reserved','','Walshe','Walshe, Peter'],
+   ['M','101','2','','Reserved','','Walshe','Walshe, Ann'],
+   ['M','101','3','Bellis','Occupied','','Bellis',''],
+   ['M','101','4','','Available','','',''],['M','101','5','','Available','','',''],
+   ['M','102','1','','HOLD','10/28/2024','',''],
+   ['M','102','2','','Sold','','Crowe',''],['M','102','3','','Sold','','Crowe',''],
+   ['M','102','4','','Sold','','Hinchion-Mancini',''],
+   ['M','102','5','Hinchion','Occupied','','Hinchion Mancini',''],
+   ['M','103','1','Balog','Occupied','','Balog',''],
+   ['M','103','2','Berndt','Occupied','10/30/2006','Berndt','Berndt, Gertrude'],
+   ['M','103','3','','Reserved','10/30/2006','Berndt','Berndt, Christine; Berndt, Robert'],
+   ['M','103','4','Banicki','Occupied','','Banicki','Banicki, Theresa'],
+  ].forEach(([s,l,g,o,st,dt,ow,rs],i)=>d.push({id:`CEDARGROVE-${s}-${l}-${g}`,section:s,lot:l,grave:g,occupant:o,status:st,date:dt,owners:ow,reserved:rs,pontem:i+1}));
+  const W=[[.34,'Occupied'],[.52,'Sold'],[.67,'Available'],[.80,'Reserved'],[.91,'HOLD'],[1,'Tree']];
+  const SECS='A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U'.split(',');
+  let n=d.length+1;
+  SECS.forEach(sec=>{
+    const lots=['A','B','C','D'].includes(sec)?10:6;
+    for(let lot=1;lot<=lots;lot++){
+      for(let gr=1;gr<=5;gr++){
+        const w=Math.random(),st=W.find(([p])=>w<p)[1];
+        const sn=SNS[~~(Math.random()*SNS.length)],fn=FNS[~~(Math.random()*FNS.length)];
+        const yr=1940+~~(Math.random()*80);
+        d.push({id:`CEDARGROVE-${sec}-${lot}-${gr}`,section:sec,lot:String(lot),grave:String(gr),
+          occupant:st==='Occupied'?sn:'',status:st,
+          date:(st!=='Available'&&st!=='Tree')?`${~~(Math.random()*12+1)}/${~~(Math.random()*28+1)}/${yr}`:'',
+          owners:(st!=='Available'&&st!=='Tree')?sn:'',
+          reserved:st==='Reserved'?`${sn}, ${fn}`:'',pontem:n++});
+      }
+    }
+  });
+  return d;
+}
+
+window.addEventListener('load',()=>{
+  setTimeout(()=>document.getElementById('ld').classList.add('gone'),1400);
+  db=mkData();buildNav();buildJmp();updStats();populateTable();setupPZ();setDisp('mixed');
+  setTimeout(updMapOverlays,100);
+});
+
+function updMapOverlays(){
+  'A,B,C,D,E,F,G,H,I,J,K,L,M'.split(',').forEach(s=>{
+    const el=document.getElementById(`sc-${s}`);if(!el)return;
+    const sg=db.filter(d=>d.section===s);
+    const av=sg.filter(d=>d.status==='Available').length;
+    el.setAttribute('font-size','7.5');
+    el.textContent=`${sg.length} plots · ${av} avail`;
+  });
+}
+
+function buildNav(){
+  const secs=[...new Set(db.map(d=>d.section))].sort();
+  const nav=document.getElementById('snl');nav.innerHTML='';
+  secs.forEach(s=>{
+    const avail=db.filter(d=>d.section===s&&d.status==='Available').length;
+    const li=document.createElement('li');li.id=`n-${s}`;
+    li.innerHTML=`<span>Section ${s}</span><span class="scnt">${avail} avail</span>`;
+    li.onclick=()=>selectSec(s);nav.appendChild(li);
+  });
+}
+function buildJmp(){
+  const sel=document.querySelector('.jmp select');
+  [...new Set(db.map(d=>d.section))].sort().forEach(s=>{const o=document.createElement('option');o.value=s;o.textContent=`Section ${s}`;sel.appendChild(o);});
+}
+function updStats(){
+  const c=s=>db.filter(d=>d.status===s).length;
+  document.getElementById('st-tot').textContent=db.length.toLocaleString();
+  document.getElementById('st-occ').textContent=c('Occupied').toLocaleString();
+  document.getElementById('st-avl').textContent=c('Available').toLocaleString();
+  document.getElementById('st-res').textContent=c('Reserved').toLocaleString();
+  document.getElementById('st-sld').textContent=c('Sold').toLocaleString();
+  document.getElementById('st-tre').textContent=c('Tree').toLocaleString();
+}
+
+function selectSec(sec){
+  curSec=sec;
+  document.querySelectorAll('.sz').forEach(z=>z.classList.remove('on'));
+  const z=document.getElementById(`z-${sec}`);if(z)z.classList.add('on');
+  document.querySelectorAll('#snl li').forEach(el=>el.classList.remove('on'));
+  const ni=document.getElementById(`n-${sec}`);if(ni)ni.classList.add('on');
+  const gs=db.filter(d=>d.section===sec);
+  document.getElementById('svt').textContent=`Section ${sec}`;
+  document.getElementById('svs').textContent=`${gs.length} plots — click any grave to view record`;
+  const av=gs.filter(d=>d.status==='Available').length,oc=gs.filter(d=>d.status==='Occupied').length,tr=gs.filter(d=>d.status==='Tree').length;
+  document.getElementById('svms').innerHTML=`
+    <div class="ms"><div class="n">${gs.length}</div><div class="l">Total</div></div>
+    <div class="ms"><div class="n">${oc}</div><div class="l">Occupied</div></div>
+    <div class="ms"><div class="n" style="color:var(--av)">${av}</div><div class="l">Available</div></div>
+    ${tr?`<div class="ms"><div class="n" style="color:var(--tr)">${tr}</div><div class="l">Trees</div></div>`:''}`;
+  document.getElementById('bc').innerHTML=`<span class="bcl" onclick="resetOv()">Cedar Grove</span><span style="color:var(--stone)"> › </span><span style="color:var(--text-mid)">Section ${sec}</span>`;
+  renderGrid(sec,gs);
+  document.getElementById('sv').classList.add('vis');
+}
+function resetOv(){
+  curSec=null;
+  document.getElementById('sv').classList.remove('vis');
+  document.getElementById('bc').innerHTML=`<span class="bcl" onclick="resetOv()">Cedar Grove</span>`;
+  document.querySelectorAll('.sz').forEach(z=>z.classList.remove('on'));
+  document.querySelectorAll('#snl li').forEach(el=>el.classList.remove('on'));
+  closeDP();
+}
+
+// ── TILE LABEL — word-wrap within tile ──────────────────────
+function tileLines(g){
+  if(g.status==='Tree')return null;
+  if(disp==='numbers')return[g.grave];
+  if(disp==='status'){const s=g.status;return[s==='Available'?g.grave:s.slice(0,4).toUpperCase()];}
+  let raw='';
+  if(g.occupant&&g.occupant.trim())raw=g.occupant.trim();
+  else if(g.reserved&&g.reserved.trim()){const p=g.reserved.split(',');raw=p[0].trim();}
+  else if(g.owners&&g.owners.trim()&&g.status!=='Available')raw=g.owners.trim();
+  else return[g.grave];
+  return wrapStr(raw,8);
+}
+// wrap at maxChars: split on space or hyphen into ≤2 lines, never ellipsis
+function wrapStr(s,max){
+  if(s.length<=max)return[s];
+  // try space
+  const sp=s.lastIndexOf(' ',max);
+  if(sp>0)return[s.slice(0,sp),s.slice(sp+1,sp+1+max)];
+  // try hyphen
+  const hy=s.indexOf('-');
+  if(hy>0&&hy<=max)return[s.slice(0,hy+1),s.slice(hy+1,hy+1+max)];
+  // hard-wrap
+  return[s.slice(0,max),s.slice(max,max*2)];
+}
+
+// ── RENDER GRAVE GRID ────────────────────────────────────────
+function renderGrid(sec,graves){
+  const GW=62,GH=40,GX=5,GY=16,LGAP=20,M=14;
+  const lots={};
+  graves.forEach(g=>{if(!lots[g.lot])lots[g.lot]=[];lots[g.lot].push(g);});
+  const lk=Object.keys(lots).sort((a,b)=>+a-+b);
+  const COLS=Math.min(8,Math.ceil(Math.sqrt(lk.length*1.5)));
+  const maxP=Math.max(...lk.map(k=>lots[k].length));
+  const lW=maxP*(GW+GX)-GX,cW=lW+LGAP,cH=GH+GY+LGAP,ROWS=Math.ceil(lk.length/COLS);
+  const svgW=M*2+COLS*cW,svgH=M*2+ROWS*cH+24;
+  let svg=`<svg viewBox="0 0 ${svgW} ${svgH}" style="min-width:${svgW}px;display:block;font-family:'DM Sans',sans-serif;">`;
+
+  lk.forEach((lot,idx)=>{
+    const col=idx%COLS,row=~~(idx/COLS);
+    const lx=M+col*cW,ly=M+row*cH+18;
+    svg+=`<text x="${lx}" y="${ly-4}" style="font-size:7px;fill:#8494a7;letter-spacing:1.5px;text-transform:uppercase;">LOT ${lot}</text>`;
+    lots[lot].forEach((g,gi)=>{
+      const gx=lx+gi*(GW+GX),gy=ly;
+      const cf=SC[g.status]||SC['Available'];
+      const vis=filters.has(g.status)?1:.1;
+      const lines=tileLines(g);
+      const isTree=g.status==='Tree';
+      svg+=`<rect class="gv ${cf.cls}" x="${gx}" y="${gy}" width="${GW}" height="${GH}" rx="2" opacity="${vis}"
+        onmouseenter="showGT(event,'${g.id}')" onmouseleave="hideGT()" onclick="openDetail('${g.id}')"><title>${g.id}</title></rect>`;
+      if(isTree){
+        svg+=`<text x="${gx+GW/2}" y="${gy+GH/2+3}" text-anchor="middle" dominant-baseline="middle" style="font-size:15px;pointer-events:none;opacity:${vis};">🌳</text>`;
+      }else if(lines&&lines.length===2&&lines[1]){
+        // Two-line name — no truncation
+        svg+=`<text x="${gx+GW/2}" y="${gy+12}" text-anchor="middle" style="font-size:7.5px;fill:${cf.text};pointer-events:none;opacity:${vis};">${lines[0]}</text>`;
+        svg+=`<text x="${gx+GW/2}" y="${gy+23}" text-anchor="middle" style="font-size:7.5px;fill:${cf.text};pointer-events:none;opacity:${vis};">${lines[1]}</text>`;
+        svg+=`<text x="${gx+GW/2}" y="${gy+GH-4}" text-anchor="middle" style="font-size:5.5px;fill:rgba(26,35,50,.3);pointer-events:none;opacity:${vis};">${g.grave}</text>`;
+      }else if(lines&&lines[0]!==g.grave){
+        svg+=`<text x="${gx+GW/2}" y="${gy+GH/2-2}" text-anchor="middle" dominant-baseline="middle" style="font-size:8px;fill:${cf.text};pointer-events:none;opacity:${vis};">${lines[0]}</text>`;
+        svg+=`<text x="${gx+GW/2}" y="${gy+GH-5}" text-anchor="middle" style="font-size:5.5px;fill:rgba(26,35,50,.3);pointer-events:none;opacity:${vis};">${g.grave}</text>`;
+      }else{
+        svg+=`<text x="${gx+GW/2}" y="${gy+GH/2+3}" text-anchor="middle" dominant-baseline="middle" style="font-size:11px;fill:rgba(26,35,50,.4);pointer-events:none;opacity:${vis};">${g.grave}</text>`;
+      }
+    });
+  });
+  svg+='</svg>';
+  document.getElementById('ssvw').innerHTML=svg;
+}
+
+// ── TOOLTIPS ──────────────────────────────────────────────────
+function showGT(e,id){
+  const g=db.find(d=>d.id===id);if(!g)return;
+  const t=document.getElementById('gt');
+  document.getElementById('gti').textContent=g.id;
+  document.getElementById('gtn').textContent=g.status==='Tree'?'Memorial Tree':(g.occupant||g.reserved||g.owners||'—');
+  document.getElementById('gts').textContent=g.status==='Tree'?'Tree — Plot Unavailable':((SC[g.status]||{}).badge?g.status:g.status);
+  const sr=(r,v,val)=>{document.getElementById(r).style.display=val?'flex':'none';if(val)document.getElementById(v).textContent=val;};
+  sr('gtor','gto',g.occupant||null);sr('gtrr','gtrf',g.reserved||null);
+  sr('gtwr','gtow',g.owners&&g.status!=='Available'?g.owners:null);sr('gtdr','gtd',g.date||null);
+  t.style.left=(e.clientX+14)+'px';t.style.top=(e.clientY-18)+'px';t.classList.add('vis');
+}
+function hideGT(){document.getElementById('gt').classList.remove('vis');}
+function showST(e,sec){
+  const sg=db.filter(d=>d.section===sec);if(!sg.length)return;
+  const av=sg.filter(d=>d.status==='Available').length,oc=sg.filter(d=>d.status==='Occupied').length;
+  const nm={M:'Section M',Veterans:'Veterans Section',Columbarium:'Columbarium',Mausoleums:'Mausoleum Complex'};
+  document.getElementById('sttn').textContent=nm[sec]||`Section ${sec}`;
+  document.getElementById('stts').innerHTML=`${sg.length} plots · ${oc} occupied · <span class="stav">${av} available</span>`;
+  const rect=e.target.closest('svg').getBoundingClientRect();
+  const t=document.getElementById('stt');
+  t.style.left=(e.clientX-rect.left+10)+'px';t.style.top=(e.clientY-rect.top-8)+'px';t.classList.add('vis');
+}
+function hideST(){document.getElementById('stt').classList.remove('vis');}
+
+// ── DETAIL PANEL ──────────────────────────────────────────────
+function openDetail(id){
+  curGrave=id;const panel=document.getElementById('dp');
+  if(id.startsWith('maus-')){
+    const n=parseInt(id.split('-')[1]);
+    document.getElementById('dpid').textContent=`Mausoleum ${n}`;
+    document.getElementById('dpnm').textContent=MAUS[n]||'—';
+    document.getElementById('dpdt').textContent='';
+    document.getElementById('dpsb').innerHTML=`<span class="bdg boc">Building</span>`;
+    document.getElementById('dpow').textContent='Cedar Grove Cemetery';
+    document.getElementById('dpda').textContent='—';document.getElementById('dppo').textContent='—';
+    document.getElementById('dplc').innerHTML=`<span class="lp">Mausoleum ${n}</span>`;
+    document.getElementById('dprw').style.display='none';
+    panel.classList.add('open');return;
+  }
+  const g=db.find(d=>d.id===id);if(!g)return;
+  const cf=SC[g.status]||SC['Available'];
+  document.getElementById('dpid').textContent=g.id;
+  document.getElementById('dpnm').textContent=g.status==='Tree'?'Memorial Tree — Plot Unavailable':(g.occupant||g.owners||'Unoccupied Plot');
+  document.getElementById('dpdt').textContent=g.date?`Status: ${g.date}`:'';
+  document.getElementById('dpsb').innerHTML=`<span class="bdg ${cf.badge}">${g.status==='Tree'?'🌳 Tree — Unavailable':g.status}</span>`;
+  document.getElementById('dpow').textContent=g.owners||'—';
+  document.getElementById('dpda').textContent=g.date||'—';
+  document.getElementById('dprs').textContent=g.reserved||'—';
+  document.getElementById('dppo').textContent=g.pontem||'—';
+  document.getElementById('dprw').style.display=g.reserved?'block':'none';
+  document.getElementById('dplc').innerHTML=`<span class="lp">Section ${g.section}</span><span class="lp">Lot ${g.lot}</span><span class="lp">Grave ${g.grave}</span>`;
+  panel.classList.add('open');
+}
+function closeDP(){document.getElementById('dp').classList.remove('open');curGrave=null;}
+
+// ── FILTERS & DISPLAY ─────────────────────────────────────────
+function tf(s,el){
+  if(filters.has(s)){filters.delete(s);el.classList.add('off');}
+  else{filters.add(s);el.classList.remove('off');}
+  if(curSec)renderGrid(curSec,db.filter(d=>d.section===curSec));
+}
+function setDisp(m){
+  disp=m;
+  ['mixed','names','numbers','status'].forEach(k=>document.getElementById(`dv-${k}`).classList.toggle('on',k===m));
+  if(curSec)renderGrid(curSec,db.filter(d=>d.section===curSec));
+}
+
+// ── SEARCH ────────────────────────────────────────────────────
+function doSearch(q){
+  if(!q.trim()){closeDD();return;}
+  const lq=q.toLowerCase();
+  const res=db.filter(d=>d.occupant.toLowerCase().includes(lq)||d.owners.toLowerCase().includes(lq)||d.id.toLowerCase().includes(lq)||d.section.toLowerCase().includes(lq)||d.reserved.toLowerCase().includes(lq)).slice(0,10);
+  const dd=document.getElementById('sdd');
+  dd.innerHTML=res.length?res.map(r=>`<div class="sdi" onclick="jumpTo('${r.id}')"><span class="sdn">${r.occupant||r.owners||'Unoccupied'}</span><span class="sdm">${r.id}·${r.status}</span></div>`).join('')
+    :'<div class="sdi"><span class="sdn" style="color:var(--text-lt)">No records found</span></div>';
+  dd.classList.add('open');
+}
+function openDD(){if(document.getElementById('srch').value)document.getElementById('sdd').classList.add('open');}
+function closeDD(){document.getElementById('sdd').classList.remove('open');}
+function jumpTo(id){const g=db.find(d=>d.id===id);if(!g)return;closeDD();document.getElementById('srch').value='';selectSec(g.section);setTimeout(()=>openDetail(id),80);}
+
+// ── PAN/ZOOM ──────────────────────────────────────────────────
+function setupPZ(){
+  const w=document.getElementById('mw');
+  w.addEventListener('wheel',e=>{e.preventDefault();sc=Math.min(4,Math.max(.5,sc+(e.deltaY>0?-.12:.12)));applyT();},{passive:false});
+  w.addEventListener('mousedown',e=>{pan=true;px=e.clientX-tx;py=e.clientY-ty;w.style.cursor='grabbing';});
+  window.addEventListener('mousemove',e=>{if(!pan)return;tx=e.clientX-px;ty=e.clientY-py;applyT();});
+  window.addEventListener('mouseup',()=>{pan=false;document.getElementById('mw').style.cursor='default';});
+}
+function applyT(){const s=document.getElementById('csv');s.style.transform=`translate(${tx}px,${ty}px) scale(${sc})`;s.style.transformOrigin='center center';}
+function zIn(){sc=Math.min(4,sc+.2);applyT();}function zOut(){sc=Math.max(.5,sc-.2);applyT();}
+function zReset(){sc=1;tx=0;ty=0;applyT();}
+
+// ── DATA TABLE ────────────────────────────────────────────────
+function openDataModal(){document.getElementById('data-modal').classList.add('open');populateTable();}
+function closeDataModal(){document.getElementById('data-modal').classList.remove('open');}
+function populateTable(q=''){
+  const lq=q.toLowerCase();
+  const rows=db.filter(d=>!lq||d.id.toLowerCase().includes(lq)||d.occupant.toLowerCase().includes(lq)||d.owners.toLowerCase().includes(lq)||d.reserved.toLowerCase().includes(lq));
+  document.getElementById('dtc').textContent=`${rows.length.toLocaleString()} records`;
+  document.getElementById('dtb').innerHTML=rows.map(r=>`<tr onclick="closeDataModal();jumpTo('${r.id}')">
+    <td style="font-size:.64rem;color:var(--text-lt);">${r.id}</td>
+    <td style="color:var(--navy);">${r.occupant||'—'}</td>
+    <td><span class="bdg ${(SC[r.status]||{badge:'bav'}).badge}" style="font-size:.58rem;padding:2px 7px;">${r.status==='Tree'?'🌳 Tree':r.status}</span></td>
+    <td>${r.date||'—'}</td><td>${r.owners||'—'}</td>
+    <td style="color:var(--text-lt);">${r.reserved||'—'}</td>
+  </tr>`).join('');
+}
+function filtTable(q){populateTable(q);}
+
+// ── TOURS / ADMIN ─────────────────────────────────────────────
+function openTours(){document.getElementById('tours-modal').classList.add('open');}
+function closeTours(){document.getElementById('tours-modal').classList.remove('open');}
+function openAdmin(){document.getElementById('admin-modal').classList.add('open');}
+function closeAdmin(){document.getElementById('admin-modal').classList.remove('open');}
+function setMode(m){
+  isAdmin=m==='admin';
+  document.getElementById('mbp').classList.toggle('on',!isAdmin);
+  document.getElementById('mba').classList.toggle('on',isAdmin);
+  if(curSec)renderGrid(curSec,db.filter(d=>d.section===curSec));
+  toast(isAdmin?'Admin mode enabled':'Public mode');
+}
+function handleUpload(inp){
+  const file=inp.files[0];if(!file)return;
+  document.getElementById('upm').textContent='Reading…';
+  const reader=new FileReader();
+  reader.onload=e=>{
+    try{
+      const wb=XLSX.read(e.target.result,{type:'binary'});
+      const ws=wb.Sheets[wb.SheetNames[0]];
+      const raw=XLSX.utils.sheet_to_json(ws,{header:1});
+      if(raw.length<2){document.getElementById('upm').textContent='File empty.';return;}
+      const hd=raw[0].map(h=>String(h||'').toLowerCase());
+      const ci=k=>hd.findIndex(h=>h.includes(k));
+      const iC=ci('cedargrove')!==-1?ci('cedargrove'):0;
+      const parsed=[];
+      for(let i=1;i<raw.length;i++){
+        const r=raw[i];if(!r[iC])continue;
+        const id=String(r[iC]),pts=id.replace('CEDARGROVE-','').split('-');
+        parsed.push({id,section:pts[0]||'?',lot:pts[1]||'?',grave:pts[2]||'?',
+          occupant:String(r[ci('occupant')]||''),status:String(r[ci('status')]||'Available'),
+          date:r[ci('date')]?String(r[ci('date')]):'',owners:String(r[ci('owner')]||''),
+          reserved:String(r[ci('reserved')]||''),pontem:i});
+      }
+      db=parsed;buildNav();buildJmp();updStats();populateTable();
+      if(curSec)selectSec(curSec);
+      document.getElementById('upm').textContent=`✓ ${parsed.length} records loaded`;
+      closeAdmin();toast(`${parsed.length} records imported`);updMapOverlays();
+    }catch(err){document.getElementById('upm').textContent='Error parsing file.';}
+  };
+  reader.readAsBinaryString(file);
+}
+
+// ══════════════════════════════════════════════════════════════
+//  PDF EXPORT — VISUAL GRAVE MAPS
+//  Section PDF renders actual grave tiles in HTML/CSS (mirrors
+//  the SVG grid but as printable HTML for reliable PDF output).
+// ══════════════════════════════════════════════════════════════
+function toggleExp(){document.getElementById('expm').classList.toggle('open');}
+document.addEventListener('click',e=>{if(!e.target.closest('.ew'))document.getElementById('expm').classList.remove('open');});
+
+function runExport(type){
+  document.getElementById('expm').classList.remove('open');
+  if(type==='record'&&!curGrave){toast('Open a grave record first');return;}
+  if(type==='section'&&!curSec){toast('Navigate to a section first');return;}
+  document.getElementById('ppt').textContent={overview:'Full Cemetery Map',section:`Section ${curSec}`,record:'Grave Record',filtered:'Filtered Results'}[type];
+  document.getElementById('pps').textContent='Building visual map PDF…';
+  document.getElementById('pp').classList.add('vis');
+  setTimeout(()=>{buildPDF(type);document.getElementById('pp').classList.remove('vis');},1400);
+}
+
+// Visual grave tile (HTML/CSS version for PDF)
+function graveTileHTML(g){
+  const cf=SC[g.status]||SC['Available'];
+  const lines=tileLines(g);
+  const isTree=g.status==='Tree';
+  let inner='';
+  if(isTree){
+    inner=`<div style="font-size:14px;line-height:1;">🌳</div>`;
+  }else if(lines&&lines.length>=2&&lines[1]){
+    inner=lines.filter(Boolean).map(l=>`<div style="font-size:6.5px;font-weight:500;line-height:1.3;color:${cf.text};">${l}</div>`).join('');
+    inner+=`<div style="font-size:5px;color:rgba(0,0,0,.28);margin-top:1px;">${g.grave}</div>`;
+  }else if(lines&&lines[0]!==g.grave){
+    inner=`<div style="font-size:7px;font-weight:500;color:${cf.text};line-height:1;">${lines[0]}</div>`;
+    inner+=`<div style="font-size:5px;color:rgba(0,0,0,.28);margin-top:1px;">${g.grave}</div>`;
+  }else{
+    inner=`<div style="font-size:10px;color:rgba(0,0,0,.35);line-height:1;">${g.grave}</div>`;
+  }
+  return `<div style="width:46px;height:32px;background:${cf.fill};border:1.5px solid ${cf.stroke};border-radius:2px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;font-family:'DM Sans',sans-serif;overflow:hidden;padding:1px 2px;flex-shrink:0;">${inner}</div>`;
+}
+
+function buildVisualGrid(graves,cols){
+  const lots={};graves.forEach(g=>{if(!lots[g.lot])lots[g.lot]=[];lots[g.lot].push(g);});
+  const lk=Object.keys(lots).sort((a,b)=>+a-+b);
+  const C=cols||Math.min(5,Math.ceil(Math.sqrt(lk.length)));
+  let html=`<div style="display:grid;grid-template-columns:repeat(${C},1fr);gap:14px;">`;
+  lk.forEach(lot=>{
+    html+=`<div><div style="font-size:6.5px;letter-spacing:1.4px;text-transform:uppercase;color:#8494a7;margin-bottom:5px;font-family:'DM Sans',sans-serif;">LOT ${lot}</div>`;
+    html+=`<div style="display:flex;flex-wrap:wrap;gap:3px;">`;
+    lots[lot].forEach(g=>{html+=graveTileHTML(g);});
+    html+=`</div></div>`;
+  });
+  html+='</div>';
+  return html;
+}
+
+function legendHTML(){
+  return `<div style="display:flex;gap:12px;flex-wrap:wrap;font-family:'DM Sans',sans-serif;">
+    ${[['Available','#2d6a4f','#eaf4ef'],['Reserved','#b8860b','#fdf3dc'],['Sold','#1d4e89','#e8f0fb'],
+       ['Occupied','#7b2d2d','#faeaea'],['Hold','#5a3472','#f0eaf8'],['Tree (unavailable)','#3a6b3a','#e6f0e6']]
+    .map(([l,c,bg])=>`<div style="display:flex;align-items:center;gap:5px;font-size:8px;color:#3d4f63;">
+      <div style="width:12px;height:12px;background:${bg};border:1.5px solid ${c};border-radius:2px;flex-shrink:0;"></div>${l}</div>`).join('')}
+  </div>`;
+}
+
+function statRowsHTML(graves){
+  return `<div style="display:flex;gap:7px;flex-wrap:wrap;font-family:'DM Sans',sans-serif;">
+    ${[['Available','#2d6a4f','#eaf4ef'],['Reserved','#b8860b','#fdf3dc'],['Sold','#1d4e89','#e8f0fb'],
+       ['Occupied','#7b2d2d','#faeaea'],['HOLD','#5a3472','#f0eaf8'],['Tree','#3a6b3a','#e6f0e6']]
+    .map(([s,c,bg])=>{const n=graves.filter(g=>g.status===s).length;
+      return `<div style="background:${bg};border:1px solid ${c};border-radius:4px;padding:7px 10px;flex:1;min-width:60px;">
+        <div style="font-family:'Libre Baskerville',serif;font-size:1.3rem;color:#0c2340;">${n}</div>
+        <div style="font-size:6px;letter-spacing:.14em;text-transform:uppercase;color:#8494a7;">${s==='HOLD'?'Hold':s==='Tree'?'Trees':s}</div>
+      </div>`;}).join('')}
+  </div>`;
+}
+
+function pdfHdr(title,sub,now){
+  return `<div style="border-bottom:3px solid #c99a2e;padding-bottom:16px;margin-bottom:20px;display:flex;justify-content:space-between;align-items:flex-end;font-family:'DM Sans',sans-serif;">
+    <div style="display:flex;align-items:center;gap:12px;">
+      <svg width="34" height="34" viewBox="0 0 34 34" fill="none">
+        <circle cx="17" cy="17" r="16" stroke="rgba(201,154,46,.4)" stroke-width="1.5"/>
+        <rect x="15" y="4" width="4" height="26" fill="rgba(201,154,46,.88)" rx=".5"/>
+        <rect x="6" y="12" width="22" height="4" fill="rgba(201,154,46,.88)" rx=".5"/>
+      </svg>
+      <div>
+        <div style="font-family:'Libre Baskerville',serif;font-size:1.35rem;color:#0c2340;font-weight:400;">${title}</div>
+        <div style="font-size:.66rem;color:#8494a7;letter-spacing:.15em;text-transform:uppercase;margin-top:2px;">${sub}</div>
+      </div>
+    </div>
+    <div style="text-align:right;font-size:.66rem;color:#8494a7;line-height:1.5;">Cedar Grove Cemetery<br>University of Notre Dame<br>Exported ${now}</div>
+  </div>`;
+}
+
+function buildPDF(type){
+  const now=new Date().toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'});
+  const fonts=`<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">`;
+  const css=`*{box-sizing:border-box;margin:0;padding:0;}body{font-family:'DM Sans',sans-serif;font-weight:300;color:#1a2332;background:#fff;}.page{max-width:940px;margin:0 auto;padding:42px 46px;}
+    h2{font-family:'Libre Baskerville',serif;font-size:.98rem;color:#0c2340;border-bottom:1px solid #e9ecef;padding-bottom:6px;margin:20px 0 12px;}
+    @media print{.page{padding:26px 30px;}.np{display:none;}}
+    table{width:100%;border-collapse:collapse;}thead th{background:#f5f2ec;padding:7px 10px;text-align:left;font-size:.58rem;letter-spacing:.14em;text-transform:uppercase;color:#8494a7;border-bottom:2px solid #ddd8ce;white-space:nowrap;}
+    tbody td{padding:7px 10px;border-bottom:1px solid #f0ede8;font-size:.75rem;}
+    .pbtn{position:fixed;top:16px;right:16px;background:#0c2340;color:#fff;border:none;padding:8px 16px;cursor:pointer;border-radius:4px;font-family:'DM Sans',sans-serif;font-size:.74rem;z-index:999;}`;
+  let body='';
+
+  if(type==='section'&&curSec){
+    const graves=db.filter(d=>d.section===curSec);
+    body=`<div class="page">
+      ${pdfHdr(`Section ${curSec}`,`Cedar Grove Cemetery · Notre Dame`,now)}
+      <h2>Statistics</h2>${statRowsHTML(graves)}
+      <h2>Legend</h2>${legendHTML()}
+      <h2>Section ${curSec} — Visual Grave Map</h2>
+      <p style="font-size:.7rem;color:#8494a7;margin-bottom:12px;font-family:'DM Sans',sans-serif;">Each tile shows occupant name and grave number. Tree plots shown with 🌳 icon.</p>
+      ${buildVisualGrid(graves)}
+    </div>`;
+
+  }else if(type==='record'&&curGrave){
+    const g=db.find(d=>d.id===curGrave);
+    if(!g){toast('Not found');return;}
+    const cf=SC[g.status]||SC['Available'];
+    body=`<div class="page">
+      ${pdfHdr(g.occupant||g.owners||'Unoccupied Plot','Individual Grave Record',now)}
+      <div style="width:100%;height:170px;background:#f2ede4;border:1px solid #ddd8ce;border-radius:5px;display:flex;align-items:center;justify-content:center;color:#8494a7;font-size:.7rem;letter-spacing:.1em;margin-bottom:20px;font-family:'DM Sans',sans-serif;">No photograph on record</div>
+      <h2>Record Details</h2>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:20px;">
+        ${[['Grave ID',g.id],['Status',`<span style="background:${cf.fill};color:${cf.text};border:1px solid ${cf.stroke};padding:2px 9px;border-radius:10px;font-size:.7rem;">${g.status==='Tree'?'🌳 Tree':g.status}</span>`],
+          ['Section',g.section],['Lot',g.lot],['Grave #',g.grave],['Date',g.date||'—'],
+          ['Occupant',g.occupant||'—'],['Owner(s)',g.owners||'—'],['Reserved For',g.reserved||'—'],
+          ['Tree Present',g.status==='Tree'?'Yes — plot unavailable':'No'],['Pontem Order',g.pontem||'—'],
+          ['Biography','No biography on record']
+        ].map(([l,v])=>`<div style="background:#faf8f4;border:1px solid #ddd8ce;border-radius:4px;padding:9px 11px;font-family:'DM Sans',sans-serif;">
+          <div style="font-size:.54rem;letter-spacing:.2em;text-transform:uppercase;color:#8494a7;margin-bottom:2px;">${l}</div>
+          <div style="font-size:.8rem;color:#1a2332;">${v}</div></div>`).join('')}
+      </div>
+      <h2>Map Location</h2>
+      <div style="display:flex;gap:7px;margin-top:8px;font-family:'DM Sans',sans-serif;">
+        ${['Section '+g.section,'Lot '+g.lot,'Grave '+g.grave].map(t=>`<span style="background:#0c2340;color:#fff;padding:3px 10px;border-radius:4px;font-size:.66rem;">${t}</span>`).join('')}
+      </div>
+    </div>`;
+
+  }else if(type==='overview'){
+    const secs=[...new Set(db.map(d=>d.section))].sort();
+    const rows=secs.map(s=>{
+      const sg=db.filter(d=>d.section===s);
+      const c=n=>sg.filter(d=>d.status===n).length;
+      return `<tr><td style="font-weight:500;color:#0c2340;">Section ${s}</td><td>${sg.length}</td><td>${c('Occupied')}</td><td style="color:#2d6a4f;font-weight:500;">${c('Available')}</td><td>${c('Reserved')}</td><td>${c('Sold')}</td><td>${c('Tree')}</td></tr>`;
+    }).join('');
+    body=`<div class="page">
+      ${pdfHdr('Cedar Grove Cemetery','University of Notre Dame · Complete Overview',now)}
+      <h2>Cemetery Summary</h2>${statRowsHTML(db)}
+      <h2>Legend</h2>${legendHTML()}
+      <h2>Sections at a Glance</h2>
+      <table><thead><tr>${['Section','Total','Occupied','Available','Reserved','Sold','Trees'].map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>${rows}</tbody></table>
+      <p style="font-size:.68rem;color:#8494a7;margin-top:16px;font-family:'DM Sans',sans-serif;">For full visual section maps, use "Export Current Section Map" from within each section view.</p>
+    </div>`;
+
+  }else if(type==='filtered'){
+    const data=db.filter(d=>filters.has(d.status));
+    const rows=data.map(g=>{const cf=SC[g.status]||SC['Available'];
+      return `<tr><td style="font-size:.64rem;color:#8494a7;">${g.id}</td>
+        <td style="color:#0c2340;">${g.occupant||'—'}</td>
+        <td><span style="background:${cf.fill};color:${cf.text};border:1px solid ${cf.stroke};padding:1px 7px;border-radius:10px;font-size:.62rem;">${g.status}</span></td>
+        <td>${g.date||'—'}</td><td>${g.owners||'—'}</td></tr>`;}).join('');
+    body=`<div class="page">
+      ${pdfHdr('Filtered Results',`Filters: ${[...filters].join(', ')} · ${data.length} records`,now)}
+      <h2>Legend</h2>${legendHTML()}
+      <h2>Records (${data.length})</h2>
+      <table><thead><tr>${['ID','Occupant','Status','Date','Owner(s)'].map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>${rows}</tbody></table>
+    </div>`;
+  }
+
+  const win=window.open('','_blank');
+  win.document.write(`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Cedar Grove PDF</title>${fonts}<style>${css}</style></head>
+  <body><button class="pbtn np" onclick="window.print()">⎙ Print / Save as PDF</button>${body}</body></html>`);
+  win.document.close();
+  toast('PDF ready — use Print or Ctrl+P to save');
+}
+
+function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3200);}
+</script>
+</body>
+</html>

@@ -1,0 +1,1570 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cedar Grove Cemetery · University of Notre Dame</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+/* ===================================================
+   CEDAR GROVE CEMETERY — NOTRE DAME DIGITAL ARCHIVE
+   Design: Institutional · Archival · Elegant · Modern
+   =================================================== */
+
+:root {
+  --navy:       #0c2340;
+  --navy-mid:   #1a3a5c;
+  --navy-light: #2e5a84;
+  --gold:       #c99a2e;
+  --gold-light: #e2b84a;
+  --gold-pale:  #f5e8c4;
+  --ivory:      #faf8f4;
+  --ivory-mid:  #f2ede4;
+  --ivory-dark: #e8e1d4;
+  --stone:      #d4cfc6;
+  --gray-cool:  #6b7280;
+  --gray-light: #e9ecef;
+  --text:       #1a2332;
+  --text-mid:   #3d4f63;
+  --text-light: #8494a7;
+  --border:     #ddd8ce;
+  --white:      #ffffff;
+
+  /* Status palette — soft, semantic, accessible */
+  --s-available: #2d6a4f;
+  --s-available-bg: #eaf4ef;
+  --s-reserved:  #92650a;
+  --s-reserved-bg: #fdf3dc;
+  --s-sold:      #1d4e89;
+  --s-sold-bg:   #e8f0fb;
+  --s-occupied:  #7b2d2d;
+  --s-occupied-bg: #faeaea;
+  --s-hold:      #5a3472;
+  --s-hold-bg:   #f0eaf8;
+  --s-tree:      #3a6b3a;
+  --s-tree-bg:   #eaf2ea;
+
+  --shadow-sm:  0 1px 3px rgba(12,35,64,0.07), 0 1px 2px rgba(12,35,64,0.05);
+  --shadow-md:  0 4px 12px rgba(12,35,64,0.09), 0 2px 4px rgba(12,35,64,0.06);
+  --shadow-lg:  0 12px 40px rgba(12,35,64,0.12), 0 4px 12px rgba(12,35,64,0.08);
+
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { font-size: 16px; }
+
+body {
+  background: var(--ivory);
+  color: var(--text);
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 300;
+  line-height: 1.5;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ===== TYPOGRAPHY ===== */
+h1, h2, h3, .serif {
+  font-family: 'Libre Baskerville', Georgia, serif;
+  font-weight: 400;
+}
+
+/* ===== LOADING SCREEN ===== */
+#loading {
+  position: fixed; inset: 0; z-index: 9999;
+  background: var(--navy);
+  display: flex; align-items: center; justify-content: center;
+  flex-direction: column; gap: 24px;
+  transition: opacity 0.6s ease, visibility 0.6s;
+}
+#loading.hidden { opacity: 0; visibility: hidden; }
+#loading .cross { font-size: 2.5rem; color: var(--gold); opacity: 0.9; animation: breathe 2.4s ease-in-out infinite; }
+#loading h2 { font-family: 'Libre Baskerville', serif; font-size: 1.5rem; color: var(--ivory); font-weight: 400; letter-spacing: 0.04em; }
+#loading p { font-size: 0.75rem; letter-spacing: 0.22em; text-transform: uppercase; color: rgba(255,255,255,0.4); }
+@keyframes breathe { 0%,100%{opacity:0.5;transform:scale(0.97)} 50%{opacity:1;transform:scale(1.04)} }
+
+/* ===== HEADER ===== */
+#site-header {
+  background: var(--navy);
+  border-bottom: 3px solid var(--gold);
+  padding: 0 40px;
+  height: 64px;
+  display: flex; align-items: center; justify-content: space-between;
+  position: sticky; top: 0; z-index: 800;
+  box-shadow: 0 2px 16px rgba(12,35,64,0.25);
+}
+
+.header-brand {
+  display: flex; align-items: center; gap: 20px;
+}
+
+.header-logo {
+  width: 36px; height: 36px; opacity: 0.85;
+  flex-shrink: 0;
+}
+
+.brand-text h1 {
+  font-size: 1.05rem; color: var(--ivory); letter-spacing: 0.02em; line-height: 1.2;
+}
+.brand-text span {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.65rem; letter-spacing: 0.22em; text-transform: uppercase; color: rgba(255,255,255,0.45);
+}
+
+.header-nav { display: flex; align-items: center; gap: 4px; }
+
+.nav-btn {
+  background: transparent; border: none; cursor: pointer;
+  color: rgba(255,255,255,0.6);
+  padding: 8px 16px; border-radius: var(--radius-sm);
+  font-family: 'DM Sans', sans-serif; font-size: 0.78rem;
+  font-weight: 400; letter-spacing: 0.06em;
+  transition: all 0.2s;
+}
+.nav-btn:hover { color: var(--ivory); background: rgba(255,255,255,0.08); }
+.nav-btn.active { color: var(--gold-light); }
+.nav-btn.primary {
+  background: var(--gold); color: var(--navy);
+  font-weight: 500; padding: 7px 18px; margin-left: 8px;
+}
+.nav-btn.primary:hover { background: var(--gold-light); color: var(--navy); }
+
+.mode-toggle {
+  display: flex; align-items: center; gap: 8px;
+  background: rgba(255,255,255,0.07); padding: 4px; border-radius: var(--radius-md);
+  margin-left: 16px;
+}
+.mode-btn {
+  padding: 5px 14px; border-radius: 5px; border: none; cursor: pointer;
+  font-family: 'DM Sans', sans-serif; font-size: 0.7rem; font-weight: 400; letter-spacing: 0.08em;
+  transition: all 0.2s; color: rgba(255,255,255,0.5); background: transparent;
+}
+.mode-btn.active { background: var(--white); color: var(--navy); font-weight: 500; }
+
+/* ===== SEARCH & FILTER TOOLBAR ===== */
+#toolbar {
+  background: var(--white);
+  border-bottom: 1px solid var(--border);
+  padding: 0 40px;
+  height: 56px;
+  display: flex; align-items: center; gap: 20px;
+  position: sticky; top: 64px; z-index: 700;
+  box-shadow: var(--shadow-sm);
+}
+
+.search-wrap { position: relative; flex: 0 0 300px; }
+.search-wrap input {
+  width: 100%;
+  background: var(--ivory);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 8px 36px 8px 14px;
+  font-family: 'DM Sans', sans-serif; font-size: 0.82rem; color: var(--text);
+  outline: none; transition: border-color 0.2s, box-shadow 0.2s;
+}
+.search-wrap input::placeholder { color: var(--text-light); }
+.search-wrap input:focus { border-color: var(--navy-light); box-shadow: 0 0 0 3px rgba(46,90,132,0.1); }
+.search-icon { position: absolute; right: 11px; top: 50%; transform: translateY(-50%); color: var(--text-light); font-size: 0.9rem; pointer-events: none; }
+
+#search-dropdown {
+  position: absolute; top: calc(100% + 6px); left: 0; right: 0;
+  background: var(--white); border: 1.5px solid var(--border); border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg); z-index: 1000; overflow: hidden; display: none;
+}
+#search-dropdown.open { display: block; }
+.sd-item {
+  padding: 11px 16px; cursor: pointer; border-bottom: 1px solid var(--gray-light);
+  transition: background 0.15s; display: flex; justify-content: space-between; align-items: center;
+}
+.sd-item:last-child { border-bottom: none; }
+.sd-item:hover { background: var(--ivory); }
+.sd-name { font-size: 0.83rem; color: var(--text); font-weight: 400; }
+.sd-meta { font-size: 0.7rem; color: var(--text-light); letter-spacing: 0.05em; }
+
+.toolbar-sep { width: 1px; height: 24px; background: var(--border); flex-shrink: 0; }
+
+.filter-row { display: flex; gap: 6px; align-items: center; }
+.filter-label { font-size: 0.68rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--text-light); font-weight: 500; margin-right: 4px; }
+
+.chip {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 4px 11px; border-radius: 20px; cursor: pointer;
+  font-size: 0.7rem; font-weight: 400; letter-spacing: 0.04em;
+  border: 1.5px solid transparent; transition: all 0.18s; white-space: nowrap; user-select: none;
+}
+.chip .dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+
+.chip-available { border-color: #a8d5bc; color: var(--s-available); background: var(--s-available-bg); }
+.chip-available .dot { background: var(--s-available); }
+.chip-reserved  { border-color: #f5d58a; color: var(--s-reserved); background: var(--s-reserved-bg); }
+.chip-reserved .dot  { background: var(--s-reserved); }
+.chip-sold      { border-color: #9ab8e4; color: var(--s-sold); background: var(--s-sold-bg); }
+.chip-sold .dot      { background: var(--s-sold); }
+.chip-occupied  { border-color: #e4a4a4; color: var(--s-occupied); background: var(--s-occupied-bg); }
+.chip-occupied .dot  { background: var(--s-occupied); }
+.chip-hold      { border-color: #c4a8de; color: var(--s-hold); background: var(--s-hold-bg); }
+.chip-hold .dot      { background: var(--s-hold); }
+.chip-tree      { border-color: #9ec49e; color: var(--s-tree); background: var(--s-tree-bg); }
+.chip-tree .dot      { background: var(--s-tree); }
+
+.chip.inactive { opacity: 0.35; filter: grayscale(0.4); }
+
+.section-jump select {
+  background: var(--ivory); border: 1.5px solid var(--border); border-radius: var(--radius-sm);
+  padding: 6px 10px; font-family: 'DM Sans', sans-serif; font-size: 0.78rem; color: var(--text);
+  outline: none; cursor: pointer;
+}
+
+/* ===== BODY LAYOUT ===== */
+#layout {
+  display: grid;
+  grid-template-columns: 268px 1fr;
+  height: calc(100vh - 120px);
+  overflow: hidden;
+}
+
+/* ===== SIDEBAR ===== */
+#sidebar {
+  background: var(--white);
+  border-right: 1px solid var(--border);
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+#sidebar::-webkit-scrollbar { width: 3px; }
+#sidebar::-webkit-scrollbar-thumb { background: var(--stone); border-radius: 2px; }
+
+.sidebar-block { padding: 24px 20px; border-bottom: 1px solid var(--border); }
+.sidebar-block:last-child { border-bottom: none; }
+
+.sidebar-label {
+  font-size: 0.6rem; letter-spacing: 0.3em; text-transform: uppercase;
+  color: var(--gold); font-weight: 500; margin-bottom: 14px;
+  display: flex; align-items: center; gap: 8px;
+}
+.sidebar-label::after { content: ''; flex: 1; height: 1px; background: var(--gold-pale); }
+
+/* Stat cards */
+.stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.stat-card {
+  background: var(--ivory); border: 1px solid var(--border); border-radius: var(--radius-md);
+  padding: 12px 14px; position: relative; overflow: hidden;
+}
+.stat-card::before {
+  content: ''; position: absolute; top: 0; left: 0; bottom: 0; width: 3px;
+}
+.stat-card.c-occupied::before { background: var(--s-occupied); }
+.stat-card.c-available::before { background: var(--s-available); }
+.stat-card.c-reserved::before { background: var(--s-reserved); }
+.stat-card.c-sold::before { background: var(--s-sold); }
+.stat-card.c-total::before { background: var(--navy); }
+.stat-card.c-tree::before { background: var(--s-tree); }
+
+.stat-num {
+  font-family: 'Libre Baskerville', serif; font-size: 1.6rem; color: var(--navy);
+  line-height: 1; margin-bottom: 4px;
+}
+.stat-lbl { font-size: 0.62rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-light); }
+
+/* Section list */
+.section-nav { list-style: none; }
+.section-nav li {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 9px 10px; border-radius: var(--radius-sm); cursor: pointer;
+  transition: all 0.18s; font-size: 0.82rem; color: var(--text-mid);
+  border-left: 2px solid transparent;
+}
+.section-nav li:hover { background: var(--ivory); color: var(--navy); border-left-color: var(--gold-pale); }
+.section-nav li.active { background: var(--gold-pale); color: var(--navy); border-left-color: var(--gold); font-weight: 500; }
+.section-count { font-size: 0.65rem; color: var(--text-light); background: var(--gray-light); padding: 2px 7px; border-radius: 10px; }
+.section-nav li.active .section-count { background: rgba(201,154,46,0.2); color: var(--gold); }
+
+/* Tour shortcuts */
+.tour-shortcut {
+  display: flex; align-items: center; gap: 10px;
+  padding: 9px 10px; border-radius: var(--radius-sm); cursor: pointer;
+  transition: all 0.18s; font-size: 0.8rem; color: var(--text-mid); margin-bottom: 4px;
+}
+.tour-shortcut:hover { background: var(--ivory); color: var(--navy); }
+.tour-shortcut .ti { font-size: 0.9rem; width: 20px; text-align: center; }
+
+/* Legend */
+.legend-item { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; font-size: 0.75rem; color: var(--text-mid); }
+.legend-swatch { width: 14px; height: 14px; border-radius: 3px; flex-shrink: 0; }
+.legend-tree { font-size: 0.85rem; width: 14px; text-align: center; line-height: 1; }
+
+/* ===== MAIN MAP AREA ===== */
+#main-area {
+  position: relative; overflow: hidden;
+  background: #f8f6f1;
+  background-image: radial-gradient(circle at 60% 40%, rgba(201,154,46,0.03) 0%, transparent 60%);
+}
+
+/* Breadcrumb */
+#breadcrumb {
+  position: absolute; top: 18px; left: 20px; z-index: 200;
+  display: flex; align-items: center; gap: 8px;
+  font-size: 0.72rem; color: var(--text-light);
+  background: rgba(255,255,255,0.92); backdrop-filter: blur(4px);
+  border: 1px solid var(--border); border-radius: 20px; padding: 5px 14px;
+  box-shadow: var(--shadow-sm);
+}
+.bc-link { cursor: pointer; color: var(--navy); transition: color 0.15s; font-weight: 400; }
+.bc-link:hover { color: var(--gold); text-decoration: underline; }
+.bc-sep { color: var(--stone); }
+.bc-current { color: var(--text-mid); }
+
+/* Zoom controls */
+#zoom-ctrls {
+  position: absolute; top: 18px; right: 20px; z-index: 200;
+  display: flex; flex-direction: column; gap: 2px;
+  background: var(--white); border: 1px solid var(--border); border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm); overflow: hidden;
+}
+.zc-btn {
+  width: 38px; height: 38px; background: none; border: none; cursor: pointer;
+  font-size: 1.1rem; color: var(--text-mid); transition: all 0.18s;
+  display: flex; align-items: center; justify-content: center;
+}
+.zc-btn:hover { background: var(--ivory); color: var(--navy); }
+.zc-btn:not(:last-child) { border-bottom: 1px solid var(--border); }
+
+/* Section tooltip */
+#section-tooltip {
+  position: absolute; z-index: 300; pointer-events: none;
+  background: var(--navy); color: var(--ivory);
+  border-radius: var(--radius-md); padding: 10px 14px; box-shadow: var(--shadow-md);
+  font-size: 0.78rem; opacity: 0; transition: opacity 0.2s;
+  min-width: 160px;
+}
+#section-tooltip.visible { opacity: 1; }
+#section-tooltip .tt-name { font-family: 'Libre Baskerville', serif; font-size: 0.9rem; margin-bottom: 4px; }
+#section-tooltip .tt-stats { font-size: 0.68rem; color: rgba(255,255,255,0.6); letter-spacing: 0.04em; }
+#section-tooltip .tt-avail { color: #7ed8a4; font-weight: 500; }
+
+/* Map SVG */
+#map-wrap {
+  width: 100%; height: 100%;
+  cursor: default; user-select: none;
+}
+
+#cemetery-svg {
+  width: 100%; height: 100%;
+  transition: transform 0.05s linear;
+  transform-origin: center center;
+}
+
+/* SVG styles */
+.road { fill: #e4dfd6; stroke: #cfc9be; stroke-width: 1; }
+.road-label { font-family: 'DM Sans', sans-serif; font-size: 11px; fill: #a09890; letter-spacing: 2px; text-anchor: middle; }
+
+.sec-zone {
+  stroke-width: 1.5; cursor: pointer;
+  transition: fill 0.2s ease, stroke 0.2s ease;
+}
+.sec-zone { fill: rgba(12,35,64,0.04); stroke: rgba(12,35,64,0.15); }
+.sec-zone:hover { fill: rgba(201,154,46,0.1); stroke: rgba(201,154,46,0.6); }
+.sec-zone.active { fill: rgba(201,154,46,0.08); stroke: var(--gold); stroke-width: 2; }
+
+.sec-label {
+  font-family: 'Libre Baskerville', serif; font-size: 15px; fill: rgba(12,35,64,0.55);
+  pointer-events: none; text-anchor: middle; dominant-baseline: middle;
+  letter-spacing: 1px;
+}
+.sec-sublabel {
+  font-family: 'DM Sans', sans-serif; font-size: 8px; fill: rgba(12,35,64,0.3);
+  pointer-events: none; text-anchor: middle; dominant-baseline: middle;
+  letter-spacing: 1.5px; text-transform: uppercase;
+}
+
+.maus-zone { fill: rgba(201,154,46,0.07); stroke: rgba(201,154,46,0.45); stroke-width: 1.5; cursor: pointer; }
+.maus-zone:hover { fill: rgba(201,154,46,0.15); stroke: var(--gold); }
+.vet-zone { fill: rgba(29,78,137,0.06); stroke: rgba(29,78,137,0.25); stroke-width: 1.5; cursor: pointer; }
+.vet-zone:hover { fill: rgba(29,78,137,0.12); stroke: var(--navy-light); }
+.col-zone { fill: rgba(90,52,114,0.06); stroke: rgba(90,52,114,0.22); stroke-width: 1.5; cursor: pointer; }
+.col-zone:hover { fill: rgba(90,52,114,0.12); }
+
+/* Graves */
+.grave {
+  stroke-width: 0.5; cursor: pointer; transition: opacity 0.15s, stroke-width 0.15s;
+}
+.grave:hover { stroke-width: 2; opacity: 0.82; }
+.g-available { fill: rgba(45,106,79,0.45); stroke: var(--s-available); }
+.g-reserved  { fill: rgba(146,101,10,0.4); stroke: var(--s-reserved); }
+.g-sold      { fill: rgba(29,78,137,0.4); stroke: var(--s-sold); }
+.g-occupied  { fill: rgba(123,45,45,0.45); stroke: var(--s-occupied); }
+.g-hold      { fill: rgba(90,52,114,0.4); stroke: var(--s-hold); }
+.g-tree      { fill: rgba(58,107,58,0.25); stroke: var(--s-tree); }
+
+.grave-name {
+  font-family: 'DM Sans', sans-serif; font-size: 7px;
+  fill: rgba(26,35,50,0.75); pointer-events: none; text-anchor: middle;
+  dominant-baseline: middle;
+}
+.grave-num {
+  font-family: 'DM Sans', sans-serif; font-size: 5.5px;
+  fill: rgba(26,35,50,0.35); pointer-events: none; text-anchor: middle;
+}
+
+/* ===== SECTION VIEW ===== */
+#section-view {
+  position: absolute; inset: 0; z-index: 100;
+  background: #f8f6f1; overflow: auto; display: none; padding: 60px 32px 32px;
+}
+#section-view.visible { display: block; }
+#section-view::-webkit-scrollbar { width: 4px; }
+#section-view::-webkit-scrollbar-thumb { background: var(--stone); border-radius: 2px; }
+
+.section-header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 28px; padding-bottom: 16px; border-bottom: 2px solid var(--border);
+}
+.section-header h2 { font-size: 1.6rem; color: var(--navy); }
+.section-header p { font-size: 0.78rem; color: var(--text-light); margin-top: 4px; }
+.section-mini-stats { display: flex; gap: 20px; }
+.mini-stat { text-align: right; }
+.mini-stat .n { font-size: 1.2rem; font-family: 'Libre Baskerville', serif; color: var(--navy); }
+.mini-stat .l { font-size: 0.6rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-light); }
+
+#section-svg-wrap { min-width: max-content; }
+
+/* ===== DETAIL PANEL ===== */
+#detail-panel {
+  position: fixed; right: -480px; top: 0; bottom: 0; width: 440px;
+  background: var(--white); border-left: 1px solid var(--border); z-index: 900;
+  overflow-y: auto; transition: right 0.38s cubic-bezier(0.4,0,0.2,1);
+  box-shadow: -8px 0 32px rgba(12,35,64,0.1);
+}
+#detail-panel.open { right: 0; }
+#detail-panel::-webkit-scrollbar { width: 3px; }
+#detail-panel::-webkit-scrollbar-thumb { background: var(--stone); }
+
+.dp-header {
+  background: var(--navy); padding: 24px 24px 20px; position: sticky; top: 0; z-index: 10;
+}
+.dp-close {
+  position: absolute; top: 16px; right: 16px;
+  background: rgba(255,255,255,0.1); border: none; cursor: pointer;
+  color: rgba(255,255,255,0.7); width: 32px; height: 32px; border-radius: 50%;
+  font-size: 0.9rem; display: flex; align-items: center; justify-content: center;
+  transition: all 0.18s;
+}
+.dp-close:hover { background: rgba(255,255,255,0.2); color: var(--white); }
+.dp-grave-id { font-size: 0.62rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--gold); margin-bottom: 8px; font-weight: 500; }
+.dp-name { font-family: 'Libre Baskerville', serif; font-size: 1.5rem; color: var(--ivory); line-height: 1.25; margin-bottom: 4px; }
+.dp-dates { font-size: 0.75rem; color: rgba(255,255,255,0.5); letter-spacing: 0.06em; }
+
+.dp-body { padding: 24px; }
+
+.dp-photo {
+  width: 100%; aspect-ratio: 16/9; background: var(--ivory-mid);
+  border: 1px solid var(--border); border-radius: var(--radius-md);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--text-light); font-size: 0.72rem; letter-spacing: 0.1em;
+  margin-bottom: 24px; overflow: hidden;
+}
+.dp-photo img { width: 100%; height: 100%; object-fit: cover; }
+
+.dp-status-row { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; }
+.status-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 4px 12px; border-radius: 14px; font-size: 0.68rem; font-weight: 500; letter-spacing: 0.06em;
+}
+.sb-available { background: var(--s-available-bg); color: var(--s-available); }
+.sb-reserved  { background: var(--s-reserved-bg);  color: var(--s-reserved); }
+.sb-sold      { background: var(--s-sold-bg);      color: var(--s-sold); }
+.sb-occupied  { background: var(--s-occupied-bg);  color: var(--s-occupied); }
+.sb-hold      { background: var(--s-hold-bg);      color: var(--s-hold); }
+.sb-tree      { background: var(--s-tree-bg);      color: var(--s-tree); }
+
+.dp-meta-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px;
+}
+.dp-field { background: var(--ivory); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 12px 14px; }
+.dp-field-label { font-size: 0.58rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--text-light); font-weight: 500; margin-bottom: 4px; }
+.dp-field-value { font-size: 0.85rem; color: var(--text); font-weight: 400; }
+
+.dp-divider { border: none; border-top: 1px solid var(--border); margin: 20px 0; }
+
+.dp-section-label { font-size: 0.6rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--text-light); font-weight: 500; margin-bottom: 10px; }
+.dp-bio { font-size: 0.82rem; color: var(--text-mid); line-height: 1.65; }
+.dp-bio.empty { color: var(--text-light); font-style: italic; }
+
+.dp-location-chips { display: flex; gap: 6px; flex-wrap: wrap; }
+.loc-chip { background: var(--navy); color: var(--ivory); border-radius: var(--radius-sm); padding: 4px 12px; font-size: 0.68rem; letter-spacing: 0.08em; }
+
+.dp-actions { display: flex; gap: 8px; margin-top: 24px; }
+.dp-btn {
+  flex: 1; padding: 10px; border-radius: var(--radius-sm);
+  font-family: 'DM Sans', sans-serif; font-size: 0.75rem; font-weight: 500; letter-spacing: 0.06em;
+  cursor: pointer; transition: all 0.2s; text-align: center; border: none;
+}
+.dp-btn-primary { background: var(--navy); color: var(--white); }
+.dp-btn-primary:hover { background: var(--navy-mid); }
+.dp-btn-secondary { background: var(--ivory); color: var(--text); border: 1px solid var(--border); }
+.dp-btn-secondary:hover { background: var(--ivory-dark); }
+
+/* ===== DATA TABLE OVERLAY ===== */
+#data-overlay {
+  display: none; position: fixed; inset: 0; z-index: 2000;
+  background: rgba(12,35,64,0.5); backdrop-filter: blur(2px);
+  align-items: flex-start; justify-content: center; padding: 40px 20px; overflow-y: auto;
+}
+#data-overlay.open { display: flex; }
+
+.dt-container {
+  background: var(--white); border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg); width: 100%; max-width: 960px;
+  border: 1px solid var(--border); overflow: hidden;
+}
+.dt-header {
+  background: var(--navy); padding: 24px 32px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.dt-header h2 { font-family: 'Libre Baskerville', serif; color: var(--ivory); font-size: 1.3rem; font-weight: 400; }
+.dt-close { background: rgba(255,255,255,0.1); border: none; cursor: pointer; color: rgba(255,255,255,0.7); width: 36px; height: 36px; border-radius: 50%; font-size: 1rem; }
+.dt-close:hover { background: rgba(255,255,255,0.2); color: var(--white); }
+.dt-toolbar { padding: 16px 32px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 16px; }
+.dt-search { background: var(--ivory); border: 1.5px solid var(--border); border-radius: var(--radius-sm); padding: 8px 14px; font-family: 'DM Sans', sans-serif; font-size: 0.82rem; width: 260px; outline: none; }
+.dt-search:focus { border-color: var(--navy-light); }
+.dt-count { font-size: 0.72rem; color: var(--text-light); margin-left: auto; }
+
+.data-table { width: 100%; border-collapse: collapse; }
+.data-table thead th {
+  background: var(--ivory); padding: 10px 16px; text-align: left;
+  font-size: 0.62rem; letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--text-light); font-weight: 500; border-bottom: 2px solid var(--border); white-space: nowrap;
+}
+.data-table tbody td { padding: 10px 16px; border-bottom: 1px solid var(--gray-light); font-size: 0.8rem; color: var(--text); }
+.data-table tbody tr { cursor: pointer; transition: background 0.15s; }
+.data-table tbody tr:hover td { background: var(--ivory); }
+.dt-scroll { max-height: 55vh; overflow-y: auto; }
+.dt-scroll::-webkit-scrollbar { width: 3px; }
+.dt-scroll::-webkit-scrollbar-thumb { background: var(--stone); }
+
+/* ===== TOURS MODAL ===== */
+#tours-modal {
+  display: none; position: fixed; inset: 0; z-index: 2000;
+  background: rgba(12,35,64,0.5); backdrop-filter: blur(2px);
+  align-items: center; justify-content: center;
+}
+#tours-modal.open { display: flex; }
+.tm-container {
+  background: var(--white); border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg); width: 520px; max-width: 90vw;
+  border: 1px solid var(--border); overflow: hidden;
+}
+.tm-header { background: var(--navy); padding: 28px 32px; position: relative; }
+.tm-header h2 { font-family: 'Libre Baskerville', serif; color: var(--ivory); font-size: 1.4rem; font-weight: 400; }
+.tm-header p { font-size: 0.75rem; color: rgba(255,255,255,0.5); margin-top: 4px; }
+.tm-close { position: absolute; top: 20px; right: 20px; background: rgba(255,255,255,0.1); border: none; cursor: pointer; color: rgba(255,255,255,0.7); width: 32px; height: 32px; border-radius: 50%; }
+.tm-body { padding: 24px 32px; }
+.tour-item {
+  display: flex; align-items: center; gap: 14px; padding: 14px 16px; cursor: pointer;
+  border: 1px solid var(--border); border-radius: var(--radius-md); margin-bottom: 8px;
+  transition: all 0.2s;
+}
+.tour-item:hover { border-color: var(--navy-light); background: var(--ivory); transform: translateX(3px); }
+.tour-icon { font-size: 1.2rem; width: 32px; text-align: center; flex-shrink: 0; }
+.tour-info h4 { font-size: 0.88rem; color: var(--navy); font-weight: 500; }
+.tour-info p  { font-size: 0.72rem; color: var(--text-light); margin-top: 1px; }
+.tour-count { margin-left: auto; background: var(--ivory-dark); padding: 3px 10px; border-radius: 12px; font-size: 0.68rem; color: var(--text-light); white-space: nowrap; }
+
+/* ===== ADMIN UPLOAD ===== */
+#admin-panel {
+  display: none; position: fixed; inset: 0; z-index: 2000;
+  background: rgba(12,35,64,0.5); backdrop-filter: blur(2px);
+  align-items: center; justify-content: center;
+}
+#admin-panel.open { display: flex; }
+.ap-container {
+  background: var(--white); border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg); width: 500px; max-width: 90vw;
+  border: 1px solid var(--border); overflow: hidden;
+}
+.ap-header { background: var(--navy); padding: 24px 28px; position: relative; }
+.ap-header h2 { font-family: 'Libre Baskerville', serif; color: var(--ivory); font-size: 1.2rem; font-weight: 400; }
+.ap-header p { font-size: 0.72rem; color: rgba(255,255,255,0.45); margin-top: 3px; }
+.ap-close { position: absolute; top: 18px; right: 18px; background: rgba(255,255,255,0.1); border: none; cursor: pointer; color: rgba(255,255,255,0.6); width: 30px; height: 30px; border-radius: 50%; }
+.ap-body { padding: 28px; }
+.upload-zone {
+  border: 2px dashed var(--border); border-radius: var(--radius-md);
+  padding: 40px; text-align: center; cursor: pointer; transition: all 0.2s;
+  margin-bottom: 20px; background: var(--ivory);
+}
+.upload-zone:hover { border-color: var(--navy-light); background: #f0f4fa; }
+.upload-zone .uz-icon { font-size: 2rem; color: var(--text-light); margin-bottom: 10px; }
+.upload-zone h3 { font-size: 0.9rem; color: var(--navy); font-weight: 500; margin-bottom: 6px; }
+.upload-zone p { font-size: 0.75rem; color: var(--text-light); }
+.upload-zone input { display: none; }
+#upload-status-msg { font-size: 0.78rem; color: var(--s-available); text-align: center; padding: 8px; }
+
+/* ===== TOAST ===== */
+#toast {
+  position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%) translateY(12px);
+  background: var(--navy); color: var(--ivory); border-radius: var(--radius-md);
+  padding: 12px 22px; font-size: 0.8rem; z-index: 5000;
+  opacity: 0; pointer-events: none; transition: all 0.3s; white-space: nowrap;
+  box-shadow: var(--shadow-md);
+}
+#toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+/* Animations */
+@keyframes fadeUp {
+  from { opacity:0; transform:translateY(16px); }
+  to   { opacity:1; transform:translateY(0); }
+}
+.fadein { animation: fadeUp 0.4s ease both; }
+
+</style>
+</head>
+<body>
+
+<!-- Loading -->
+<div id="loading">
+  <svg class="cross" width="40" height="40" viewBox="0 0 40 40">
+    <rect x="17" y="2" width="6" height="36" fill="currentColor" rx="1"/>
+    <rect x="2" y="13" width="36" height="6" fill="currentColor" rx="1"/>
+  </svg>
+  <h2>Cedar Grove Cemetery</h2>
+  <p>University of Notre Dame · Digital Archive</p>
+</div>
+
+<!-- Header -->
+<header id="site-header">
+  <div class="header-brand">
+    <svg class="header-logo" viewBox="0 0 36 36" fill="none">
+      <circle cx="18" cy="18" r="17" stroke="rgba(201,154,46,0.4)" stroke-width="1.5"/>
+      <rect x="16" y="6" width="4" height="24" fill="rgba(201,154,46,0.8)" rx="0.5"/>
+      <rect x="8" y="13" width="20" height="4" fill="rgba(201,154,46,0.8)" rx="0.5"/>
+    </svg>
+    <div class="brand-text">
+      <h1>Cedar Grove Cemetery</h1>
+      <span>University of Notre Dame · Est. 1842</span>
+    </div>
+  </div>
+
+  <nav class="header-nav">
+    <button class="nav-btn active" id="btn-map" onclick="showView('map')">Map</button>
+    <button class="nav-btn" onclick="openDataOverlay()">Records</button>
+    <button class="nav-btn" onclick="openToursModal()">Tours</button>
+    <button class="nav-btn primary" onclick="openAdminPanel()">⬆ Update Data</button>
+    <div class="mode-toggle">
+      <button class="mode-btn active" id="pub-mode" onclick="setMode('public')">Public</button>
+      <button class="mode-btn" id="adm-mode" onclick="setMode('admin')">Admin</button>
+    </div>
+  </nav>
+</header>
+
+<!-- Toolbar -->
+<div id="toolbar">
+  <div class="search-wrap">
+    <input type="text" id="search-input" placeholder="Search by name, section, or year…"
+      oninput="handleSearch(this.value)"
+      onfocus="if(this.value)showDropdown()"
+      onblur="setTimeout(hideDropdown,200)">
+    <span class="search-icon">⌕</span>
+    <div id="search-dropdown"></div>
+  </div>
+
+  <div class="toolbar-sep"></div>
+
+  <div class="filter-row">
+    <span class="filter-label">Status</span>
+    <div class="chip chip-available" id="f-Available" onclick="toggleFilter('Available',this)">
+      <span class="dot"></span> Available
+    </div>
+    <div class="chip chip-reserved" id="f-Reserved" onclick="toggleFilter('Reserved',this)">
+      <span class="dot"></span> Reserved
+    </div>
+    <div class="chip chip-sold" id="f-Sold" onclick="toggleFilter('Sold',this)">
+      <span class="dot"></span> Sold
+    </div>
+    <div class="chip chip-occupied" id="f-Occupied" onclick="toggleFilter('Occupied',this)">
+      <span class="dot"></span> Occupied
+    </div>
+    <div class="chip chip-hold" id="f-HOLD" onclick="toggleFilter('HOLD',this)">
+      <span class="dot"></span> Hold
+    </div>
+    <div class="chip chip-tree" id="f-Tree" onclick="toggleFilter('Tree',this)">
+      <span class="dot"></span> Tree
+    </div>
+  </div>
+
+  <div class="toolbar-sep"></div>
+
+  <div class="section-jump">
+    <select onchange="if(this.value) selectSection(this.value)">
+      <option value="">Jump to Section…</option>
+    </select>
+  </div>
+</div>
+
+<!-- Layout -->
+<div id="layout">
+  <!-- Sidebar -->
+  <aside id="sidebar">
+    <div class="sidebar-block">
+      <div class="sidebar-label">Cemetery Overview</div>
+      <div class="stats-grid">
+        <div class="stat-card c-total">
+          <div class="stat-num" id="st-total">—</div>
+          <div class="stat-lbl">Total Plots</div>
+        </div>
+        <div class="stat-card c-occupied">
+          <div class="stat-num" id="st-occupied">—</div>
+          <div class="stat-lbl">Occupied</div>
+        </div>
+        <div class="stat-card c-available">
+          <div class="stat-num" id="st-available">—</div>
+          <div class="stat-lbl">Available</div>
+        </div>
+        <div class="stat-card c-reserved">
+          <div class="stat-num" id="st-reserved">—</div>
+          <div class="stat-lbl">Reserved</div>
+        </div>
+        <div class="stat-card c-sold">
+          <div class="stat-num" id="st-sold">—</div>
+          <div class="stat-lbl">Sold</div>
+        </div>
+        <div class="stat-card c-tree">
+          <div class="stat-num" id="st-tree">—</div>
+          <div class="stat-lbl">Memorial Trees</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sidebar-block">
+      <div class="sidebar-label">Sections</div>
+      <ul class="section-nav" id="section-nav"></ul>
+    </div>
+
+    <div class="sidebar-block">
+      <div class="sidebar-label">Mausoleums</div>
+      <ul class="section-nav">
+        <li onclick="selectSection('M')"><span>① Mary Queen of Angels</span></li>
+        <li onclick="selectSection('M')"><span>② Mary Queen of All Saints</span></li>
+        <li onclick="selectSection('M')"><span>③ Mary Mother of the Church</span></li>
+        <li onclick="selectSection('M')"><span>④ Mary Mother of God</span></li>
+      </ul>
+    </div>
+
+    <div class="sidebar-block">
+      <div class="sidebar-label">Guided Tours</div>
+      <div class="tour-shortcut" onclick="openToursModal()"><span class="ti">✝</span> Notre Dame Presidents</div>
+      <div class="tour-shortcut" onclick="openToursModal()"><span class="ti">⚑</span> War Veterans</div>
+      <div class="tour-shortcut" onclick="openToursModal()"><span class="ti">🎓</span> Distinguished Faculty</div>
+      <div class="tour-shortcut" onclick="openToursModal()"><span class="ti">🌳</span> Memorial Trees</div>
+    </div>
+
+    <div class="sidebar-block">
+      <div class="sidebar-label">Legend</div>
+      <div class="legend-item"><div class="legend-swatch" style="background:var(--s-available)"></div> Available</div>
+      <div class="legend-item"><div class="legend-swatch" style="background:var(--s-reserved)"></div> Reserved</div>
+      <div class="legend-item"><div class="legend-swatch" style="background:var(--s-sold)"></div> Sold</div>
+      <div class="legend-item"><div class="legend-swatch" style="background:var(--s-occupied)"></div> Occupied</div>
+      <div class="legend-item"><div class="legend-swatch" style="background:var(--s-hold)"></div> Hold</div>
+      <div class="legend-item"><span class="legend-tree">🌳</span> Memorial Tree</div>
+      <div style="height:8px"></div>
+      <div class="legend-item"><div class="legend-swatch" style="background:rgba(201,154,46,0.3);border:1.5px solid var(--gold)"></div> Mausoleum</div>
+      <div class="legend-item"><div class="legend-swatch" style="background:rgba(29,78,137,0.15);border:1.5px solid var(--s-sold)"></div> Veterans</div>
+      <div class="legend-item"><div class="legend-swatch" style="background:rgba(90,52,114,0.12);border:1.5px solid var(--s-hold)"></div> Columbarium</div>
+    </div>
+  </aside>
+
+  <!-- Map Canvas -->
+  <main id="main-area">
+    <!-- Breadcrumb -->
+    <div id="breadcrumb">
+      <span class="bc-link" onclick="resetToOverview()">Cedar Grove</span>
+    </div>
+
+    <!-- Zoom Controls -->
+    <div id="zoom-ctrls">
+      <button class="zc-btn" onclick="zoomIn()" title="Zoom In">+</button>
+      <button class="zc-btn" onclick="zoomOut()" title="Zoom Out">−</button>
+      <button class="zc-btn" onclick="resetZoom()" title="Reset" style="font-size:0.75rem;">⌖</button>
+    </div>
+
+    <!-- Section tooltip -->
+    <div id="section-tooltip">
+      <div class="tt-name" id="tt-name"></div>
+      <div class="tt-stats" id="tt-stats"></div>
+    </div>
+
+    <!-- Overview Map -->
+    <div id="map-wrap">
+      <svg id="cemetery-svg" viewBox="0 0 1400 860" preserveAspectRatio="xMidYMid meet">
+
+        <!-- Page background fill -->
+        <rect width="1400" height="860" fill="#f5f2ec"/>
+
+        <!-- Outer boundary -->
+        <rect x="30" y="30" width="1340" height="800" rx="4" fill="none" stroke="rgba(12,35,64,0.08)" stroke-width="1.5" stroke-dasharray="6,4"/>
+
+        <!-- Roads -->
+        <!-- Holy Cross Drive (top curved road) -->
+        <path class="road" d="M 40 175 Q 400 150 700 158 Q 1000 166 1350 185 L 1350 210 Q 1000 192 700 184 Q 400 176 40 202 Z"/>
+        <text class="road-label" x="700" y="170">HOLY CROSS DRIVE</text>
+
+        <!-- Notre Dame Ave (right edge) -->
+        <rect class="road" x="1330" y="180" width="38" height="640" rx="2"/>
+        <text class="road-label" transform="rotate(90,1360,480)" x="-80" y="1356" style="font-size:9px; letter-spacing:2px;">NOTRE DAME AVENUE</text>
+
+        <!-- Internal paths (subtle) -->
+        <line x1="400" y1="215" x2="400" y2="720" stroke="#ddd8ce" stroke-width="8"/>
+        <line x1="720" y1="215" x2="720" y2="720" stroke="#ddd8ce" stroke-width="8"/>
+        <line x1="1000" y1="215" x2="1000" y2="720" stroke="#ddd8ce" stroke-width="8"/>
+        <line x1="50" y1="490" x2="1320" y2="490" stroke="#ddd8ce" stroke-width="8"/>
+
+        <!-- ===== SECTION ZONES ===== -->
+        <!-- Top row: A B C D E F G -->
+        <rect class="sec-zone" id="z-A" x="48" y="218" width="160" height="128" rx="3" data-sec="A" onmouseenter="showTip(event,'A')" onmouseleave="hideTip()" onclick="selectSection('A')"/>
+        <text class="sec-label" x="128" y="275">A</text>
+        <text class="sec-sublabel" x="128" y="295">Section</text>
+
+        <rect class="sec-zone" id="z-B" x="218" y="218" width="168" height="128" rx="3" data-sec="B" onmouseenter="showTip(event,'B')" onmouseleave="hideTip()" onclick="selectSection('B')"/>
+        <text class="sec-label" x="302" y="275">B</text>
+        <text class="sec-sublabel" x="302" y="295">Section</text>
+
+        <rect class="sec-zone" id="z-C" x="416" y="218" width="168" height="128" rx="3" data-sec="C" onmouseenter="showTip(event,'C')" onmouseleave="hideTip()" onclick="selectSection('C')"/>
+        <text class="sec-label" x="500" y="275">C</text>
+        <text class="sec-sublabel" x="500" y="295">Section</text>
+
+        <rect class="sec-zone" id="z-D" x="594" y="218" width="110" height="128" rx="3" data-sec="D" onmouseenter="showTip(event,'D')" onmouseleave="hideTip()" onclick="selectSection('D')"/>
+        <text class="sec-label" x="649" y="275">D</text>
+
+        <rect class="sec-zone" id="z-E" x="730" y="218" width="120" height="128" rx="3" data-sec="E" onmouseenter="showTip(event,'E')" onmouseleave="hideTip()" onclick="selectSection('E')"/>
+        <text class="sec-label" x="790" y="275">E</text>
+
+        <rect class="sec-zone" id="z-F" x="866" y="218" width="122" height="128" rx="3" data-sec="F" onmouseenter="showTip(event,'F')" onmouseleave="hideTip()" onclick="selectSection('F')"/>
+        <text class="sec-label" x="927" y="275">F</text>
+
+        <rect class="sec-zone" id="z-G" x="1010" y="218" width="170" height="128" rx="3" data-sec="G" onmouseenter="showTip(event,'G')" onmouseleave="hideTip()" onclick="selectSection('G')"/>
+        <text class="sec-label" x="1095" y="275">G</text>
+        <text class="sec-sublabel" x="1095" y="295">Section</text>
+
+        <rect class="sec-zone" id="z-X" x="1196" y="218" width="118" height="128" rx="3" data-sec="X" onmouseenter="showTip(event,'X')" onmouseleave="hideTip()" onclick="selectSection('X')"/>
+        <text class="sec-label" x="1255" y="275">X</text>
+
+        <!-- Middle row: H I J K L -->
+        <rect class="sec-zone" id="z-H" x="48" y="500" width="160" height="140" rx="3" data-sec="H" onmouseenter="showTip(event,'H')" onmouseleave="hideTip()" onclick="selectSection('H')"/>
+        <text class="sec-label" x="128" y="567">H</text>
+
+        <rect class="sec-zone" id="z-I" x="218" y="500" width="168" height="140" rx="3" data-sec="I" onmouseenter="showTip(event,'I')" onmouseleave="hideTip()" onclick="selectSection('I')"/>
+        <text class="sec-label" x="302" y="567">I</text>
+
+        <rect class="sec-zone" id="z-J" x="416" y="500" width="168" height="140" rx="3" data-sec="J" onmouseenter="showTip(event,'J')" onmouseleave="hideTip()" onclick="selectSection('J')"/>
+        <text class="sec-label" x="500" y="567">J</text>
+
+        <rect class="sec-zone" id="z-K" x="594" y="500" width="230" height="140" rx="3" data-sec="K" onmouseenter="showTip(event,'K')" onmouseleave="hideTip()" onclick="selectSection('K')"/>
+        <text class="sec-label" x="709" y="567">K</text>
+
+        <rect class="sec-zone" id="z-L" x="840" y="500" width="228" height="140" rx="3" data-sec="L" onmouseenter="showTip(event,'L')" onmouseleave="hideTip()" onclick="selectSection('L')"/>
+        <text class="sec-label" x="954" y="567">L</text>
+
+        <rect class="sec-zone" id="z-N" x="1084" y="500" width="130" height="140" rx="3" data-sec="N" onmouseenter="showTip(event,'N')" onmouseleave="hideTip()" onclick="selectSection('N')"/>
+        <text class="sec-label" x="1149" y="567">N</text>
+
+        <rect class="sec-zone" id="z-O" x="1228" y="500" width="86" height="140" rx="3" data-sec="O" onmouseenter="showTip(event,'O')" onmouseleave="hideTip()" onclick="selectSection('O')"/>
+        <text class="sec-label" x="1271" y="567">O</text>
+
+        <!-- Bottom strip: M (mausoleums) Veterans Columbarium + others -->
+        <!-- Middle large grid sections in between rows -->
+        <rect class="sec-zone" id="z-P" x="48" y="360" width="340" height="128" rx="3" data-sec="P" onmouseenter="showTip(event,'P')" onmouseleave="hideTip()" onclick="selectSection('P')"/>
+        <text class="sec-label" x="218" y="417">P</text>
+        <text class="sec-sublabel" x="218" y="437">Section</text>
+
+        <rect class="sec-zone" id="z-Q" x="416" y="360" width="350" height="128" rx="3" data-sec="Q" onmouseenter="showTip(event,'Q')" onmouseleave="hideTip()" onclick="selectSection('Q')"/>
+        <text class="sec-label" x="591" y="417">Q</text>
+        <text class="sec-sublabel" x="591" y="437">Section</text>
+
+        <rect class="sec-zone" id="z-R" x="780" y="360" width="310" height="128" rx="3" data-sec="R" onmouseenter="showTip(event,'R')" onmouseleave="hideTip()" onclick="selectSection('R')"/>
+        <text class="sec-label" x="935" y="417">R</text>
+
+        <rect class="sec-zone" id="z-S" x="1104" y="360" width="210" height="128" rx="3" data-sec="S" onmouseenter="showTip(event,'S')" onmouseleave="hideTip()" onclick="selectSection('S')"/>
+        <text class="sec-label" x="1209" y="417">S</text>
+
+        <!-- Mausoleums -->
+        <rect class="maus-zone" id="z-M" x="48" y="660" width="180" height="120" rx="4" onmouseenter="showTip(event,'M')" onmouseleave="hideTip()" onclick="selectSection('M')"/>
+        <text class="sec-label" x="138" y="712" style="font-size:12px;fill:rgba(201,154,46,0.8);">M</text>
+        <text class="sec-sublabel" x="138" y="730" style="fill:rgba(201,154,46,0.6);">Mausoleums</text>
+        <!-- Mausoleum sub-buildings -->
+        <rect x="58" y="670" width="38" height="28" rx="2" fill="rgba(201,154,46,0.15)" stroke="rgba(201,154,46,0.5)" stroke-width="1" cursor="pointer" onclick="openGraveDetail('maus-1')"/>
+        <text style="font-size:7px;fill:rgba(201,154,46,0.8);text-anchor:middle;dominant-baseline:middle;pointer-events:none" x="77" y="684">①</text>
+        <rect x="104" y="670" width="38" height="28" rx="2" fill="rgba(201,154,46,0.15)" stroke="rgba(201,154,46,0.5)" stroke-width="1" cursor="pointer" onclick="openGraveDetail('maus-2')"/>
+        <text style="font-size:7px;fill:rgba(201,154,46,0.8);text-anchor:middle;dominant-baseline:middle;pointer-events:none" x="123" y="684">②</text>
+        <rect x="58" y="706" width="38" height="28" rx="2" fill="rgba(201,154,46,0.15)" stroke="rgba(201,154,46,0.5)" stroke-width="1" cursor="pointer" onclick="openGraveDetail('maus-3')"/>
+        <text style="font-size:7px;fill:rgba(201,154,46,0.8);text-anchor:middle;dominant-baseline:middle;pointer-events:none" x="77" y="720">③</text>
+        <rect x="104" y="706" width="38" height="28" rx="2" fill="rgba(201,154,46,0.15)" stroke="rgba(201,154,46,0.5)" stroke-width="1" cursor="pointer" onclick="openGraveDetail('maus-4')"/>
+        <text style="font-size:7px;fill:rgba(201,154,46,0.8);text-anchor:middle;dominant-baseline:middle;pointer-events:none" x="123" y="720">④</text>
+
+        <!-- Veterans -->
+        <rect class="vet-zone" x="242" y="660" width="180" height="120" rx="4" onmouseenter="showTip(event,'Veterans')" onmouseleave="hideTip()" onclick="selectSection('Veterans')"/>
+        <text class="sec-label" x="332" y="712" style="font-size:12px;fill:rgba(29,78,137,0.7);">⚑</text>
+        <text class="sec-sublabel" x="332" y="730" style="fill:rgba(29,78,137,0.5);">Veterans</text>
+
+        <!-- Columbarium -->
+        <rect class="col-zone" x="440" y="660" width="160" height="120" rx="4" onmouseenter="showTip(event,'Columbarium')" onmouseleave="hideTip()" onclick="selectSection('Columbarium')"/>
+        <text class="sec-label" x="520" y="712" style="font-size:11px;fill:rgba(90,52,114,0.6);">◈</text>
+        <text class="sec-sublabel" x="520" y="730" style="fill:rgba(90,52,114,0.5);">Columbarium</text>
+
+        <!-- Additional bottom sections -->
+        <rect class="sec-zone" id="z-T" x="618" y="660" width="200" height="120" rx="3" data-sec="T" onmouseenter="showTip(event,'T')" onmouseleave="hideTip()" onclick="selectSection('T')"/>
+        <text class="sec-label" x="718" y="717">T</text>
+
+        <rect class="sec-zone" id="z-U" x="832" y="660" width="180" height="120" rx="3" data-sec="U" onmouseenter="showTip(event,'U')" onmouseleave="hideTip()" onclick="selectSection('U')"/>
+        <text class="sec-label" x="922" y="717">U</text>
+
+        <rect class="sec-zone" id="z-V" x="1026" y="660" width="180" height="120" rx="3" data-sec="V" onmouseenter="showTip(event,'V')" onmouseleave="hideTip()" onclick="selectSection('V')"/>
+        <text class="sec-label" x="1116" y="717">V</text>
+
+        <!-- North indicator -->
+        <g transform="translate(1290,55)">
+          <circle r="22" fill="var(--white)" stroke="var(--border)" stroke-width="1.5"/>
+          <text text-anchor="middle" y="-5" style="font-family:'Libre Baskerville',serif;font-size:12px;fill:var(--navy);font-weight:700;">N</text>
+          <line x1="0" y1="-16" x2="0" y2="-6" stroke="var(--navy)" stroke-width="2"/>
+          <polygon points="0,-18 3,-10 -3,-10" fill="var(--navy)"/>
+        </g>
+
+        <!-- Scale indicator -->
+        <g transform="translate(60,800)">
+          <line x1="0" y1="0" x2="80" y2="0" stroke="var(--text-light)" stroke-width="1.5"/>
+          <line x1="0" y1="-4" x2="0" y2="4" stroke="var(--text-light)" stroke-width="1.5"/>
+          <line x1="80" y1="-4" x2="80" y2="4" stroke="var(--text-light)" stroke-width="1.5"/>
+          <text x="40" y="-8" text-anchor="middle" style="font-size:8px;fill:var(--text-light);font-family:'DM Sans',sans-serif;">Not to Scale</text>
+        </g>
+
+      </svg>
+    </div>
+
+    <!-- Section View (grave grid) -->
+    <div id="section-view">
+      <div class="section-header fadein">
+        <div>
+          <h2 id="sv-title">Section A</h2>
+          <p id="sv-subtitle">Click any grave to view its record</p>
+        </div>
+        <div class="section-mini-stats" id="sv-stats"></div>
+      </div>
+      <div id="section-svg-wrap"></div>
+    </div>
+  </main>
+</div>
+
+<!-- Grave Detail Panel -->
+<div id="detail-panel">
+  <div class="dp-header">
+    <button class="dp-close" onclick="closeDetail()">✕</button>
+    <div class="dp-grave-id" id="dp-id">—</div>
+    <div class="dp-name" id="dp-name">—</div>
+    <div class="dp-dates" id="dp-dates"></div>
+  </div>
+  <div class="dp-body">
+    <div class="dp-photo" id="dp-photo">No photograph on record</div>
+    <div class="dp-status-row" id="dp-status-row"></div>
+
+    <div class="dp-meta-grid">
+      <div class="dp-field">
+        <div class="dp-field-label">Owner(s)</div>
+        <div class="dp-field-value" id="dp-owner">—</div>
+      </div>
+      <div class="dp-field">
+        <div class="dp-field-label">Date of Status</div>
+        <div class="dp-field-value" id="dp-date">—</div>
+      </div>
+      <div class="dp-field" id="dp-reserved-wrap">
+        <div class="dp-field-label">Reserved For</div>
+        <div class="dp-field-value" id="dp-reserved">—</div>
+      </div>
+      <div class="dp-field">
+        <div class="dp-field-label">Pontem Order</div>
+        <div class="dp-field-value" id="dp-pontem">—</div>
+      </div>
+    </div>
+
+    <hr class="dp-divider">
+
+    <div class="dp-section-label">Location</div>
+    <div class="dp-location-chips" id="dp-location"></div>
+
+    <hr class="dp-divider">
+
+    <div class="dp-section-label">Biography</div>
+    <div class="dp-bio empty" id="dp-bio">No biography on record. Upload documents to add biographical information for this grave.</div>
+
+    <hr class="dp-divider">
+
+    <div class="dp-section-label">Documents & Links</div>
+    <div style="font-size:0.78rem;color:var(--text-light);font-style:italic;">No documents attached to this record.</div>
+
+    <div class="dp-actions">
+      <button class="dp-btn dp-btn-secondary" onclick="openAdminPanel()">⬆ Add Photo</button>
+      <button class="dp-btn dp-btn-primary" onclick="openAdminPanel()">✎ Edit Record</button>
+    </div>
+  </div>
+</div>
+
+<!-- Data Records Overlay -->
+<div id="data-overlay">
+  <div class="dt-container fadein">
+    <div class="dt-header">
+      <h2>Cemetery Records</h2>
+      <button class="dt-close" onclick="closeDataOverlay()">✕</button>
+    </div>
+    <div class="dt-toolbar">
+      <input type="text" class="dt-search" id="dt-search" placeholder="Filter records…" oninput="filterTable(this.value)">
+      <span class="dt-count" id="dt-count"></span>
+    </div>
+    <div class="dt-scroll">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Occupant</th>
+            <th>Status</th>
+            <th>Date</th>
+            <th>Owner(s)</th>
+            <th>Reserved For</th>
+          </tr>
+        </thead>
+        <tbody id="dt-tbody"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- Tours Modal -->
+<div id="tours-modal">
+  <div class="tm-container fadein">
+    <div class="tm-header">
+      <h2>Guided Cemetery Tours</h2>
+      <p>Explore notable burials highlighted on the map</p>
+      <button class="tm-close" onclick="closeToursModal()">✕</button>
+    </div>
+    <div class="tm-body">
+      <div class="tour-item" onclick="startTour('presidents')">
+        <span class="tour-icon">✝</span>
+        <div class="tour-info"><h4>Notre Dame Presidents</h4><p>Holy Cross Congregation Fathers who led the University</p></div>
+        <span class="tour-count">C.S.C. Fathers</span>
+      </div>
+      <div class="tour-item" onclick="startTour('holy-cross')">
+        <span class="tour-icon">⛪</span>
+        <div class="tour-info"><h4>Holy Cross Community</h4><p>Priests and Brothers of the Congregation of Holy Cross</p></div>
+        <span class="tour-count">Religious</span>
+      </div>
+      <div class="tour-item" onclick="startTour('veterans')">
+        <span class="tour-icon">⚑</span>
+        <div class="tour-info"><h4>War Veterans</h4><p>Service members from WWI, WWII, Korea, Vietnam and beyond</p></div>
+        <span class="tour-count">All Conflicts</span>
+      </div>
+      <div class="tour-item" onclick="startTour('faculty')">
+        <span class="tour-icon">🎓</span>
+        <div class="tour-info"><h4>Distinguished Faculty</h4><p>Scholars and professors who shaped Notre Dame</p></div>
+        <span class="tour-count">Professors</span>
+      </div>
+      <div class="tour-item" onclick="startTour('trees')">
+        <span class="tour-icon">🌳</span>
+        <div class="tour-info"><h4>Memorial Trees</h4><p>Living memorials planted throughout the grounds</p></div>
+        <span class="tour-count">Trees</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Admin Upload Panel -->
+<div id="admin-panel">
+  <div class="ap-container fadein">
+    <div class="ap-header">
+      <h2>Update Cemetery Data</h2>
+      <p>Upload an updated Excel or CSV export from Pontem</p>
+      <button class="ap-close" onclick="closeAdminPanel()">✕</button>
+    </div>
+    <div class="ap-body">
+      <label class="upload-zone" id="upload-zone">
+        <input type="file" accept=".xlsx,.xls,.csv" onchange="handleFileUpload(this)">
+        <div class="uz-icon">↑</div>
+        <h3>Drop file here or click to browse</h3>
+        <p>Supports .xlsx, .xls, .csv — map updates automatically on import</p>
+      </label>
+      <div id="upload-status-msg"></div>
+      <div style="font-size:0.72rem;color:var(--text-light);line-height:1.6;margin-top:12px;">
+        <strong>Expected columns:</strong> CedarGrove-Section-Lot-Grave, Occupant, Status, Date of Status, Owner(s), Reserved For, Pontem Order
+        <br><br>Status values: <em>Available, Reserved, Sold, Occupied, HOLD, Tree</em>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div id="toast"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script>
+/* =========================================================
+   CEDAR GROVE CEMETERY — INTERACTIVE ARCHIVE
+   ========================================================= */
+
+let db = [];
+let activeFilters = new Set(['Available','Reserved','Sold','Occupied','HOLD','Tree']);
+let currentSection = null;
+let scale = 1, tx = 0, ty = 0;
+let panning = false, px = 0, py = 0;
+let isAdmin = false;
+
+// ── SAMPLE DATA ──────────────────────────────────────────
+const STATUSES = ['Available','Occupied','Sold','Reserved','HOLD','Tree'];
+const SURNAMES = ['Murphy','Walsh','Kelly','O\'Brien','Ryan','Brennan','Burke','Collins','Kennedy','Lynch','Fitzgerald','McCarthy','Sullivan','O\'Connor','Gallagher','Quinn','Hughes','Hesburgh','Sorin','O\'Neill','Corby','Zahm','Cavanaugh'];
+const FIRST = ['Thomas','Mary','Patrick','Ann','James','Catherine','Michael','Margaret','John','Elizabeth','Robert','Gertrude','William','Christine','Francis'];
+
+function makeSampleData() {
+  const data = [];
+  // Real data from screenshot
+  const real = [
+    {id:'CEDARGROVE-M-100-1',occupant:'Bartkus',status:'Occupied',date:'6/30/2006',owners:'Woo',reserved:''},
+    {id:'CEDARGROVE-M-100-2',occupant:'',status:'Sold',date:'',owners:'Woo',reserved:''},
+    {id:'CEDARGROVE-M-100-3',occupant:'',status:'Sold',date:'',owners:'Kmiec',reserved:''},
+    {id:'CEDARGROVE-M-100-4',occupant:'',status:'Sold',date:'7/28/2006',owners:'Newburg',reserved:''},
+    {id:'CEDARGROVE-M-100-5',occupant:'Newburg',status:'Occupied',date:'7/28/2006',owners:'Newburg',reserved:''},
+    {id:'CEDARGROVE-M-101-1',occupant:'',status:'Reserved',date:'',owners:'Walshe',reserved:'Walshe, Peter'},
+    {id:'CEDARGROVE-M-101-2',occupant:'',status:'Reserved',date:'',owners:'Walshe',reserved:'Walshe, Ann'},
+    {id:'CEDARGROVE-M-101-3',occupant:'Bellis',status:'Occupied',date:'',owners:'Bellis',reserved:''},
+    {id:'CEDARGROVE-M-101-4',occupant:'',status:'Available',date:'',owners:'',reserved:''},
+    {id:'CEDARGROVE-M-101-5',occupant:'',status:'Available',date:'',owners:'',reserved:''},
+    {id:'CEDARGROVE-M-102-1',occupant:'',status:'HOLD',date:'10/28/2024',owners:'',reserved:''},
+    {id:'CEDARGROVE-M-102-2',occupant:'',status:'Sold',date:'',owners:'Crowe',reserved:''},
+    {id:'CEDARGROVE-M-102-3',occupant:'',status:'Sold',date:'',owners:'Crowe',reserved:''},
+    {id:'CEDARGROVE-M-102-4',occupant:'',status:'Sold',date:'',owners:'Hinchion-Mancini',reserved:''},
+    {id:'CEDARGROVE-M-102-5',occupant:'Hinchion',status:'Occupied',date:'',owners:'Hinchion Mancini',reserved:''},
+    {id:'CEDARGROVE-M-103-1',occupant:'Balog',status:'Occupied',date:'',owners:'Balog',reserved:''},
+    {id:'CEDARGROVE-M-103-2',occupant:'Berndt',status:'Occupied',date:'10/30/2006',owners:'Berndt',reserved:'Berndt, Gertrude'},
+    {id:'CEDARGROVE-M-103-3',occupant:'',status:'Reserved',date:'10/30/2006',owners:'Berndt',reserved:'Berndt, Christine; Berndt, Robert'},
+    {id:'CEDARGROVE-M-103-4',occupant:'Banicki',status:'Occupied',date:'',owners:'Banicki',reserved:'Banicki, Theresa'},
+  ];
+  real.forEach((r,i) => { const p = parseId(r.id); data.push({...r,...p,pontem:i+1}); });
+
+  // Generate remaining sections
+  const sections = 'A,B,C,D,E,F,G,H,I,J,K,L,N,O,P,Q,R,S,T,U,V,X'.split(',');
+  let n = data.length + 1;
+  sections.forEach(sec => {
+    const lots = sec.length === 1 ? 10 : 6;
+    for (let lot = 1; lot <= lots; lot++) {
+      for (let gr = 1; gr <= 5; gr++) {
+        const idx = Math.floor(Math.random() * STATUSES.length);
+        // Weight toward Occupied/Sold
+        const wt = Math.random();
+        let status = wt < 0.35 ? 'Occupied' : wt < 0.55 ? 'Sold' : wt < 0.7 ? 'Available' : wt < 0.83 ? 'Reserved' : wt < 0.93 ? 'HOLD' : 'Tree';
+        const surname = SURNAMES[Math.floor(Math.random()*SURNAMES.length)];
+        const first = FIRST[Math.floor(Math.random()*FIRST.length)];
+        const yr = 1940 + Math.floor(Math.random()*80);
+        const id = `CEDARGROVE-${sec}-${lot}-${gr}`;
+        data.push({
+          id, section: sec, lot: String(lot), grave: String(gr),
+          occupant: status === 'Occupied' ? surname : '',
+          status,
+          date: status !== 'Available' && status !== 'Tree' ? `${Math.floor(Math.random()*12)+1}/${Math.floor(Math.random()*28)+1}/${yr}` : '',
+          owners: status !== 'Available' && status !== 'Tree' ? surname : '',
+          reserved: status === 'Reserved' ? `${surname}, ${first}` : '',
+          pontem: n++
+        });
+      }
+    }
+  });
+  return data;
+}
+
+function parseId(id) {
+  const p = id.replace('CEDARGROVE-','').split('-');
+  return { section: p[0]||'?', lot: p[1]||'?', grave: p[2]||'?' };
+}
+
+db = makeSampleData();
+
+// ── INIT ─────────────────────────────────────────────────
+window.addEventListener('load', () => {
+  setTimeout(() => document.getElementById('loading').classList.add('hidden'), 1400);
+  buildSectionNav();
+  updateStats();
+  populateTable();
+  buildSectionJump();
+  setupPanZoom();
+});
+
+// ── SECTION NAV ──────────────────────────────────────────
+function buildSectionNav() {
+  const secs = [...new Set(db.map(d => d.section))].sort();
+  const nav = document.getElementById('section-nav');
+  nav.innerHTML = '';
+  secs.forEach(s => {
+    const avail = db.filter(d => d.section === s && d.status === 'Available').length;
+    const total = db.filter(d => d.section === s).length;
+    const li = document.createElement('li');
+    li.id = `nav-${s}`;
+    li.innerHTML = `<span>Section ${s}</span><span class="section-count">${avail} avail</span>`;
+    li.onclick = () => selectSection(s);
+    nav.appendChild(li);
+  });
+}
+
+function buildSectionJump() {
+  const sel = document.querySelector('.section-jump select');
+  const secs = [...new Set(db.map(d => d.section))].sort();
+  secs.forEach(s => {
+    const o = document.createElement('option');
+    o.value = s; o.textContent = `Section ${s}`;
+    sel.appendChild(o);
+  });
+}
+
+// ── STATS ────────────────────────────────────────────────
+function updateStats() {
+  const c = s => db.filter(d => d.status === s).length;
+  document.getElementById('st-total').textContent = db.length.toLocaleString();
+  document.getElementById('st-occupied').textContent = c('Occupied').toLocaleString();
+  document.getElementById('st-available').textContent = c('Available').toLocaleString();
+  document.getElementById('st-reserved').textContent = c('Reserved').toLocaleString();
+  document.getElementById('st-sold').textContent = c('Sold').toLocaleString();
+  document.getElementById('st-tree').textContent = c('Tree').toLocaleString();
+}
+
+// ── SELECT SECTION ────────────────────────────────────────
+function selectSection(sec) {
+  currentSection = sec;
+  document.querySelectorAll('.sec-zone').forEach(z => z.classList.remove('active'));
+  const z = document.getElementById(`z-${sec}`);
+  if (z) z.classList.add('active');
+  document.querySelectorAll('#section-nav li').forEach(el => el.classList.remove('active'));
+  const navEl = document.getElementById(`nav-${sec}`);
+  if (navEl) navEl.classList.add('active');
+
+  // Breadcrumb
+  document.getElementById('breadcrumb').innerHTML = `
+    <span class="bc-link" onclick="resetToOverview()">Cedar Grove</span>
+    <span class="bc-sep">›</span>
+    <span class="bc-current">Section ${sec}</span>
+  `;
+
+  // Section header
+  const graves = db.filter(d => d.section === sec);
+  const avail = graves.filter(d => d.status === 'Available').length;
+  const occ = graves.filter(d => d.status === 'Occupied').length;
+  document.getElementById('sv-title').textContent = `Section ${sec}`;
+  document.getElementById('sv-subtitle').textContent = `${graves.length} plots — click any grave to view record`;
+  document.getElementById('sv-stats').innerHTML = `
+    <div class="mini-stat"><div class="n">${graves.length}</div><div class="l">Total</div></div>
+    <div class="mini-stat"><div class="n">${occ}</div><div class="l">Occupied</div></div>
+    <div class="mini-stat"><div class="n" style="color:var(--s-available)">${avail}</div><div class="l">Available</div></div>
+  `;
+
+  renderSectionGrid(sec, graves);
+  document.getElementById('section-view').classList.add('visible');
+}
+
+function resetToOverview() {
+  currentSection = null;
+  document.getElementById('section-view').classList.remove('visible');
+  document.getElementById('breadcrumb').innerHTML = `<span class="bc-link" onclick="resetToOverview()">Cedar Grove</span>`;
+  document.querySelectorAll('.sec-zone').forEach(z => z.classList.remove('active'));
+  document.querySelectorAll('#section-nav li').forEach(el => el.classList.remove('active'));
+  closeDetail();
+}
+
+// ── RENDER SECTION GRAVE GRID ─────────────────────────────
+function renderSectionGrid(sec, graves) {
+  const GW = 56, GH = 32, GAP_X = 5, GAP_Y = 14;
+  const LOT_GAP = 20, MARGIN = 16;
+
+  const lots = {};
+  graves.forEach(g => { if (!lots[g.lot]) lots[g.lot] = []; lots[g.lot].push(g); });
+  const lotKeys = Object.keys(lots).sort((a,b) => +a - +b);
+
+  const COLS = Math.min(8, Math.ceil(Math.sqrt(lotKeys.length * 1.5)));
+  const maxPerLot = Math.max(...lotKeys.map(k => lots[k].length));
+  const lotW = maxPerLot * (GW + GAP_X) - GAP_X;
+  const lotH = GH;
+  const cellW = lotW + LOT_GAP;
+  const cellH = lotH + GAP_Y + LOT_GAP;
+  const ROWS = Math.ceil(lotKeys.length / COLS);
+  const svgW = MARGIN * 2 + COLS * cellW;
+  const svgH = MARGIN * 2 + ROWS * cellH + 20;
+
+  let svg = `<svg viewBox="0 0 ${svgW} ${svgH}" style="min-width:${svgW}px;display:block;">`;
+
+  lotKeys.forEach((lot, idx) => {
+    const col = idx % COLS;
+    const row = Math.floor(idx / COLS);
+    const lx = MARGIN + col * cellW;
+    const ly = MARGIN + row * cellH + 16;
+
+    svg += `<text x="${lx}" y="${ly - 4}" style="font-family:'DM Sans',sans-serif;font-size:7.5px;fill:var(--text-light);letter-spacing:1.5px;text-transform:uppercase;">LOT ${lot}</text>`;
+
+    lots[lot].forEach((g, gi) => {
+      const gx = lx + gi * (GW + GAP_X);
+      const gy = ly;
+      const cls = getGraveClass(g.status);
+      const vis = activeFilters.has(g.status) ? 1 : 0.1;
+
+      if (g.status === 'Tree') {
+        svg += `<rect class="grave ${cls}" x="${gx}" y="${gy}" width="${GW}" height="${GH}" rx="2" opacity="${vis}" onclick="openGraveDetail('${g.id}')"/>`;
+        svg += `<text x="${gx+GW/2}" y="${gy+GH/2+1}" text-anchor="middle" dominant-baseline="middle" style="font-size:11px;pointer-events:none;">🌳</text>`;
+      } else {
+        svg += `<rect class="grave ${cls}" x="${gx}" y="${gy}" width="${GW}" height="${GH}" rx="2" opacity="${vis}" onclick="openGraveDetail('${g.id}')"><title>${g.id}${g.occupant?' — '+g.occupant:''}</title></rect>`;
+        if (g.occupant) {
+          const nm = g.occupant.length > 7 ? g.occupant.slice(0,6)+'…' : g.occupant;
+          svg += `<text class="grave-name" x="${gx+GW/2}" y="${gy+GH/2}" pointer-events="none">${nm}</text>`;
+        }
+        svg += `<text class="grave-num" x="${gx+GW/2}" y="${gy+GH-5}" pointer-events="none">${g.grave}</text>`;
+      }
+    });
+  });
+
+  svg += '</svg>';
+  document.getElementById('section-svg-wrap').innerHTML = svg;
+}
+
+function getGraveClass(s) {
+  return { Available:'g-available', Reserved:'g-reserved', Sold:'g-sold', Occupied:'g-occupied', HOLD:'g-hold', Tree:'g-tree' }[s] || 'g-available';
+}
+
+// ── TOOLTIP ───────────────────────────────────────────────
+function showTip(e, sec) {
+  const t = document.getElementById('section-tooltip');
+  const secGraves = db.filter(d => d.section === sec);
+  if (!secGraves.length) return;
+  const avail = secGraves.filter(d => d.status === 'Available').length;
+  const occ = secGraves.filter(d => d.status === 'Occupied').length;
+  const names = { M:'Mausoleums', Veterans:'Veterans Section', Columbarium:'Columbarium' };
+  document.getElementById('tt-name').textContent = names[sec] || `Section ${sec}`;
+  document.getElementById('tt-stats').innerHTML = `${secGraves.length} plots · ${occ} occupied · <span class="tt-avail">${avail} available</span>`;
+  const rect = e.target.closest('svg').getBoundingClientRect();
+  t.style.left = (e.clientX - rect.left + 14) + 'px';
+  t.style.top = (e.clientY - rect.top - 10) + 'px';
+  t.classList.add('visible');
+}
+function hideTip() { document.getElementById('section-tooltip').classList.remove('visible'); }
+
+// ── GRAVE DETAIL ──────────────────────────────────────────
+function openGraveDetail(id) {
+  const panel = document.getElementById('detail-panel');
+
+  if (id.startsWith('maus-')) {
+    const mausNames = ['','Mary Queen of Angels','Mary Queen of All Saints','Mary Mother of the Church','Mary Mother of God'];
+    const n = parseInt(id.split('-')[1]);
+    document.getElementById('dp-id').textContent = `Mausoleum ${n}`;
+    document.getElementById('dp-name').textContent = mausNames[n] || '—';
+    document.getElementById('dp-dates').textContent = '';
+    document.getElementById('dp-status-row').innerHTML = `<span class="status-badge sb-occupied">Building</span>`;
+    document.getElementById('dp-owner').textContent = 'Cedar Grove Cemetery';
+    document.getElementById('dp-date').textContent = '—';
+    document.getElementById('dp-reserved').textContent = '—';
+    document.getElementById('dp-pontem').textContent = '—';
+    document.getElementById('dp-location').innerHTML = `<span class="loc-chip">Mausoleum ${n}</span>`;
+    panel.classList.add('open');
+    return;
+  }
+
+  const g = db.find(d => d.id === id);
+  if (!g) return;
+
+  document.getElementById('dp-id').textContent = g.id;
+  document.getElementById('dp-name').textContent = g.occupant || (g.owners ? g.owners : 'Unoccupied Plot');
+  document.getElementById('dp-dates').textContent = g.date ? `Status date: ${g.date}` : '';
+  document.getElementById('dp-status-row').innerHTML = `<span class="status-badge sb-${g.status.toLowerCase()}">${g.status === 'HOLD' ? 'Hold' : g.status === 'Tree' ? '🌳 Tree' : g.status}</span>`;
+  document.getElementById('dp-owner').textContent = g.owners || '—';
+  document.getElementById('dp-date').textContent = g.date || '—';
+  document.getElementById('dp-reserved').textContent = g.reserved || '—';
+  document.getElementById('dp-pontem').textContent = g.pontem || '—';
+  document.getElementById('dp-reserved-wrap').style.display = g.reserved ? 'block' : 'none';
+  document.getElementById('dp-location').innerHTML = `
+    <span class="loc-chip">Section ${g.section}</span>
+    <span class="loc-chip">Lot ${g.lot}</span>
+    <span class="loc-chip">Grave ${g.grave}</span>
+  `;
+  panel.classList.add('open');
+}
+
+function closeDetail() { document.getElementById('detail-panel').classList.remove('open'); }
+
+// ── FILTERS ───────────────────────────────────────────────
+function toggleFilter(status, el) {
+  if (activeFilters.has(status)) { activeFilters.delete(status); el.classList.add('inactive'); }
+  else { activeFilters.add(status); el.classList.remove('inactive'); }
+  if (currentSection) {
+    const graves = db.filter(d => d.section === currentSection);
+    renderSectionGrid(currentSection, graves);
+  }
+}
+
+// ── SEARCH ────────────────────────────────────────────────
+function handleSearch(q) {
+  if (!q.trim()) { hideDropdown(); return; }
+  const lq = q.toLowerCase();
+  const results = db.filter(d =>
+    d.occupant.toLowerCase().includes(lq) ||
+    d.owners.toLowerCase().includes(lq) ||
+    d.id.toLowerCase().includes(lq) ||
+    d.section.toLowerCase().includes(lq)
+  ).slice(0, 10);
+  const dd = document.getElementById('search-dropdown');
+  if (!results.length) {
+    dd.innerHTML = '<div class="sd-item"><span class="sd-name" style="color:var(--text-light)">No records found</span></div>';
+  } else {
+    dd.innerHTML = results.map(r => `
+      <div class="sd-item" onclick="jumpTo('${r.id}')">
+        <span class="sd-name">${r.occupant || r.owners || 'Unoccupied'}</span>
+        <span class="sd-meta">${r.id} · ${r.status}</span>
+      </div>
+    `).join('');
+  }
+  dd.classList.add('open');
+}
+
+function showDropdown() { if (document.getElementById('search-input').value) document.getElementById('search-dropdown').classList.add('open'); }
+function hideDropdown() { document.getElementById('search-dropdown').classList.remove('open'); }
+
+function jumpTo(id) {
+  const g = db.find(d => d.id === id);
+  if (!g) return;
+  hideDropdown();
+  document.getElementById('search-input').value = '';
+  selectSection(g.section);
+  setTimeout(() => openGraveDetail(id), 80);
+}
+
+// ── ZOOM / PAN ─────────────────────────────────────────────
+function setupPanZoom() {
+  const wrap = document.getElementById('map-wrap');
+  wrap.addEventListener('wheel', e => {
+    e.preventDefault();
+    scale = Math.min(4, Math.max(0.5, scale + (e.deltaY > 0 ? -0.12 : 0.12)));
+    applyTransform();
+  }, { passive: false });
+  wrap.addEventListener('mousedown', e => { panning = true; px = e.clientX - tx; py = e.clientY - ty; wrap.style.cursor = 'grabbing'; });
+  window.addEventListener('mousemove', e => { if (!panning) return; tx = e.clientX - px; ty = e.clientY - py; applyTransform(); });
+  window.addEventListener('mouseup', () => { panning = false; document.getElementById('map-wrap').style.cursor = 'default'; });
+}
+
+function applyTransform() {
+  const s = document.getElementById('cemetery-svg');
+  s.style.transform = `translate(${tx}px,${ty}px) scale(${scale})`;
+  s.style.transformOrigin = 'center center';
+}
+function zoomIn() { scale = Math.min(4, scale + 0.2); applyTransform(); }
+function zoomOut() { scale = Math.max(0.5, scale - 0.2); applyTransform(); }
+function resetZoom() { scale = 1; tx = 0; ty = 0; applyTransform(); }
+
+// ── TABLE ──────────────────────────────────────────────────
+function openDataOverlay() { document.getElementById('data-overlay').classList.add('open'); }
+function closeDataOverlay() { document.getElementById('data-overlay').classList.remove('open'); }
+
+function populateTable(q = '') {
+  const lq = q.toLowerCase();
+  const rows = db.filter(d =>
+    !lq || d.id.toLowerCase().includes(lq) || d.occupant.toLowerCase().includes(lq) || d.owners.toLowerCase().includes(lq)
+  );
+  document.getElementById('dt-count').textContent = `${rows.length.toLocaleString()} records`;
+  const badgeCls = { Available:'sb-available', Reserved:'sb-reserved', Sold:'sb-sold', Occupied:'sb-occupied', HOLD:'sb-hold', Tree:'sb-tree' };
+  document.getElementById('dt-tbody').innerHTML = rows.map(r => `
+    <tr onclick="closeDataOverlay(); jumpTo('${r.id}')">
+      <td style="font-size:0.7rem;color:var(--text-light);font-family:'DM Sans',sans-serif;">${r.id}</td>
+      <td style="font-weight:400;color:var(--navy);">${r.occupant || '—'}</td>
+      <td><span class="status-badge ${badgeCls[r.status]||'sb-available'}" style="font-size:0.62rem;padding:3px 9px;">${r.status}</span></td>
+      <td>${r.date || '—'}</td>
+      <td>${r.owners || '—'}</td>
+      <td style="color:var(--text-light);">${r.reserved || '—'}</td>
+    </tr>
+  `).join('');
+}
+function filterTable(q) { populateTable(q); }
+
+// ── TOURS ──────────────────────────────────────────────────
+function openToursModal() { document.getElementById('tours-modal').classList.add('open'); }
+function closeToursModal() { document.getElementById('tours-modal').classList.remove('open'); }
+function startTour(type) {
+  closeToursModal();
+  toast(`Tour: ${type} — graves will be highlighted as label data becomes available`);
+}
+
+// ── ADMIN ──────────────────────────────────────────────────
+function openAdminPanel() { document.getElementById('admin-panel').classList.add('open'); }
+function closeAdminPanel() { document.getElementById('admin-panel').classList.remove('open'); }
+
+function setMode(m) {
+  isAdmin = m === 'admin';
+  document.getElementById('pub-mode').classList.toggle('active', !isAdmin);
+  document.getElementById('adm-mode').classList.toggle('active', isAdmin);
+  toast(isAdmin ? 'Admin mode — full record access enabled' : 'Public mode');
+}
+
+// ── FILE UPLOAD ────────────────────────────────────────────
+function handleFileUpload(input) {
+  const file = input.files[0]; if (!file) return;
+  document.getElementById('upload-status-msg').textContent = 'Reading file…';
+  const reader = new FileReader();
+  reader.onload = e => {
+    try {
+      const wb = XLSX.read(e.target.result, { type: 'binary' });
+      const ws = wb.Sheets[wb.SheetNames[0]];
+      const raw = XLSX.utils.sheet_to_json(ws, { header: 1 });
+      if (raw.length < 2) { document.getElementById('upload-status-msg').textContent = 'File appears empty.'; return; }
+
+      const heads = raw[0].map(h => String(h||'').toLowerCase());
+      const ci = k => heads.findIndex(h => h.includes(k));
+      const idC = ci('cedargrove') !== -1 ? ci('cedargrove') : 0;
+      const occC = ci('occupant'); const stC = ci('status'); const dtC = ci('date');
+      const owC = ci('owner'); const rsC = ci('reserved');
+
+      const parsed = [];
+      for (let i = 1; i < raw.length; i++) {
+        const r = raw[i]; if (!r[idC]) continue;
+        const idStr = String(r[idC]);
+        const p = parseId(idStr);
+        const st = String(r[stC]||'Available');
+        parsed.push({ id:idStr, ...p,
+          occupant: String(r[occC]||''), status: st,
+          date: r[dtC] ? String(r[dtC]) : '',
+          owners: String(r[owC]||''),
+          reserved: String(r[rsC]||''),
+          pontem: i
+        });
+      }
+
+      db = parsed;
+      buildSectionNav();
+      buildSectionJump();
+      updateStats();
+      populateTable();
+      if (currentSection) selectSection(currentSection);
+      document.getElementById('upload-status-msg').textContent = `✓ ${parsed.length} records loaded successfully`;
+      closeAdminPanel();
+      toast(`${parsed.length} records imported — map updated`);
+    } catch(err) {
+      document.getElementById('upload-status-msg').textContent = 'Error: Could not parse file.';
+    }
+  };
+  reader.readAsBinaryString(file);
+}
+
+// ── TOAST ──────────────────────────────────────────────────
+function toast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3200);
+}
+
+// Close modals on backdrop click
+['data-overlay','tours-modal','admin-panel'].forEach(id => {
+  document.getElementById(id).addEventListener('click', function(e) {
+    if (e.target === this) {
+      this.classList.remove('open');
+    }
+  });
+});
+
+</script>
+</body>
+</html>

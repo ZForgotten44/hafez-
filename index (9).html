@@ -1,0 +1,1665 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cedar Grove Cemetery — Holy Cross, Notre Dame</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Josefin+Sans:wght@200;300;400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --stone: #e8e4dc;
+    --parchment: #f5f1e8;
+    --ink: #1a1814;
+    --moss: #4a5c3a;
+    --moss-light: #6b7f58;
+    --rust: #8b4513;
+    --gold: #c9a84c;
+    --gold-light: #e8cc7a;
+    --slate: #5a6472;
+    --shadow: rgba(26,24,20,0.15);
+
+    /* Status colors */
+    --available: #3d7a4a;
+    --reserved: #b8860b;
+    --sold: #2a5a8a;
+    --occupied: #7a2a2a;
+    --hold: #6a3a7a;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--ink);
+    color: var(--stone);
+    font-family: 'Josefin Sans', sans-serif;
+    font-weight: 300;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ===== HEADER ===== */
+  header {
+    background: linear-gradient(180deg, #0e0d0a 0%, #1a1814 100%);
+    border-bottom: 1px solid rgba(201,168,76,0.3);
+    padding: 20px 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+  }
+
+  .header-title {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .header-title h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 300;
+    font-size: 1.6rem;
+    letter-spacing: 0.08em;
+    color: var(--gold-light);
+  }
+
+  .header-title span {
+    font-size: 0.65rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--slate);
+    margin-top: 2px;
+  }
+
+  .header-cross {
+    font-size: 1.8rem;
+    color: var(--gold);
+    opacity: 0.6;
+  }
+
+  .header-controls {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+  }
+
+  .btn {
+    background: transparent;
+    border: 1px solid rgba(201,168,76,0.4);
+    color: var(--stone);
+    padding: 7px 16px;
+    font-family: 'Josefin Sans', sans-serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .btn:hover {
+    background: rgba(201,168,76,0.15);
+    border-color: var(--gold);
+    color: var(--gold-light);
+  }
+
+  .btn.active {
+    background: rgba(201,168,76,0.2);
+    border-color: var(--gold);
+    color: var(--gold-light);
+  }
+
+  /* ===== SEARCH BAR ===== */
+  .search-container {
+    background: rgba(255,255,255,0.03);
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    padding: 14px 40px;
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  .search-box {
+    position: relative;
+    flex: 1;
+    min-width: 240px;
+    max-width: 400px;
+  }
+
+  .search-box input {
+    width: 100%;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    color: var(--stone);
+    padding: 9px 40px 9px 16px;
+    font-family: 'Josefin Sans', sans-serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  .search-box input::placeholder { color: var(--slate); }
+  .search-box input:focus { border-color: var(--gold); }
+
+  .search-icon {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--slate);
+    font-size: 0.9rem;
+  }
+
+  .search-results {
+    position: absolute;
+    top: calc(100% + 4px);
+    left: 0;
+    right: 0;
+    background: #1e1c18;
+    border: 1px solid rgba(201,168,76,0.3);
+    z-index: 500;
+    max-height: 280px;
+    overflow-y: auto;
+    display: none;
+  }
+
+  .search-results.open { display: block; }
+
+  .search-result-item {
+    padding: 10px 16px;
+    cursor: pointer;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    transition: background 0.15s;
+    font-size: 0.75rem;
+  }
+
+  .search-result-item:hover { background: rgba(201,168,76,0.1); }
+  .search-result-item .name { color: var(--gold-light); }
+  .search-result-item .meta { color: var(--slate); font-size: 0.65rem; letter-spacing: 0.1em; margin-top: 2px; }
+
+  /* ===== FILTER BAR ===== */
+  .filter-bar {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  .filter-label {
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--slate);
+    margin-right: 4px;
+  }
+
+  .filter-chip {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 12px;
+    border: 1px solid transparent;
+    cursor: pointer;
+    font-family: 'Josefin Sans', sans-serif;
+    font-size: 0.62rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    transition: all 0.2s;
+    background: rgba(255,255,255,0.03);
+    border-color: rgba(255,255,255,0.08);
+  }
+
+  .filter-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .filter-chip.active-filter { border-color: currentColor; background: rgba(255,255,255,0.07); }
+
+  .chip-available { color: #6ab87a; }
+  .chip-available .filter-dot { background: var(--available); }
+  .chip-reserved { color: #e8c84a; }
+  .chip-reserved .filter-dot { background: var(--reserved); }
+  .chip-sold { color: #5a9ada; }
+  .chip-sold .filter-dot { background: var(--sold); }
+  .chip-occupied { color: #c86a6a; }
+  .chip-occupied .filter-dot { background: var(--occupied); }
+  .chip-hold { color: #b07ac8; }
+  .chip-hold .filter-dot { background: var(--hold); }
+
+  /* ===== UPLOAD ZONE ===== */
+  .upload-banner {
+    background: rgba(74,92,58,0.15);
+    border: 1px dashed rgba(74,92,58,0.5);
+    margin: 0 40px 0;
+    padding: 10px 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-top: 12px;
+  }
+
+  .upload-banner:hover { background: rgba(74,92,58,0.25); border-color: var(--moss-light); }
+  .upload-banner input { display: none; }
+  .upload-banner .upload-icon { font-size: 1.2rem; color: var(--moss-light); }
+  .upload-banner .upload-text { font-size: 0.68rem; letter-spacing: 0.15em; color: var(--moss-light); text-transform: uppercase; }
+  .upload-banner .upload-sub { font-size: 0.6rem; color: var(--slate); margin-top: 2px; }
+
+  /* ===== MAIN LAYOUT ===== */
+  .main-layout {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    height: calc(100vh - 140px);
+  }
+
+  /* ===== SIDEBAR ===== */
+  .sidebar {
+    background: #141210;
+    border-right: 1px solid rgba(255,255,255,0.06);
+    overflow-y: auto;
+    padding: 24px 0;
+  }
+
+  .sidebar-section {
+    padding: 0 20px 20px;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    margin-bottom: 20px;
+  }
+
+  .sidebar-heading {
+    font-size: 0.58rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 12px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid rgba(201,168,76,0.2);
+  }
+
+  .section-list { list-style: none; }
+
+  .section-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 10px;
+    cursor: pointer;
+    transition: all 0.15s;
+    border-left: 2px solid transparent;
+    font-size: 0.75rem;
+    letter-spacing: 0.05em;
+  }
+
+  .section-item:hover {
+    background: rgba(255,255,255,0.04);
+    border-left-color: var(--gold);
+    color: var(--gold-light);
+  }
+
+  .section-item.active {
+    background: rgba(201,168,76,0.1);
+    border-left-color: var(--gold);
+    color: var(--gold-light);
+  }
+
+  .section-badge {
+    font-size: 0.6rem;
+    padding: 2px 7px;
+    background: rgba(255,255,255,0.07);
+    letter-spacing: 0.1em;
+  }
+
+  .stats-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+
+  .stat-item {
+    background: rgba(255,255,255,0.03);
+    padding: 10px;
+    text-align: center;
+  }
+
+  .stat-value {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.4rem;
+    color: var(--gold-light);
+  }
+
+  .stat-label {
+    font-size: 0.55rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--slate);
+    margin-top: 2px;
+  }
+
+  /* ===== MAP AREA ===== */
+  .map-container {
+    position: relative;
+    overflow: hidden;
+    background: #0f0e0b;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px);
+    background-size: 40px 40px;
+  }
+
+  .map-toolbar {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .map-tool-btn {
+    width: 36px;
+    height: 36px;
+    background: rgba(20,18,16,0.9);
+    border: 1px solid rgba(201,168,76,0.3);
+    color: var(--stone);
+    cursor: pointer;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+  }
+
+  .map-tool-btn:hover { background: rgba(201,168,76,0.2); border-color: var(--gold); }
+
+  .map-breadcrumb {
+    position: absolute;
+    top: 16px;
+    left: 16px;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+
+  .breadcrumb-item {
+    cursor: pointer;
+    color: var(--slate);
+    transition: color 0.2s;
+  }
+  .breadcrumb-item:hover, .breadcrumb-item.current { color: var(--gold-light); }
+  .breadcrumb-sep { color: rgba(255,255,255,0.2); }
+
+  /* ===== THE SVG MAP ===== */
+  #map-svg-wrapper {
+    width: 100%;
+    height: 100%;
+    cursor: grab;
+    transition: transform 0.1s;
+  }
+
+  #map-svg-wrapper:active { cursor: grabbing; }
+
+  #cemetery-svg {
+    width: 100%;
+    height: 100%;
+  }
+
+  /* Section zones */
+  .section-zone {
+    fill: rgba(74,92,58,0.15);
+    stroke: rgba(74,92,58,0.5);
+    stroke-width: 1;
+    cursor: pointer;
+    transition: fill 0.2s, stroke 0.2s;
+  }
+
+  .section-zone:hover {
+    fill: rgba(74,92,58,0.35);
+    stroke: rgba(107,127,88,0.9);
+  }
+
+  .section-label {
+    font-family: 'Josefin Sans', sans-serif;
+    font-size: 14px;
+    fill: rgba(200,190,160,0.8);
+    pointer-events: none;
+    letter-spacing: 2px;
+    text-anchor: middle;
+    dominant-baseline: middle;
+  }
+
+  /* Individual graves */
+  .grave {
+    stroke-width: 0.5;
+    cursor: pointer;
+    transition: opacity 0.15s;
+  }
+
+  .grave-available { fill: rgba(61,122,74,0.5); stroke: #4a9c5c; }
+  .grave-reserved { fill: rgba(184,134,11,0.5); stroke: #e8c84a; }
+  .grave-sold { fill: rgba(42,90,138,0.5); stroke: #5a9ada; }
+  .grave-occupied { fill: rgba(122,42,42,0.5); stroke: #c86a6a; }
+  .grave-hold { fill: rgba(106,58,122,0.5); stroke: #b07ac8; }
+
+  .grave:hover { opacity: 0.7; stroke-width: 1.5; }
+
+  .road-path {
+    fill: rgba(80,72,60,0.3);
+    stroke: rgba(120,110,90,0.4);
+    stroke-width: 1;
+  }
+
+  /* Mausoleum buildings */
+  .mausoleum {
+    fill: rgba(139,69,19,0.2);
+    stroke: rgba(201,168,76,0.6);
+    stroke-width: 1.5;
+    cursor: pointer;
+    transition: fill 0.2s;
+  }
+
+  .mausoleum:hover { fill: rgba(139,69,19,0.4); }
+
+  /* ===== GRAVE DETAIL PANEL ===== */
+  .detail-panel {
+    position: fixed;
+    right: -420px;
+    top: 0;
+    bottom: 0;
+    width: 420px;
+    background: #141210;
+    border-left: 1px solid rgba(201,168,76,0.3);
+    z-index: 900;
+    transition: right 0.35s cubic-bezier(0.4,0,0.2,1);
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .detail-panel.open { right: 0; }
+
+  .detail-panel-header {
+    padding: 24px 24px 16px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-shrink: 0;
+  }
+
+  .detail-close {
+    background: none;
+    border: none;
+    color: var(--slate);
+    cursor: pointer;
+    font-size: 1.2rem;
+    padding: 4px;
+    transition: color 0.2s;
+  }
+
+  .detail-close:hover { color: var(--gold-light); }
+
+  .detail-body { padding: 24px; flex: 1; }
+
+  .detail-photo-placeholder {
+    width: 100%;
+    aspect-ratio: 4/3;
+    background: rgba(255,255,255,0.04);
+    border: 1px dashed rgba(255,255,255,0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--slate);
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+
+  .detail-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.6rem;
+    font-weight: 300;
+    color: var(--gold-light);
+    margin-bottom: 4px;
+  }
+
+  .detail-dates {
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    color: var(--slate);
+    margin-bottom: 20px;
+  }
+
+  .detail-field {
+    margin-bottom: 14px;
+  }
+
+  .detail-field-label {
+    font-size: 0.58rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 4px;
+  }
+
+  .detail-field-value {
+    font-size: 0.8rem;
+    color: var(--stone);
+    letter-spacing: 0.05em;
+  }
+
+  .status-badge {
+    display: inline-block;
+    padding: 3px 12px;
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    font-weight: 400;
+  }
+
+  .badge-available { background: rgba(61,122,74,0.2); color: #6ab87a; border: 1px solid #3d7a4a; }
+  .badge-reserved { background: rgba(184,134,11,0.2); color: #e8c84a; border: 1px solid #b8860b; }
+  .badge-sold { background: rgba(42,90,138,0.2); color: #5a9ada; border: 1px solid #2a5a8a; }
+  .badge-occupied { background: rgba(122,42,42,0.2); color: #c86a6a; border: 1px solid #7a2a2a; }
+  .badge-hold { background: rgba(106,58,122,0.2); color: #b07ac8; border: 1px solid #6a3a7a; }
+
+  .detail-divider {
+    border: none;
+    border-top: 1px solid rgba(255,255,255,0.06);
+    margin: 20px 0;
+  }
+
+  .location-tag {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .location-pill {
+    background: rgba(255,255,255,0.05);
+    padding: 4px 12px;
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    color: var(--stone);
+  }
+
+  /* ===== SECTION VIEW ===== */
+  #section-view {
+    display: none;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: #0f0e0b;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px);
+    background-size: 20px 20px;
+    overflow: auto;
+  }
+
+  #section-view.active { display: flex; align-items: center; justify-content: center; }
+
+  #section-svg-container {
+    padding: 40px;
+    min-width: max-content;
+  }
+
+  /* ===== LEGEND ===== */
+  .map-legend {
+    position: absolute;
+    bottom: 16px;
+    left: 16px;
+    background: rgba(14,13,10,0.92);
+    border: 1px solid rgba(201,168,76,0.2);
+    padding: 12px 16px;
+    z-index: 100;
+  }
+
+  .legend-title {
+    font-size: 0.55rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 8px;
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 5px;
+    font-size: 0.62rem;
+    letter-spacing: 0.1em;
+    color: var(--stone);
+  }
+
+  .legend-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 2px;
+    flex-shrink: 0;
+  }
+
+  /* ===== TOUR MODE ===== */
+  .tour-modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.7);
+    z-index: 2000;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .tour-modal.open { display: flex; }
+
+  .tour-modal-inner {
+    background: #1a1814;
+    border: 1px solid rgba(201,168,76,0.4);
+    width: 500px;
+    max-width: 90vw;
+    padding: 40px;
+  }
+
+  .tour-modal h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.8rem;
+    font-weight: 300;
+    color: var(--gold-light);
+    margin-bottom: 8px;
+  }
+
+  .tour-modal p {
+    font-size: 0.72rem;
+    color: var(--slate);
+    letter-spacing: 0.08em;
+    margin-bottom: 28px;
+  }
+
+  .tour-list { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+
+  .tour-item {
+    padding: 14px 18px;
+    border: 1px solid rgba(255,255,255,0.07);
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .tour-item:hover { background: rgba(201,168,76,0.1); border-color: var(--gold); }
+  .tour-item-name { font-size: 0.8rem; letter-spacing: 0.08em; }
+  .tour-item-count { font-size: 0.6rem; color: var(--slate); letter-spacing: 0.1em; }
+
+  .tour-close { float: right; cursor: pointer; color: var(--slate); font-size: 1.2rem; }
+
+  /* ===== DATA TABLE ===== */
+  .data-view {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.8);
+    z-index: 2000;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 40px 20px;
+    overflow-y: auto;
+  }
+
+  .data-view.open { display: flex; }
+
+  .data-table-container {
+    background: #1a1814;
+    border: 1px solid rgba(201,168,76,0.3);
+    width: 100%;
+    max-width: 1000px;
+    padding: 32px;
+  }
+
+  .data-table-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+  }
+
+  .data-table-header h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 300;
+    font-size: 1.5rem;
+    color: var(--gold-light);
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.72rem;
+  }
+
+  thead tr {
+    border-bottom: 1px solid rgba(201,168,76,0.3);
+  }
+
+  th {
+    text-align: left;
+    padding: 10px 12px;
+    font-size: 0.58rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    font-weight: 300;
+  }
+
+  td {
+    padding: 9px 12px;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    letter-spacing: 0.03em;
+    color: var(--stone);
+  }
+
+  tr:hover td { background: rgba(255,255,255,0.03); cursor: pointer; }
+
+  /* ===== LOADING ===== */
+  #loading-overlay {
+    position: fixed;
+    inset: 0;
+    background: var(--ink);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 20px;
+    transition: opacity 0.5s;
+  }
+
+  #loading-overlay.hidden { opacity: 0; pointer-events: none; }
+
+  .loading-cross {
+    font-size: 3rem;
+    color: var(--gold);
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 0.4; transform: scale(0.97); }
+    50% { opacity: 1; transform: scale(1.03); }
+  }
+
+  .loading-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.2rem;
+    font-weight: 300;
+    color: var(--gold-light);
+    letter-spacing: 0.3em;
+  }
+
+  .loading-sub {
+    font-size: 0.6rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--slate);
+  }
+
+  /* ===== TOAST ===== */
+  #toast {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    background: rgba(20,18,16,0.95);
+    border: 1px solid rgba(201,168,76,0.4);
+    padding: 12px 20px;
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    color: var(--gold-light);
+    z-index: 5000;
+    transform: translateY(20px);
+    opacity: 0;
+    transition: all 0.3s;
+    pointer-events: none;
+  }
+
+  #toast.show { transform: translateY(0); opacity: 1; }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: rgba(201,168,76,0.3); }
+
+</style>
+</head>
+<body>
+
+<!-- Loading Screen -->
+<div id="loading-overlay">
+  <div class="loading-cross">✝</div>
+  <div class="loading-text">Cedar Grove Cemetery</div>
+  <div class="loading-sub">Holy Cross · Notre Dame · Indiana</div>
+</div>
+
+<!-- Header -->
+<header>
+  <div class="header-title">
+    <h1>Cedar Grove Cemetery</h1>
+    <span>University of Notre Dame · Est. 1842</span>
+  </div>
+  <div class="header-cross">✝</div>
+  <div class="header-controls">
+    <button class="btn" onclick="openTourModal()">✦ Tours</button>
+    <button class="btn" onclick="openDataView()">⊞ All Records</button>
+    <button class="btn" id="view-toggle" onclick="toggleView()">⊡ Map</button>
+  </div>
+</header>
+
+<!-- Search + Filter Bar -->
+<div class="search-container">
+  <div class="search-box">
+    <input type="text" id="search-input" placeholder="Search by name, section, or year…" oninput="handleSearch(this.value)" onfocus="showSearchResults()" onblur="setTimeout(hideSearchResults, 200)">
+    <span class="search-icon">⌕</span>
+    <div class="search-results" id="search-results"></div>
+  </div>
+
+  <div class="filter-bar">
+    <span class="filter-label">Filter</span>
+    <div class="filter-chip chip-available active-filter" onclick="toggleFilter('Available', this)">
+      <span class="filter-dot"></span> Available
+    </div>
+    <div class="filter-chip chip-reserved active-filter" onclick="toggleFilter('Reserved', this)">
+      <span class="filter-dot"></span> Reserved
+    </div>
+    <div class="filter-chip chip-sold active-filter" onclick="toggleFilter('Sold', this)">
+      <span class="filter-dot"></span> Sold
+    </div>
+    <div class="filter-chip chip-occupied active-filter" onclick="toggleFilter('Occupied', this)">
+      <span class="filter-dot"></span> Occupied
+    </div>
+    <div class="filter-chip chip-hold active-filter" onclick="toggleFilter('HOLD', this)">
+      <span class="filter-dot"></span> Hold
+    </div>
+  </div>
+</div>
+
+<!-- Upload Banner -->
+<label class="upload-banner" id="upload-banner">
+  <input type="file" id="excel-upload" accept=".xlsx,.xls,.csv" onchange="handleFileUpload(this)">
+  <span class="upload-icon">⬆</span>
+  <div>
+    <div class="upload-text">Upload Updated Cemetery Data</div>
+    <div class="upload-sub">Drag & drop or click — supports .xlsx, .xls, .csv · Map updates automatically</div>
+  </div>
+  <span id="upload-status" style="margin-left:auto; font-size:0.65rem; color:var(--moss-light);"></span>
+</label>
+
+<!-- Main Layout -->
+<div class="main-layout">
+
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <div class="sidebar-section">
+      <div class="sidebar-heading">Cemetery Overview</div>
+      <div class="stats-grid" id="stats-grid">
+        <div class="stat-item"><div class="stat-value" id="stat-total">—</div><div class="stat-label">Total Graves</div></div>
+        <div class="stat-item"><div class="stat-value" id="stat-occupied">—</div><div class="stat-label">Occupied</div></div>
+        <div class="stat-item"><div class="stat-value" id="stat-available">—</div><div class="stat-label">Available</div></div>
+        <div class="stat-item"><div class="stat-value" id="stat-reserved">—</div><div class="stat-label">Reserved</div></div>
+      </div>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-heading">Sections</div>
+      <ul class="section-list" id="section-list"></ul>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-heading">Mausoleums</div>
+      <ul class="section-list" id="mausoleum-list">
+        <li class="section-item" onclick="selectSection('M')">
+          <span>Mary Queen of Angels</span>
+          <span class="section-badge">1</span>
+        </li>
+        <li class="section-item" onclick="selectSection('M')">
+          <span>Mary Queen of All Saints</span>
+          <span class="section-badge">2</span>
+        </li>
+        <li class="section-item" onclick="selectSection('M')">
+          <span>Mary Mother of the Church</span>
+          <span class="section-badge">3</span>
+        </li>
+        <li class="section-item" onclick="selectSection('M')">
+          <span>Mary Mother of God</span>
+          <span class="section-badge">4</span>
+        </li>
+      </ul>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-heading">Special Areas</div>
+      <ul class="section-list">
+        <li class="section-item"><span>Veterans Section</span><span class="section-badge">⚑</span></li>
+        <li class="section-item"><span>Columbarium</span><span class="section-badge">◈</span></li>
+        <li class="section-item"><span>Chapel</span><span class="section-badge">✝</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Map Container -->
+  <div class="map-container" id="map-container">
+
+    <!-- Breadcrumb -->
+    <div class="map-breadcrumb" id="breadcrumb">
+      <span class="breadcrumb-item current">Cedar Grove</span>
+    </div>
+
+    <!-- Map Toolbar -->
+    <div class="map-toolbar">
+      <button class="map-tool-btn" onclick="zoomIn()" title="Zoom In">+</button>
+      <button class="map-tool-btn" onclick="zoomOut()" title="Zoom Out">−</button>
+      <button class="map-tool-btn" onclick="resetView()" title="Reset View">⌖</button>
+    </div>
+
+    <!-- SVG Wrapper (pan/zoom) -->
+    <div id="map-svg-wrapper">
+      <svg id="cemetery-svg" viewBox="0 0 1400 900" preserveAspectRatio="xMidYMid meet">
+        <!-- Background -->
+        <rect width="1400" height="900" fill="transparent"/>
+
+        <!-- Roads -->
+        <path class="road-path" d="M 50 180 Q 700 160 1380 200 L 1380 230 Q 700 210 50 210 Z" opacity="0.6"/>
+
+        <!-- Section zones - representing the cemetery layout -->
+        <!-- Top area sections (north of road) -->
+        <rect class="section-zone" id="zone-A" x="50" y="220" width="160" height="120" rx="2" onclick="selectSection('A')"/>
+        <text class="section-label" x="130" y="280">A</text>
+
+        <rect class="section-zone" id="zone-B" x="220" y="220" width="160" height="120" rx="2" onclick="selectSection('B')"/>
+        <text class="section-label" x="300" y="280">B</text>
+
+        <rect class="section-zone" id="zone-C" x="390" y="220" width="180" height="120" rx="2" onclick="selectSection('C')"/>
+        <text class="section-label" x="480" y="280">C</text>
+
+        <rect class="section-zone" id="zone-D" x="580" y="220" width="180" height="120" rx="2" onclick="selectSection('D')"/>
+        <text class="section-label" x="670" y="280">D</text>
+
+        <rect class="section-zone" id="zone-E" x="770" y="220" width="160" height="120" rx="2" onclick="selectSection('E')"/>
+        <text class="section-label" x="850" y="280">E</text>
+
+        <rect class="section-zone" id="zone-F" x="940" y="220" width="160" height="120" rx="2" onclick="selectSection('F')"/>
+        <text class="section-label" x="1020" y="280">F</text>
+
+        <rect class="section-zone" id="zone-G" x="1110" y="220" width="180" height="120" rx="2" onclick="selectSection('G')"/>
+        <text class="section-label" x="1200" y="280">G</text>
+
+        <!-- Middle sections -->
+        <rect class="section-zone" id="zone-H" x="50" y="370" width="220" height="150" rx="2" onclick="selectSection('H')"/>
+        <text class="section-label" x="160" y="445">H</text>
+
+        <rect class="section-zone" id="zone-I" x="280" y="370" width="220" height="150" rx="2" onclick="selectSection('I')"/>
+        <text class="section-label" x="390" y="445">I</text>
+
+        <rect class="section-zone" id="zone-J" x="510" y="370" width="220" height="150" rx="2" onclick="selectSection('J')"/>
+        <text class="section-label" x="620" y="445">J</text>
+
+        <rect class="section-zone" id="zone-K" x="740" y="370" width="200" height="150" rx="2" onclick="selectSection('K')"/>
+        <text class="section-label" x="840" y="445">K</text>
+
+        <rect class="section-zone" id="zone-L" x="950" y="370" width="200" height="150" rx="2" onclick="selectSection('L')"/>
+        <text class="section-label" x="1050" y="445">L</text>
+
+        <!-- Bottom sections -->
+        <rect class="section-zone" id="zone-M" x="50" y="540" width="240" height="160" rx="2"
+          fill="rgba(139,69,19,0.12)" stroke="rgba(201,168,76,0.4)" onclick="selectSection('M')"/>
+        <text class="section-label" x="170" y="620" fill="rgba(201,168,76,0.8)">M (Mausoleums)</text>
+
+        <rect class="section-zone" id="zone-veterans" x="300" y="540" width="200" height="160" rx="2"
+          fill="rgba(42,90,138,0.1)" stroke="rgba(90,154,218,0.4)" onclick="selectSection('Veterans')"/>
+        <text class="section-label" x="400" y="620" fill="rgba(90,154,218,0.8)">Veterans</text>
+
+        <rect class="section-zone" id="zone-columbarium" x="510" y="540" width="180" height="160" rx="2"
+          fill="rgba(106,58,122,0.1)" stroke="rgba(176,122,200,0.4)" onclick="selectSection('Columbarium')"/>
+        <text class="section-label" x="600" y="620" fill="rgba(176,122,200,0.8)">Columbarium</text>
+
+        <rect class="section-zone" id="zone-N" x="700" y="540" width="200" height="160" rx="2" onclick="selectSection('N')"/>
+        <text class="section-label" x="800" y="620">N</text>
+
+        <rect class="section-zone" id="zone-O" x="910" y="540" width="200" height="160" rx="2" onclick="selectSection('O')"/>
+        <text class="section-label" x="1010" y="620">O</text>
+
+        <rect class="section-zone" id="zone-P" x="1120" y="540" width="200" height="160" rx="2" onclick="selectSection('P')"/>
+        <text class="section-label" x="1220" y="620">P</text>
+
+        <!-- Mausoleum Buildings Detail (in M zone) -->
+        <rect class="mausoleum" x="65" y="555" width="50" height="40" rx="2" onclick="openGraveDetail('mausoleum-1')">
+          <title>Mary Queen of Angels</title>
+        </rect>
+        <text style="font-size:7px; fill:rgba(201,168,76,0.7); pointer-events:none; text-anchor:middle;" x="90" y="578">①</text>
+
+        <rect class="mausoleum" x="125" y="555" width="50" height="40" rx="2" onclick="openGraveDetail('mausoleum-2')">
+          <title>Mary Queen of All Saints</title>
+        </rect>
+        <text style="font-size:7px; fill:rgba(201,168,76,0.7); pointer-events:none; text-anchor:middle;" x="150" y="578">②</text>
+
+        <rect class="mausoleum" x="65" y="605" width="50" height="40" rx="2" onclick="openGraveDetail('mausoleum-3')">
+          <title>Mary Mother of the Church</title>
+        </rect>
+        <text style="font-size:7px; fill:rgba(201,168,76,0.7); pointer-events:none; text-anchor:middle;" x="90" y="628">③</text>
+
+        <rect class="mausoleum" x="125" y="605" width="50" height="40" rx="2" onclick="openGraveDetail('mausoleum-4')">
+          <title>Mary Mother of God</title>
+        </rect>
+        <text style="font-size:7px; fill:rgba(201,168,76,0.7); pointer-events:none; text-anchor:middle;" x="150" y="628">④</text>
+
+        <!-- Road labels -->
+        <text style="font-size:11px; fill:rgba(180,170,140,0.6); letter-spacing:3px; text-anchor:middle;" x="700" y="172">HOLY CROSS DRIVE</text>
+        <text style="font-size:11px; fill:rgba(180,170,140,0.6); letter-spacing:2px;" transform="rotate(90, 1360, 450)" x="-200" y="1360">NOTRE DAME AVENUE</text>
+
+        <!-- Right boundary road -->
+        <rect class="road-path" x="1340" y="200" width="40" height="620" rx="2" opacity="0.4"/>
+
+        <!-- Hover instructions -->
+        <text style="font-size:10px; fill:rgba(180,170,140,0.3); text-anchor:middle;" x="700" y="760">Click any section to explore graves</text>
+      </svg>
+    </div>
+
+    <!-- Section Grave View overlay -->
+    <div id="section-view">
+      <div id="section-svg-container">
+        <!-- Dynamically generated grave grid -->
+      </div>
+    </div>
+
+    <!-- Legend -->
+    <div class="map-legend">
+      <div class="legend-title">Legend</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--available)"></div>Available</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--reserved)"></div>Reserved</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--sold)"></div>Sold</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--occupied)"></div>Occupied</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--hold)"></div>Hold</div>
+    </div>
+  </div>
+</div>
+
+<!-- Grave Detail Panel -->
+<div class="detail-panel" id="detail-panel">
+  <div class="detail-panel-header">
+    <div>
+      <div style="font-size:0.55rem; letter-spacing:0.3em; text-transform:uppercase; color:var(--gold); margin-bottom:6px;">Grave Record</div>
+      <div id="detail-id" style="font-size:0.7rem; color:var(--slate); letter-spacing:0.1em;"></div>
+    </div>
+    <button class="detail-close" onclick="closeDetail()">✕</button>
+  </div>
+
+  <div class="detail-body">
+    <div class="detail-photo-placeholder" id="detail-photo">
+      <span>No Photo on Record</span>
+    </div>
+
+    <div class="detail-name" id="detail-name">—</div>
+    <div class="detail-dates" id="detail-dates"></div>
+
+    <div class="detail-field">
+      <div class="detail-field-label">Status</div>
+      <div id="detail-status"></div>
+    </div>
+
+    <div class="detail-field" id="owner-field">
+      <div class="detail-field-label">Owner(s)</div>
+      <div class="detail-field-value" id="detail-owner">—</div>
+    </div>
+
+    <div class="detail-field" id="reserved-field">
+      <div class="detail-field-label">Reserved For</div>
+      <div class="detail-field-value" id="detail-reserved">—</div>
+    </div>
+
+    <div class="detail-field">
+      <div class="detail-field-label">Date of Status</div>
+      <div class="detail-field-value" id="detail-date">—</div>
+    </div>
+
+    <hr class="detail-divider">
+
+    <div class="detail-field">
+      <div class="detail-field-label">Location</div>
+      <div class="location-tag" id="detail-location"></div>
+    </div>
+
+    <hr class="detail-divider">
+
+    <div class="detail-field">
+      <div class="detail-field-label">Biography</div>
+      <div class="detail-field-value" id="detail-bio" style="color:var(--slate); font-size:0.72rem; line-height:1.6;">No biography on record. Upload documents to add biographical information.</div>
+    </div>
+
+    <hr class="detail-divider">
+
+    <div class="detail-field">
+      <div class="detail-field-label">Documents & Links</div>
+      <div style="font-size:0.68rem; color:var(--slate);">No documents attached</div>
+    </div>
+
+    <div style="margin-top:24px; display:flex; gap:8px;">
+      <button class="btn" style="flex:1; justify-content:center; display:flex;">⬆ Add Photo</button>
+      <button class="btn" style="flex:1; justify-content:center; display:flex;">✎ Edit Record</button>
+    </div>
+  </div>
+</div>
+
+<!-- Tour Modal -->
+<div class="tour-modal" id="tour-modal">
+  <div class="tour-modal-inner">
+    <button class="tour-close" onclick="closeTourModal()">✕</button>
+    <h2>Guided Tours</h2>
+    <p>Explore notable burials by category — the map will highlight each grave automatically.</p>
+    <ul class="tour-list">
+      <li class="tour-item" onclick="startTour('presidents')">
+        <span class="tour-item-name">Notre Dame Presidents</span>
+        <span class="tour-item-count">C.S.C. Fathers</span>
+      </li>
+      <li class="tour-item" onclick="startTour('holy-cross')">
+        <span class="tour-item-name">Holy Cross Priests & Brothers</span>
+        <span class="tour-item-count">Religious Community</span>
+      </li>
+      <li class="tour-item" onclick="startTour('veterans')">
+        <span class="tour-item-name">War Veterans</span>
+        <span class="tour-item-count">All Conflicts</span>
+      </li>
+      <li class="tour-item" onclick="startTour('faculty')">
+        <span class="tour-item-name">Distinguished Faculty</span>
+        <span class="tour-item-count">Professors & Scholars</span>
+      </li>
+      <li class="tour-item" onclick="startTour('notable')">
+        <span class="tour-item-name">Notable Figures</span>
+        <span class="tour-item-count">Community Leaders</span>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<!-- Data Table View -->
+<div class="data-view" id="data-view">
+  <div class="data-table-container">
+    <div class="data-table-header">
+      <h2>All Cemetery Records</h2>
+      <button class="btn" onclick="closeDataView()">✕ Close</button>
+    </div>
+    <div style="margin-bottom:16px; display:flex; gap:12px; align-items:center;">
+      <input type="text" id="table-search" placeholder="Filter records…"
+        style="background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); color:var(--stone); padding:8px 14px; font-family:'Josefin Sans',sans-serif; font-size:0.72rem; letter-spacing:0.08em; outline:none; width:280px;"
+        oninput="filterTable(this.value)">
+      <span id="table-count" style="font-size:0.65rem; color:var(--slate); letter-spacing:0.1em;"></span>
+    </div>
+    <div style="overflow-x:auto; max-height:60vh; overflow-y:auto;">
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Occupant</th>
+            <th>Status</th>
+            <th>Date</th>
+            <th>Owner(s)</th>
+            <th>Reserved For</th>
+          </tr>
+        </thead>
+        <tbody id="records-tbody"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div id="toast"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script>
+
+// ==================== DATA STORE ====================
+let cemeteryData = [];
+let activeFilters = new Set(['Available', 'Reserved', 'Sold', 'Occupied', 'HOLD']);
+let currentSection = null;
+let currentScale = 1;
+let panX = 0, panY = 0;
+let isPanning = false, startX = 0, startY = 0;
+
+// ==================== SAMPLE DATA (from screenshot) ====================
+const sampleData = [
+  { id: 'CEDARGROVE-M-100-1', occupant: 'Bartkus', status: 'Occupied', date: '6/30/2006', owners: 'Woo', reserved: '', pontem: 1, section: 'M', lot: '100', grave: '1' },
+  { id: 'CEDARGROVE-M-100-2', occupant: '', status: 'Sold', date: '', owners: 'Woo', reserved: '', pontem: 2, section: 'M', lot: '100', grave: '2' },
+  { id: 'CEDARGROVE-M-100-3', occupant: '', status: 'Sold', date: '', owners: 'Kmiec', reserved: '', pontem: 3, section: 'M', lot: '100', grave: '3' },
+  { id: 'CEDARGROVE-M-100-4', occupant: '', status: 'Sold', date: '7/28/2006', owners: 'Newburg', reserved: '', pontem: 4, section: 'M', lot: '100', grave: '4' },
+  { id: 'CEDARGROVE-M-100-5', occupant: 'Newburg', status: 'Occupied', date: '7/28/2006', owners: 'Newburg', reserved: '', pontem: 5, section: 'M', lot: '100', grave: '5' },
+  { id: 'CEDARGROVE-M-101-1', occupant: '', status: 'Reserved', date: '', owners: 'Walshe', reserved: 'Walshe, Peter', pontem: 6, section: 'M', lot: '101', grave: '1' },
+  { id: 'CEDARGROVE-M-101-2', occupant: '', status: 'Reserved', date: '', owners: 'Walshe', reserved: 'Walshe, Ann', pontem: 7, section: 'M', lot: '101', grave: '2' },
+  { id: 'CEDARGROVE-M-101-3', occupant: 'Bellis', status: 'Occupied', date: '', owners: 'Bellis', reserved: '', pontem: 8, section: 'M', lot: '101', grave: '3' },
+  { id: 'CEDARGROVE-M-101-4', occupant: '', status: 'Available', date: '', owners: '', reserved: '', pontem: 9, section: 'M', lot: '101', grave: '4' },
+  { id: 'CEDARGROVE-M-101-5', occupant: '', status: 'Available', date: '', owners: '', reserved: '', pontem: 10, section: 'M', lot: '101', grave: '5' },
+  { id: 'CEDARGROVE-M-102-1', occupant: '', status: 'HOLD', date: '10/28/2024', owners: '', reserved: '', pontem: 11, section: 'M', lot: '102', grave: '1' },
+  { id: 'CEDARGROVE-M-102-2', occupant: '', status: 'Sold', date: '', owners: 'Crowe', reserved: '', pontem: 12, section: 'M', lot: '102', grave: '2' },
+  { id: 'CEDARGROVE-M-102-3', occupant: '', status: 'Sold', date: '', owners: 'Crowe', reserved: '', pontem: 13, section: 'M', lot: '102', grave: '3' },
+  { id: 'CEDARGROVE-M-102-4', occupant: '', status: 'Sold', date: '', owners: 'Hinchion-Mancini', reserved: '', pontem: 14, section: 'M', lot: '102', grave: '4' },
+  { id: 'CEDARGROVE-M-102-5', occupant: 'Hinchion', status: 'Occupied', date: '', owners: 'Hinchion Mancini', reserved: '', pontem: 15, section: 'M', lot: '102', grave: '5' },
+  { id: 'CEDARGROVE-M-103-1', occupant: 'Balog', status: 'Occupied', date: '', owners: 'Balog', reserved: '', pontem: 16, section: 'M', lot: '103', grave: '1' },
+  { id: 'CEDARGROVE-M-103-2', occupant: 'Berndt', status: 'Occupied', date: '10/30/2006', owners: 'Berndt', reserved: 'Berndt, Gertrude', pontem: 17, section: 'M', lot: '103', grave: '2' },
+  { id: 'CEDARGROVE-M-103-3', occupant: '', status: 'Reserved', date: '10/30/2006', owners: 'Berndt', reserved: 'Berndt, Christine; Berndt, Robert', pontem: 18, section: 'M', lot: '103', grave: '3' },
+  { id: 'CEDARGROVE-M-103-4', occupant: 'Banicki', status: 'Occupied', date: '', owners: 'Banicki', reserved: 'Banicki, Theresa', pontem: 19, section: 'M', lot: '103', grave: '4' },
+];
+
+// Generate additional sample data for other sections
+['A','B','C','D','E','F','G','H','I','J','K','L'].forEach(sec => {
+  const statuses = ['Available', 'Occupied', 'Sold', 'Reserved', 'HOLD'];
+  const surnames = ['Murphy', 'Walsh', 'Kelly', 'O\'Brien', 'Smith', 'Ryan', 'Brennan', 'Burke', 'Collins', 'Kennedy', 'Lynch', 'Fitzgerald', 'McCarthy', 'Sullivan', 'O\'Connor', 'Gallagher', 'Clarke', 'Quinn', 'Hughes', 'O\'Neill'];
+  for (let lot = 1; lot <= 8; lot++) {
+    for (let grave = 1; grave <= 5; grave++) {
+      const status = statuses[Math.floor(Math.random() * statuses.length)];
+      const owner = surnames[Math.floor(Math.random() * surnames.length)];
+      sampleData.push({
+        id: `CEDARGROVE-${sec}-${lot}-${grave}`,
+        occupant: status === 'Occupied' ? owner : '',
+        status,
+        date: status === 'Occupied' ? `${Math.floor(Math.random()*12)+1}/${Math.floor(Math.random()*28)+1}/${2000 + Math.floor(Math.random()*24)}` : '',
+        owners: status !== 'Available' ? owner : '',
+        reserved: status === 'Reserved' ? `${owner}, ${['John','Mary','Robert','Patricia','James','Linda'][Math.floor(Math.random()*6)]}` : '',
+        pontem: sampleData.length + 1,
+        section: sec,
+        lot: String(lot),
+        grave: String(grave)
+      });
+    }
+  }
+});
+
+cemeteryData = [...sampleData];
+
+// ==================== INIT ====================
+window.addEventListener('load', () => {
+  setTimeout(() => {
+    document.getElementById('loading-overlay').classList.add('hidden');
+  }, 1800);
+
+  buildSectionList();
+  updateStats();
+  populateTable();
+  setupPanZoom();
+});
+
+// ==================== SECTION LIST ====================
+function buildSectionList() {
+  const sections = [...new Set(cemeteryData.map(d => d.section))].sort();
+  const list = document.getElementById('section-list');
+  list.innerHTML = '';
+  sections.forEach(sec => {
+    const count = cemeteryData.filter(d => d.section === sec).length;
+    const avail = cemeteryData.filter(d => d.section === sec && d.status === 'Available').length;
+    const li = document.createElement('li');
+    li.className = 'section-item';
+    li.id = `sidebar-sec-${sec}`;
+    li.innerHTML = `<span>Section ${sec}</span><span class="section-badge">${avail} avail</span>`;
+    li.onclick = () => selectSection(sec);
+    list.appendChild(li);
+  });
+}
+
+// ==================== STATS ====================
+function updateStats() {
+  const total = cemeteryData.length;
+  const occ = cemeteryData.filter(d => d.status === 'Occupied').length;
+  const avail = cemeteryData.filter(d => d.status === 'Available').length;
+  const res = cemeteryData.filter(d => d.status === 'Reserved').length;
+
+  document.getElementById('stat-total').textContent = total.toLocaleString();
+  document.getElementById('stat-occupied').textContent = occ.toLocaleString();
+  document.getElementById('stat-available').textContent = avail.toLocaleString();
+  document.getElementById('stat-reserved').textContent = res.toLocaleString();
+}
+
+// ==================== SELECT SECTION ====================
+function selectSection(section) {
+  currentSection = section;
+
+  // Update sidebar
+  document.querySelectorAll('.section-item').forEach(el => el.classList.remove('active'));
+  const sideEl = document.getElementById(`sidebar-sec-${section}`);
+  if (sideEl) sideEl.classList.add('active');
+
+  // Update breadcrumb
+  document.getElementById('breadcrumb').innerHTML = `
+    <span class="breadcrumb-item" onclick="resetToOverview()">Cedar Grove</span>
+    <span class="breadcrumb-sep">›</span>
+    <span class="breadcrumb-item current">Section ${section}</span>
+  `;
+
+  // Generate grave grid for section
+  const sectionGraves = cemeteryData.filter(d => d.section === section);
+  renderSectionView(section, sectionGraves);
+}
+
+function resetToOverview() {
+  currentSection = null;
+  document.getElementById('section-view').classList.remove('active');
+  document.getElementById('breadcrumb').innerHTML = `<span class="breadcrumb-item current">Cedar Grove</span>`;
+  document.querySelectorAll('.section-item').forEach(el => el.classList.remove('active'));
+}
+
+// ==================== RENDER SECTION GRAVES ====================
+function renderSectionView(section, graves) {
+  const container = document.getElementById('section-svg-container');
+  const view = document.getElementById('section-view');
+  view.classList.add('active');
+
+  // Group by lot
+  const lots = {};
+  graves.forEach(g => {
+    if (!lots[g.lot]) lots[g.lot] = [];
+    lots[g.lot].push(g);
+  });
+
+  const lotKeys = Object.keys(lots).sort((a, b) => parseInt(a) - parseInt(b));
+  const GRAVE_W = 52, GRAVE_H = 30, GAP_X = 6, GAP_Y = 18, LOT_GAP = 24, MARGIN = 20;
+  const maxLotSize = Math.max(...lotKeys.map(k => lots[k].length));
+  const cols = Math.ceil(Math.sqrt(lotKeys.length));
+  const rows = Math.ceil(lotKeys.length / cols);
+  const lotW = maxLotSize * (GRAVE_W + GAP_X);
+  const svgW = cols * (lotW + LOT_GAP) + MARGIN * 2;
+  const svgH = rows * (GRAVE_H + GAP_Y + LOT_GAP) + MARGIN * 2 + 40;
+
+  let svgContent = `<svg viewBox="0 0 ${svgW} ${svgH}" style="min-width:${svgW}px; min-height:${svgH}px; display:block;">`;
+  svgContent += `<text x="${svgW/2}" y="24" text-anchor="middle" style="font-family:'Cormorant Garamond',serif; font-size:18px; fill:rgba(201,168,76,0.8); letter-spacing:4px;">SECTION ${section}</text>`;
+
+  lotKeys.forEach((lot, idx) => {
+    const col = idx % cols;
+    const row = Math.floor(idx / cols);
+    const lotX = MARGIN + col * (lotW + LOT_GAP);
+    const lotY = MARGIN + 36 + row * (GRAVE_H + GAP_Y + LOT_GAP);
+
+    svgContent += `<text x="${lotX}" y="${lotY - 4}" style="font-family:'Josefin Sans',sans-serif; font-size:8px; fill:rgba(180,170,140,0.5); letter-spacing:2px;">LOT ${lot}</text>`;
+
+    lots[lot].forEach((grave, gi) => {
+      const gx = lotX + gi * (GRAVE_W + GAP_X);
+      const gy = lotY;
+      const statusClass = getStatusClass(grave.status);
+      const isVisible = activeFilters.has(grave.status);
+      const opacity = isVisible ? 1 : 0.1;
+
+      svgContent += `
+        <rect class="grave ${statusClass}" x="${gx}" y="${gy}" width="${GRAVE_W}" height="${GRAVE_H}" rx="1"
+          opacity="${opacity}"
+          onclick="openGraveDetail('${grave.id}')"
+          data-id="${grave.id}">
+          <title>${grave.id}${grave.occupant ? ' — ' + grave.occupant : ''}</title>
+        </rect>`;
+
+      if (grave.occupant) {
+        const name = grave.occupant.length > 7 ? grave.occupant.substring(0, 6) + '…' : grave.occupant;
+        svgContent += `<text x="${gx + GRAVE_W/2}" y="${gy + GRAVE_H/2 + 1}" text-anchor="middle" dominant-baseline="middle"
+          style="font-size:7px; fill:rgba(255,255,255,0.7); pointer-events:none; font-family:'Josefin Sans',sans-serif;">${name}</text>`;
+      }
+
+      svgContent += `<text x="${gx + GRAVE_W/2}" y="${gy + GRAVE_H - 4}" text-anchor="middle"
+        style="font-size:6px; fill:rgba(255,255,255,0.3); pointer-events:none; font-family:'Josefin Sans',sans-serif;">${grave.grave}</text>`;
+    });
+  });
+
+  svgContent += '</svg>';
+  container.innerHTML = svgContent;
+}
+
+function getStatusClass(status) {
+  const map = { 'Available': 'grave-available', 'Reserved': 'grave-reserved', 'Sold': 'grave-sold', 'Occupied': 'grave-occupied', 'HOLD': 'grave-hold' };
+  return map[status] || 'grave-available';
+}
+
+// ==================== GRAVE DETAIL ====================
+function openGraveDetail(id) {
+  const grave = cemeteryData.find(d => d.id === id);
+  if (!grave && !id.startsWith('mausoleum')) return;
+
+  const panel = document.getElementById('detail-panel');
+  panel.classList.add('open');
+
+  if (id.startsWith('mausoleum')) {
+    const nums = ['Mary Queen of Angels', 'Mary Queen of All Saints', 'Mary Mother of the Church', 'Mary Mother of God'];
+    const n = parseInt(id.split('-')[1]) - 1;
+    document.getElementById('detail-id').textContent = `Mausoleum ${n+1}`;
+    document.getElementById('detail-name').textContent = nums[n] || '—';
+    document.getElementById('detail-dates').textContent = '';
+    document.getElementById('detail-status').innerHTML = `<span class="status-badge badge-occupied">Building</span>`;
+    document.getElementById('detail-owner').textContent = 'Holy Cross Cemetery';
+    document.getElementById('detail-reserved').textContent = '—';
+    document.getElementById('detail-date').textContent = '—';
+    document.getElementById('detail-location').innerHTML = `<span class="location-pill">Mausoleum ${n+1}</span>`;
+    return;
+  }
+
+  // Parse ID parts
+  const parts = grave.id.replace('CEDARGROVE-','').split('-');
+  document.getElementById('detail-id').textContent = grave.id;
+  document.getElementById('detail-name').textContent = grave.occupant || (grave.owners ? grave.owners : 'Unoccupied');
+  document.getElementById('detail-dates').textContent = grave.date ? `Date of Status: ${grave.date}` : '';
+
+  const badgeClass = `badge-${grave.status.toLowerCase().replace('hold','hold')}`;
+  document.getElementById('detail-status').innerHTML = `<span class="status-badge ${badgeClass}">${grave.status}</span>`;
+  document.getElementById('detail-owner').textContent = grave.owners || '—';
+  document.getElementById('detail-reserved').textContent = grave.reserved || '—';
+  document.getElementById('detail-date').textContent = grave.date || '—';
+  document.getElementById('detail-location').innerHTML = `
+    <span class="location-pill">Section ${grave.section}</span>
+    <span class="location-pill">Lot ${grave.lot}</span>
+    <span class="location-pill">Grave ${grave.grave}</span>
+  `;
+
+  document.getElementById('reserved-field').style.display = grave.reserved ? 'block' : 'none';
+}
+
+function closeDetail() {
+  document.getElementById('detail-panel').classList.remove('open');
+}
+
+// ==================== FILTER ====================
+function toggleFilter(status, chip) {
+  if (activeFilters.has(status)) {
+    activeFilters.delete(status);
+    chip.classList.remove('active-filter');
+  } else {
+    activeFilters.add(status);
+    chip.classList.add('active-filter');
+  }
+  if (currentSection) {
+    const sectionGraves = cemeteryData.filter(d => d.section === currentSection);
+    renderSectionView(currentSection, sectionGraves);
+  }
+}
+
+// ==================== SEARCH ====================
+function handleSearch(query) {
+  if (!query.trim()) { hideSearchResults(); return; }
+  const q = query.toLowerCase();
+  const results = cemeteryData.filter(d =>
+    d.occupant.toLowerCase().includes(q) ||
+    d.owners.toLowerCase().includes(q) ||
+    d.id.toLowerCase().includes(q) ||
+    d.section.toLowerCase().includes(q)
+  ).slice(0, 12);
+  renderSearchResults(results);
+}
+
+function renderSearchResults(results) {
+  const container = document.getElementById('search-results');
+  if (!results.length) { container.innerHTML = '<div class="search-result-item" style="color:var(--slate)">No records found</div>'; }
+  else {
+    container.innerHTML = results.map(r => `
+      <div class="search-result-item" onclick="jumpToGrave('${r.id}')">
+        <div class="name">${r.occupant || r.owners || 'Unoccupied'}</div>
+        <div class="meta">${r.id} · ${r.status}</div>
+      </div>
+    `).join('');
+  }
+  container.classList.add('open');
+}
+
+function showSearchResults() {
+  const q = document.getElementById('search-input').value;
+  if (q) handleSearch(q);
+}
+
+function hideSearchResults() {
+  document.getElementById('search-results').classList.remove('open');
+}
+
+function jumpToGrave(id) {
+  const grave = cemeteryData.find(d => d.id === id);
+  if (!grave) return;
+  hideSearchResults();
+  selectSection(grave.section);
+  setTimeout(() => openGraveDetail(id), 100);
+}
+
+// ==================== ZOOM/PAN ====================
+function setupPanZoom() {
+  const wrapper = document.getElementById('map-svg-wrapper');
+  wrapper.addEventListener('wheel', (e) => {
+    e.preventDefault();
+    const delta = e.deltaY > 0 ? -0.1 : 0.1;
+    currentScale = Math.min(Math.max(0.5, currentScale + delta), 4);
+    applyTransform();
+  });
+
+  wrapper.addEventListener('mousedown', (e) => { isPanning = true; startX = e.clientX - panX; startY = e.clientY - panY; });
+  window.addEventListener('mousemove', (e) => { if (!isPanning) return; panX = e.clientX - startX; panY = e.clientY - startY; applyTransform(); });
+  window.addEventListener('mouseup', () => { isPanning = false; });
+}
+
+function applyTransform() {
+  document.getElementById('cemetery-svg').style.transform = `translate(${panX}px, ${panY}px) scale(${currentScale})`;
+  document.getElementById('cemetery-svg').style.transformOrigin = 'center center';
+}
+
+function zoomIn() { currentScale = Math.min(currentScale + 0.2, 4); applyTransform(); }
+function zoomOut() { currentScale = Math.max(currentScale - 0.2, 0.5); applyTransform(); }
+function resetView() { currentScale = 1; panX = 0; panY = 0; applyTransform(); }
+
+// ==================== DATA TABLE ====================
+function openDataView() {
+  document.getElementById('data-view').classList.add('open');
+  populateTable();
+}
+function closeDataView() { document.getElementById('data-view').classList.remove('open'); }
+
+function populateTable(filter = '') {
+  const tbody = document.getElementById('records-tbody');
+  const q = filter.toLowerCase();
+  const rows = cemeteryData.filter(d =>
+    !q || d.id.toLowerCase().includes(q) || d.occupant.toLowerCase().includes(q) || d.owners.toLowerCase().includes(q)
+  );
+  document.getElementById('table-count').textContent = `${rows.length.toLocaleString()} records`;
+
+  tbody.innerHTML = rows.map(r => `
+    <tr onclick="closeDataView(); jumpToGrave('${r.id}')">
+      <td style="color:var(--slate); font-size:0.65rem;">${r.id}</td>
+      <td style="color:var(--gold-light);">${r.occupant || '—'}</td>
+      <td><span class="status-badge badge-${r.status.toLowerCase()}" style="font-size:0.55rem; padding:2px 8px;">${r.status}</span></td>
+      <td>${r.date || '—'}</td>
+      <td>${r.owners || '—'}</td>
+      <td style="color:var(--slate);">${r.reserved || '—'}</td>
+    </tr>
+  `).join('');
+}
+
+function filterTable(q) { populateTable(q); }
+
+// ==================== FILE UPLOAD ====================
+function handleFileUpload(input) {
+  const file = input.files[0];
+  if (!file) return;
+  document.getElementById('upload-status').textContent = 'Processing…';
+
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    try {
+      const wb = XLSX.read(e.target.result, { type: 'binary' });
+      const ws = wb.Sheets[wb.SheetNames[0]];
+      const rawData = XLSX.utils.sheet_to_json(ws, { header: 1 });
+
+      if (rawData.length < 2) { showToast('File appears empty'); return; }
+
+      const headers = rawData[0].map(h => String(h || '').toLowerCase());
+      const idCol = headers.findIndex(h => h.includes('cedargrove') || h.includes('section') || h.includes('id'));
+      const occupantCol = headers.findIndex(h => h.includes('occupant'));
+      const statusCol = headers.findIndex(h => h.includes('status') && !h.includes('date'));
+      const dateCol = headers.findIndex(h => h.includes('date'));
+      const ownerCol = headers.findIndex(h => h.includes('owner'));
+      const reservedCol = headers.findIndex(h => h.includes('reserved'));
+
+      const parsed = [];
+      for (let i = 1; i < rawData.length; i++) {
+        const row = rawData[i];
+        if (!row[idCol]) continue;
+        const idStr = String(row[idCol]);
+        const parts = idStr.replace('CEDARGROVE-','').split('-');
+        parsed.push({
+          id: idStr,
+          occupant: String(row[occupantCol] || ''),
+          status: String(row[statusCol] || 'Available'),
+          date: row[dateCol] ? String(row[dateCol]) : '',
+          owners: String(row[ownerCol] || ''),
+          reserved: String(row[reservedCol] || ''),
+          pontem: i,
+          section: parts[0] || '?',
+          lot: parts[1] || '?',
+          grave: parts[2] || '?'
+        });
+      }
+
+      cemeteryData = parsed;
+      buildSectionList();
+      updateStats();
+      populateTable();
+      if (currentSection) selectSection(currentSection);
+      document.getElementById('upload-status').textContent = `✓ ${parsed.length} records loaded`;
+      showToast(`${parsed.length} records imported successfully`);
+    } catch (err) {
+      document.getElementById('upload-status').textContent = 'Error reading file';
+      showToast('Could not parse file — check format');
+    }
+  };
+  reader.readAsBinaryString(file);
+}
+
+// ==================== TOURS ====================
+function openTourModal() { document.getElementById('tour-modal').classList.add('open'); }
+function closeTourModal() { document.getElementById('tour-modal').classList.remove('open'); }
+
+function startTour(type) {
+  closeTourModal();
+  showToast(`Tour mode: ${type} — graves will be highlighted as data becomes available`);
+}
+
+// ==================== VIEW TOGGLE ====================
+function toggleView() {
+  // Could toggle between map and list views
+}
+
+// ==================== TOAST ====================
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+</script>
+</body>
+</html>

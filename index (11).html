@@ -1,0 +1,1356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cedar Grove Cemetery · University of Notre Dame</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy:        #0c2340;
+  --navy-mid:    #1a3a5c;
+  --navy-light:  #2e5a84;
+  --gold:        #c99a2e;
+  --gold-light:  #e2b84a;
+  --gold-pale:   #f5e8c4;
+  --ivory:       #faf8f4;
+  --ivory-mid:   #f2ede4;
+  --ivory-dark:  #e8e1d4;
+  --stone:       #d4cfc6;
+  --gray-light:  #e9ecef;
+  --text:        #1a2332;
+  --text-mid:    #3d4f63;
+  --text-light:  #8494a7;
+  --border:      #ddd8ce;
+  --white:       #ffffff;
+  --s-available: #2d6a4f;  --s-available-bg: #eaf4ef;
+  --s-reserved:  #92650a;  --s-reserved-bg:  #fdf3dc;
+  --s-sold:      #1d4e89;  --s-sold-bg:      #e8f0fb;
+  --s-occupied:  #7b2d2d;  --s-occupied-bg:  #faeaea;
+  --s-hold:      #5a3472;  --s-hold-bg:      #f0eaf8;
+  --s-tree:      #3a6b3a;  --s-tree-bg:      #e6f0e6;
+  --shadow-sm: 0 1px 3px rgba(12,35,64,0.07),0 1px 2px rgba(12,35,64,0.05);
+  --shadow-md: 0 4px 12px rgba(12,35,64,0.09),0 2px 4px rgba(12,35,64,0.06);
+  --shadow-lg: 0 12px 40px rgba(12,35,64,0.12),0 4px 12px rgba(12,35,64,0.08);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{font-size:16px;}
+body{background:var(--ivory);color:var(--text);font-family:'DM Sans',sans-serif;font-weight:300;line-height:1.5;-webkit-font-smoothing:antialiased;}
+h1,h2,h3,.serif{font-family:'Libre Baskerville',Georgia,serif;font-weight:400;}
+
+/* LOADING */
+#loading{position:fixed;inset:0;z-index:9999;background:var(--navy);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:20px;transition:opacity .6s,visibility .6s;}
+#loading.hidden{opacity:0;visibility:hidden;}
+#loading h2{font-family:'Libre Baskerville',serif;font-size:1.45rem;color:var(--ivory);font-weight:400;letter-spacing:.04em;}
+#loading p{font-size:.72rem;letter-spacing:.22em;text-transform:uppercase;color:rgba(255,255,255,.38);}
+.ld-cross{animation:breathe 2.4s ease-in-out infinite;}
+@keyframes breathe{0%,100%{opacity:.4;transform:scale(.96)}50%{opacity:1;transform:scale(1.04)}}
+
+/* HEADER */
+#hdr{background:var(--navy);border-bottom:3px solid var(--gold);padding:0 32px;height:60px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:800;box-shadow:0 2px 16px rgba(12,35,64,.3);}
+.hdr-brand{display:flex;align-items:center;gap:16px;}
+.hdr-brand h1{font-size:1rem;color:var(--ivory);letter-spacing:.02em;line-height:1.2;}
+.hdr-brand span{font-family:'DM Sans',sans-serif;font-size:.62rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.4);}
+.hdr-nav{display:flex;align-items:center;gap:2px;}
+.nb{background:transparent;border:none;cursor:pointer;color:rgba(255,255,255,.58);padding:7px 14px;border-radius:4px;font-family:'DM Sans',sans-serif;font-size:.75rem;font-weight:400;letter-spacing:.05em;transition:all .18s;white-space:nowrap;}
+.nb:hover{color:var(--ivory);background:rgba(255,255,255,.08);}
+.nb.gold{background:var(--gold);color:var(--navy);font-weight:500;padding:7px 16px;margin-left:6px;}
+.nb.gold:hover{background:var(--gold-light);}
+.mode-wrap{display:flex;background:rgba(255,255,255,.08);padding:3px;border-radius:6px;margin-left:12px;}
+.mb{padding:4px 12px;border-radius:4px;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:.68rem;color:rgba(255,255,255,.45);background:transparent;transition:all .18s;}
+.mb.on{background:var(--white);color:var(--navy);font-weight:500;}
+
+/* EXPORT DROPDOWN */
+.exp-wrap{position:relative;}
+.exp-menu{display:none;position:absolute;top:calc(100%+6px);right:0;background:var(--white);border:1.5px solid var(--border);border-radius:8px;box-shadow:var(--shadow-lg);z-index:900;min-width:210px;overflow:hidden;}
+.exp-menu.open{display:block;}
+.exp-item{padding:10px 16px;cursor:pointer;font-size:.78rem;color:var(--text);border-bottom:1px solid var(--gray-light);transition:background .15s;display:flex;align-items:center;gap:10px;}
+.exp-item:last-child{border-bottom:none;}
+.exp-item:hover{background:var(--ivory);}
+.exp-item .ei{font-size:.9rem;width:18px;text-align:center;}
+
+/* TOOLBAR */
+#toolbar{background:var(--white);border-bottom:1px solid var(--border);padding:0 32px;height:52px;display:flex;align-items:center;gap:16px;position:sticky;top:60px;z-index:700;box-shadow:var(--shadow-sm);}
+.srch-wrap{position:relative;flex:0 0 260px;}
+.srch-wrap input{width:100%;background:var(--ivory);border:1.5px solid var(--border);border-radius:6px;padding:7px 32px 7px 12px;font-family:'DM Sans',sans-serif;font-size:.8rem;color:var(--text);outline:none;transition:border-color .18s,box-shadow .18s;}
+.srch-wrap input::placeholder{color:var(--text-light);}
+.srch-wrap input:focus{border-color:var(--navy-light);box-shadow:0 0 0 3px rgba(46,90,132,.1);}
+.srch-ico{position:absolute;right:10px;top:50%;transform:translateY(-50%);color:var(--text-light);font-size:.85rem;pointer-events:none;}
+#srch-dd{position:absolute;top:calc(100%+6px);left:0;right:0;background:var(--white);border:1.5px solid var(--border);border-radius:8px;box-shadow:var(--shadow-lg);z-index:1000;overflow:hidden;display:none;}
+#srch-dd.open{display:block;}
+.sd-item{padding:10px 14px;cursor:pointer;border-bottom:1px solid var(--gray-light);transition:background .15s;display:flex;justify-content:space-between;align-items:center;}
+.sd-item:last-child{border-bottom:none;}
+.sd-item:hover{background:var(--ivory);}
+.sd-name{font-size:.8rem;color:var(--text);}
+.sd-meta{font-size:.68rem;color:var(--text-light);letter-spacing:.04em;}
+.tb-sep{width:1px;height:22px;background:var(--border);flex-shrink:0;}
+.filter-row{display:flex;gap:5px;align-items:center;}
+.fl{font-size:.62rem;letter-spacing:.18em;text-transform:uppercase;color:var(--text-light);font-weight:500;margin-right:3px;white-space:nowrap;}
+.chip{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:20px;cursor:pointer;font-size:.68rem;font-weight:400;letter-spacing:.04em;border:1.5px solid transparent;transition:all .18s;white-space:nowrap;user-select:none;}
+.chip .dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
+.chip-available{border-color:#a8d5bc;color:var(--s-available);background:var(--s-available-bg);}
+.chip-available .dot{background:var(--s-available);}
+.chip-reserved{border-color:#f5d58a;color:var(--s-reserved);background:var(--s-reserved-bg);}
+.chip-reserved .dot{background:var(--s-reserved);}
+.chip-sold{border-color:#9ab8e4;color:var(--s-sold);background:var(--s-sold-bg);}
+.chip-sold .dot{background:var(--s-sold);}
+.chip-occupied{border-color:#e4a4a4;color:var(--s-occupied);background:var(--s-occupied-bg);}
+.chip-occupied .dot{background:var(--s-occupied);}
+.chip-hold{border-color:#c4a8de;color:var(--s-hold);background:var(--s-hold-bg);}
+.chip-hold .dot{background:var(--s-hold);}
+.chip-tree{border-color:#9ec49e;color:var(--s-tree);background:var(--s-tree-bg);}
+.chip-tree .dot{background:var(--s-tree);}
+.chip.off{opacity:.32;filter:grayscale(.5);}
+
+/* Display toggle */
+.disp-wrap{display:flex;background:var(--ivory);border:1.5px solid var(--border);border-radius:6px;overflow:hidden;flex-shrink:0;}
+.dt-btn{padding:5px 10px;border:none;background:transparent;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:.68rem;color:var(--text-light);transition:all .18s;white-space:nowrap;}
+.dt-btn.on{background:var(--navy);color:var(--white);}
+.dt-btn:not(.on):hover{background:var(--ivory-dark);}
+
+.sec-jump select{background:var(--ivory);border:1.5px solid var(--border);border-radius:4px;padding:6px 8px;font-family:'DM Sans',sans-serif;font-size:.76rem;color:var(--text);outline:none;cursor:pointer;}
+
+/* LAYOUT */
+#layout{display:grid;grid-template-columns:260px 1fr;height:calc(100vh - 112px);overflow:hidden;}
+
+/* SIDEBAR */
+#sidebar{background:var(--white);border-right:1px solid var(--border);overflow-y:auto;overflow-x:hidden;}
+#sidebar::-webkit-scrollbar{width:3px;}
+#sidebar::-webkit-scrollbar-thumb{background:var(--stone);border-radius:2px;}
+.sb-block{padding:20px 18px;border-bottom:1px solid var(--border);}
+.sb-block:last-child{border-bottom:none;}
+.sb-lbl{font-size:.58rem;letter-spacing:.28em;text-transform:uppercase;color:var(--gold);font-weight:500;margin-bottom:12px;display:flex;align-items:center;gap:8px;}
+.sb-lbl::after{content:'';flex:1;height:1px;background:var(--gold-pale);}
+.stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px;}
+.stat-card{background:var(--ivory);border:1px solid var(--border);border-radius:6px;padding:10px 12px;position:relative;overflow:hidden;}
+.stat-card::before{content:'';position:absolute;top:0;left:0;bottom:0;width:3px;}
+.sc-total::before{background:var(--navy);}
+.sc-occ::before{background:var(--s-occupied);}
+.sc-avail::before{background:var(--s-available);}
+.sc-res::before{background:var(--s-reserved);}
+.sc-sold::before{background:var(--s-sold);}
+.sc-tree::before{background:var(--s-tree);}
+.stat-n{font-family:'Libre Baskerville',serif;font-size:1.5rem;color:var(--navy);line-height:1;margin-bottom:3px;}
+.stat-l{font-size:.58rem;letter-spacing:.12em;text-transform:uppercase;color:var(--text-light);}
+.sec-nav{list-style:none;}
+.sec-nav li{display:flex;align-items:center;justify-content:space-between;padding:8px 10px;border-radius:4px;cursor:pointer;font-size:.8rem;color:var(--text-mid);border-left:2px solid transparent;transition:all .18s;}
+.sec-nav li:hover{background:var(--ivory);color:var(--navy);border-left-color:var(--gold-pale);}
+.sec-nav li.on{background:var(--gold-pale);color:var(--navy);border-left-color:var(--gold);font-weight:500;}
+.sec-cnt{font-size:.62rem;color:var(--text-light);background:var(--gray-light);padding:2px 7px;border-radius:10px;}
+.sec-nav li.on .sec-cnt{background:rgba(201,154,46,.2);color:var(--gold);}
+.tour-item{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:4px;cursor:pointer;font-size:.78rem;color:var(--text-mid);transition:all .18s;margin-bottom:3px;}
+.tour-item:hover{background:var(--ivory);color:var(--navy);}
+.tour-item .ti{width:18px;text-align:center;}
+.leg-item{display:flex;align-items:center;gap:9px;margin-bottom:7px;font-size:.74rem;color:var(--text-mid);}
+.leg-sw{width:14px;height:14px;border-radius:3px;flex-shrink:0;}
+
+/* MAIN MAP */
+#main-area{position:relative;overflow:hidden;background:#f5f2ec;}
+#bc{position:absolute;top:14px;left:16px;z-index:200;display:flex;align-items:center;gap:7px;font-size:.7rem;color:var(--text-light);background:rgba(255,255,255,.94);backdrop-filter:blur(4px);border:1px solid var(--border);border-radius:20px;padding:4px 14px;box-shadow:var(--shadow-sm);}
+.bc-l{cursor:pointer;color:var(--navy);transition:color .15s;font-weight:400;}
+.bc-l:hover{color:var(--gold);text-decoration:underline;}
+.bc-sep{color:var(--stone);}
+#zoom-ctrls{position:absolute;top:14px;right:16px;z-index:200;display:flex;flex-direction:column;gap:2px;background:var(--white);border:1px solid var(--border);border-radius:6px;box-shadow:var(--shadow-sm);overflow:hidden;}
+.zb{width:36px;height:36px;background:none;border:none;cursor:pointer;font-size:1.05rem;color:var(--text-mid);transition:all .18s;display:flex;align-items:center;justify-content:center;}
+.zb:hover{background:var(--ivory);color:var(--navy);}
+.zb:not(:last-child){border-bottom:1px solid var(--border);}
+#map-wrap{width:100%;height:100%;cursor:default;user-select:none;}
+#cem-svg{width:100%;height:100%;transition:transform .05s linear;transform-origin:center center;}
+.road-fill{fill:#e4dfd6;stroke:#cfc9be;stroke-width:1;}
+.road-lbl{font-family:'DM Sans',sans-serif;font-size:10px;fill:#a09890;letter-spacing:2px;text-anchor:middle;}
+.sz{stroke-width:1.5;cursor:pointer;fill:rgba(12,35,64,.04);stroke:rgba(12,35,64,.14);transition:fill .2s,stroke .2s;}
+.sz:hover{fill:rgba(201,154,46,.1);stroke:rgba(201,154,46,.6);}
+.sz.on{fill:rgba(201,154,46,.08);stroke:var(--gold);stroke-width:2;}
+.slbl{font-family:'Libre Baskerville',serif;font-size:15px;fill:rgba(12,35,64,.5);pointer-events:none;text-anchor:middle;dominant-baseline:middle;letter-spacing:1px;}
+.ssub{font-family:'DM Sans',sans-serif;font-size:8px;fill:rgba(12,35,64,.28);pointer-events:none;text-anchor:middle;dominant-baseline:middle;letter-spacing:1.5px;}
+.mz{fill:rgba(201,154,46,.07);stroke:rgba(201,154,46,.42);stroke-width:1.5;cursor:pointer;}
+.mz:hover{fill:rgba(201,154,46,.15);stroke:var(--gold);}
+.vz{fill:rgba(29,78,137,.06);stroke:rgba(29,78,137,.24);stroke-width:1.5;cursor:pointer;}
+.vz:hover{fill:rgba(29,78,137,.12);}
+.cz{fill:rgba(90,52,114,.06);stroke:rgba(90,52,114,.2);stroke-width:1.5;cursor:pointer;}
+.cz:hover{fill:rgba(90,52,114,.12);}
+
+/* SECTION VIEW */
+#sec-view{position:absolute;inset:0;z-index:100;background:#f5f2ec;overflow:auto;display:none;padding:54px 28px 28px;}
+#sec-view.vis{display:block;}
+#sec-view::-webkit-scrollbar{width:3px;}
+#sec-view::-webkit-scrollbar-thumb{background:var(--stone);}
+.sv-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:22px;padding-bottom:14px;border-bottom:2px solid var(--border);}
+.sv-head h2{font-size:1.5rem;color:var(--navy);}
+.sv-head p{font-size:.75rem;color:var(--text-light);margin-top:3px;}
+.sv-ministats{display:flex;gap:18px;}
+.ms{text-align:right;}
+.ms .n{font-size:1.15rem;font-family:'Libre Baskerville',serif;color:var(--navy);}
+.ms .l{font-size:.58rem;letter-spacing:.14em;text-transform:uppercase;color:var(--text-light);}
+.sv-actions{display:flex;gap:8px;align-items:center;}
+#sec-svg-wrap{min-width:max-content;}
+
+/* GRAVE TOOLTIP */
+#gtip{position:fixed;z-index:500;pointer-events:none;background:var(--navy);color:var(--ivory);border-radius:8px;padding:12px 15px;box-shadow:var(--shadow-lg);font-size:.78rem;opacity:0;transition:opacity .15s;min-width:190px;max-width:260px;}
+#gtip.vis{opacity:1;}
+#gtip .gt-id{font-size:.58rem;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin-bottom:6px;}
+#gtip .gt-name{font-family:'Libre Baskerville',serif;font-size:.95rem;margin-bottom:5px;line-height:1.3;}
+.gt-row{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:3px;}
+.gt-lbl{font-size:.62rem;color:rgba(255,255,255,.45);letter-spacing:.08em;}
+.gt-val{font-size:.72rem;color:rgba(255,255,255,.85);}
+#gtip .gt-cta{margin-top:9px;padding-top:8px;border-top:1px solid rgba(255,255,255,.1);font-size:.62rem;color:rgba(255,255,255,.45);letter-spacing:.08em;}
+
+/* Section tooltip */
+#sec-tip{position:absolute;z-index:300;pointer-events:none;background:var(--navy);color:var(--ivory);border-radius:8px;padding:10px 14px;box-shadow:var(--shadow-md);font-size:.75rem;opacity:0;transition:opacity .18s;min-width:155px;}
+#sec-tip.vis{opacity:1;}
+#sec-tip .stt-n{font-family:'Libre Baskerville',serif;font-size:.88rem;margin-bottom:4px;}
+#sec-tip .stt-s{font-size:.66rem;color:rgba(255,255,255,.55);letter-spacing:.04em;}
+.stt-av{color:#7ed8a4;}
+
+/* Grave SVG */
+.gv{stroke-width:.6;cursor:pointer;}
+.gv:hover{stroke-width:2;}
+.g-av{fill:rgba(45,106,79,.42);stroke:var(--s-available);}
+.g-rs{fill:rgba(146,101,10,.38);stroke:var(--s-reserved);}
+.g-sl{fill:rgba(29,78,137,.38);stroke:var(--s-sold);}
+.g-oc{fill:rgba(123,45,45,.42);stroke:var(--s-occupied);}
+.g-hl{fill:rgba(90,52,114,.38);stroke:var(--s-hold);}
+.g-tr{fill:rgba(58,107,58,.22);stroke:var(--s-tree);}
+.gv-lbl{pointer-events:none;font-family:'DM Sans',sans-serif;text-anchor:middle;dominant-baseline:middle;}
+
+/* DETAIL PANEL */
+#dp{position:fixed;right:-460px;top:0;bottom:0;width:430px;background:var(--white);border-left:1px solid var(--border);z-index:900;overflow-y:auto;transition:right .36s cubic-bezier(.4,0,.2,1);box-shadow:-8px 0 32px rgba(12,35,64,.1);}
+#dp.open{right:0;}
+#dp::-webkit-scrollbar{width:3px;}
+#dp::-webkit-scrollbar-thumb{background:var(--stone);}
+.dp-hdr{background:var(--navy);padding:22px 22px 18px;position:sticky;top:0;z-index:10;}
+.dp-x{position:absolute;top:14px;right:14px;background:rgba(255,255,255,.1);border:none;cursor:pointer;color:rgba(255,255,255,.65);width:30px;height:30px;border-radius:50%;font-size:.85rem;display:flex;align-items:center;justify-content:center;transition:all .18s;}
+.dp-x:hover{background:rgba(255,255,255,.2);color:#fff;}
+.dp-gid{font-size:.58rem;letter-spacing:.24em;text-transform:uppercase;color:var(--gold);margin-bottom:6px;font-weight:500;}
+.dp-nm{font-family:'Libre Baskerville',serif;font-size:1.4rem;color:var(--ivory);line-height:1.25;margin-bottom:3px;}
+.dp-dt{font-size:.72rem;color:rgba(255,255,255,.45);letter-spacing:.05em;}
+.dp-body{padding:22px;}
+.dp-ph{width:100%;aspect-ratio:16/9;background:var(--ivory-mid);border:1px solid var(--border);border-radius:6px;display:flex;align-items:center;justify-content:center;color:var(--text-light);font-size:.7rem;letter-spacing:.1em;margin-bottom:20px;}
+.dp-sb{display:flex;gap:8px;margin-bottom:18px;flex-wrap:wrap;}
+.sbadge{display:inline-flex;align-items:center;gap:5px;padding:4px 11px;border-radius:14px;font-size:.66rem;font-weight:500;letter-spacing:.05em;}
+.sb-av{background:var(--s-available-bg);color:var(--s-available);}
+.sb-rs{background:var(--s-reserved-bg);color:var(--s-reserved);}
+.sb-sl{background:var(--s-sold-bg);color:var(--s-sold);}
+.sb-oc{background:var(--s-occupied-bg);color:var(--s-occupied);}
+.sb-hl{background:var(--s-hold-bg);color:var(--s-hold);}
+.sb-tr{background:var(--s-tree-bg);color:var(--s-tree);}
+.dp-mg{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:18px;}
+.dp-field{background:var(--ivory);border:1px solid var(--border);border-radius:4px;padding:10px 12px;}
+.dp-fl{font-size:.56rem;letter-spacing:.2em;text-transform:uppercase;color:var(--text-light);font-weight:500;margin-bottom:3px;}
+.dp-fv{font-size:.82rem;color:var(--text);}
+.dp-div{border:none;border-top:1px solid var(--border);margin:18px 0;}
+.dp-sl{font-size:.58rem;letter-spacing:.2em;text-transform:uppercase;color:var(--text-light);font-weight:500;margin-bottom:8px;}
+.dp-bio{font-size:.8rem;color:var(--text-mid);line-height:1.65;}
+.dp-bio.empty{color:var(--text-light);font-style:italic;}
+.dp-locs{display:flex;gap:5px;flex-wrap:wrap;}
+.loc-pill{background:var(--navy);color:var(--ivory);border-radius:4px;padding:3px 11px;font-size:.66rem;letter-spacing:.07em;}
+.dp-acts{display:flex;gap:7px;margin-top:20px;}
+.dpa{flex:1;padding:9px;border-radius:4px;font-family:'DM Sans',sans-serif;font-size:.72rem;font-weight:500;letter-spacing:.05em;cursor:pointer;transition:all .2s;text-align:center;border:none;}
+.dpa-p{background:var(--navy);color:#fff;}
+.dpa-p:hover{background:var(--navy-mid);}
+.dpa-s{background:var(--ivory);color:var(--text);border:1px solid var(--border);}
+.dpa-s:hover{background:var(--ivory-dark);}
+.dpa-pdf{background:var(--s-available-bg);color:var(--s-available);border:1px solid #a8d5bc;}
+.dpa-pdf:hover{background:#d5eddf;}
+
+/* MODALS shared */
+.modal-bg{display:none;position:fixed;inset:0;z-index:2000;background:rgba(12,35,64,.48);backdrop-filter:blur(2px);align-items:flex-start;justify-content:center;padding:40px 20px;overflow-y:auto;}
+.modal-bg.open{display:flex;}
+.modal-inner{background:var(--white);border-radius:10px;box-shadow:var(--shadow-lg);width:100%;max-width:920px;border:1px solid var(--border);overflow:hidden;animation:fadeUp .3s ease both;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+.modal-sm{max-width:500px;}
+.modal-hdr{background:var(--navy);padding:22px 28px;display:flex;align-items:center;justify-content:space-between;}
+.modal-hdr h2{font-family:'Libre Baskerville',serif;color:var(--ivory);font-size:1.25rem;font-weight:400;}
+.modal-hdr p{font-size:.72rem;color:rgba(255,255,255,.44);margin-top:3px;}
+.mx{background:rgba(255,255,255,.1);border:none;cursor:pointer;color:rgba(255,255,255,.65);width:32px;height:32px;border-radius:50%;font-size:.9rem;display:flex;align-items:center;justify-content:center;transition:all .18s;flex-shrink:0;}
+.mx:hover{background:rgba(255,255,255,.2);color:#fff;}
+.modal-body{padding:24px 28px;}
+
+/* Data table */
+.dt-tbar{display:flex;align-items:center;gap:14px;padding:14px 28px;border-bottom:1px solid var(--border);}
+.dt-tbar input{background:var(--ivory);border:1.5px solid var(--border);border-radius:4px;padding:7px 12px;font-family:'DM Sans',sans-serif;font-size:.78rem;width:240px;outline:none;}
+.dt-tbar input:focus{border-color:var(--navy-light);}
+.dt-cnt{font-size:.7rem;color:var(--text-light);margin-left:auto;}
+.dt-scrl{max-height:55vh;overflow-y:auto;}
+.dt-scrl::-webkit-scrollbar{width:3px;}
+.dt-scrl::-webkit-scrollbar-thumb{background:var(--stone);}
+table{width:100%;border-collapse:collapse;}
+thead th{background:var(--ivory);padding:9px 14px;text-align:left;font-size:.6rem;letter-spacing:.16em;text-transform:uppercase;color:var(--text-light);font-weight:500;border-bottom:2px solid var(--border);white-space:nowrap;}
+tbody td{padding:9px 14px;border-bottom:1px solid var(--gray-light);font-size:.78rem;color:var(--text);}
+tbody tr{cursor:pointer;transition:background .14s;}
+tbody tr:hover td{background:var(--ivory);}
+
+/* Tours */
+.tour-card{display:flex;align-items:center;gap:12px;padding:12px 14px;cursor:pointer;border:1px solid var(--border);border-radius:6px;margin-bottom:8px;transition:all .2s;}
+.tour-card:hover{border-color:var(--navy-light);background:var(--ivory);transform:translateX(3px);}
+.tc-icon{font-size:1.15rem;width:30px;text-align:center;flex-shrink:0;}
+.tc-info h4{font-size:.85rem;color:var(--navy);font-weight:500;}
+.tc-info p{font-size:.7rem;color:var(--text-light);margin-top:1px;}
+.tc-cnt{margin-left:auto;background:var(--ivory-dark);padding:3px 9px;border-radius:12px;font-size:.66rem;color:var(--text-light);white-space:nowrap;}
+
+/* Admin upload */
+.upload-zone{border:2px dashed var(--border);border-radius:8px;padding:36px;text-align:center;cursor:pointer;transition:all .2s;margin-bottom:18px;background:var(--ivory);}
+.upload-zone:hover{border-color:var(--navy-light);background:#f0f4fa;}
+.upload-zone input{display:none;}
+.uz-icon{font-size:2rem;color:var(--text-light);margin-bottom:8px;}
+.upload-zone h3{font-size:.88rem;color:var(--navy);font-weight:500;margin-bottom:5px;}
+.upload-zone p{font-size:.72rem;color:var(--text-light);}
+#up-msg{font-size:.76rem;color:var(--s-available);text-align:center;padding:6px;min-height:24px;}
+
+/* PDF progress */
+#pdf-prog{display:none;position:fixed;inset:0;z-index:9998;background:rgba(12,35,64,.6);align-items:center;justify-content:center;flex-direction:column;gap:16px;}
+#pdf-prog.vis{display:flex;}
+#pdf-prog .pp-box{background:var(--white);border-radius:10px;padding:36px 44px;text-align:center;box-shadow:var(--shadow-lg);}
+#pdf-prog h3{font-family:'Libre Baskerville',serif;color:var(--navy);margin-bottom:8px;}
+#pdf-prog p{font-size:.76rem;color:var(--text-light);}
+.pp-bar{width:240px;height:4px;background:var(--gray-light);border-radius:2px;margin-top:16px;overflow:hidden;}
+.pp-fill{height:100%;background:var(--gold);border-radius:2px;animation:ppfill 1.8s ease-in-out infinite;}
+@keyframes ppfill{0%{width:0;margin-left:0}50%{width:80%}100%{width:0;margin-left:100%}}
+
+/* TOAST */
+#toast{position:fixed;bottom:26px;left:50%;transform:translateX(-50%) translateY(10px);background:var(--navy);color:var(--ivory);border-radius:6px;padding:11px 22px;font-size:.78rem;z-index:5000;opacity:0;pointer-events:none;transition:all .28s;white-space:nowrap;box-shadow:var(--shadow-md);}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+</style>
+</head>
+<body>
+
+<div id="loading">
+  <svg class="ld-cross" width="38" height="38" viewBox="0 0 38 38" fill="none">
+    <rect x="16" y="2" width="6" height="34" fill="rgba(201,154,46,.9)" rx="1"/>
+    <rect x="2" y="12" width="34" height="6" fill="rgba(201,154,46,.9)" rx="1"/>
+  </svg>
+  <h2>Cedar Grove Cemetery</h2>
+  <p>University of Notre Dame · Digital Archive</p>
+</div>
+
+<!-- HEADER -->
+<header id="hdr">
+  <div class="hdr-brand">
+    <svg width="34" height="34" viewBox="0 0 34 34" fill="none" style="flex-shrink:0;opacity:.85">
+      <circle cx="17" cy="17" r="16" stroke="rgba(201,154,46,.4)" stroke-width="1.5"/>
+      <rect x="15" y="5" width="4" height="24" fill="rgba(201,154,46,.85)" rx=".5"/>
+      <rect x="7" y="12" width="20" height="4" fill="rgba(201,154,46,.85)" rx=".5"/>
+    </svg>
+    <div>
+      <h1>Cedar Grove Cemetery</h1>
+      <span>University of Notre Dame · Est. 1842</span>
+    </div>
+  </div>
+  <nav class="hdr-nav">
+    <button class="nb" onclick="openDataModal()">Records</button>
+    <button class="nb" onclick="openToursModal()">Tours</button>
+    <div class="exp-wrap">
+      <button class="nb" onclick="toggleExpMenu()" id="exp-btn">Export PDF ▾</button>
+      <div class="exp-menu" id="exp-menu">
+        <div class="exp-item" onclick="exportPDF('overview')"><span class="ei">🗺</span> Full cemetery overview</div>
+        <div class="exp-item" onclick="exportPDF('section')"><span class="ei">📋</span> Current section map</div>
+        <div class="exp-item" onclick="exportPDF('record')"><span class="ei">📄</span> Selected grave record</div>
+        <div class="exp-item" onclick="exportPDF('filtered')"><span class="ei">🔍</span> Filtered results summary</div>
+      </div>
+    </div>
+    <button class="nb gold" onclick="openAdminModal()">⬆ Update Data</button>
+    <div class="mode-wrap">
+      <button class="mb on" id="mb-pub" onclick="setMode('public')">Public</button>
+      <button class="mb" id="mb-adm" onclick="setMode('admin')">Admin</button>
+    </div>
+  </nav>
+</header>
+
+<!-- TOOLBAR -->
+<div id="toolbar">
+  <div class="srch-wrap">
+    <input type="text" id="srch" placeholder="Search name, section, ID…"
+      oninput="handleSearch(this.value)"
+      onfocus="if(this.value)openDD()"
+      onblur="setTimeout(closeDD,200)">
+    <span class="srch-ico">⌕</span>
+    <div id="srch-dd"></div>
+  </div>
+  <div class="tb-sep"></div>
+  <div class="filter-row">
+    <span class="fl">Filter</span>
+    <div class="chip chip-available" id="f-Available" onclick="toggleFilter('Available',this)"><span class="dot"></span>Available</div>
+    <div class="chip chip-reserved"  id="f-Reserved"  onclick="toggleFilter('Reserved',this)"><span class="dot"></span>Reserved</div>
+    <div class="chip chip-sold"      id="f-Sold"      onclick="toggleFilter('Sold',this)"><span class="dot"></span>Sold</div>
+    <div class="chip chip-occupied"  id="f-Occupied"  onclick="toggleFilter('Occupied',this)"><span class="dot"></span>Occupied</div>
+    <div class="chip chip-hold"      id="f-HOLD"      onclick="toggleFilter('HOLD',this)"><span class="dot"></span>Hold</div>
+    <div class="chip chip-tree"      id="f-Tree"      onclick="toggleFilter('Tree',this)"><span class="dot"></span>Trees</div>
+  </div>
+  <div class="tb-sep"></div>
+  <div class="disp-wrap">
+    <span style="padding:5px 10px;font-size:.62rem;letter-spacing:.14em;color:var(--text-light);text-transform:uppercase;align-self:center;">View</span>
+    <button class="dt-btn" id="dv-mixed" onclick="setDisplay('mixed')">Mixed</button>
+    <button class="dt-btn" id="dv-names" onclick="setDisplay('names')">Names</button>
+    <button class="dt-btn" id="dv-numbers" onclick="setDisplay('numbers')">Numbers</button>
+    <button class="dt-btn" id="dv-status" onclick="setDisplay('status')">Status</button>
+  </div>
+  <div class="sec-jump">
+    <select onchange="if(this.value){selectSection(this.value);this.value='';}">
+      <option value="">Jump to section…</option>
+    </select>
+  </div>
+</div>
+
+<!-- LAYOUT -->
+<div id="layout">
+  <!-- SIDEBAR -->
+  <aside id="sidebar">
+    <div class="sb-block">
+      <div class="sb-lbl">Overview</div>
+      <div class="stats-grid">
+        <div class="stat-card sc-total"><div class="stat-n" id="st-total">—</div><div class="stat-l">Total Plots</div></div>
+        <div class="stat-card sc-occ"><div class="stat-n" id="st-occ">—</div><div class="stat-l">Occupied</div></div>
+        <div class="stat-card sc-avail"><div class="stat-n" id="st-avail">—</div><div class="stat-l">Available</div></div>
+        <div class="stat-card sc-res"><div class="stat-n" id="st-res">—</div><div class="stat-l">Reserved</div></div>
+        <div class="stat-card sc-sold"><div class="stat-n" id="st-sold">—</div><div class="stat-l">Sold</div></div>
+        <div class="stat-card sc-tree"><div class="stat-n" id="st-tree">—</div><div class="stat-l">Trees</div></div>
+      </div>
+    </div>
+    <div class="sb-block">
+      <div class="sb-lbl">Sections</div>
+      <ul class="sec-nav" id="sec-nav"></ul>
+    </div>
+    <div class="sb-block">
+      <div class="sb-lbl">Mausoleums</div>
+      <ul class="sec-nav">
+        <li onclick="selectSection('M')"><span>① Mary Queen of Angels</span></li>
+        <li onclick="selectSection('M')"><span>② Mary Queen of All Saints</span></li>
+        <li onclick="selectSection('M')"><span>③ Mary Mother of the Church</span></li>
+        <li onclick="selectSection('M')"><span>④ Mary Mother of God</span></li>
+      </ul>
+    </div>
+    <div class="sb-block">
+      <div class="sb-lbl">Guided Tours</div>
+      <div class="tour-item" onclick="openToursModal()"><span class="ti">✝</span> Notre Dame Presidents</div>
+      <div class="tour-item" onclick="openToursModal()"><span class="ti">⚑</span> War Veterans</div>
+      <div class="tour-item" onclick="openToursModal()"><span class="ti">🎓</span> Distinguished Faculty</div>
+      <div class="tour-item" onclick="openToursModal()"><span class="ti">🌳</span> Memorial Trees</div>
+    </div>
+    <div class="sb-block">
+      <div class="sb-lbl">Legend</div>
+      <div class="leg-item"><div class="leg-sw" style="background:var(--s-available)"></div>Available</div>
+      <div class="leg-item"><div class="leg-sw" style="background:var(--s-reserved)"></div>Reserved</div>
+      <div class="leg-item"><div class="leg-sw" style="background:var(--s-sold)"></div>Sold</div>
+      <div class="leg-item"><div class="leg-sw" style="background:var(--s-occupied)"></div>Occupied</div>
+      <div class="leg-item"><div class="leg-sw" style="background:var(--s-hold)"></div>Hold</div>
+      <div class="leg-item"><span style="font-size:.9rem;width:14px;text-align:center;">🌳</span>Tree — plot unavailable</div>
+      <div style="height:6px"></div>
+      <div class="leg-item"><div class="leg-sw" style="background:rgba(201,154,46,.25);border:1.5px solid var(--gold)"></div>Mausoleum</div>
+      <div class="leg-item"><div class="leg-sw" style="background:rgba(29,78,137,.12);border:1.5px solid var(--s-sold)"></div>Veterans</div>
+      <div class="leg-item"><div class="leg-sw" style="background:rgba(90,52,114,.1);border:1.5px solid var(--s-hold)"></div>Columbarium</div>
+    </div>
+  </aside>
+
+  <!-- MAP AREA -->
+  <main id="main-area">
+    <div id="bc"><span class="bc-l" onclick="resetOverview()">Cedar Grove</span></div>
+    <div id="zoom-ctrls">
+      <button class="zb" onclick="zoomIn()">+</button>
+      <button class="zb" onclick="zoomOut()">−</button>
+      <button class="zb" onclick="resetZoom()" style="font-size:.72rem;">⌖</button>
+    </div>
+    <div id="sec-tip"><div class="stt-n" id="stt-n"></div><div class="stt-s" id="stt-s"></div></div>
+
+    <!-- OVERVIEW MAP -->
+    <div id="map-wrap">
+      <svg id="cem-svg" viewBox="0 0 1400 860" preserveAspectRatio="xMidYMid meet">
+        <rect width="1400" height="860" fill="#f5f2ec"/>
+        <rect x="28" y="28" width="1344" height="804" rx="4" fill="none" stroke="rgba(12,35,64,.07)" stroke-width="1.5" stroke-dasharray="6,4"/>
+        <!-- Roads -->
+        <path class="road-fill" d="M38 174 Q400 149 700 157 Q1000 165 1352 184 L1352 208 Q1000 190 700 182 Q400 173 38 200Z"/>
+        <text class="road-lbl" x="700" y="168">HOLY CROSS DRIVE</text>
+        <rect class="road-fill" x="1332" y="180" width="38" height="640" rx="2"/>
+        <text class="road-lbl" transform="rotate(90,1362,480)" x="-82" y="1358" style="font-size:9px;letter-spacing:2px;">NOTRE DAME AVENUE</text>
+        <line x1="398" y1="214" x2="398" y2="718" stroke="#ddd8ce" stroke-width="8"/>
+        <line x1="720" y1="214" x2="720" y2="718" stroke="#ddd8ce" stroke-width="8"/>
+        <line x1="1004" y1="214" x2="1004" y2="718" stroke="#ddd8ce" stroke-width="8"/>
+        <line x1="46" y1="492" x2="1322" y2="492" stroke="#ddd8ce" stroke-width="8"/>
+        <!-- Top row -->
+        <rect class="sz" id="z-A" x="46" y="218" width="155" height="126" rx="3" data-s="A" onmouseenter="showSecTip(event,'A')" onmouseleave="hideSecTip()" onclick="selectSection('A')"/>
+        <text class="slbl" x="124" y="273">A</text><text class="ssub" x="124" y="293">Section</text>
+        <rect class="sz" id="z-B" x="212" y="218" width="172" height="126" rx="3" data-s="B" onmouseenter="showSecTip(event,'B')" onmouseleave="hideSecTip()" onclick="selectSection('B')"/>
+        <text class="slbl" x="298" y="273">B</text><text class="ssub" x="298" y="293">Section</text>
+        <rect class="sz" id="z-C" x="416" y="218" width="168" height="126" rx="3" data-s="C" onmouseenter="showSecTip(event,'C')" onmouseleave="hideSecTip()" onclick="selectSection('C')"/>
+        <text class="slbl" x="500" y="273">C</text><text class="ssub" x="500" y="293">Section</text>
+        <rect class="sz" id="z-D" x="596" y="218" width="108" height="126" rx="3" data-s="D" onmouseenter="showSecTip(event,'D')" onmouseleave="hideSecTip()" onclick="selectSection('D')"/>
+        <text class="slbl" x="650" y="273">D</text>
+        <rect class="sz" id="z-E" x="732" y="218" width="118" height="126" rx="3" data-s="E" onmouseenter="showSecTip(event,'E')" onmouseleave="hideSecTip()" onclick="selectSection('E')"/>
+        <text class="slbl" x="791" y="273">E</text>
+        <rect class="sz" id="z-F" x="868" y="218" width="120" height="126" rx="3" data-s="F" onmouseenter="showSecTip(event,'F')" onmouseleave="hideSecTip()" onclick="selectSection('F')"/>
+        <text class="slbl" x="928" y="273">F</text>
+        <rect class="sz" id="z-G" x="1014" y="218" width="166" height="126" rx="3" data-s="G" onmouseenter="showSecTip(event,'G')" onmouseleave="hideSecTip()" onclick="selectSection('G')"/>
+        <text class="slbl" x="1097" y="273">G</text><text class="ssub" x="1097" y="293">Section</text>
+        <rect class="sz" id="z-X" x="1194" y="218" width="120" height="126" rx="3" data-s="X" onmouseenter="showSecTip(event,'X')" onmouseleave="hideSecTip()" onclick="selectSection('X')"/>
+        <text class="slbl" x="1254" y="273">X</text>
+        <!-- Middle strip -->
+        <rect class="sz" id="z-P" x="46" y="360" width="338" height="124" rx="3" data-s="P" onmouseenter="showSecTip(event,'P')" onmouseleave="hideSecTip()" onclick="selectSection('P')"/>
+        <text class="slbl" x="215" y="415">P</text><text class="ssub" x="215" y="435">Section</text>
+        <rect class="sz" id="z-Q" x="416" y="360" width="350" height="124" rx="3" data-s="Q" onmouseenter="showSecTip(event,'Q')" onmouseleave="hideSecTip()" onclick="selectSection('Q')"/>
+        <text class="slbl" x="591" y="415">Q</text><text class="ssub" x="591" y="435">Section</text>
+        <rect class="sz" id="z-R" x="782" y="360" width="308" height="124" rx="3" data-s="R" onmouseenter="showSecTip(event,'R')" onmouseleave="hideSecTip()" onclick="selectSection('R')"/>
+        <text class="slbl" x="936" y="415">R</text>
+        <rect class="sz" id="z-S" x="1106" y="360" width="208" height="124" rx="3" data-s="S" onmouseenter="showSecTip(event,'S')" onmouseleave="hideSecTip()" onclick="selectSection('S')"/>
+        <text class="slbl" x="1210" y="415">S</text>
+        <!-- Lower row -->
+        <rect class="sz" id="z-H" x="46" y="500" width="158" height="138" rx="3" data-s="H" onmouseenter="showSecTip(event,'H')" onmouseleave="hideSecTip()" onclick="selectSection('H')"/>
+        <text class="slbl" x="125" y="566">H</text>
+        <rect class="sz" id="z-I" x="216" y="500" width="168" height="138" rx="3" data-s="I" onmouseenter="showSecTip(event,'I')" onmouseleave="hideSecTip()" onclick="selectSection('I')"/>
+        <text class="slbl" x="300" y="566">I</text>
+        <rect class="sz" id="z-J" x="416" y="500" width="168" height="138" rx="3" data-s="J" onmouseenter="showSecTip(event,'J')" onmouseleave="hideSecTip()" onclick="selectSection('J')"/>
+        <text class="slbl" x="500" y="566">J</text>
+        <rect class="sz" id="z-K" x="596" y="500" width="228" height="138" rx="3" data-s="K" onmouseenter="showSecTip(event,'K')" onmouseleave="hideSecTip()" onclick="selectSection('K')"/>
+        <text class="slbl" x="710" y="566">K</text>
+        <rect class="sz" id="z-L" x="840" y="500" width="226" height="138" rx="3" data-s="L" onmouseenter="showSecTip(event,'L')" onmouseleave="hideSecTip()" onclick="selectSection('L')"/>
+        <text class="slbl" x="953" y="566">L</text>
+        <rect class="sz" id="z-N" x="1082" y="500" width="132" height="138" rx="3" data-s="N" onmouseenter="showSecTip(event,'N')" onmouseleave="hideSecTip()" onclick="selectSection('N')"/>
+        <text class="slbl" x="1148" y="566">N</text>
+        <rect class="sz" id="z-O" x="1226" y="500" width="88" height="138" rx="3" data-s="O" onmouseenter="showSecTip(event,'O')" onmouseleave="hideSecTip()" onclick="selectSection('O')"/>
+        <text class="slbl" x="1270" y="566">O</text>
+        <!-- Bottom zones -->
+        <rect class="mz" id="z-M" x="46" y="658" width="182" height="118" rx="4" onmouseenter="showSecTip(event,'M')" onmouseleave="hideSecTip()" onclick="selectSection('M')"/>
+        <text class="slbl" x="137" y="708" style="font-size:12px;fill:rgba(201,154,46,.8);">M</text>
+        <text class="ssub" x="137" y="727" style="fill:rgba(201,154,46,.6);">Mausoleums</text>
+        <rect x="56" y="668" width="38" height="28" rx="2" fill="rgba(201,154,46,.14)" stroke="rgba(201,154,46,.5)" stroke-width="1" cursor="pointer" onclick="openGraveDetail('maus-1')"/>
+        <text style="font-size:7px;fill:rgba(201,154,46,.8);text-anchor:middle;dominant-baseline:middle;pointer-events:none;" x="75" y="682">①</text>
+        <rect x="102" y="668" width="38" height="28" rx="2" fill="rgba(201,154,46,.14)" stroke="rgba(201,154,46,.5)" stroke-width="1" cursor="pointer" onclick="openGraveDetail('maus-2')"/>
+        <text style="font-size:7px;fill:rgba(201,154,46,.8);text-anchor:middle;dominant-baseline:middle;pointer-events:none;" x="121" y="682">②</text>
+        <rect x="56" y="704" width="38" height="28" rx="2" fill="rgba(201,154,46,.14)" stroke="rgba(201,154,46,.5)" stroke-width="1" cursor="pointer" onclick="openGraveDetail('maus-3')"/>
+        <text style="font-size:7px;fill:rgba(201,154,46,.8);text-anchor:middle;dominant-baseline:middle;pointer-events:none;" x="75" y="718">③</text>
+        <rect x="102" y="704" width="38" height="28" rx="2" fill="rgba(201,154,46,.14)" stroke="rgba(201,154,46,.5)" stroke-width="1" cursor="pointer" onclick="openGraveDetail('maus-4')"/>
+        <text style="font-size:7px;fill:rgba(201,154,46,.8);text-anchor:middle;dominant-baseline:middle;pointer-events:none;" x="121" y="718">④</text>
+        <rect class="vz" x="242" y="658" width="182" height="118" rx="4" onmouseenter="showSecTip(event,'Veterans')" onmouseleave="hideSecTip()" onclick="selectSection('Veterans')"/>
+        <text class="slbl" x="333" y="708" style="font-size:13px;fill:rgba(29,78,137,.7);">⚑</text>
+        <text class="ssub" x="333" y="727" style="fill:rgba(29,78,137,.5);">Veterans</text>
+        <rect class="cz" x="440" y="658" width="162" height="118" rx="4" onmouseenter="showSecTip(event,'Columbarium')" onmouseleave="hideSecTip()" onclick="selectSection('Columbarium')"/>
+        <text class="slbl" x="521" y="708" style="font-size:11px;fill:rgba(90,52,114,.6);">◈</text>
+        <text class="ssub" x="521" y="727" style="fill:rgba(90,52,114,.5);">Columbarium</text>
+        <rect class="sz" id="z-T" x="620" y="658" width="196" height="118" rx="3" data-s="T" onmouseenter="showSecTip(event,'T')" onmouseleave="hideSecTip()" onclick="selectSection('T')"/>
+        <text class="slbl" x="718" y="715">T</text>
+        <rect class="sz" id="z-U" x="832" y="658" width="180" height="118" rx="3" data-s="U" onmouseenter="showSecTip(event,'U')" onmouseleave="hideSecTip()" onclick="selectSection('U')"/>
+        <text class="slbl" x="922" y="715">U</text>
+        <rect class="sz" id="z-V" x="1026" y="658" width="178" height="118" rx="3" data-s="V" onmouseenter="showSecTip(event,'V')" onmouseleave="hideSecTip()" onclick="selectSection('V')"/>
+        <text class="slbl" x="1115" y="715">V</text>
+        <!-- North + scale -->
+        <g transform="translate(1292,54)">
+          <circle r="21" fill="var(--white)" stroke="var(--border)" stroke-width="1.5"/>
+          <text text-anchor="middle" y="-5" style="font-family:'Libre Baskerville',serif;font-size:11px;fill:var(--navy);font-weight:700;">N</text>
+          <polygon points="0,-18 3,-10 -3,-10" fill="var(--navy)"/>
+        </g>
+        <g transform="translate(58,800)">
+          <line x1="0" y1="0" x2="80" y2="0" stroke="var(--text-light)" stroke-width="1.5"/>
+          <line x1="0" y1="-4" x2="0" y2="4" stroke="var(--text-light)" stroke-width="1.5"/>
+          <line x1="80" y1="-4" x2="80" y2="4" stroke="var(--text-light)" stroke-width="1.5"/>
+          <text x="40" y="-8" text-anchor="middle" style="font-size:8px;fill:var(--text-light);font-family:'DM Sans',sans-serif;">Not to Scale</text>
+        </g>
+      </svg>
+    </div>
+
+    <!-- SECTION GRAVE VIEW -->
+    <div id="sec-view">
+      <div class="sv-head">
+        <div><h2 id="sv-title">Section</h2><p id="sv-sub">Click a grave to view its record</p></div>
+        <div style="display:flex;gap:12px;align-items:center;">
+          <div class="sv-ministats" id="sv-ms"></div>
+          <button class="nb gold" style="font-size:.72rem;padding:6px 14px;" onclick="exportPDF('section')">Export PDF</button>
+        </div>
+      </div>
+      <div id="sec-svg-wrap"></div>
+    </div>
+  </main>
+</div>
+
+<!-- GRAVE HOVER TOOLTIP -->
+<div id="gtip">
+  <div class="gt-id" id="gt-id"></div>
+  <div class="gt-name" id="gt-name"></div>
+  <div class="gt-row"><span class="gt-lbl">Status</span><span class="gt-val" id="gt-st"></span></div>
+  <div class="gt-row" id="gt-occ-r"><span class="gt-lbl">Occupant</span><span class="gt-val" id="gt-occ"></span></div>
+  <div class="gt-row" id="gt-res-r"><span class="gt-lbl">Reserved For</span><span class="gt-val" id="gt-res"></span></div>
+  <div class="gt-row" id="gt-own-r"><span class="gt-lbl">Owner</span><span class="gt-val" id="gt-own"></span></div>
+  <div class="gt-row" id="gt-dt-r"><span class="gt-lbl">Date</span><span class="gt-val" id="gt-dt"></span></div>
+  <div class="gt-cta">Click to open full record</div>
+</div>
+
+<!-- DETAIL PANEL -->
+<div id="dp">
+  <div class="dp-hdr">
+    <button class="dp-x" onclick="closeDP()">✕</button>
+    <div class="dp-gid" id="dp-gid"></div>
+    <div class="dp-nm" id="dp-nm"></div>
+    <div class="dp-dt" id="dp-dt"></div>
+  </div>
+  <div class="dp-body">
+    <div class="dp-ph" id="dp-ph">No photograph on record</div>
+    <div class="dp-sb" id="dp-sb"></div>
+    <div class="dp-mg">
+      <div class="dp-field"><div class="dp-fl">Owner(s)</div><div class="dp-fv" id="dp-own">—</div></div>
+      <div class="dp-field"><div class="dp-fl">Date of Status</div><div class="dp-fv" id="dp-date">—</div></div>
+      <div class="dp-field" id="dp-res-f"><div class="dp-fl">Reserved For</div><div class="dp-fv" id="dp-res">—</div></div>
+      <div class="dp-field"><div class="dp-fl">Pontem Order</div><div class="dp-fv" id="dp-pon">—</div></div>
+    </div>
+    <hr class="dp-div">
+    <div class="dp-sl">Location</div>
+    <div class="dp-locs" id="dp-loc"></div>
+    <hr class="dp-div">
+    <div class="dp-sl">Biography</div>
+    <div class="dp-bio empty" id="dp-bio">No biography on record. Upload documents to add biographical information.</div>
+    <hr class="dp-div">
+    <div class="dp-sl">Documents &amp; Links</div>
+    <div style="font-size:.76rem;color:var(--text-light);font-style:italic;">No documents attached.</div>
+    <div class="dp-acts">
+      <button class="dpa dpa-pdf" onclick="exportPDF('record')">⬇ Export PDF</button>
+      <button class="dpa dpa-s" onclick="openAdminModal()">⬆ Add Photo</button>
+      <button class="dpa dpa-p" onclick="openAdminModal()">✎ Edit</button>
+    </div>
+  </div>
+</div>
+
+<!-- DATA RECORDS MODAL -->
+<div class="modal-bg" id="data-modal" onclick="if(event.target===this)closeDataModal()">
+  <div class="modal-inner">
+    <div class="modal-hdr">
+      <div><h2>Cemetery Records</h2><p>All plots — click any row to view on map</p></div>
+      <button class="mx" onclick="closeDataModal()">✕</button>
+    </div>
+    <div class="dt-tbar">
+      <input type="text" id="dt-srch" placeholder="Filter by name, ID, section…" oninput="filterTable(this.value)">
+      <span class="dt-cnt" id="dt-cnt"></span>
+    </div>
+    <div class="dt-scrl">
+      <table><thead><tr>
+        <th>ID</th><th>Occupant</th><th>Status</th><th>Date</th><th>Owner(s)</th><th>Reserved For</th>
+      </tr></thead>
+      <tbody id="dt-body"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- TOURS MODAL -->
+<div class="modal-bg" id="tours-modal" onclick="if(event.target===this)closeToursModal()">
+  <div class="modal-inner modal-sm">
+    <div class="modal-hdr">
+      <div><h2>Guided Cemetery Tours</h2><p>Explore notable burials highlighted on the map</p></div>
+      <button class="mx" onclick="closeToursModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="tour-card" onclick="startTour('presidents')"><span class="tc-icon">✝</span><div class="tc-info"><h4>Notre Dame Presidents</h4><p>Holy Cross Fathers who led the University</p></div><span class="tc-cnt">C.S.C.</span></div>
+      <div class="tour-card" onclick="startTour('holy-cross')"><span class="tc-icon">⛪</span><div class="tc-info"><h4>Holy Cross Community</h4><p>Priests and Brothers of the Congregation</p></div><span class="tc-cnt">Religious</span></div>
+      <div class="tour-card" onclick="startTour('veterans')"><span class="tc-icon">⚑</span><div class="tc-info"><h4>War Veterans</h4><p>Service members from all conflicts</p></div><span class="tc-cnt">All Eras</span></div>
+      <div class="tour-card" onclick="startTour('faculty')"><span class="tc-icon">🎓</span><div class="tc-info"><h4>Distinguished Faculty</h4><p>Scholars who shaped Notre Dame</p></div><span class="tc-cnt">Professors</span></div>
+      <div class="tour-card" onclick="startTour('trees')"><span class="tc-icon">🌳</span><div class="tc-info"><h4>Memorial Trees</h4><p>Living memorials throughout the grounds</p></div><span class="tc-cnt">Trees</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ADMIN UPLOAD MODAL -->
+<div class="modal-bg" id="admin-modal" onclick="if(event.target===this)closeAdminModal()">
+  <div class="modal-inner modal-sm">
+    <div class="modal-hdr">
+      <div><h2>Update Cemetery Data</h2><p>Upload an updated export from Pontem</p></div>
+      <button class="mx" onclick="closeAdminModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <label class="upload-zone">
+        <input type="file" accept=".xlsx,.xls,.csv" onchange="handleUpload(this)">
+        <div class="uz-icon">↑</div>
+        <h3>Drop file here or click to browse</h3>
+        <p>Supports .xlsx, .xls, .csv · Map updates automatically</p>
+      </label>
+      <div id="up-msg"></div>
+      <div style="font-size:.7rem;color:var(--text-light);line-height:1.65;">
+        <strong>Expected columns:</strong> CedarGrove-Section-Lot-Grave, Occupant, Status, Date of Status, Owner(s), Reserved For, Pontem Order<br><br>
+        Status values: <em>Available, Reserved, Sold, Occupied, HOLD, Tree</em><br>
+        Tree status = plot unavailable, shown with tree icon.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PDF PROGRESS -->
+<div id="pdf-prog">
+  <div class="pp-box">
+    <h3 id="pp-title">Generating PDF…</h3>
+    <p id="pp-sub">Please wait while we prepare your document</p>
+    <div class="pp-bar"><div class="pp-fill"></div></div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script>
+/* ============================================================
+   CEDAR GROVE CEMETERY v3
+   Smart tile labels · PDF export · Display toggle · Trees
+   ============================================================ */
+
+// ── STATE ────────────────────────────────────────────────────
+let db = [];
+let filters = new Set(['Available','Reserved','Sold','Occupied','HOLD','Tree']);
+let displayMode = 'mixed';   // mixed | names | numbers | status
+let isAdmin = false;
+let currentSection = null;
+let currentGraveId = null;
+let scale = 1, tx = 0, ty = 0, panning = false, px = 0, py = 0;
+
+// ── DISPLAY NAMES ────────────────────────────────────────────
+const MAUS_NAMES = ['','Mary Queen of Angels','Mary Queen of All Saints','Mary Mother of the Church','Mary Mother of God'];
+const STATUS_BADGE = { Available:'sb-av', Reserved:'sb-rs', Sold:'sb-sl', Occupied:'sb-oc', HOLD:'sb-hl', Tree:'sb-tr' };
+const STATUS_PRETTY = { Available:'Available', Reserved:'Reserved', Sold:'Sold', Occupied:'Occupied', HOLD:'Hold', Tree:'Tree — Plot Unavailable' };
+
+// ── SAMPLE DATA ──────────────────────────────────────────────
+const SURNAMES = ['Murphy','Walsh','Kelly','O\'Brien','Ryan','Brennan','Burke','Collins','Kennedy','Lynch','Fitzgerald','McCarthy','Sullivan','O\'Connor','Gallagher','Quinn','Hughes','Hesburgh','Sorin','O\'Neill','Corby','Zahm','Cavanaugh','Lemmon','Kroc','Parseghian'];
+const FIRSTS   = ['Thomas','Mary','Patrick','Ann','James','Catherine','Michael','Margaret','John','Elizabeth','Robert','Gertrude','William','Christine','Francis','Theodore','Knute','Edward'];
+
+function genData() {
+  const d = [];
+  // Real data from screenshot
+  [['M','100','1','Bartkus','Occupied','6/30/2006','Woo',''],
+   ['M','100','2','','Sold','','Woo',''],
+   ['M','100','3','','Sold','','Kmiec',''],
+   ['M','100','4','','Sold','7/28/2006','Newburg',''],
+   ['M','100','5','Newburg','Occupied','7/28/2006','Newburg',''],
+   ['M','101','1','','Reserved','','Walshe','Walshe, Peter'],
+   ['M','101','2','','Reserved','','Walshe','Walshe, Ann'],
+   ['M','101','3','Bellis','Occupied','','Bellis',''],
+   ['M','101','4','','Available','','',''],
+   ['M','101','5','','Available','','',''],
+   ['M','102','1','','HOLD','10/28/2024','',''],
+   ['M','102','2','','Sold','','Crowe',''],
+   ['M','102','3','','Sold','','Crowe',''],
+   ['M','102','4','','Sold','','Hinchion-Mancini',''],
+   ['M','102','5','Hinchion','Occupied','','Hinchion Mancini',''],
+   ['M','103','1','Balog','Occupied','','Balog',''],
+   ['M','103','2','Berndt','Occupied','10/30/2006','Berndt','Berndt, Gertrude'],
+   ['M','103','3','','Reserved','10/30/2006','Berndt','Berndt, Christine; Berndt, Robert'],
+   ['M','103','4','Banicki','Occupied','','Banicki','Banicki, Theresa'],
+  ].forEach(([sec,lot,gr,occ,st,date,own,res],i) => {
+    d.push({id:`CEDARGROVE-${sec}-${lot}-${gr}`,section:sec,lot,grave:gr,occupant:occ,status:st,date,owners:own,reserved:res,pontem:i+1});
+  });
+
+  const ST_WEIGHTS = [[.35,'Occupied'],[.55,'Sold'],[.70,'Available'],[.83,'Reserved'],[.93,'HOLD'],[1,'Tree']];
+  const secs = 'A,B,C,D,E,F,G,H,I,J,K,L,N,O,P,Q,R,S,T,U,V,X'.split(',');
+  let n = d.length + 1;
+  secs.forEach(sec => {
+    const lots = ['A','B','C'].includes(sec) ? 12 : 8;
+    for (let lot = 1; lot <= lots; lot++) {
+      for (let gr = 1; gr <= 5; gr++) {
+        const w = Math.random();
+        const st = ST_WEIGHTS.find(([p]) => w < p)[1];
+        const sn = SURNAMES[Math.floor(Math.random()*SURNAMES.length)];
+        const fn = FIRSTS[Math.floor(Math.random()*FIRSTS.length)];
+        const yr = 1940+Math.floor(Math.random()*80);
+        d.push({
+          id:`CEDARGROVE-${sec}-${lot}-${gr}`, section:sec, lot:String(lot), grave:String(gr),
+          occupant: st==='Occupied' ? sn : '',
+          status: st,
+          date: (st!=='Available'&&st!=='Tree') ? `${Math.ceil(Math.random()*12)}/${Math.ceil(Math.random()*28)}/${yr}` : '',
+          owners: (st!=='Available'&&st!=='Tree') ? sn : '',
+          reserved: st==='Reserved' ? `${sn}, ${fn}` : '',
+          pontem: n++
+        });
+      }
+    }
+  });
+  return d;
+}
+
+// ── INIT ─────────────────────────────────────────────────────
+window.addEventListener('load',()=>{
+  setTimeout(()=>document.getElementById('loading').classList.add('hidden'),1400);
+  db = genData();
+  buildSecNav();
+  buildSecJump();
+  updateStats();
+  populateTable();
+  setupPanZoom();
+  setDisplay('mixed');
+});
+
+// ── SECTION NAV ──────────────────────────────────────────────
+function buildSecNav() {
+  const secs = [...new Set(db.map(d=>d.section))].sort();
+  const nav = document.getElementById('sec-nav');
+  nav.innerHTML = '';
+  secs.forEach(s=>{
+    const avail = db.filter(d=>d.section===s&&d.status==='Available').length;
+    const li = document.createElement('li');
+    li.id=`n-${s}`;
+    li.innerHTML=`<span>Section ${s}</span><span class="sec-cnt">${avail} avail</span>`;
+    li.onclick=()=>selectSection(s);
+    nav.appendChild(li);
+  });
+}
+
+function buildSecJump() {
+  const sel = document.querySelector('.sec-jump select');
+  const secs = [...new Set(db.map(d=>d.section))].sort();
+  secs.forEach(s=>{ const o=document.createElement('option'); o.value=s; o.textContent=`Section ${s}`; sel.appendChild(o); });
+}
+
+// ── STATS ─────────────────────────────────────────────────────
+function updateStats() {
+  const c=s=>db.filter(d=>d.status===s).length;
+  document.getElementById('st-total').textContent = db.length.toLocaleString();
+  document.getElementById('st-occ').textContent   = c('Occupied').toLocaleString();
+  document.getElementById('st-avail').textContent = c('Available').toLocaleString();
+  document.getElementById('st-res').textContent   = c('Reserved').toLocaleString();
+  document.getElementById('st-sold').textContent  = c('Sold').toLocaleString();
+  document.getElementById('st-tree').textContent  = c('Tree').toLocaleString();
+}
+
+// ── SELECT SECTION ────────────────────────────────────────────
+function selectSection(sec) {
+  currentSection = sec;
+  document.querySelectorAll('.sz').forEach(z=>z.classList.remove('on'));
+  const z=document.getElementById(`z-${sec}`); if(z) z.classList.add('on');
+  document.querySelectorAll('#sec-nav li').forEach(el=>el.classList.remove('on'));
+  const ni=document.getElementById(`n-${sec}`); if(ni) ni.classList.add('on');
+  updateBreadcrumb(sec);
+  const graves = db.filter(d=>d.section===sec);
+  const avail=graves.filter(d=>d.status==='Available').length;
+  const occ=graves.filter(d=>d.status==='Occupied').length;
+  const trees=graves.filter(d=>d.status==='Tree').length;
+  document.getElementById('sv-title').textContent=`Section ${sec}`;
+  document.getElementById('sv-sub').textContent=`${graves.length} plots — click any grave to view record`;
+  document.getElementById('sv-ms').innerHTML=`
+    <div class="ms"><div class="n">${graves.length}</div><div class="l">Total</div></div>
+    <div class="ms"><div class="n">${occ}</div><div class="l">Occupied</div></div>
+    <div class="ms"><div class="n" style="color:var(--s-available)">${avail}</div><div class="l">Available</div></div>
+    ${trees?`<div class="ms"><div class="n" style="color:var(--s-tree)">${trees}</div><div class="l">Trees</div></div>`:''}
+  `;
+  renderGraveGrid(sec, graves);
+  document.getElementById('sec-view').classList.add('vis');
+}
+
+function resetOverview() {
+  currentSection = null;
+  document.getElementById('sec-view').classList.remove('vis');
+  document.getElementById('bc').innerHTML=`<span class="bc-l" onclick="resetOverview()">Cedar Grove</span>`;
+  document.querySelectorAll('.sz').forEach(z=>z.classList.remove('on'));
+  document.querySelectorAll('#sec-nav li').forEach(el=>el.classList.remove('on'));
+  closeDP();
+}
+
+function updateBreadcrumb(sec) {
+  document.getElementById('bc').innerHTML=`
+    <span class="bc-l" onclick="resetOverview()">Cedar Grove</span>
+    <span class="bc-sep">›</span>
+    <span style="color:var(--text-mid)">Section ${sec}</span>
+  `;
+}
+
+// ── TILE LABEL LOGIC ─────────────────────────────────────────
+// Returns the short display label for a grave tile based on display mode
+function getTileLabel(g) {
+  const num = g.grave;
+  if (g.status === 'Tree') return null; // icon only
+
+  switch (displayMode) {
+    case 'numbers':
+      return num;
+    case 'status':
+      return g.status === 'Available' ? num : g.status.slice(0,3).toUpperCase();
+    case 'names':
+    case 'mixed':
+    default: {
+      // Priority: occupant > reserved_for > owner > number
+      if (g.occupant && g.occupant.trim()) {
+        return truncate(g.occupant.trim(), 7);
+      }
+      if (g.reserved && g.reserved.trim()) {
+        // Extract last name before comma
+        const parts = g.reserved.split(',');
+        return truncate(parts[0].trim(), 7);
+      }
+      if (g.owners && g.owners.trim() && g.status === 'Sold') {
+        return truncate(g.owners.trim(), 7);
+      }
+      if (g.status === 'HOLD' && !isAdmin) return num;
+      return num;
+    }
+  }
+}
+
+function truncate(str, max) {
+  if (!str) return '';
+  return str.length > max ? str.slice(0, max-1) + '…' : str;
+}
+
+// ── RENDER GRAVE GRID ────────────────────────────────────────
+function renderGraveGrid(sec, graves) {
+  const GW=58, GH=34, GX=5, GY=12, LGAP=18, M=14;
+  const lots={};
+  graves.forEach(g=>{ if(!lots[g.lot]) lots[g.lot]=[]; lots[g.lot].push(g); });
+  const lotKeys=Object.keys(lots).sort((a,b)=>+a-+b);
+  const COLS=Math.min(9, Math.ceil(Math.sqrt(lotKeys.length*1.5)));
+  const maxPer=Math.max(...lotKeys.map(k=>lots[k].length));
+  const lotW=maxPer*(GW+GX)-GX;
+  const cellW=lotW+LGAP, cellH=GH+GY+LGAP;
+  const ROWS=Math.ceil(lotKeys.length/COLS);
+  const svgW=M*2+COLS*cellW, svgH=M*2+ROWS*cellH+20;
+
+  let svg=`<svg viewBox="0 0 ${svgW} ${svgH}" style="min-width:${svgW}px;display:block;">`;
+
+  lotKeys.forEach((lot,idx)=>{
+    const col=idx%COLS, row=Math.floor(idx/COLS);
+    const lx=M+col*cellW, ly=M+row*cellH+16;
+    svg+=`<text x="${lx}" y="${ly-4}" style="font-family:'DM Sans',sans-serif;font-size:7px;fill:var(--text-light);letter-spacing:1.5px;text-transform:uppercase;">LOT ${lot}</text>`;
+
+    lots[lot].forEach((g,gi)=>{
+      const gx=lx+gi*(GW+GX), gy=ly;
+      const cls=graveClass(g.status);
+      const vis=filters.has(g.status)?1:0.1;
+      const label=getTileLabel(g);
+      const isTree=g.status==='Tree';
+
+      svg+=`<rect class="gv ${cls}" x="${gx}" y="${gy}" width="${GW}" height="${GH}" rx="2"
+        opacity="${vis}"
+        onmouseenter="showGraveTip(event,'${g.id}')"
+        onmouseleave="hideGraveTip()"
+        onclick="openGraveDetail('${g.id}')">
+        <title>${g.id}</title></rect>`;
+
+      if (isTree) {
+        svg+=`<text x="${gx+GW/2}" y="${gy+GH/2+1}" text-anchor="middle" dominant-baseline="middle" style="font-size:12px;pointer-events:none;opacity:${vis};">🌳</text>`;
+      } else if (label && label !== g.grave) {
+        // Name label — slightly larger
+        svg+=`<text class="gv-lbl" x="${gx+GW/2}" y="${gy+GH/2-2}" style="font-size:7.5px;opacity:${vis};" pointer-events="none">${label}</text>`;
+        svg+=`<text class="gv-lbl" x="${gx+GW/2}" y="${gy+GH-6}" style="font-size:5.5px;fill:rgba(26,35,50,.35);opacity:${vis};" pointer-events="none">${g.grave}</text>`;
+      } else {
+        // Just number
+        svg+=`<text class="gv-lbl" x="${gx+GW/2}" y="${gy+GH/2+2}" style="font-size:9px;fill:rgba(26,35,50,.5);opacity:${vis};" pointer-events="none">${g.grave}</text>`;
+      }
+    });
+  });
+
+  svg+='</svg>';
+  document.getElementById('sec-svg-wrap').innerHTML=svg;
+}
+
+function graveClass(s) {
+  return {Available:'g-av',Reserved:'g-rs',Sold:'g-sl',Occupied:'g-oc',HOLD:'g-hl',Tree:'g-tr'}[s]||'g-av';
+}
+
+// ── GRAVE HOVER TOOLTIP ───────────────────────────────────────
+function showGraveTip(e, id) {
+  const g = db.find(d=>d.id===id); if(!g) return;
+  const t = document.getElementById('gtip');
+  document.getElementById('gt-id').textContent = g.id;
+
+  const dispName = g.occupant || g.reserved || g.owners || '—';
+  document.getElementById('gt-name').textContent = dispName;
+  document.getElementById('gt-st').textContent = STATUS_PRETTY[g.status] || g.status;
+
+  const showRow = (rowId, valId, val) => {
+    const r=document.getElementById(rowId);
+    if(val){r.style.display='flex';document.getElementById(valId).textContent=val;}
+    else r.style.display='none';
+  };
+  showRow('gt-occ-r','gt-occ', g.occupant||null);
+  showRow('gt-res-r','gt-res', g.reserved||null);
+  showRow('gt-own-r','gt-own', (g.owners&&g.status!=='Available')?g.owners:null);
+  showRow('gt-dt-r','gt-dt',  g.date||null);
+
+  t.style.left = (e.clientX + 16) + 'px';
+  t.style.top  = (e.clientY - 20) + 'px';
+  t.classList.add('vis');
+}
+
+function hideGraveTip() {
+  document.getElementById('gtip').classList.remove('vis');
+}
+
+// ── SECTION TOOLTIP ───────────────────────────────────────────
+function showSecTip(e, sec) {
+  const sg=db.filter(d=>d.section===sec); if(!sg.length) return;
+  const avail=sg.filter(d=>d.status==='Available').length;
+  const occ=sg.filter(d=>d.status==='Occupied').length;
+  const names={M:'Mausoleums',Veterans:'Veterans Section',Columbarium:'Columbarium'};
+  document.getElementById('stt-n').textContent = names[sec]||`Section ${sec}`;
+  document.getElementById('stt-s').innerHTML = `${sg.length} plots · ${occ} occupied · <span class="stt-av">${avail} available</span>`;
+  const rect=e.target.closest('svg').getBoundingClientRect();
+  const t=document.getElementById('sec-tip');
+  t.style.left=(e.clientX-rect.left+12)+'px';
+  t.style.top=(e.clientY-rect.top-8)+'px';
+  t.classList.add('vis');
+}
+function hideSecTip() { document.getElementById('sec-tip').classList.remove('vis'); }
+
+// ── DETAIL PANEL ──────────────────────────────────────────────
+function openGraveDetail(id) {
+  currentGraveId = id;
+  const panel=document.getElementById('dp');
+
+  if(id.startsWith('maus-')) {
+    const n=parseInt(id.split('-')[1]);
+    document.getElementById('dp-gid').textContent=`Mausoleum ${n}`;
+    document.getElementById('dp-nm').textContent=MAUS_NAMES[n]||'—';
+    document.getElementById('dp-dt').textContent='';
+    document.getElementById('dp-sb').innerHTML=`<span class="sbadge sb-oc">Building</span>`;
+    document.getElementById('dp-own').textContent='Cedar Grove Cemetery';
+    document.getElementById('dp-date').textContent='—'; document.getElementById('dp-pon').textContent='—';
+    document.getElementById('dp-loc').innerHTML=`<span class="loc-pill">Mausoleum ${n}</span>`;
+    document.getElementById('dp-res-f').style.display='none';
+    panel.classList.add('open'); return;
+  }
+
+  const g=db.find(d=>d.id===id); if(!g) return;
+  const dispName=g.occupant||(g.owners?g.owners:'Unoccupied Plot');
+  document.getElementById('dp-gid').textContent=g.id;
+  document.getElementById('dp-nm').textContent=g.status==='Tree'?'Memorial Tree — Plot Unavailable':dispName;
+  document.getElementById('dp-dt').textContent=g.date?`Status date: ${g.date}`:'';
+  const bc=STATUS_BADGE[g.status]||'sb-av';
+  const bl=g.status==='Tree'?'🌳 Tree — Unavailable':(STATUS_PRETTY[g.status]||g.status);
+  document.getElementById('dp-sb').innerHTML=`<span class="sbadge ${bc}">${bl}</span>`;
+  document.getElementById('dp-own').textContent=g.owners||'—';
+  document.getElementById('dp-date').textContent=g.date||'—';
+  document.getElementById('dp-res').textContent=g.reserved||'—';
+  document.getElementById('dp-pon').textContent=g.pontem||'—';
+  document.getElementById('dp-res-f').style.display=g.reserved?'block':'none';
+  document.getElementById('dp-loc').innerHTML=`<span class="loc-pill">Section ${g.section}</span><span class="loc-pill">Lot ${g.lot}</span><span class="loc-pill">Grave ${g.grave}</span>`;
+  panel.classList.add('open');
+}
+
+function closeDP() { document.getElementById('dp').classList.remove('open'); currentGraveId=null; }
+
+// ── FILTERS ───────────────────────────────────────────────────
+function toggleFilter(status, el) {
+  if(filters.has(status)){ filters.delete(status); el.classList.add('off'); }
+  else { filters.add(status); el.classList.remove('off'); }
+  if(currentSection) renderGraveGrid(currentSection, db.filter(d=>d.section===currentSection));
+}
+
+// ── DISPLAY MODE ──────────────────────────────────────────────
+function setDisplay(mode) {
+  displayMode=mode;
+  ['mixed','names','numbers','status'].forEach(m=>{
+    document.getElementById(`dv-${m}`).classList.toggle('on',m===mode);
+  });
+  if(currentSection) renderGraveGrid(currentSection, db.filter(d=>d.section===currentSection));
+}
+
+// ── SEARCH ────────────────────────────────────────────────────
+function handleSearch(q) {
+  if(!q.trim()){closeDD();return;}
+  const lq=q.toLowerCase();
+  const res=db.filter(d=>
+    d.occupant.toLowerCase().includes(lq)||d.owners.toLowerCase().includes(lq)||
+    d.id.toLowerCase().includes(lq)||d.section.toLowerCase().includes(lq)||
+    d.reserved.toLowerCase().includes(lq)
+  ).slice(0,10);
+  const dd=document.getElementById('srch-dd');
+  dd.innerHTML = res.length
+    ? res.map(r=>`<div class="sd-item" onclick="jumpTo('${r.id}')"><span class="sd-name">${r.occupant||r.owners||'Unoccupied'}</span><span class="sd-meta">${r.id} · ${r.status}</span></div>`).join('')
+    : '<div class="sd-item"><span class="sd-name" style="color:var(--text-light)">No records found</span></div>';
+  dd.classList.add('open');
+}
+function openDD(){if(document.getElementById('srch').value)document.getElementById('srch-dd').classList.add('open');}
+function closeDD(){document.getElementById('srch-dd').classList.remove('open');}
+function jumpTo(id){
+  const g=db.find(d=>d.id===id); if(!g) return;
+  closeDD(); document.getElementById('srch').value='';
+  selectSection(g.section); setTimeout(()=>openGraveDetail(id),80);
+}
+
+// ── PAN / ZOOM ────────────────────────────────────────────────
+function setupPanZoom(){
+  const w=document.getElementById('map-wrap');
+  w.addEventListener('wheel',e=>{e.preventDefault();scale=Math.min(4,Math.max(.5,scale+(e.deltaY>0?-.12:.12)));applyT();},{passive:false});
+  w.addEventListener('mousedown',e=>{panning=true;px=e.clientX-tx;py=e.clientY-ty;w.style.cursor='grabbing';});
+  window.addEventListener('mousemove',e=>{if(!panning)return;tx=e.clientX-px;ty=e.clientY-py;applyT();});
+  window.addEventListener('mouseup',()=>{panning=false;document.getElementById('map-wrap').style.cursor='default';});
+}
+function applyT(){const s=document.getElementById('cem-svg');s.style.transform=`translate(${tx}px,${ty}px) scale(${scale})`;s.style.transformOrigin='center center';}
+function zoomIn(){scale=Math.min(4,scale+.2);applyT();}
+function zoomOut(){scale=Math.max(.5,scale-.2);applyT();}
+function resetZoom(){scale=1;tx=0;ty=0;applyT();}
+
+// ── DATA TABLE ────────────────────────────────────────────────
+function openDataModal(){document.getElementById('data-modal').classList.add('open');populateTable();}
+function closeDataModal(){document.getElementById('data-modal').classList.remove('open');}
+
+function populateTable(q=''){
+  const lq=q.toLowerCase();
+  const rows=db.filter(d=>!lq||d.id.toLowerCase().includes(lq)||d.occupant.toLowerCase().includes(lq)||d.owners.toLowerCase().includes(lq)||d.reserved.toLowerCase().includes(lq));
+  document.getElementById('dt-cnt').textContent=`${rows.length.toLocaleString()} records`;
+  document.getElementById('dt-body').innerHTML=rows.map(r=>`
+    <tr onclick="closeDataModal();jumpTo('${r.id}')">
+      <td style="font-size:.68rem;color:var(--text-light);">${r.id}</td>
+      <td style="color:var(--navy);font-weight:400;">${r.occupant||'—'}</td>
+      <td><span class="sbadge ${STATUS_BADGE[r.status]||'sb-av'}" style="font-size:.6rem;padding:3px 8px;">${r.status==='Tree'?'🌳 Tree':r.status}</span></td>
+      <td>${r.date||'—'}</td>
+      <td>${r.owners||'—'}</td>
+      <td style="color:var(--text-light);">${r.reserved||'—'}</td>
+    </tr>`).join('');
+}
+function filterTable(q){populateTable(q);}
+
+// ── TOURS ─────────────────────────────────────────────────────
+function openToursModal(){document.getElementById('tours-modal').classList.add('open');}
+function closeToursModal(){document.getElementById('tours-modal').classList.remove('open');}
+function startTour(type){closeToursModal();toast(`Tour: "${type}" — grave highlighting available when label data is attached`);}
+
+// ── ADMIN / UPLOAD ────────────────────────────────────────────
+function openAdminModal(){document.getElementById('admin-modal').classList.add('open');}
+function closeAdminModal(){document.getElementById('admin-modal').classList.remove('open');}
+
+function setMode(m){
+  isAdmin=m==='admin';
+  document.getElementById('mb-pub').classList.toggle('on',!isAdmin);
+  document.getElementById('mb-adm').classList.toggle('on',isAdmin);
+  if(currentSection) renderGraveGrid(currentSection, db.filter(d=>d.section===currentSection));
+  toast(isAdmin?'Admin mode — full record access enabled':'Public mode');
+}
+
+function handleUpload(inp){
+  const file=inp.files[0]; if(!file) return;
+  document.getElementById('up-msg').textContent='Reading file…';
+  const reader=new FileReader();
+  reader.onload=e=>{
+    try {
+      const wb=XLSX.read(e.target.result,{type:'binary'});
+      const ws=wb.Sheets[wb.SheetNames[0]];
+      const raw=XLSX.utils.sheet_to_json(ws,{header:1});
+      if(raw.length<2){document.getElementById('up-msg').textContent='File appears empty.';return;}
+      const hd=raw[0].map(h=>String(h||'').toLowerCase());
+      const ci=k=>hd.findIndex(h=>h.includes(k));
+      const idC=ci('cedargrove')!==-1?ci('cedargrove'):0;
+      const occC=ci('occupant'),stC=ci('status'),dtC=ci('date'),owC=ci('owner'),rsC=ci('reserved');
+      const parsed=[];
+      for(let i=1;i<raw.length;i++){
+        const r=raw[i]; if(!r[idC]) continue;
+        const id=String(r[idC]);
+        const pts=id.replace('CEDARGROVE-','').split('-');
+        const st=String(r[stC]||'Available');
+        parsed.push({id,section:pts[0]||'?',lot:pts[1]||'?',grave:pts[2]||'?',
+          occupant:String(r[occC]||''),status:st,date:r[dtC]?String(r[dtC]):'',
+          owners:String(r[owC]||''),reserved:String(r[rsC]||''),pontem:i});
+      }
+      db=parsed;
+      buildSecNav();buildSecJump();updateStats();populateTable();
+      if(currentSection) selectSection(currentSection);
+      document.getElementById('up-msg').textContent=`✓ ${parsed.length} records loaded`;
+      closeAdminModal();
+      toast(`${parsed.length} records imported — map updated`);
+    } catch(err){document.getElementById('up-msg').textContent='Error: Could not parse file.';}
+  };
+  reader.readAsBinaryString(file);
+}
+
+// ── PDF EXPORT ─────────────────────────────────────────────────
+function toggleExpMenu(){document.getElementById('exp-menu').classList.toggle('open');}
+document.addEventListener('click',e=>{if(!e.target.closest('.exp-wrap'))document.getElementById('exp-menu').classList.remove('open');});
+
+function exportPDF(type) {
+  document.getElementById('exp-menu').classList.remove('open');
+  const titles = {
+    overview:'Generating full cemetery overview PDF…',
+    section:`Generating Section ${currentSection||'—'} PDF…`,
+    record: currentGraveId?`Generating grave record PDF for ${currentGraveId}…`:'No grave selected — open a record first',
+    filtered:'Generating filtered results summary PDF…'
+  };
+  if(type==='record'&&!currentGraveId){toast('Open a grave record first, then export');return;}
+  if(type==='section'&&!currentSection){toast('Navigate to a section first, then export');return;}
+  document.getElementById('pp-title').textContent = {overview:'Cemetery Overview',section:`Section ${currentSection}`,record:'Grave Record',filtered:'Filtered Results'}[type];
+  document.getElementById('pp-sub').textContent = 'Preparing document…';
+  document.getElementById('pdf-prog').classList.add('vis');
+  setTimeout(()=>{
+    generatePDFContent(type);
+    document.getElementById('pdf-prog').classList.remove('vis');
+  }, 1600);
+}
+
+function generatePDFContent(type) {
+  const now = new Date().toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'});
+  let html='', title='', data=[];
+
+  if(type==='record' && currentGraveId) {
+    const g=db.find(d=>d.id===currentGraveId);
+    if(!g){toast('Record not found');return;}
+    title=`Grave Record — ${g.occupant||g.owners||g.id}`;
+    html=buildRecordPDF(g,now);
+  } else if(type==='section' && currentSection) {
+    data=db.filter(d=>d.section===currentSection);
+    title=`Section ${currentSection} — Cedar Grove Cemetery`;
+    html=buildSectionPDF(currentSection,data,now);
+  } else if(type==='overview') {
+    title='Cedar Grove Cemetery — Overview';
+    html=buildOverviewPDF(now);
+  } else if(type==='filtered') {
+    data=db.filter(d=>filters.has(d.status));
+    title='Cedar Grove Cemetery — Filtered Results';
+    html=buildFilteredPDF(data,now);
+  }
+
+  const win=window.open('','_blank');
+  win.document.write(`<!DOCTYPE html><html><head><title>${title}</title>
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:'DM Sans',sans-serif;font-weight:300;color:#1a2332;background:#fff;padding:0;}
+    @media print{body{padding:0;} .no-print{display:none;} .page{page-break-after:always;}}
+    .page{max-width:820px;margin:0 auto;padding:48px 52px;}
+    .pdf-hdr{border-bottom:3px solid #c99a2e;padding-bottom:20px;margin-bottom:28px;display:flex;justify-content:space-between;align-items:flex-end;}
+    .pdf-hdr h1{font-family:'Libre Baskerville',serif;font-size:1.5rem;color:#0c2340;font-weight:400;}
+    .pdf-hdr .sub{font-size:.68rem;letter-spacing:.18em;text-transform:uppercase;color:#8494a7;margin-top:4px;}
+    .pdf-hdr .meta{text-align:right;font-size:.7rem;color:#8494a7;}
+    .cross{font-size:1.6rem;color:#c99a2e;margin-right:12px;vertical-align:middle;}
+    .pdf-section{margin-bottom:28px;}
+    .pdf-section h2{font-family:'Libre Baskerville',serif;font-size:1.1rem;color:#0c2340;border-bottom:1px solid #e9ecef;padding-bottom:8px;margin-bottom:14px;}
+    .stats-row{display:flex;gap:14px;margin-bottom:20px;}
+    .stat-box{flex:1;border:1px solid #ddd8ce;border-radius:4px;padding:12px 14px;border-top:3px solid #c99a2e;}
+    .stat-box .n{font-family:'Libre Baskerville',serif;font-size:1.5rem;color:#0c2340;}
+    .stat-box .l{font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;color:#8494a7;margin-top:2px;}
+    table{width:100%;border-collapse:collapse;font-size:.78rem;margin-bottom:20px;}
+    th{background:#f5f2ec;padding:8px 10px;text-align:left;font-size:.6rem;letter-spacing:.14em;text-transform:uppercase;color:#8494a7;border-bottom:2px solid #ddd8ce;}
+    td{padding:8px 10px;border-bottom:1px solid #f0ede8;}
+    tr:hover td{background:#faf8f4;}
+    .badge{display:inline-block;padding:2px 8px;border-radius:10px;font-size:.64rem;font-weight:500;}
+    .b-av{background:#eaf4ef;color:#2d6a4f;} .b-rs{background:#fdf3dc;color:#92650a;}
+    .b-sl{background:#e8f0fb;color:#1d4e89;} .b-oc{background:#faeaea;color:#7b2d2d;}
+    .b-hl{background:#f0eaf8;color:#5a3472;} .b-tr{background:#e6f0e6;color:#3a6b3a;}
+    .record-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:16px 0;}
+    .rf{background:#faf8f4;border:1px solid #ddd8ce;border-radius:4px;padding:10px 12px;}
+    .rf-l{font-size:.58rem;letter-spacing:.2em;text-transform:uppercase;color:#8494a7;margin-bottom:3px;}
+    .rf-v{font-size:.85rem;color:#1a2332;}
+    .photo-box{width:100%;height:200px;background:#f2ede4;border:1px solid #ddd8ce;display:flex;align-items:center;justify-content:center;color:#8494a7;font-size:.72rem;margin:16px 0;border-radius:4px;}
+    .legend{display:flex;gap:16px;flex-wrap:wrap;margin:12px 0;}
+    .leg{display:flex;align-items:center;gap:6px;font-size:.72rem;}
+    .ld{width:12px;height:12px;border-radius:2px;flex-shrink:0;}
+    .pdf-ftr{margin-top:40px;padding-top:14px;border-top:1px solid #ddd8ce;font-size:.66rem;color:#8494a7;display:flex;justify-content:space-between;}
+    .print-btn{position:fixed;top:20px;right:20px;background:#0c2340;color:#fff;border:none;padding:10px 20px;cursor:pointer;border-radius:4px;font-family:'DM Sans',sans-serif;font-size:.8rem;z-index:999;}
+  </style></head><body>
+  <button class="print-btn no-print" onclick="window.print()">⎙ Print / Save as PDF</button>
+  ${html}
+  <script>window.onafterprint=()=>{};<\/script>
+  </body></html>`);
+  win.document.close();
+  toast(`PDF ready — print or save from the new window`);
+}
+
+function statBadge(status) {
+  const cls={Available:'b-av',Reserved:'b-rs',Sold:'b-sl',Occupied:'b-oc',HOLD:'b-hl',Tree:'b-tr'}[status]||'b-av';
+  return `<span class="badge ${cls}">${status==='Tree'?'🌳 Tree':status}</span>`;
+}
+
+function buildRecordPDF(g, now) {
+  return `<div class="page">
+    <div class="pdf-hdr">
+      <div><span class="cross">✝</span><h1>${g.occupant||g.owners||'Unoccupied Plot'}</h1><div class="sub">Cedar Grove Cemetery · University of Notre Dame</div></div>
+      <div class="meta">Individual Grave Record<br>${now}</div>
+    </div>
+    <div class="photo-box">No photograph on record</div>
+    <div class="pdf-section">
+      <h2>Record Details</h2>
+      <div class="record-grid">
+        <div class="rf"><div class="rf-l">Grave ID</div><div class="rf-v">${g.id}</div></div>
+        <div class="rf"><div class="rf-l">Status</div><div class="rf-v">${statBadge(g.status)}</div></div>
+        <div class="rf"><div class="rf-l">Section</div><div class="rf-v">${g.section}</div></div>
+        <div class="rf"><div class="rf-l">Lot</div><div class="rf-v">${g.lot}</div></div>
+        <div class="rf"><div class="rf-l">Grave</div><div class="rf-v">${g.grave}</div></div>
+        <div class="rf"><div class="rf-l">Date of Status</div><div class="rf-v">${g.date||'—'}</div></div>
+        <div class="rf"><div class="rf-l">Owner(s)</div><div class="rf-v">${g.owners||'—'}</div></div>
+        <div class="rf"><div class="rf-l">Reserved For</div><div class="rf-v">${g.reserved||'—'}</div></div>
+        <div class="rf"><div class="rf-l">Pontem Order</div><div class="rf-v">${g.pontem||'—'}</div></div>
+        <div class="rf"><div class="rf-l">Tree Present</div><div class="rf-v">${g.status==='Tree'?'Yes — plot unavailable':'No'}</div></div>
+      </div>
+    </div>
+    <div class="pdf-section"><h2>Biography</h2><p style="color:#8494a7;font-style:italic;font-size:.82rem;">No biography on record.</p></div>
+    <div class="pdf-section"><h2>Documents</h2><p style="color:#8494a7;font-style:italic;font-size:.82rem;">No documents attached.</p></div>
+    <div class="pdf-ftr"><span>Cedar Grove Cemetery · University of Notre Dame</span><span>Generated ${now}</span></div>
+  </div>`;
+}
+
+function buildSectionPDF(sec, graves, now) {
+  const statusCounts = ['Available','Reserved','Sold','Occupied','HOLD','Tree']
+    .map(s=>`<div class="stat-box"><div class="n">${graves.filter(g=>g.status===s).length}</div><div class="l">${s==='Tree'?'Trees':s}</div></div>`).join('');
+  const rows = graves.map(g=>`<tr>
+    <td>${g.id}</td>
+    <td style="font-weight:400;color:#0c2340;">${g.occupant||'—'}</td>
+    <td>${statBadge(g.status)}</td>
+    <td>${g.date||'—'}</td>
+    <td>${g.owners||'—'}</td>
+    <td>${g.reserved||'—'}</td>
+  </tr>`).join('');
+  return `<div class="page">
+    <div class="pdf-hdr">
+      <div><span class="cross">✝</span><h1>Section ${sec}</h1><div class="sub">Cedar Grove Cemetery · University of Notre Dame</div></div>
+      <div class="meta">Section Map Export<br>${now}</div>
+    </div>
+    <div class="pdf-section"><h2>Section Statistics</h2>
+      <div class="stats-row">${statusCounts}</div>
+      <div class="legend">
+        <div class="leg"><div class="ld" style="background:#2d6a4f"></div>Available</div>
+        <div class="leg"><div class="ld" style="background:#92650a"></div>Reserved</div>
+        <div class="leg"><div class="ld" style="background:#1d4e89"></div>Sold</div>
+        <div class="leg"><div class="ld" style="background:#7b2d2d"></div>Occupied</div>
+        <div class="leg"><div class="ld" style="background:#5a3472"></div>Hold</div>
+        <div class="leg"><div class="ld" style="background:#3a6b3a"></div>Tree (unavailable)</div>
+      </div>
+    </div>
+    <div class="pdf-section"><h2>All Plots — Section ${sec}</h2>
+      <table><thead><tr><th>ID</th><th>Occupant</th><th>Status</th><th>Date</th><th>Owner(s)</th><th>Reserved For</th></tr></thead>
+      <tbody>${rows}</tbody></table>
+    </div>
+    <div class="pdf-ftr"><span>Cedar Grove Cemetery · University of Notre Dame</span><span>Generated ${now}</span></div>
+  </div>`;
+}
+
+function buildOverviewPDF(now) {
+  const total=db.length;
+  const counts=['Available','Reserved','Sold','Occupied','HOLD','Tree']
+    .map(s=>`<div class="stat-box"><div class="n">${db.filter(d=>d.status===s).length}</div><div class="l">${s==='Tree'?'Trees':s}</div></div>`).join('');
+  const secs=[...new Set(db.map(d=>d.section))].sort();
+  const secRows=secs.map(s=>{
+    const sg=db.filter(d=>d.section===s);
+    return `<tr><td><strong>Section ${s}</strong></td><td>${sg.length}</td>
+      <td>${sg.filter(d=>d.status==='Occupied').length}</td>
+      <td style="color:#2d6a4f;font-weight:500;">${sg.filter(d=>d.status==='Available').length}</td>
+      <td>${sg.filter(d=>d.status==='Reserved').length}</td>
+      <td>${sg.filter(d=>d.status==='Tree').length}</td>
+    </tr>`;
+  }).join('');
+  return `<div class="page">
+    <div class="pdf-hdr">
+      <div><span class="cross">✝</span><h1>Cedar Grove Cemetery</h1><div class="sub">University of Notre Dame · Est. 1842 · Digital Archive Overview</div></div>
+      <div class="meta">Full Cemetery Overview<br>${now}</div>
+    </div>
+    <div class="pdf-section"><h2>Summary Statistics</h2>
+      <div class="stats-row"><div class="stat-box"><div class="n">${total.toLocaleString()}</div><div class="l">Total Plots</div></div>${counts}</div>
+    </div>
+    <div class="pdf-section"><h2>By Section</h2>
+      <table><thead><tr><th>Section</th><th>Total</th><th>Occupied</th><th>Available</th><th>Reserved</th><th>Trees</th></tr></thead>
+      <tbody>${secRows}</tbody></table>
+    </div>
+    <div class="pdf-ftr"><span>Cedar Grove Cemetery · University of Notre Dame</span><span>Generated ${now}</span></div>
+  </div>`;
+}
+
+function buildFilteredPDF(data, now) {
+  const activeList=[...filters].join(', ');
+  const rows=data.map(g=>`<tr>
+    <td style="font-size:.68rem;color:#8494a7;">${g.id}</td>
+    <td style="color:#0c2340;font-weight:400;">${g.occupant||'—'}</td>
+    <td>${statBadge(g.status)}</td>
+    <td>${g.date||'—'}</td>
+    <td>${g.owners||'—'}</td>
+  </tr>`).join('');
+  return `<div class="page">
+    <div class="pdf-hdr">
+      <div><span class="cross">✝</span><h1>Filtered Results</h1><div class="sub">Cedar Grove Cemetery · Filters: ${activeList}</div></div>
+      <div class="meta">${data.length} records<br>${now}</div>
+    </div>
+    <table><thead><tr><th>ID</th><th>Occupant</th><th>Status</th><th>Date</th><th>Owner(s)</th></tr></thead>
+      <tbody>${rows}</tbody></table>
+    <div class="pdf-ftr"><span>Cedar Grove Cemetery · University of Notre Dame</span><span>Generated ${now}</span></div>
+  </div>`;
+}
+
+// ── TOAST ─────────────────────────────────────────────────────
+function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3200);}
+</script>
+</body>
+</html>
