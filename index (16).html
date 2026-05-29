@@ -1775,6 +1775,56 @@ function buildPDF(type){
     if(!g){toast('Not found');return;}
     const cf=SC[g.status]||SC['Available'];
     body=`<div class="page">
+dj// src/modules/orchestrator/index.ts
+import OpenAI from 'openai';
+import { config } from '../../config';
+import { buildSystemPrompt, buildMenuMessage, getLanguageName } from '../../prompts';
+import type { CallState, Mode } from '../../types';
+
+const openai = new OpenAI({ apiKey: config.openai.apiKey });
+
+export interface OrchestratorResult {
+  reply: string;
+  updatedState: CallState;
+  latencyMs: number;
+}
+
+const DTMF_MODES: Record<string, Mode> = {
+  '1': 'general',
+  '2': 'tutor',
+  '3': 'practice',
+  '4': 'general', // language change — handled separately
+};
+
+/**
+ * Main orchestration: takes user speech + call state, returns AI reply + new state.
+ */
+export async function orchestrate(
+  userInput: string,
+  state: CallState,
+  detectedLanguage: string,
+): Promise<OrchestratorResult> {
+  const start = Date.now();
+
+  // ── DTMF / digit detection ────────────────────────────────────
+  const digit = userInput.trim();
+  if (/^[1-4]$/.test(digit)) {
+    return handleDtmf(digit, state, start);
+  }
+
+  // ── Language switch detection ─────────────────────────────────
+  let lang = state.language;
+  // If Whisper detected a different language with high confidence, switch
+  if (detectedLanguage && detectedLanguage !== 'en' && detectedLanguage !== state.language) {
+    lang = detectedLanguage;
+  }
+
+  // ── Mode detection from natural speech ───────────────────────
+  const mode = await detectModeIfNeeded(userInput, state);
+
+  const updatedState: CallState = {
+    ...state,
+    language: lang,
       ${pdfHdr(g.occupant||g.owners||'Unoccupied Plot','Individual Grave Record',now)}
       <div style="width:100%;height:170px;background:#f2ede4;border:1px solid #ddd8ce;border-radius:5px;display:flex;align-items:center;justify-content:center;color:#8494a7;font-size:.7rem;letter-spacing:.1em;margin-bottom:20px;font-family:'DM Sans',sans-serif;">No photograph on record</div>
       <h2>Record Details</h2>

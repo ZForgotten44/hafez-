@@ -81,7 +81,7 @@ import csv
 import os
 
 # ─────────────────────────────────────────────────────────────────────
-N_B = N_A = N_D = N_C = 22
+N_B = N_A = N_D = N_C = 12
 SWEEP  = N_B + N_A          # 44
 ROWS   = 19
 OFFSET = SWEEP * ROWS       # 836
