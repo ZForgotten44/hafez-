@@ -1,0 +1,137 @@
+section,lot_label_in_decoder,h_number,note
+A,20H,H000087,
+A,39H,H000131,
+A,58H,H000175,
+A,77H,H000219,
+A,96H,H000263,
+A,115H,H000307,
+A,134H,H000351,
+A,153H,H000395,
+A,172H,H000439,
+A,191H,H000483,
+A,210H,H000527,
+A,229H,H000571,
+A,259,H000603,
+A,257,H000605,
+A,248H,H000615,
+A,267H,H000659,
+A,286H,H000703,
+A,305H,H000747,
+A,324H,H000791,
+A,351,H000826,
+A,343H,H000835,
+B,56,H000094,
+B,158,H000312,
+B,157,H000313,
+B,151,H000319,
+B,256,H000534,
+B,254,H000536,
+B,253,H000537,
+B,251,H000539,
+B,259,H000594,
+B,289,H000629,
+B,320H,H000661,
+B,340H,H000705,
+B,360H,H000749,
+B,359,H000751,
+C,56,H000967,
+C,54,H000969,
+C,51,H000973,
+C,47H,H000977,
+C,66H,H001020,
+C,151,H001185,
+C,124H,H001195,
+C,156,H001244,
+C,153,H001247,
+C,180H,H001281,
+C,199H,H001325,
+C,258,H001452,
+C,256H,H001454,
+C,251,H001461,
+C,272H,H001498,
+C,288H,H001540,
+C,359,H001709,
+C,357,H001712,
+C,353,H001717,
+D,1U,H000837,
+D,1O,H000843,
+D,1L,H000846,
+D,1J,H000848,
+D,1I,H000849,
+D,1D,H000874,
+D,1H_2,H000878,
+D,1I_2,H000879,
+D,157,H001166,
+D,156,H001167,
+D,151,H001172,
+D,257,H001382,
+D,256,H001383,
+D,251,H001388,
+D,384,H001690,shared base of a double-row lot (map shows 'A'/'B' rows)
+D,383,H001691,shared base of a double-row lot (map shows 'A'/'B' rows)
+D,382,H001692,shared base of a double-row lot (map shows 'A'/'B' rows)
+D,381,H001693,shared base of a double-row lot (map shows 'A'/'B' rows)
+D,380,H001694,shared base of a double-row lot (map shows 'A'/'B' rows)
+D,379,H001695,shared base of a double-row lot (map shows 'A'/'B' rows)
+D,378,H001696,shared base of a double-row lot (map shows 'A'/'B' rows)
+D,377,H001697,shared base of a double-row lot (map shows 'A'/'B' rows)
+D,376,H001698,shared base of a double-row lot (map shows 'A'/'B' rows)
+D,356,H001732,
+D,375,H001733,shared base of a double-row lot (map shows 'A'/'B' rows)
+D,374,H001734,shared base of a double-row lot (map shows 'A'/'B' rows)
+D,373,H001735,shared base of a double-row lot (map shows 'A'/'B' rows)
+D,372,H001736,shared base of a double-row lot (map shows 'A'/'B' rows)
+D,371,H001737,shared base of a double-row lot (map shows 'A'/'B' rows)
+D,370,H001738,shared base of a double-row lot (map shows 'A'/'B' rows)
+D,369,H001739,shared base of a double-row lot (map shows 'A'/'B' rows)
+D,368,H001740,shared base of a double-row lot (map shows 'A'/'B' rows)
+D,367,H001741,shared base of a double-row lot (map shows 'A'/'B' rows)
+D,516,H001811,
+D,514,H001813,
+D,547,H002379,
+D,555,H002388,
+D,556H,H002390,
+D,557,H002391,
+D,560H,H002396,
+D,561,H002397,
+E,19,H001890,
+E,54,H001973,
+E,151,H002171,
+E,159,H002222,
+E,155,H002227,
+E,152dr,H002230,internal double-row key (labelled as A/B on the map)
+E,169dr,H002258,internal double-row key (labelled as A/B on the map)
+E,199,H002260,shared base of a double-row lot (map shows 'A'/'B' rows)
+E,198,H002261,shared base of a double-row lot (map shows 'A'/'B' rows)
+E,197,H002262,shared base of a double-row lot (map shows 'A'/'B' rows)
+E,196,H002263,shared base of a double-row lot (map shows 'A'/'B' rows)
+E,195,H002264,shared base of a double-row lot (map shows 'A'/'B' rows)
+E,194,H002265,shared base of a double-row lot (map shows 'A'/'B' rows)
+E,193,H002266,shared base of a double-row lot (map shows 'A'/'B' rows)
+E,192,H002267,shared base of a double-row lot (map shows 'A'/'B' rows)
+E,191,H002268,shared base of a double-row lot (map shows 'A'/'B' rows)
+E,190,H002269,shared base of a double-row lot (map shows 'A'/'B' rows)
+F,18,H001872,
+F,52,H001954,
+F,51,H001955,
+F,56,H002008,
+F,156,H002198,
+G,38H,H002460,
+G,57H,H002505,
+G,51,H002512,
+J,56,H003006,
+J,132,H003082,
+K,257,H002916,
+K,259,H002918,
+M,12,H002588,
+M,14,H002589,
+M,15,H002590,
+M,16,H002591,
+M,19,H002593,
+M,20,H002594,
+M,23,H002595,
+M,24,H002596,
+M,25,H002597,
+M,31,H002601,
+M,151,H002707,
+M,253,H002809,
