@@ -420,6 +420,7 @@ function search(raw){var q=raw.trim();if(!q)return[];var out=[],seen={};
   if(lm){var key=lm[1]+'|'+lm[2];if(byLeg[key]!==undefined)add({k:'lot',i:byLeg[key],rank:0});
     UNPL.forEach(function(u,i){if(u.s===lm[1]&&u.l===lm[2])add({k:'unplaced',i:i,rank:1})});
     REVIEW.forEach(function(v,i){if(v.s===lm[1]&&v.l===lm[2])add({k:'review',i:i,rank:1})})}
+  if(lm&&byLeg[lm[1]+'|'+lm[2]]===undefined){LOTS.forEach(function(r,i){if(r[2]===lm[1]&&r[3].indexOf(lm[2])===0)add({k:'lot',i:i,rank:1+(r[3].length-lm[2].length)/10})})}
   // bare legacy label (20H, 19) in any section
   var bare=up.replace(/\s/g,'');if(/^\d+[A-Z]*(_\d+)?$/.test(bare))LOTS.forEach(function(r,i){if(r[3]===bare)add({k:'lot',i:i,rank:5})});
   // names
