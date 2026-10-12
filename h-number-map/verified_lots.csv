@@ -1,0 +1,3104 @@
+h_number,legacy_section,legacy_lot,map_x,map_y,outline,section_evidence
+H000001,B,20H,1654.18,424.5,drawn,two independent readings
+H000002,B,19A,1654.72,440.38,drawn,two independent readings
+H000003,B,19,1654.98,447.97,drawn,two independent readings
+H000004,B,18,1655.25,456.85,drawn,two independent readings
+H000005,B,17,1655.61,467.0,drawn,two independent readings
+H000006,B,16,1655.94,476.82,drawn,two independent readings
+H000007,B,15,1656.26,486.63,drawn,two independent readings
+H000008,B,14,1656.58,496.44,drawn,two independent readings
+H000009,B,13,1656.92,506.26,drawn,two independent readings
+H000011,B,11,1657.55,525.94,drawn,two independent readings
+H000012,B,10,1657.89,535.75,drawn,two independent readings
+H000013,B,9,1658.91,553.88,drawn,two independent readings
+H000014,B,8,1659.26,564.28,drawn,two independent readings
+H000015,B,7,1659.61,574.47,drawn,two independent readings
+H000016,B,6,1659.98,585.07,drawn,two independent readings
+H000017,B,5,1660.35,596.06,drawn,two independent readings
+H000018,B,4,1660.72,606.63,drawn,two independent readings
+H000019,B,3,1661.04,616.82,drawn,two independent readings
+H000020,B,2,1661.43,627.88,drawn,two independent readings
+H000021,B,1,1661.8,639.32,drawn,two independent readings
+H000022,B,12,1657.24,516.13,drawn,two independent readings
+H000023,A,19,1658.52,659.89,drawn,two independent readings
+H000024,A,18,1658.37,672.69,drawn,two independent readings
+H000025,A,17,1658.2,685.21,drawn,two independent readings
+H000026,A,16,1658.02,698.58,drawn,two independent readings
+H000027,A,15,1657.8,713.44,drawn,two independent readings
+H000028,A,14,1657.62,727.91,drawn,two independent readings
+H000029,A,13H,1657.47,738.35,drawn,two independent readings
+H000030,A,13,1657.38,747.41,drawn,two independent readings
+H000031,A,12,1657.21,758.87,drawn,two independent readings
+H000032,A,11,1657.01,770.6,drawn,two independent readings
+H000033,A,10,1656.87,782.56,drawn,two independent readings
+H000034,A,9,1656.49,805.69,drawn,two independent readings
+H000035,A,8,1656.35,817.71,drawn,two independent readings
+H000036,A,7,1656.15,829.35,drawn,two independent readings
+H000037,A,6,1655.99,841.0,drawn,two independent readings
+H000038,A,5H,1655.9,849.72,drawn,two independent readings
+H000039,A,5,1655.73,858.47,drawn,two independent readings
+H000040,A,4,1655.61,870.32,drawn,two independent readings
+H000041,A,3,1655.43,882.13,drawn,two independent readings
+H000042,A,2,1655.25,893.66,drawn,two independent readings
+H000043,A,1H,1655.15,903.16,drawn,two independent readings
+H000044,A,1,1655.05,909.63,drawn,two independent readings
+H000045,B,40H,1639.42,423.81,drawn,two independent readings
+H000047,B,39,1640.12,444.57,drawn,two independent readings
+H000048,B,38,1640.49,456.13,drawn,two independent readings
+H000049,B,37,1640.84,466.25,drawn,two independent readings
+H000050,B,36,1641.16,476.13,drawn,two independent readings
+H000051,B,35,1641.49,485.94,drawn,two independent readings
+H000052,B,34,1641.79,495.75,drawn,two independent readings
+H000053,B,33,1642.12,505.63,drawn,two independent readings
+H000054,B,32,1642.44,515.44,drawn,two independent readings
+H000056,B,30,1643.09,535.1,drawn,two independent readings
+H000057,B,29,1644.17,553.51,drawn,two independent readings
+H000058,B,28,1644.49,563.88,drawn,two independent readings
+H000059,B,27,1644.86,574.0,drawn,two independent readings
+H000060,B,26,1645.2,584.56,drawn,two independent readings
+H000061,B,25,1645.56,595.56,drawn,two independent readings
+H000062,B,24,1645.92,606.2,drawn,two independent readings
+H000063,B,23,1646.26,616.37,drawn,two independent readings
+H000064,B,22,1646.61,627.38,drawn,two independent readings
+H000065,B,21,1646.99,638.82,drawn,two independent readings
+H000066,B,31,1642.74,525.25,drawn,two independent readings
+H000067,A,38,1645.21,659.68,drawn,two independent readings
+H000068,A,37,1645.02,672.51,drawn,two independent readings
+H000069,A,36,1644.88,685.03,drawn,two independent readings
+H000070,A,35,1644.68,698.38,drawn,two independent readings
+H000071,A,34,1644.46,713.24,drawn,two independent readings
+H000072,A,33,1644.26,727.73,drawn,two independent readings
+H000073,A,32H,1644.13,738.16,drawn,two independent readings
+H000074,A,32,1643.98,747.22,drawn,two independent readings
+H000075,A,31,1643.87,758.69,drawn,two independent readings
+H000076,A,30,1643.69,770.41,drawn,two independent readings
+H000077,A,29,1643.49,782.37,drawn,two independent readings
+H000078,A,28,1643.11,805.51,drawn,two independent readings
+H000079,A,27,1642.98,817.53,drawn,two independent readings
+H000080,A,26,1642.81,829.16,drawn,two independent readings
+H000081,A,25,1642.61,840.82,drawn,two independent readings
+H000082,A,24H,1642.49,849.53,drawn,two independent readings
+H000083,A,24,1642.41,858.29,drawn,two independent readings
+H000084,A,23,1642.23,870.16,drawn,two independent readings
+H000085,A,22,1642.09,881.97,drawn,two independent readings
+H000086,A,21,1641.89,893.48,drawn,two independent readings
+H000088,A,20,1641.75,905.66,drawn,two independent readings
+H000089,B,60H,1624.68,423.13,drawn,two independent readings
+H000091,B,59,1625.37,443.94,drawn,two independent readings
+H000092,B,58,1625.74,455.5,drawn,two independent readings
+H000093,B,57,1626.11,465.63,drawn,two independent readings
+H000094,B,56,1626.4,475.44,drawn,inferred from surrounding lots
+H000095,B,55,1626.74,485.25,drawn,two independent readings
+H000096,B,54,1627.05,495.07,drawn,two independent readings
+H000097,B,53,1627.37,504.88,drawn,two independent readings
+H000098,B,52,1627.69,514.75,drawn,two independent readings
+H000099,B,51,1627.99,524.57,drawn,two independent readings
+H000101,B,49,1629.4,552.88,drawn,two independent readings
+H000102,B,48,1629.75,563.28,drawn,two independent readings
+H000103,B,47,1630.09,573.47,drawn,two independent readings
+H000104,B,46,1630.43,584.07,drawn,two independent readings
+H000105,B,45,1630.76,595.07,drawn,two independent readings
+H000106,B,44,1631.11,605.63,drawn,two independent readings
+H000107,B,43,1631.47,615.82,drawn,two independent readings
+H000108,B,42,1631.81,626.88,drawn,two independent readings
+H000109,B,41,1632.19,638.32,drawn,two independent readings
+H000110,B,50,1628.33,534.38,drawn,two independent readings
+H000111,A,57,1628.74,658.82,drawn,two independent readings
+H000112,A,56,1628.55,671.63,drawn,two independent readings
+H000113,A,55,1628.4,684.14,drawn,two independent readings
+H000114,A,54,1628.21,697.43,drawn,two independent readings
+H000115,A,53,1628.0,712.35,drawn,two independent readings
+H000116,A,52,1627.8,726.85,drawn,two independent readings
+H000117,A,51H,1627.7,737.28,drawn,two independent readings
+H000118,A,51,1627.54,746.35,drawn,two independent readings
+H000119,A,50,1627.4,757.82,drawn,two independent readings
+H000120,A,49,1627.21,769.56,drawn,two independent readings
+H000121,A,48,1627.05,781.5,drawn,two independent readings
+H000122,A,47,1625.64,804.39,drawn,two independent readings
+H000123,A,46,1625.5,816.53,drawn,two independent readings
+H000124,A,45,1625.32,828.15,drawn,two independent readings
+H000125,A,44,1625.16,839.67,drawn,two independent readings
+H000126,A,43H,1625.0,848.72,drawn,two independent readings
+H000127,A,43,1624.9,857.76,drawn,two independent readings
+H000128,A,42,1624.74,869.19,drawn,two independent readings
+H000129,A,41,1624.62,880.91,drawn,two independent readings
+H000130,A,40,1624.45,892.27,drawn,two independent readings
+H000132,A,39,1624.27,904.39,drawn,two independent readings
+H000133,B,80H,1609.83,422.47,drawn,two independent readings
+H000135,B,79,1610.52,443.19,drawn,two independent readings
+H000136,B,78,1610.9,454.75,drawn,two independent readings
+H000137,B,77,1611.24,464.88,drawn,two independent readings
+H000138,B,76,1611.6,474.75,drawn,two independent readings
+H000139,B,75,1611.91,484.57,drawn,two independent readings
+H000140,B,74,1612.24,494.38,drawn,two independent readings
+H000141,B,73,1612.6,504.25,drawn,two independent readings
+H000142,B,72,1612.91,514.07,drawn,two independent readings
+H000143,B,71,1613.24,523.88,drawn,two independent readings
+H000144,B,70,1613.59,533.72,drawn,two independent readings
+H000146,B,68,1614.89,562.78,drawn,two independent readings
+H000147,B,67,1615.23,572.97,drawn,two independent readings
+H000148,B,66,1615.61,583.57,drawn,two independent readings
+H000149,B,65,1615.98,594.56,drawn,two independent readings
+H000150,B,64,1616.34,605.13,drawn,two independent readings
+H000151,B,63,1616.67,615.32,drawn,two independent readings
+H000152,B,62,1617.05,626.38,drawn,two independent readings
+H000153,B,61,1617.43,637.82,drawn,two independent readings
+H000154,B,69,1614.54,552.38,drawn,two independent readings
+H000155,A,76,1613.74,658.31,drawn,two independent readings
+H000156,A,75,1613.56,671.1,drawn,two independent readings
+H000157,A,74,1613.36,683.6,drawn,two independent readings
+H000158,A,73,1613.21,696.96,drawn,two independent readings
+H000159,A,72,1612.99,711.82,drawn,two independent readings
+H000160,A,71,1612.77,726.3,drawn,two independent readings
+H000161,A,70H,1612.64,736.76,drawn,two independent readings
+H000162,A,70,1612.52,745.8,drawn,two independent readings
+H000163,A,69,1612.37,757.31,drawn,two independent readings
+H000164,A,68,1612.21,769.01,drawn,two independent readings
+H000165,A,67,1612.02,780.93,drawn,two independent readings
+H000166,A,66,1612.72,804.21,drawn,two independent readings
+H000167,A,65,1612.54,816.35,drawn,two independent readings
+H000168,A,64,1612.4,828.01,drawn,two independent readings
+H000169,A,63,1612.21,839.49,drawn,two independent readings
+H000170,A,62H,1612.08,848.57,drawn,two independent readings
+H000171,A,62,1611.97,857.59,drawn,two independent readings
+H000172,A,61,1611.81,869.0,drawn,two independent readings
+H000173,A,60,1611.66,880.72,drawn,two independent readings
+H000174,A,59,1611.52,892.13,drawn,two independent readings
+H000176,A,58,1611.34,904.21,drawn,two independent readings
+H000179,B,99,1595.78,442.57,drawn,two independent readings
+H000180,B,98,1596.17,454.13,drawn,two independent readings
+H000181,B,97,1596.49,464.25,drawn,two independent readings
+H000182,B,96,1596.85,474.07,drawn,two independent readings
+H000183,B,95,1597.17,483.88,drawn,two independent readings
+H000184,B,94,1597.5,493.72,drawn,two independent readings
+H000185,B,93,1597.84,503.53,drawn,two independent readings
+H000186,B,92,1598.16,513.38,drawn,two independent readings
+H000187,B,91,1598.49,523.19,drawn,two independent readings
+H000188,B,90,1598.82,533.0,drawn,two independent readings
+H000189,B,89,1599.78,551.88,drawn,two independent readings
+H000191,B,87,1600.47,572.46,drawn,two independent readings
+H000192,B,86,1600.83,583.06,drawn,two independent readings
+H000193,B,85,1601.18,594.06,drawn,two independent readings
+H000194,B,84,1601.54,604.63,drawn,two independent readings
+H000195,B,83,1601.88,614.81,drawn,two independent readings
+H000196,B,82,1602.24,625.88,drawn,two independent readings
+H000197,B,81,1602.62,637.32,drawn,two independent readings
+H000198,B,88,1600.13,562.29,drawn,two independent readings
+H000199,A,95,1599.01,657.77,drawn,two independent readings
+H000200,A,94,1598.84,670.61,drawn,two independent readings
+H000201,A,93,1598.64,683.09,drawn,two independent readings
+H000202,A,92,1598.46,696.45,drawn,two independent readings
+H000203,A,91,1598.27,711.3,drawn,two independent readings
+H000204,A,90,1598.08,725.83,drawn,two independent readings
+H000205,A,89H,1597.93,736.25,drawn,two independent readings
+H000206,A,89,1597.81,745.29,drawn,two independent readings
+H000207,A,88,1597.64,756.77,drawn,two independent readings
+H000208,A,87,1597.49,768.5,drawn,two independent readings
+H000209,A,86,1597.33,780.45,drawn,two independent readings
+H000210,A,85,1596.96,803.89,drawn,two independent readings
+H000211,A,84,1596.78,816.02,drawn,two independent readings
+H000212,A,83,1596.6,827.66,drawn,two independent readings
+H000213,A,82,1596.46,839.2,drawn,two independent readings
+H000214,A,81H,1596.34,848.25,drawn,two independent readings
+H000215,A,81,1596.21,857.26,drawn,two independent readings
+H000216,A,80,1596.05,868.69,drawn,two independent readings
+H000217,A,79,1595.9,880.37,drawn,two independent readings
+H000218,A,78,1595.74,891.75,drawn,two independent readings
+H000220,A,77,1595.58,903.89,drawn,two independent readings
+H000223,B,119,1581.02,441.82,drawn,two independent readings
+H000224,B,118,1581.41,453.4,drawn,two independent readings
+H000225,B,117,1581.73,463.53,drawn,two independent readings
+H000226,B,116,1582.11,473.38,drawn,two independent readings
+H000227,B,115,1582.41,483.19,drawn,two independent readings
+H000228,B,114,1582.74,493.0,drawn,two independent readings
+H000229,B,113,1583.1,502.88,drawn,two independent readings
+H000230,B,112,1583.41,512.69,drawn,two independent readings
+H000231,B,111,1583.74,522.5,drawn,two independent readings
+H000232,B,110,1584.09,532.35,drawn,two independent readings
+H000233,B,109,1584.93,551.38,drawn,two independent readings
+H000234,B,108,1585.25,561.75,drawn,two independent readings
+H000236,B,106,1585.97,582.54,drawn,two independent readings
+H000237,B,105,1586.36,593.56,drawn,two independent readings
+H000238,B,104,1586.72,604.13,drawn,two independent readings
+H000239,B,103,1587.05,614.25,drawn,two independent readings
+H000240,B,102,1587.43,625.25,drawn,two independent readings
+H000241,B,101,1587.8,636.69,drawn,two independent readings
+H000242,B,107,1585.62,571.91,drawn,two independent readings
+H000243,A,114,1583.87,657.22,drawn,two independent readings
+H000244,A,113,1583.67,670.03,drawn,two independent readings
+H000245,A,112,1583.55,682.57,drawn,two independent readings
+H000246,A,111,1583.37,695.91,drawn,two independent readings
+H000247,A,110,1583.11,710.78,drawn,two independent readings
+H000248,A,109,1582.93,725.28,drawn,two independent readings
+H000249,A,108H,1582.78,735.72,drawn,two independent readings
+H000250,A,108,1582.68,744.75,drawn,two independent readings
+H000251,A,107,1582.56,756.22,drawn,two independent readings
+H000252,A,106,1582.36,767.97,drawn,two independent readings
+H000253,A,105,1582.18,779.94,drawn,two independent readings
+H000254,A,104,1580.79,802.53,drawn,two independent readings
+H000255,A,103,1580.62,814.66,drawn,two independent readings
+H000256,A,102,1580.49,826.31,drawn,two independent readings
+H000257,A,101,1580.32,837.84,drawn,two independent readings
+H000258,A,100H,1580.21,846.88,drawn,two independent readings
+H000259,A,100,1580.08,855.87,drawn,two independent readings
+H000260,A,99,1579.9,867.32,drawn,two independent readings
+H000261,A,98,1579.75,879.04,drawn,two independent readings
+H000262,A,97,1579.61,890.44,drawn,two independent readings
+H000264,A,96,1579.42,902.53,drawn,two independent readings
+H000267,B,139,1566.25,441.19,drawn,two independent readings
+H000268,B,138,1566.61,452.75,drawn,two independent readings
+H000269,B,137,1566.98,462.88,drawn,two independent readings
+H000270,B,136,1567.28,472.69,drawn,two independent readings
+H000271,B,135,1567.61,482.5,drawn,two independent readings
+H000272,B,134,1567.93,492.35,drawn,two independent readings
+H000273,B,133,1568.23,502.16,drawn,two independent readings
+H000274,B,132,1568.57,512.0,drawn,two independent readings
+H000275,B,131,1568.87,521.82,drawn,two independent readings
+H000276,B,130,1569.21,531.63,drawn,two independent readings
+H000277,B,129,1570.16,550.82,drawn,two independent readings
+H000278,B,128,1570.49,561.19,drawn,two independent readings
+H000279,B,127,1570.85,571.38,drawn,two independent readings
+H000281,B,125,1571.51,592.94,drawn,two independent readings
+H000282,B,124,1571.87,603.57,drawn,two independent readings
+H000283,B,123,1572.23,613.75,drawn,two independent readings
+H000284,B,122,1572.55,624.75,drawn,two independent readings
+H000285,B,121,1572.93,636.19,drawn,two independent readings
+H000286,B,126,1571.18,581.94,drawn,two independent readings
+H000287,A,133,1568.87,656.69,drawn,two independent readings
+H000288,A,132,1568.71,669.52,drawn,two independent readings
+H000289,A,131,1568.52,682.18,drawn,two independent readings
+H000290,A,130,1568.34,695.55,drawn,two independent readings
+H000291,A,129,1568.14,710.27,drawn,two independent readings
+H000292,A,128,1567.96,724.77,drawn,two independent readings
+H000293,A,127H,1567.81,735.19,drawn,two independent readings
+H000294,A,127,1567.67,744.25,drawn,two independent readings
+H000295,A,126,1567.52,755.68,drawn,two independent readings
+H000296,A,125,1567.37,767.44,drawn,two independent readings
+H000297,A,124,1567.22,779.42,drawn,two independent readings
+H000298,A,123,1567.86,802.38,drawn,two independent readings
+H000299,A,122,1567.68,814.5,drawn,two independent readings
+H000300,A,121,1567.55,826.13,drawn,two independent readings
+H000301,A,120,1567.41,837.67,drawn,two independent readings
+H000302,A,119H,1567.25,846.72,drawn,two independent readings
+H000303,A,119,1567.15,855.73,drawn,two independent readings
+H000304,A,118,1566.96,867.12,drawn,two independent readings
+H000305,A,117,1566.8,878.84,drawn,two independent readings
+H000306,A,116,1566.67,890.25,drawn,two independent readings
+H000308,A,115,1566.49,902.38,drawn,two independent readings
+H000311,B,159,1551.5,440.44,drawn,two independent readings
+H000312,B,158,1551.87,452.03,drawn,inferred from surrounding lots
+H000313,B,157,1552.21,462.16,drawn,inferred from surrounding lots
+H000314,B,156,1552.53,472.0,drawn,two independent readings
+H000315,B,155,1552.86,481.81,drawn,two independent readings
+H000316,B,154,1553.17,491.63,drawn,two independent readings
+H000317,B,153,1553.49,501.5,drawn,two independent readings
+H000318,B,152,1553.81,511.31,drawn,two independent readings
+H000319,B,151,1554.12,521.12,drawn,inferred from surrounding lots
+H000320,B,150,1554.46,530.97,drawn,two independent readings
+H000321,B,149,1555.35,550.25,drawn,two independent readings
+H000322,B,148,1555.68,560.62,drawn,two independent readings
+H000323,B,147,1556.04,570.82,drawn,two independent readings
+H000324,B,146,1556.39,581.44,drawn,two independent readings
+H000326,B,144,1557.11,603.0,drawn,two independent readings
+H000327,B,143,1557.46,613.16,drawn,two independent readings
+H000328,B,142,1557.8,624.16,drawn,two independent readings
+H000329,B,141,1558.18,635.59,drawn,two independent readings
+H000330,B,145,1556.75,592.44,drawn,two independent readings
+H000331,A,152,1554.05,656.19,drawn,two independent readings
+H000332,A,151,1553.86,669.0,drawn,two independent readings
+H000333,A,150,1553.71,681.49,drawn,two independent readings
+H000334,A,149,1553.52,694.83,drawn,two independent readings
+H000335,A,148,1553.31,709.72,drawn,two independent readings
+H000336,A,147,1553.11,724.22,drawn,two independent readings
+H000337,A,146H,1552.99,734.63,drawn,two independent readings
+H000338,A,146,1552.86,743.69,drawn,two independent readings
+H000339,A,145,1552.71,755.18,drawn,two independent readings
+H000340,A,144,1552.53,766.92,drawn,two independent readings
+H000341,A,143,1552.35,778.85,drawn,two independent readings
+H000342,A,142,1551.02,801.24,drawn,two independent readings
+H000343,A,141,1550.84,813.42,drawn,two independent readings
+H000344,A,140,1550.67,825.03,drawn,two independent readings
+H000345,A,139,1550.53,836.53,drawn,two independent readings
+H000346,A,138H,1550.37,845.6,drawn,two independent readings
+H000347,A,138,1550.27,854.62,drawn,two independent readings
+H000348,A,137,1550.12,866.06,drawn,two independent readings
+H000349,A,136,1549.97,877.79,drawn,two independent readings
+H000350,A,135,1549.79,889.53,drawn,two independent readings
+H000352,A,134,1549.65,901.62,drawn,two independent readings
+H000353,B,180H,1535.99,419.0,drawn,two independent readings
+H000355,B,179,1536.7,439.81,drawn,two independent readings
+H000356,B,178,1537.08,451.37,drawn,two independent readings
+H000357,B,177,1537.42,461.51,drawn,two independent readings
+H000358,B,176,1537.75,471.31,drawn,two independent readings
+H000359,B,175,1538.08,481.13,drawn,two independent readings
+H000360,B,174,1538.4,490.97,drawn,two independent readings
+H000361,B,173,1538.72,500.78,drawn,two independent readings
+H000362,B,172,1539.05,510.63,drawn,two independent readings
+H000363,B,171,1539.37,520.44,drawn,two independent readings
+H000364,B,170,1539.7,530.25,drawn,two independent readings
+H000365,B,169,1540.54,549.69,drawn,two independent readings
+H000366,B,168,1540.87,560.06,drawn,two independent readings
+H000367,B,167,1541.24,570.25,drawn,two independent readings
+H000368,B,166,1541.61,581.25,drawn,two independent readings
+H000369,B,165,1541.99,592.25,drawn,two independent readings
+H000371,B,163,1542.67,612.63,drawn,two independent readings
+H000372,B,162,1543.05,623.63,drawn,two independent readings
+H000373,B,161,1543.43,635.07,drawn,two independent readings
+H000374,B,164,1542.34,602.44,drawn,two independent readings
+H000375,A,171,1539.05,655.56,drawn,two independent readings
+H000376,A,170,1538.86,668.38,drawn,two independent readings
+H000377,A,169,1538.71,680.87,drawn,two independent readings
+H000378,A,168,1538.53,694.24,drawn,two independent readings
+H000379,A,167,1538.3,709.16,drawn,two independent readings
+H000380,A,166,1538.12,723.63,drawn,two independent readings
+H000381,A,165H,1538.01,734.03,drawn,two independent readings
+H000382,A,165,1537.85,743.1,drawn,two independent readings
+H000383,A,164,1537.71,754.55,drawn,two independent readings
+H000384,A,163,1537.52,766.33,drawn,two independent readings
+H000385,A,162,1537.37,778.29,drawn,two independent readings
+H000386,A,161,1538.09,801.1,drawn,two independent readings
+H000387,A,160,1537.89,813.21,drawn,two independent readings
+H000388,A,159,1537.74,824.88,drawn,two independent readings
+H000389,A,158,1537.59,836.39,drawn,two independent readings
+H000390,A,157H,1537.48,845.41,drawn,two independent readings
+H000391,A,157,1537.33,854.45,drawn,two independent readings
+H000392,A,156,1537.18,865.88,drawn,two independent readings
+H000393,A,155,1537.01,877.59,drawn,two independent readings
+H000394,A,154,1536.86,889.0,drawn,two independent readings
+H000396,A,153,1536.72,901.11,drawn,two independent readings
+H000397,B,200H,1521.21,418.34,drawn,two independent readings
+H000399,B,199,1521.9,439.07,drawn,two independent readings
+H000400,B,198,1522.29,450.66,drawn,two independent readings
+H000401,B,197,1522.6,460.78,drawn,two independent readings
+H000402,B,196,1522.98,470.63,drawn,two independent readings
+H000403,B,195,1523.29,480.44,drawn,two independent readings
+H000404,B,194,1523.61,490.25,drawn,two independent readings
+H000405,B,193,1523.97,500.13,drawn,two independent readings
+H000406,B,192,1524.28,509.94,drawn,two independent readings
+H000407,B,191,1524.61,519.75,drawn,two independent readings
+H000408,B,190,1524.95,529.63,drawn,two independent readings
+H000409,B,189,1525.78,549.13,drawn,two independent readings
+H000410,B,188,1526.12,559.5,drawn,two independent readings
+H000411,B,187,1526.47,569.69,drawn,two independent readings
+H000412,B,186,1526.81,580.32,drawn,two independent readings
+H000413,B,185,1527.14,591.31,drawn,two independent readings
+H000414,B,184,1527.49,601.88,drawn,two independent readings
+H000416,B,182,1528.17,623.03,drawn,two independent readings
+H000417,B,181,1528.56,634.51,drawn,two independent readings
+H000418,B,183,1527.86,612.03,drawn,two independent readings
+H000419,A,190,1523.96,654.93,drawn,two independent readings
+H000420,A,189,1523.77,667.76,drawn,two independent readings
+H000421,A,188,1523.59,680.27,drawn,two independent readings
+H000422,A,187,1523.38,693.64,drawn,two independent readings
+H000423,A,186,1523.22,708.52,drawn,two independent readings
+H000424,A,185,1523.02,723.02,drawn,two independent readings
+H000425,A,184H,1522.86,733.44,drawn,two independent readings
+H000426,A,184,1522.74,742.5,drawn,two independent readings
+H000427,A,183,1522.59,753.93,drawn,two independent readings
+H000428,A,182,1522.42,765.69,drawn,two independent readings
+H000429,A,181,1522.27,777.7,drawn,two independent readings
+H000430,A,180,1520.9,799.99,drawn,two independent readings
+H000431,A,179,1520.74,812.13,drawn,two independent readings
+H000432,A,178,1520.59,823.76,drawn,two independent readings
+H000433,A,177,1520.41,835.28,drawn,two independent readings
+H000434,A,176H,1520.25,844.35,drawn,two independent readings
+H000435,A,176,1520.16,853.34,drawn,two independent readings
+H000436,A,175,1519.98,864.78,drawn,two independent readings
+H000437,A,174,1519.86,876.5,drawn,two independent readings
+H000438,A,173,1519.71,887.89,drawn,two independent readings
+H000440,A,172,1519.52,899.99,drawn,two independent readings
+H000441,B,220H,1506.42,417.63,drawn,two independent readings
+H000443,B,219,1507.15,438.44,drawn,two independent readings
+H000444,B,218,1507.54,450.0,drawn,two independent readings
+H000445,B,217,1507.87,460.13,drawn,two independent readings
+H000446,B,216,1508.23,469.94,drawn,two independent readings
+H000447,B,215,1508.54,479.75,drawn,two independent readings
+H000448,B,214,1508.87,489.63,drawn,two independent readings
+H000449,B,213,1509.23,499.44,drawn,two independent readings
+H000450,B,212,1509.54,509.25,drawn,two independent readings
+H000451,B,211,1509.87,519.07,drawn,two independent readings
+H000452,B,210,1510.2,528.88,drawn,two independent readings
+H000453,B,209,1511.03,548.57,drawn,two independent readings
+H000454,B,208,1511.36,558.94,drawn,two independent readings
+H000455,B,207,1511.72,569.13,drawn,two independent readings
+H000456,B,206,1512.05,579.69,drawn,two independent readings
+H000457,B,205,1512.38,590.69,drawn,two independent readings
+H000458,B,204,1512.74,601.31,drawn,two independent readings
+H000459,B,203,1513.1,611.5,drawn,two independent readings
+H000461,B,201,1513.8,633.94,drawn,two independent readings
+H000462,B,202,1513.43,622.5,drawn,two independent readings
+H000463,A,209,1508.71,654.37,drawn,two independent readings
+H000464,A,208,1508.55,667.16,drawn,two independent readings
+H000465,A,207,1508.39,679.7,drawn,two independent readings
+H000466,A,206,1508.22,693.02,drawn,two independent readings
+H000467,A,205,1507.98,707.91,drawn,two independent readings
+H000468,A,204,1507.78,722.42,drawn,two independent readings
+H000469,A,203H,1507.63,732.84,drawn,two independent readings
+H000470,A,203,1507.53,741.92,drawn,two independent readings
+H000471,A,202,1507.36,753.37,drawn,two independent readings
+H000472,A,201,1507.2,765.08,drawn,two independent readings
+H000473,A,200,1507.06,777.07,drawn,two independent readings
+H000474,A,199,1507.74,799.82,drawn,two independent readings
+H000475,A,198,1507.61,811.97,drawn,two independent readings
+H000476,A,197,1507.44,823.59,drawn,two independent readings
+H000477,A,196,1507.23,835.09,drawn,two independent readings
+H000478,A,195H,1507.14,844.16,drawn,two independent readings
+H000479,A,195,1506.98,853.16,drawn,two independent readings
+H000480,A,194,1506.87,864.59,drawn,two independent readings
+H000481,A,193,1506.73,876.34,drawn,two independent readings
+H000482,A,192,1506.56,887.72,drawn,two independent readings
+H000484,A,191,1506.36,899.81,drawn,two independent readings
+H000485,B,240H,1491.68,417.0,drawn,two independent readings
+H000487,B,239,1492.38,437.7,drawn,two independent readings
+H000488,B,238,1492.77,449.29,drawn,two independent readings
+H000489,B,237,1493.09,459.41,drawn,two independent readings
+H000490,B,236,1493.44,469.26,drawn,two independent readings
+H000491,B,235,1493.76,479.07,drawn,two independent readings
+H000492,B,234,1494.08,488.88,drawn,two independent readings
+H000493,B,233,1494.42,498.76,drawn,two independent readings
+H000494,B,232,1494.74,508.57,drawn,two independent readings
+H000495,B,231,1495.05,518.38,drawn,two independent readings
+H000496,B,230,1495.39,528.25,drawn,two independent readings
+H000497,B,229,1496.17,548.0,drawn,two independent readings
+H000498,B,228,1496.5,558.38,drawn,two independent readings
+H000499,B,227,1496.87,568.57,drawn,two independent readings
+H000500,B,226,1497.23,579.19,drawn,two independent readings
+H000501,B,225,1497.61,590.19,drawn,two independent readings
+H000502,B,224,1497.97,600.75,drawn,two independent readings
+H000503,B,223,1498.29,610.94,drawn,two independent readings
+H000504,B,222,1498.68,621.97,drawn,two independent readings
+H000506,B,221,1499.04,633.41,drawn,two independent readings
+H000507,A,228,1493.62,653.81,drawn,two independent readings
+H000508,A,227,1493.47,666.59,drawn,two independent readings
+H000509,A,226,1493.26,679.11,drawn,two independent readings
+H000510,A,225,1493.09,692.42,drawn,two independent readings
+H000511,A,224,1492.89,707.33,drawn,two independent readings
+H000512,A,223,1492.68,721.81,drawn,two independent readings
+H000513,A,222H,1492.52,732.25,drawn,two independent readings
+H000514,A,222,1492.4,741.3,drawn,two independent readings
+H000515,A,221,1492.23,752.78,drawn,two independent readings
+H000516,A,220,1492.12,764.5,drawn,two independent readings
+H000517,A,219,1491.96,776.43,drawn,two independent readings
+H000518,A,218,1490.59,798.73,drawn,two independent readings
+H000519,A,217,1490.41,810.85,drawn,two independent readings
+H000520,A,216,1490.27,822.49,drawn,two independent readings
+H000521,A,215,1490.12,834.0,drawn,two independent readings
+H000522,A,214H,1490.01,843.03,drawn,two independent readings
+H000523,A,214,1489.86,852.07,drawn,two independent readings
+H000524,A,213,1489.71,863.51,drawn,two independent readings
+H000525,A,212,1489.51,875.21,drawn,two independent readings
+H000526,A,211,1489.36,886.63,drawn,two independent readings
+H000528,A,210,1489.22,898.73,drawn,two independent readings
+H000529,B,260H,1476.93,416.25,drawn,two independent readings
+H000532,B,258,1477.99,448.63,drawn,two independent readings
+H000533,B,257,1478.35,458.75,drawn,two independent readings
+H000534,B,256,1478.66,468.56,drawn,inferred from surrounding lots
+H000535,B,255,1478.99,478.38,drawn,two independent readings
+H000536,B,254,1479.29,488.25,drawn,inferred from surrounding lots
+H000537,B,253,1479.62,498.06,drawn,inferred from surrounding lots
+H000538,B,252,1479.94,507.88,drawn,two independent readings
+H000539,B,251,1480.24,517.69,drawn,inferred from surrounding lots
+H000540,B,250,1480.58,527.5,drawn,two independent readings
+H000541,B,249,1481.43,547.48,drawn,two independent readings
+H000542,B,248,1481.73,557.85,drawn,two independent readings
+H000543,B,247,1482.11,568.0,drawn,two independent readings
+H000544,B,246,1482.45,578.56,drawn,two independent readings
+H000545,B,245,1482.81,589.57,drawn,two independent readings
+H000546,B,244,1483.17,600.19,drawn,two independent readings
+H000547,B,243,1483.51,610.37,drawn,two independent readings
+H000548,B,242,1483.87,621.38,drawn,two independent readings
+H000549,B,241,1484.24,632.81,drawn,two independent readings
+H000550,B,240,1491.99,425.44,drawn,two independent readings
+H000551,A,247,1478.62,653.19,drawn,two independent readings
+H000552,A,246,1478.46,665.99,drawn,two independent readings
+H000553,A,245,1478.27,678.51,drawn,two independent readings
+H000554,A,244,1478.09,691.8,drawn,two independent readings
+H000555,A,243,1477.9,706.74,drawn,two independent readings
+H000556,A,242,1477.67,721.22,drawn,two independent readings
+H000557,A,241H,1477.52,731.62,drawn,two independent readings
+H000558,A,241,1477.39,740.7,drawn,two independent readings
+H000559,A,240,1477.24,752.19,drawn,two independent readings
+H000560,A,239,1477.12,763.94,drawn,two independent readings
+H000561,A,238,1476.96,775.87,drawn,two independent readings
+H000562,A,237,1477.64,798.53,drawn,two independent readings
+H000563,A,236,1477.5,810.66,drawn,two independent readings
+H000564,A,235,1477.33,822.32,drawn,two independent readings
+H000565,A,234,1477.17,833.84,drawn,two independent readings
+H000566,A,233H,1477.05,842.88,drawn,two independent readings
+H000567,A,233,1476.93,851.88,drawn,two independent readings
+H000568,A,232,1476.77,863.31,drawn,two independent readings
+H000569,A,231,1476.63,875.03,drawn,two independent readings
+H000570,A,230,1476.46,886.45,drawn,two independent readings
+H000572,A,229,1476.26,898.52,drawn,two independent readings
+H000573,B,280H,1462.18,415.63,drawn,two independent readings
+H000575,B,279,1462.86,436.35,drawn,two independent readings
+H000577,B,277,1463.58,458.07,drawn,two independent readings
+H000578,B,276,1463.9,467.88,drawn,two independent readings
+H000579,B,275,1464.25,477.72,drawn,two independent readings
+H000580,B,274,1464.54,487.54,drawn,two independent readings
+H000581,B,273,1464.87,497.38,drawn,two independent readings
+H000582,B,272,1465.19,507.19,drawn,two independent readings
+H000583,B,271,1465.49,517.0,drawn,two independent readings
+H000584,B,270,1465.83,526.88,drawn,two independent readings
+H000585,B,269,1466.66,546.88,drawn,two independent readings
+H000586,B,268,1466.99,557.25,drawn,two independent readings
+H000587,B,267,1467.35,567.44,drawn,two independent readings
+H000588,B,266,1467.68,578.07,drawn,two independent readings
+H000589,B,265,1468.01,589.06,drawn,two independent readings
+H000590,B,264,1468.36,599.63,drawn,two independent readings
+H000591,B,263,1468.73,609.82,drawn,two independent readings
+H000592,B,262,1469.06,620.85,drawn,two independent readings
+H000593,B,261,1469.43,632.29,drawn,two independent readings
+H000594,B,259,1477.63,437.07,drawn,inferred from surrounding lots
+H000595,A,266,1463.62,652.56,drawn,two independent readings
+H000596,A,265,1463.43,665.38,drawn,two independent readings
+H000597,A,264,1463.25,677.91,drawn,two independent readings
+H000598,A,263,1463.08,691.21,drawn,two independent readings
+H000599,A,262,1462.9,706.14,drawn,two independent readings
+H000600,A,261,1462.68,720.63,drawn,two independent readings
+H000601,A,260H,1462.52,731.06,drawn,two independent readings
+H000602,A,260,1462.4,740.14,drawn,two independent readings
+H000603,A,259,1462.24,751.56,drawn,inferred from surrounding lots
+H000604,A,258,1462.12,763.31,drawn,two independent readings
+H000605,A,257,1461.97,775.28,drawn,inferred from surrounding lots
+H000606,A,256,1460.58,797.45,drawn,two independent readings
+H000607,A,255,1460.41,809.6,drawn,two independent readings
+H000608,A,254,1460.28,821.22,drawn,two independent readings
+H000609,A,253,1460.11,832.72,drawn,two independent readings
+H000610,A,252H,1460.01,841.78,drawn,two independent readings
+H000611,A,252,1459.86,850.82,drawn,two independent readings
+H000612,A,251,1459.71,862.26,drawn,two independent readings
+H000613,A,250,1459.51,873.96,drawn,two independent readings
+H000614,A,249,1459.37,885.35,drawn,two independent readings
+H000616,A,248,1459.21,897.45,drawn,two independent readings
+H000619,B,299,1448.5,435.69,drawn,two independent readings
+H000620,B,298,1448.87,447.26,drawn,two independent readings
+H000622,B,296,1449.53,467.25,drawn,two independent readings
+H000623,B,295,1449.84,477.07,drawn,two independent readings
+H000624,B,294,1450.17,486.88,drawn,two independent readings
+H000625,B,293,1450.51,496.72,drawn,two independent readings
+H000626,B,292,1450.8,506.53,drawn,two independent readings
+H000627,B,291,1451.15,516.38,drawn,two independent readings
+H000630,B,288,1452.16,556.75,drawn,two independent readings
+H000631,B,287,1452.49,566.88,drawn,two independent readings
+H000632,B,286,1452.87,577.44,drawn,two independent readings
+H000633,B,285,1453.25,588.47,drawn,two independent readings
+H000634,B,284,1453.59,599.1,drawn,two independent readings
+H000635,B,283,1453.92,609.25,drawn,two independent readings
+H000636,B,282,1454.3,620.25,drawn,two independent readings
+H000637,B,281,1454.68,631.69,drawn,two independent readings
+H000638,B,278,1463.24,447.94,drawn,two independent readings
+H000639,A,285,1448.63,651.97,drawn,two independent readings
+H000640,A,284,1448.42,664.78,drawn,two independent readings
+H000641,A,283,1448.24,677.32,drawn,two independent readings
+H000642,A,282,1448.09,690.67,drawn,two independent readings
+H000643,A,281,1447.89,705.58,drawn,two independent readings
+H000644,A,280,1447.68,720.03,drawn,two independent readings
+H000645,A,279H,1447.51,730.47,drawn,two independent readings
+H000646,A,279,1447.39,739.51,drawn,two independent readings
+H000647,A,278,1447.25,750.97,drawn,two independent readings
+H000648,A,277,1447.11,762.72,drawn,two independent readings
+H000649,A,276,1446.93,774.69,drawn,two independent readings
+H000650,A,275,1447.65,797.24,drawn,two independent readings
+H000651,A,274,1447.5,809.41,drawn,two independent readings
+H000652,A,273,1447.33,821.04,drawn,two independent readings
+H000653,A,272,1447.19,832.54,drawn,two independent readings
+H000654,A,271H,1447.03,841.6,drawn,two independent readings
+H000655,A,271,1446.93,850.63,drawn,two independent readings
+H000656,A,270,1446.77,862.06,drawn,two independent readings
+H000657,A,269,1446.63,873.78,drawn,two independent readings
+H000658,A,268,1446.44,886.36,drawn,two independent readings
+H000660,A,267,1446.24,898.44,drawn,two independent readings
+H000663,B,319,1425.05,630.56,drawn,two independent readings
+H000664,B,318,1432.85,421.88,drawn,two independent readings
+H000665,B,317,1433.18,432.03,drawn,two independent readings
+H000667,B,315,1433.86,452.38,drawn,two independent readings
+H000668,B,314,1434.24,462.94,drawn,two independent readings
+H000669,B,313,1434.53,473.13,drawn,two independent readings
+H000670,B,312,1434.86,482.88,drawn,two independent readings
+H000671,B,311,1435.23,493.07,drawn,two independent readings
+H000672,B,310,1435.56,503.25,drawn,two independent readings
+H000673,B,309,1435.8,511.13,drawn,two independent readings
+H000674,B,308,1437.36,557.0,drawn,two independent readings
+H000675,B,307,1437.72,566.31,drawn,two independent readings
+H000676,B,306,1438.05,576.94,drawn,two independent readings
+H000677,B,305,1438.44,587.94,drawn,two independent readings
+H000678,B,304,1438.81,598.5,drawn,two independent readings
+H000679,B,303,1439.14,608.69,drawn,two independent readings
+H000680,B,302,1439.55,619.75,drawn,two independent readings
+H000681,B,301,1439.93,631.19,drawn,two independent readings
+H000682,B,297,1449.22,457.38,drawn,two independent readings
+H000683,A,304,1433.61,651.41,drawn,two independent readings
+H000684,A,303,1433.43,664.22,drawn,two independent readings
+H000685,A,302,1433.23,676.72,drawn,two independent readings
+H000686,A,301,1433.09,690.05,drawn,two independent readings
+H000687,A,300,1432.89,704.96,drawn,two independent readings
+H000688,A,299,1432.68,719.44,drawn,two independent readings
+H000689,A,298H,1432.52,729.87,drawn,two independent readings
+H000690,A,298,1432.4,738.92,drawn,two independent readings
+H000691,A,297,1432.23,750.41,drawn,two independent readings
+H000692,A,296,1432.12,762.13,drawn,two independent readings
+H000693,A,295,1431.93,774.07,drawn,two independent readings
+H000694,A,294,1430.58,796.2,drawn,two independent readings
+H000695,A,293,1430.41,808.35,drawn,two independent readings
+H000696,A,292,1430.25,819.97,drawn,two independent readings
+H000697,A,291,1430.11,831.47,drawn,two independent readings
+H000698,A,290H,1430.01,840.53,drawn,two independent readings
+H000699,A,290,1429.85,849.53,drawn,two independent readings
+H000700,A,289,1429.72,860.98,drawn,two independent readings
+H000701,A,288,1429.51,872.71,drawn,two independent readings
+H000702,A,287,1429.37,884.1,drawn,two independent readings
+H000704,A,286,1429.21,896.2,drawn,two independent readings
+H000707,B,339,1409.58,607.56,drawn,two independent readings
+H000708,B,338,1409.93,618.63,drawn,two independent readings
+H000709,B,337,1410.31,630.07,drawn,two independent readings
+H000710,B,336,1418.1,421.19,drawn,two independent readings
+H000712,B,334,1418.75,441.53,drawn,two independent readings
+H000713,B,333,1419.1,451.72,drawn,two independent readings
+H000714,B,332,1419.42,461.88,drawn,two independent readings
+H000715,B,331,1419.76,472.03,drawn,two independent readings
+H000716,B,330,1420.11,482.22,drawn,two independent readings
+H000717,B,329,1420.44,492.38,drawn,two independent readings
+H000718,B,328,1420.77,502.53,drawn,two independent readings
+H000719,B,327,1421.06,511.44,drawn,two independent readings
+H000720,B,326,1422.62,556.44,drawn,two independent readings
+H000721,B,325,1422.93,565.75,drawn,two independent readings
+H000722,B,324,1423.26,576.32,drawn,two independent readings
+H000723,B,323,1423.64,587.35,drawn,two independent readings
+H000724,B,322,1423.98,597.97,drawn,two independent readings
+H000725,B,321,1424.32,608.13,drawn,two independent readings
+H000726,B,316,1433.49,442.22,drawn,two independent readings
+H000727,A,323,1418.62,650.81,drawn,two independent readings
+H000728,A,322,1418.43,663.63,drawn,two independent readings
+H000729,A,321,1418.24,676.13,drawn,two independent readings
+H000730,A,320,1418.05,689.44,drawn,two independent readings
+H000731,A,319,1417.87,704.35,drawn,two independent readings
+H000732,A,318,1417.67,718.85,drawn,two independent readings
+H000733,A,317H,1417.52,729.25,drawn,two independent readings
+H000734,A,317,1417.39,738.33,drawn,two independent readings
+H000735,A,316,1417.24,749.81,drawn,two independent readings
+H000736,A,315,1417.12,761.56,drawn,two independent readings
+H000737,A,314,1416.93,773.5,drawn,two independent readings
+H000738,A,313,1417.65,795.99,drawn,two independent readings
+H000739,A,312,1415.93,808.13,drawn,two independent readings
+H000740,A,311,1417.32,819.79,drawn,two independent readings
+H000741,A,310,1417.19,831.29,drawn,two independent readings
+H000742,A,309H,1417.03,840.35,drawn,two independent readings
+H000743,A,309,1416.93,849.38,drawn,two independent readings
+H000744,A,308,1416.77,860.81,drawn,two independent readings
+H000745,A,307,1416.59,872.54,drawn,two independent readings
+H000746,A,306,1416.41,883.91,drawn,two independent readings
+H000748,A,305,1416.27,895.99,drawn,two independent readings
+H000751,B,359,1394.13,586.25,drawn,inferred from surrounding lots
+H000752,B,358,1394.49,596.88,drawn,two independent readings
+H000753,B,357,1394.82,607.0,drawn,two independent readings
+H000754,B,356,1395.17,618.0,drawn,two independent readings
+H000755,B,355,1395.55,629.44,drawn,two independent readings
+H000757,B,353,1403.66,430.69,drawn,two independent readings
+H000758,B,352,1403.99,440.88,drawn,two independent readings
+H000759,B,351,1404.35,451.0,drawn,two independent readings
+H000760,B,350,1404.68,461.19,drawn,two independent readings
+H000761,B,349,1405.0,471.38,drawn,two independent readings
+H000762,B,348,1405.37,481.5,drawn,two independent readings
+H000763,B,347,1405.69,491.69,drawn,two independent readings
+H000764,B,346,1406.0,501.88,drawn,two independent readings
+H000765,B,345,1406.3,510.25,drawn,two independent readings
+H000766,B,344,1407.88,555.91,drawn,two independent readings
+H000767,B,343,1408.2,565.2,drawn,two independent readings
+H000768,B,342,1408.51,575.81,drawn,two independent readings
+H000769,B,341,1408.88,586.82,drawn,two independent readings
+H000770,B,335,1418.41,431.38,drawn,two independent readings
+H000771,A,342,1403.96,650.2,drawn,two independent readings
+H000772,A,341,1403.77,662.99,drawn,two independent readings
+H000773,A,340,1403.59,675.55,drawn,two independent readings
+H000774,A,339,1403.39,688.83,drawn,two independent readings
+H000775,A,338,1403.21,703.74,drawn,two independent readings
+H000776,A,337,1403.01,718.21,drawn,two independent readings
+H000777,A,336H,1402.88,728.66,drawn,two independent readings
+H000778,A,336,1402.73,737.72,drawn,two independent readings
+H000779,A,335,1402.58,749.2,drawn,two independent readings
+H000780,A,334,1402.4,760.93,drawn,two independent readings
+H000781,A,333,1402.25,772.91,drawn,two independent readings
+H000782,A,332,1400.59,794.85,drawn,two independent readings
+H000783,A,331,1400.41,806.97,drawn,two independent readings
+H000784,A,330,1400.27,818.62,drawn,two independent readings
+H000785,A,329,1400.12,830.13,drawn,two independent readings
+H000786,A,328H,1400.01,839.16,drawn,two independent readings
+H000787,A,328,1399.86,848.19,drawn,two independent readings
+H000788,A,327,1399.71,859.63,drawn,two independent readings
+H000789,A,326,1399.51,871.34,drawn,two independent readings
+H000790,A,325,1399.36,882.75,drawn,two independent readings
+H000792,A,324,1399.22,894.86,drawn,two independent readings
+H000802,B,372,1388.58,419.88,drawn,two independent readings
+H000803,B,371,1388.88,430.0,drawn,two independent readings
+H000804,B,370,1389.24,440.19,drawn,two independent readings
+H000805,B,369,1389.57,450.38,drawn,inferred from surrounding lots
+H000806,B,368,1389.87,460.5,drawn,two independent readings
+H000807,B,367,1390.24,470.69,drawn,two independent readings
+H000808,B,366,1390.56,480.88,drawn,two independent readings
+H000809,B,365,1390.87,491.0,drawn,two independent readings
+H000810,B,364,1391.23,501.19,drawn,two independent readings
+H000811,B,363,1391.54,510.13,drawn,two independent readings
+H000812,B,362,1393.13,556.13,drawn,two independent readings
+H000813,B,361,1393.44,565.44,drawn,two independent readings
+H000814,B,354,1403.34,420.5,drawn,inferred from surrounding lots
+H000815,A,361,1389.12,649.69,drawn,two independent readings
+H000816,A,360,1388.96,662.49,drawn,two independent readings
+H000817,A,359,1388.77,675.01,drawn,two independent readings
+H000818,A,358,1388.62,688.32,drawn,two independent readings
+H000819,A,357,1388.43,703.19,drawn,two independent readings
+H000820,A,356,1388.22,717.65,drawn,two independent readings
+H000821,A,355H,1388.07,728.1,drawn,two independent readings
+H000822,A,355,1387.96,737.12,drawn,two independent readings
+H000823,A,354,1387.78,748.6,drawn,two independent readings
+H000824,A,353,1387.61,760.35,drawn,two independent readings
+H000825,A,352,1387.46,772.3,drawn,two independent readings
+H000826,A,351,1387.86,794.66,drawn,inferred from surrounding lots
+H000827,A,350,1387.69,806.78,drawn,two independent readings
+H000828,A,349,1387.55,818.44,drawn,two independent readings
+H000829,A,348,1387.39,829.98,drawn,two independent readings
+H000830,A,347H,1387.27,839.0,drawn,two independent readings
+H000831,A,347,1387.14,848.01,drawn,two independent readings
+H000832,A,346,1386.96,859.43,drawn,two independent readings
+H000833,A,345,1386.82,871.16,drawn,two independent readings
+H000834,A,344,1386.67,882.57,drawn,two independent readings
+H000836,A,343,1386.48,894.66,drawn,two independent readings
+H000837,D,1U,1358.42,412.31,drawn,inferred from surrounding lots
+H000838,D,1T,1358.62,420.81,drawn,two independent readings
+H000839,D,1S,1358.9,433.13,drawn,two independent readings
+H000840,D,1R,1359.18,444.76,drawn,two independent readings
+H000841,D,1Q,1359.42,454.94,drawn,two independent readings
+H000842,D,1P,1359.67,464.75,drawn,two independent readings
+H000843,D,1O,1359.86,474.57,drawn,inferred from surrounding lots
+H000844,D,1N,1360.06,484.44,drawn,two independent readings
+H000845,D,1M,1360.3,494.31,drawn,two independent readings
+H000846,D,1L,1360.56,504.19,drawn,inferred from surrounding lots
+H000847,D,1K,1360.8,514.06,drawn,two independent readings
+H000848,D,1J,1361.0,523.94,drawn,inferred from surrounding lots
+H000849,D,1I,1362.25,545.59,drawn,inferred from surrounding lots
+H000850,D,1H,1362.24,555.69,drawn,two independent readings
+H000851,D,20,1345.75,419.38,drawn,two independent readings
+H000852,D,19,1345.93,431.69,drawn,two independent readings
+H000853,D,18,1346.06,443.25,drawn,two independent readings
+H000854,D,17,1346.18,453.38,drawn,two independent readings
+H000855,D,16,1346.3,463.25,drawn,two independent readings
+H000856,D,15,1346.42,473.13,drawn,two independent readings
+H000857,D,14,1346.56,483.0,drawn,two independent readings
+H000858,D,13,1346.68,492.88,drawn,two independent readings
+H000859,D,12,1346.8,502.75,drawn,two independent readings
+H000860,D,11,1346.91,512.6,drawn,two independent readings
+H000861,D,10,1347.07,522.41,drawn,inferred from surrounding lots
+H000862,D,9,1346.99,545.07,drawn,two independent readings
+H000863,D,8,1346.99,555.19,drawn,two independent readings
+H000864,D,7,1346.99,565.07,drawn,inferred from surrounding lots
+H000865,D,6,1346.99,575.38,drawn,two independent readings
+H000866,D,5,1347.05,586.13,drawn,two independent readings
+H000867,D,4,1347.12,596.44,drawn,two independent readings
+H000868,D,3,1347.12,606.32,drawn,two independent readings
+H000869,D,2,1347.12,617.0,drawn,two independent readings
+H000870,D,1,1347.12,628.13,drawn,inferred from surrounding lots
+H000871,D,1A,1362.37,628.75,drawn,two independent readings
+H000872,D,1B,1362.37,617.57,drawn,two independent readings
+H000873,D,1C,1362.37,606.81,drawn,two independent readings
+H000874,D,1D,1362.37,596.94,drawn,inferred from surrounding lots
+H000875,D,1E,1362.3,586.62,drawn,two independent readings
+H000876,D,F1,1362.24,575.88,drawn,two independent readings
+H000877,D,1G,1362.24,565.56,drawn,two independent readings
+H000880,C,19,1367.11,650.51,drawn,two independent readings
+H000881,C,18,1366.92,662.44,drawn,two independent readings
+H000882,C,17,1366.68,674.5,drawn,two independent readings
+H000883,C,16,1366.37,688.19,drawn,two independent readings
+H000884,C,15,1366.11,703.26,drawn,two independent readings
+H000885,C,14,1365.81,717.88,drawn,two independent readings
+H000886,C,13,1365.43,736.88,drawn,two independent readings
+H000887,C,12,1365.17,749.03,drawn,two independent readings
+H000888,C,11,1364.95,760.85,drawn,two independent readings
+H000889,C,10,1364.73,772.78,drawn,two independent readings
+H000890,C,9H,1364.91,783.1,drawn,inferred from surrounding lots
+H000891,C,9,1365.05,793.38,drawn,inferred from surrounding lots
+H000892,C,8,1364.85,805.34,drawn,two independent readings
+H000893,C,7,1364.61,817.06,drawn,two independent readings
+H000894,C,6,1364.37,828.38,drawn,two independent readings
+H000895,C,5H,1364.21,836.76,drawn,two independent readings
+H000896,C,5,1364.05,845.85,drawn,two independent readings
+H000897,C,4,1363.8,857.88,drawn,two independent readings
+H000898,C,3,1363.56,869.63,drawn,two independent readings
+H000899,C,2,1363.33,881.34,drawn,two independent readings
+H000900,C,1,1363.12,893.47,drawn,two independent readings
+H000901,D,20H,1345.65,410.91,drawn,two independent readings
+H000902,D,40,1332.36,418.82,drawn,two independent readings
+H000903,D,39,1332.36,431.12,drawn,two independent readings
+H000904,D,38,1332.36,442.75,drawn,two independent readings
+H000905,D,37,1332.36,452.94,drawn,two independent readings
+H000906,D,36,1332.36,462.81,drawn,two independent readings
+H000907,D,35,1332.42,472.69,drawn,two independent readings
+H000908,D,34,1332.42,482.56,drawn,two independent readings
+H000909,D,33,1332.43,492.38,drawn,two independent readings
+H000910,D,32,1332.42,502.19,drawn,two independent readings
+H000911,D,31,1332.42,512.07,drawn,two independent readings
+H000912,D,30,1332.42,521.94,drawn,two independent readings
+H000913,D,29H,1332.55,533.67,drawn,two independent readings
+H000914,D,29,1332.62,544.51,drawn,two independent readings
+H000915,D,28,1332.62,554.63,drawn,two independent readings
+H000916,D,27,1332.62,564.57,drawn,two independent readings
+H000917,D,26,1332.62,574.88,drawn,two independent readings
+H000918,D,25,1332.62,585.57,drawn,two independent readings
+H000919,D,24,1332.62,595.88,drawn,two independent readings
+H000920,D,23,1332.62,605.81,drawn,two independent readings
+H000921,D,22,1332.62,616.5,drawn,two independent readings
+H000922,D,21,1332.62,627.62,drawn,two independent readings
+H000923,C,38,1352.18,648.91,drawn,two independent readings
+H000924,C,37,1351.96,661.22,drawn,two independent readings
+H000925,C,36,1351.75,673.03,drawn,two independent readings
+H000926,C,35,1351.43,686.7,drawn,two independent readings
+H000927,C,34,1351.15,702.07,drawn,two independent readings
+H000928,C,33,1350.86,717.06,drawn,two independent readings
+H000929,C,32H,1350.67,727.41,drawn,two independent readings
+H000930,C,32,1350.49,736.5,drawn,two independent readings
+H000931,C,31,1350.25,748.53,drawn,two independent readings
+H000932,C,30,1350.0,760.13,drawn,two independent readings
+H000933,C,29,1349.8,772.0,drawn,two independent readings
+H000934,C,28,1348.87,792.27,drawn,inferred from surrounding lots
+H000935,C,27,1348.65,804.26,drawn,two independent readings
+H000936,C,26,1348.42,816.0,drawn,two independent readings
+H000937,C,25,1348.18,827.31,drawn,two independent readings
+H000938,C,24H,1348.02,835.69,drawn,two independent readings
+H000939,C,24,1347.85,844.81,drawn,two independent readings
+H000940,C,23,1347.62,856.81,drawn,two independent readings
+H000941,C,22,1347.37,868.51,drawn,two independent readings
+H000942,C,21,1347.15,880.26,drawn,two independent readings
+H000943,C,20,1346.93,892.44,drawn,two independent readings
+H000944,D,40H,1332.39,410.28,drawn,two independent readings
+H000945,D,60,1317.99,418.63,drawn,two independent readings
+H000946,D,59,1317.99,431.01,drawn,two independent readings
+H000947,D,58,1317.99,442.56,drawn,two independent readings
+H000948,D,57,1317.99,452.69,drawn,two independent readings
+H000949,D,56,1317.99,462.56,drawn,two independent readings
+H000950,D,55,1318.05,472.44,drawn,two independent readings
+H000951,D,54,1318.05,482.31,drawn,two independent readings
+H000952,D,53,1318.05,492.19,drawn,two independent readings
+H000953,D,52,1318.05,502.06,drawn,two independent readings
+H000954,D,51,1318.05,511.88,drawn,two independent readings
+H000955,D,50,1318.05,521.69,drawn,two independent readings
+H000956,D,49H,1317.9,533.18,drawn,two independent readings
+H000957,D,49,1317.74,544.01,drawn,two independent readings
+H000958,D,48,1317.74,554.07,drawn,two independent readings
+H000959,D,47,1317.74,563.94,drawn,two independent readings
+H000960,D,46,1317.74,574.25,drawn,two independent readings
+H000961,D,45,1317.8,585.0,drawn,two independent readings
+H000962,D,44,1317.87,595.32,drawn,two independent readings
+H000963,D,43,1317.86,605.19,drawn,two independent readings
+H000964,D,42,1317.87,615.94,drawn,two independent readings
+H000965,D,41,1317.87,627.12,drawn,two independent readings
+H000966,C,57,1337.37,647.85,drawn,two independent readings
+H000967,C,56,1337.17,659.75,drawn,inferred from surrounding lots
+H000968,C,55,1336.92,672.07,drawn,two independent readings
+H000969,C,54,1336.61,686.22,drawn,inferred from surrounding lots
+H000970,C,53,1336.34,701.51,drawn,two independent readings
+H000971,C,52,1336.05,716.44,drawn,two independent readings
+H000972,C,51H,1335.88,727.1,drawn,inferred from surrounding lots
+H000973,C,51,1335.68,736.13,drawn,inferred from surrounding lots
+H000974,C,50,1335.42,747.91,drawn,two independent readings
+H000975,C,49,1335.19,759.79,drawn,two independent readings
+H000976,C,48,1334.98,771.72,drawn,two independent readings
+H000977,C,47H,1334.93,781.73,drawn,inferred from surrounding lots
+H000978,C,47,1336.12,792.0,drawn,two independent readings
+H000979,C,46,1335.86,804.0,drawn,two independent readings
+H000980,C,45,1335.67,815.75,drawn,two independent readings
+H000981,C,44,1335.43,827.07,drawn,two independent readings
+H000982,C,43H,1335.24,835.44,drawn,two independent readings
+H000983,C,43,1335.05,844.56,drawn,two independent readings
+H000984,C,42,1334.81,856.56,drawn,two independent readings
+H000985,C,41,1334.57,868.25,drawn,two independent readings
+H000986,C,40,1334.36,880.0,drawn,two independent readings
+H000987,C,39,1334.12,892.19,drawn,two independent readings
+H000988,D,60H,1318.02,410.1,drawn,two independent readings
+H000989,D,80,1303.49,418.19,drawn,two independent readings
+H000990,D,79,1303.49,430.5,drawn,two independent readings
+H000991,D,78,1303.49,442.13,drawn,two independent readings
+H000992,D,77,1303.49,452.31,drawn,two independent readings
+H000993,D,76,1303.49,462.19,drawn,two independent readings
+H000994,D,75,1303.62,472.06,drawn,two independent readings
+H000995,D,74,1303.61,481.91,drawn,two independent readings
+H000996,D,73,1303.63,491.72,drawn,two independent readings
+H000997,D,72,1303.62,501.56,drawn,two independent readings
+H000998,D,71,1303.62,511.44,drawn,two independent readings
+H000999,D,70,1303.62,521.31,drawn,two independent readings
+H001000,D,69H,1303.56,532.6,drawn,two independent readings
+H001001,D,69,1303.49,543.44,drawn,two independent readings
+H001002,D,68,1303.49,553.57,drawn,two independent readings
+H001003,D,67,1303.49,563.44,drawn,two independent readings
+H001004,D,66,1303.49,573.75,drawn,two independent readings
+H001005,D,65,1303.49,584.5,drawn,two independent readings
+H001006,D,64,1303.49,594.82,drawn,two independent readings
+H001007,D,63,1303.49,604.69,drawn,two independent readings
+H001008,D,62,1303.48,615.41,drawn,two independent readings
+H001009,D,61,1303.5,626.53,drawn,two independent readings
+H001010,C,76,1322.37,647.29,drawn,two independent readings
+H001011,C,75,1322.16,659.22,drawn,two independent readings
+H001012,C,74,1321.93,671.53,drawn,two independent readings
+H001013,C,73,1321.62,685.69,drawn,two independent readings
+H001014,C,72,1321.34,700.94,drawn,two independent readings
+H001015,C,71,1321.06,715.44,drawn,two independent readings
+H001016,C,70,1320.68,735.5,drawn,two independent readings
+H001017,C,69,1320.43,747.32,drawn,two independent readings
+H001018,C,68,1320.18,759.22,drawn,two independent readings
+H001019,C,67,1320.0,771.16,drawn,two independent readings
+H001020,C,66H,1319.89,781.37,drawn,inferred from surrounding lots
+H001021,C,66,1318.99,791.63,drawn,inferred from surrounding lots
+H001022,C,65,1318.8,803.63,drawn,two independent readings
+H001023,C,64,1318.55,815.38,drawn,two independent readings
+H001024,C,63,1318.3,826.69,drawn,two independent readings
+H001025,C,62H,1318.18,835.06,drawn,two independent readings
+H001026,C,62,1318.04,844.13,drawn,two independent readings
+H001027,C,61,1317.8,856.13,drawn,two independent readings
+H001028,C,60,1317.56,867.88,drawn,two independent readings
+H001029,C,59,1317.31,879.63,drawn,two independent readings
+H001030,C,58,1317.11,891.75,drawn,two independent readings
+H001031,D,80H,1303.49,409.94,drawn,two independent readings
+H001032,D,100,1288.68,421.81,drawn,two independent readings
+H001033,D,99,1288.68,433.88,drawn,two independent readings
+H001034,D,98,1288.68,445.32,drawn,two independent readings
+H001035,D,97,1288.68,455.31,drawn,two independent readings
+H001036,D,96,1288.68,464.94,drawn,two independent readings
+H001037,D,95,1288.8,474.62,drawn,two independent readings
+H001038,D,94,1288.8,484.31,drawn,two independent readings
+H001039,D,93,1288.8,494.0,drawn,two independent readings
+H001040,D,92,1288.8,503.69,drawn,two independent readings
+H001041,D,91,1288.8,513.38,drawn,two independent readings
+H001042,D,90,1288.8,523.07,drawn,two independent readings
+H001043,D,89H,1288.77,532.81,drawn,two independent readings
+H001044,D,89,1288.74,542.88,drawn,two independent readings
+H001045,D,88,1288.74,553.0,drawn,two independent readings
+H001046,D,87,1288.74,562.94,drawn,two independent readings
+H001047,D,86,1288.74,573.26,drawn,two independent readings
+H001048,D,85,1288.77,583.93,drawn,two independent readings
+H001049,D,84,1288.8,594.25,drawn,two independent readings
+H001050,D,83,1288.81,604.19,drawn,two independent readings
+H001051,D,82,1288.8,614.88,drawn,two independent readings
+H001052,D,81,1288.8,626.0,drawn,two independent readings
+H001053,C,95,1307.37,646.66,drawn,two independent readings
+H001054,C,94,1307.17,658.56,drawn,two independent readings
+H001055,C,93,1306.92,670.88,drawn,two independent readings
+H001056,C,92,1306.64,684.66,drawn,two independent readings
+H001057,C,91,1306.37,699.91,drawn,two independent readings
+H001058,C,90,1306.05,715.25,drawn,two independent readings
+H001059,C,89,1305.67,734.97,drawn,two independent readings
+H001060,C,88,1305.44,746.72,drawn,two independent readings
+H001061,C,87,1305.18,758.6,drawn,two independent readings
+H001062,C,86,1305.0,770.54,drawn,two independent readings
+H001063,C,85H,1304.86,780.83,drawn,two independent readings
+H001064,C,85,1305.99,791.38,drawn,two independent readings
+H001065,C,84,1305.8,803.38,drawn,two independent readings
+H001066,C,83,1305.56,815.13,drawn,two independent readings
+H001067,C,82,1305.3,826.44,drawn,two independent readings
+H001068,C,81H,1305.18,834.81,drawn,two independent readings
+H001069,C,81,1305.04,843.88,drawn,two independent readings
+H001070,C,80,1304.8,855.88,drawn,two independent readings
+H001071,C,79,1304.55,867.63,drawn,two independent readings
+H001072,C,78,1304.31,879.38,drawn,two independent readings
+H001073,C,77,1304.12,891.5,drawn,two independent readings
+H001074,D,100H,1288.68,413.5,drawn,two independent readings
+H001075,D,120,1274.68,421.5,drawn,two independent readings
+H001076,D,119,1274.68,433.63,drawn,two independent readings
+H001077,D,118,1274.68,445.0,drawn,two independent readings
+H001078,D,117,1274.68,454.94,drawn,two independent readings
+H001079,D,116,1274.68,464.63,drawn,two independent readings
+H001080,D,115,1274.74,474.31,drawn,two independent readings
+H001081,D,114,1274.74,484.0,drawn,two independent readings
+H001082,D,113,1274.74,493.69,drawn,two independent readings
+H001083,D,112,1274.74,503.31,drawn,two independent readings
+H001084,D,111,1274.74,513.01,drawn,two independent readings
+H001085,D,110,1274.74,522.69,drawn,two independent readings
+H001086,D,109H,1274.75,532.35,drawn,two independent readings
+H001087,D,109,1274.73,542.34,drawn,two independent readings
+H001088,D,108,1274.71,552.43,drawn,two independent readings
+H001089,D,107,1274.64,562.32,drawn,two independent readings
+H001090,D,106,1274.62,572.62,drawn,two independent readings
+H001091,D,105,1274.58,583.37,drawn,two independent readings
+H001092,D,104,1274.55,593.69,drawn,two independent readings
+H001093,D,103,1274.55,603.57,drawn,two independent readings
+H001094,D,102,1274.46,614.31,drawn,two independent readings
+H001095,D,101,1274.44,625.47,drawn,two independent readings
+H001096,C,114,1292.33,646.03,drawn,two independent readings
+H001097,C,113,1292.11,657.94,drawn,two independent readings
+H001098,C,112,1291.86,670.25,drawn,two independent readings
+H001099,C,111,1291.59,684.02,drawn,two independent readings
+H001100,C,110,1291.33,699.29,drawn,two independent readings
+H001101,C,109,1291.02,714.63,drawn,two independent readings
+H001102,C,108H,1290.83,725.32,drawn,two independent readings
+H001103,C,108,1290.66,734.35,drawn,two independent readings
+H001104,C,107,1290.44,746.1,drawn,two independent readings
+H001105,C,106,1290.17,757.97,drawn,two independent readings
+H001106,C,105,1289.98,769.9,drawn,two independent readings
+H001107,C,104H,1289.85,780.05,drawn,two independent readings
+H001108,C,104,1288.74,790.27,drawn,two independent readings
+H001109,C,103,1288.55,802.25,drawn,two independent readings
+H001110,C,102,1288.3,814.0,drawn,two independent readings
+H001111,C,101,1288.05,825.31,drawn,two independent readings
+H001112,C,100H,1287.93,833.69,drawn,two independent readings
+H001113,C,100,1287.79,842.75,drawn,two independent readings
+H001114,C,99,1287.55,854.75,drawn,two independent readings
+H001115,C,98,1287.3,866.5,drawn,two independent readings
+H001116,C,97,1287.06,878.25,drawn,two independent readings
+H001117,C,96,1286.87,890.44,drawn,two independent readings
+H001118,D,120H,1274.68,413.13,drawn,two independent readings
+H001119,D,140,1259.74,421.13,drawn,two independent readings
+H001120,D,139,1259.74,433.25,drawn,two independent readings
+H001121,D,138,1259.74,444.62,drawn,two independent readings
+H001122,D,137,1259.74,454.56,drawn,two independent readings
+H001123,D,136,1259.74,464.26,drawn,two independent readings
+H001124,D,135,1259.8,473.94,drawn,two independent readings
+H001125,D,134,1259.8,483.62,drawn,two independent readings
+H001126,D,133,1259.8,493.31,drawn,two independent readings
+H001127,D,132,1259.8,503.0,drawn,two independent readings
+H001128,D,131,1259.8,512.69,drawn,two independent readings
+H001129,D,130,1259.79,522.35,drawn,two independent readings
+H001130,D,129H,1259.84,531.9,drawn,two independent readings
+H001131,D,129,1259.87,541.82,drawn,two independent readings
+H001132,D,128,1259.87,551.94,drawn,two independent readings
+H001133,D,127,1259.87,561.82,drawn,two independent readings
+H001134,D,126,1259.87,572.12,drawn,two independent readings
+H001135,D,125,1259.9,582.87,drawn,two independent readings
+H001136,D,124,1259.93,593.19,drawn,two independent readings
+H001137,D,123,1259.93,603.06,drawn,two independent readings
+H001138,D,122,1259.93,613.82,drawn,two independent readings
+H001139,D,121,1259.93,624.94,drawn,two independent readings
+H001140,C,133,1276.93,645.38,drawn,two independent readings
+H001141,C,132,1276.73,657.31,drawn,two independent readings
+H001142,C,131,1276.48,669.6,drawn,two independent readings
+H001143,C,130,1276.2,683.38,drawn,two independent readings
+H001144,C,129,1275.93,698.66,drawn,two independent readings
+H001145,C,128,1275.61,714.0,drawn,two independent readings
+H001146,C,127H,1275.42,724.69,drawn,two independent readings
+H001147,C,127,1275.24,733.69,drawn,two independent readings
+H001148,C,126,1274.99,745.44,drawn,two independent readings
+H001149,C,125,1274.74,757.35,drawn,two independent readings
+H001150,C,124,1274.56,769.28,drawn,two independent readings
+H001151,C,123H,1274.42,779.52,drawn,two independent readings
+H001152,C,123,1275.55,790.0,drawn,two independent readings
+H001153,C,122,1275.33,802.01,drawn,two independent readings
+H001154,C,121,1275.11,813.75,drawn,two independent readings
+H001155,C,120,1274.86,825.06,drawn,two independent readings
+H001156,C,119H,1274.71,833.44,drawn,two independent readings
+H001157,C,119,1274.54,842.49,drawn,two independent readings
+H001158,C,118,1274.31,854.5,drawn,two independent readings
+H001159,C,117,1274.06,866.26,drawn,two independent readings
+H001160,C,116,1273.84,878.01,drawn,two independent readings
+H001161,C,115,1273.61,890.19,drawn,two independent readings
+H001162,D,140H,1259.74,412.75,drawn,two independent readings
+H001163,D,160,1244.37,420.81,drawn,two independent readings
+H001164,D,159,1244.37,432.88,drawn,two independent readings
+H001165,D,158,1244.37,444.26,drawn,two independent readings
+H001166,D,157,1244.37,454.25,drawn,inferred from surrounding lots
+H001167,D,156,1244.37,463.94,drawn,inferred from surrounding lots
+H001168,D,155,1244.42,473.63,drawn,two independent readings
+H001169,D,154,1244.43,483.31,drawn,two independent readings
+H001170,D,153,1244.43,492.94,drawn,two independent readings
+H001171,D,152,1244.42,502.62,drawn,two independent readings
+H001172,D,151,1244.42,512.32,drawn,inferred from surrounding lots
+H001173,D,150,1244.42,522.0,drawn,two independent readings
+H001174,D,149H,1244.52,531.5,drawn,two independent readings
+H001175,D,149,1244.62,541.31,drawn,two independent readings
+H001176,D,148,1244.62,551.44,drawn,two independent readings
+H001177,D,147,1244.62,561.31,drawn,two independent readings
+H001178,D,146,1244.62,571.62,drawn,two independent readings
+H001179,D,145,1244.62,582.38,drawn,two independent readings
+H001180,D,144,1244.62,592.69,drawn,two independent readings
+H001181,D,143,1244.62,602.57,drawn,two independent readings
+H001182,D,142,1244.61,613.28,drawn,two independent readings
+H001183,D,141,1244.62,624.41,drawn,two independent readings
+H001184,C,152,1261.93,644.76,drawn,two independent readings
+H001185,C,151,1261.73,656.69,drawn,inferred from surrounding lots
+H001186,C,150,1261.48,668.97,drawn,two independent readings
+H001187,C,149,1261.2,682.75,drawn,two independent readings
+H001188,C,148,1260.93,698.03,drawn,two independent readings
+H001189,C,147,1260.61,713.37,drawn,two independent readings
+H001190,C,146H,1260.42,724.06,drawn,two independent readings
+H001191,C,146,1260.24,733.07,drawn,two independent readings
+H001192,C,145,1259.99,744.82,drawn,two independent readings
+H001193,C,144,1259.74,756.72,drawn,two independent readings
+H001194,C,143,1259.56,768.66,drawn,two independent readings
+H001195,C,124H,1259.41,778.73,drawn,inferred from surrounding lots
+H001196,C,142,1258.44,788.91,drawn,two independent readings
+H001197,C,141,1258.21,800.87,drawn,two independent readings
+H001198,C,140,1257.98,812.63,drawn,two independent readings
+H001199,C,139,1257.74,823.94,drawn,two independent readings
+H001200,C,138H,1257.58,832.32,drawn,two independent readings
+H001201,C,138,1257.42,841.45,drawn,two independent readings
+H001202,C,137,1257.18,853.5,drawn,two independent readings
+H001203,C,136,1256.93,865.19,drawn,two independent readings
+H001204,C,135,1256.71,876.87,drawn,two independent readings
+H001205,C,134,1256.49,889.07,drawn,two independent readings
+H001206,D,160H,1244.39,412.47,drawn,two independent readings
+H001207,D,180,1229.87,420.44,drawn,two independent readings
+H001208,D,179,1229.87,432.5,drawn,two independent readings
+H001209,D,178,1229.87,443.88,drawn,two independent readings
+H001210,D,177,1229.87,453.87,drawn,two independent readings
+H001211,D,176,1229.87,463.57,drawn,two independent readings
+H001212,D,175,1229.92,473.25,drawn,two independent readings
+H001213,D,174,1229.92,482.94,drawn,two independent readings
+H001214,D,173,1229.92,492.62,drawn,two independent readings
+H001215,D,172,1229.92,502.32,drawn,two independent readings
+H001216,D,171,1229.91,511.97,drawn,two independent readings
+H001217,D,170,1229.94,521.66,drawn,two independent readings
+H001218,D,169H,1229.83,531.06,drawn,two independent readings
+H001219,D,169,1229.74,540.75,drawn,two independent readings
+H001220,D,168,1229.74,550.88,drawn,two independent readings
+H001221,D,167,1229.74,560.81,drawn,two independent readings
+H001222,D,166,1229.74,571.12,drawn,two independent readings
+H001223,D,165,1229.77,581.81,drawn,two independent readings
+H001224,D,164,1229.8,592.13,drawn,two independent readings
+H001225,D,163,1229.8,602.07,drawn,two independent readings
+H001226,D,162,1229.8,612.75,drawn,two independent readings
+H001227,D,161,1229.8,623.88,drawn,two independent readings
+H001228,C,171,1246.54,644.09,drawn,two independent readings
+H001229,C,170,1246.36,656.04,drawn,two independent readings
+H001230,C,169,1246.11,668.35,drawn,two independent readings
+H001231,C,168,1245.83,682.1,drawn,two independent readings
+H001232,C,167,1245.55,697.38,drawn,two independent readings
+H001233,C,166,1245.24,712.75,drawn,two independent readings
+H001234,C,165H,1245.03,723.41,drawn,two independent readings
+H001235,C,165,1244.87,732.41,drawn,two independent readings
+H001236,C,164,1244.62,744.19,drawn,two independent readings
+H001237,C,163,1244.37,756.07,drawn,two independent readings
+H001238,C,162,1244.18,768.0,drawn,two independent readings
+H001239,C,161,1245.62,788.66,drawn,two independent readings
+H001240,C,160,1245.43,800.63,drawn,two independent readings
+H001241,C,159,1245.18,812.38,drawn,two independent readings
+H001242,C,158,1244.93,823.69,drawn,two independent readings
+H001243,C,157,1244.66,841.19,drawn,two independent readings
+H001244,C,156,1244.43,853.25,drawn,inferred from surrounding lots
+H001245,C,155,1244.18,864.94,drawn,two independent readings
+H001246,C,154,1243.94,876.63,drawn,two independent readings
+H001247,C,153,1243.74,888.82,drawn,inferred from surrounding lots
+H001248,D,180H,1229.87,412.13,drawn,two independent readings
+H001249,D,200,1214.93,419.94,drawn,two independent readings
+H001250,D,199,1214.92,432.0,drawn,two independent readings
+H001251,D,198,1214.92,443.38,drawn,two independent readings
+H001252,D,197,1214.92,453.38,drawn,two independent readings
+H001253,D,196,1214.92,463.07,drawn,two independent readings
+H001254,D,195,1214.99,472.75,drawn,two independent readings
+H001255,D,194,1214.99,482.44,drawn,two independent readings
+H001256,D,193,1214.99,492.12,drawn,two independent readings
+H001257,D,192,1214.99,501.81,drawn,two independent readings
+H001258,D,191,1214.99,511.44,drawn,two independent readings
+H001259,D,190,1214.99,521.12,drawn,two independent readings
+H001260,D,189H,1214.93,530.57,drawn,two independent readings
+H001261,D,189,1214.87,540.25,drawn,two independent readings
+H001262,D,188,1214.87,550.32,drawn,two independent readings
+H001263,D,187,1214.87,560.19,drawn,two independent readings
+H001264,D,186,1214.87,570.5,drawn,two independent readings
+H001265,D,185,1214.93,581.25,drawn,two independent readings
+H001266,D,184,1214.99,591.56,drawn,two independent readings
+H001267,D,183,1214.99,601.44,drawn,two independent readings
+H001268,D,182,1214.99,612.19,drawn,two independent readings
+H001269,D,181,1214.99,623.38,drawn,two independent readings
+H001270,C,190,1232.31,643.54,drawn,two independent readings
+H001271,C,189,1232.11,655.44,drawn,two independent readings
+H001272,C,188,1231.86,667.75,drawn,two independent readings
+H001273,C,187,1231.57,681.53,drawn,two independent readings
+H001274,C,186,1231.31,696.78,drawn,two independent readings
+H001275,C,185,1230.99,712.12,drawn,two independent readings
+H001276,C,184H,1230.8,722.81,drawn,two independent readings
+H001277,C,184,1230.62,731.81,drawn,two independent readings
+H001278,C,183,1230.36,743.57,drawn,two independent readings
+H001279,C,182,1230.12,755.47,drawn,two independent readings
+H001280,C,181,1229.94,767.41,drawn,two independent readings
+H001281,C,180H,1229.76,777.47,drawn,inferred from surrounding lots
+H001282,C,180,1228.49,787.63,drawn,two independent readings
+H001283,C,179,1228.27,799.62,drawn,two independent readings
+H001284,C,178,1228.06,811.35,drawn,two independent readings
+H001285,C,177,1227.79,822.66,drawn,two independent readings
+H001286,C,176H,1227.65,831.07,drawn,two independent readings
+H001287,C,176,1227.48,840.13,drawn,two independent readings
+H001288,C,175,1227.24,852.13,drawn,two independent readings
+H001289,C,174,1227.0,863.88,drawn,two independent readings
+H001290,C,173,1226.78,875.62,drawn,two independent readings
+H001291,C,172,1226.55,887.76,drawn,two independent readings
+H001292,D,200H,1214.92,411.63,drawn,two independent readings
+H001293,D,220,1200.74,419.32,drawn,two independent readings
+H001294,D,219,1200.74,431.38,drawn,two independent readings
+H001295,D,218,1200.73,442.79,drawn,two independent readings
+H001296,D,217,1200.75,452.78,drawn,two independent readings
+H001297,D,216,1200.74,462.44,drawn,two independent readings
+H001298,D,215,1200.8,472.12,drawn,two independent readings
+H001299,D,214,1200.8,481.82,drawn,two independent readings
+H001300,D,213,1200.8,491.5,drawn,two independent readings
+H001301,D,212,1200.8,501.19,drawn,two independent readings
+H001302,D,211,1200.79,510.85,drawn,two independent readings
+H001303,D,210,1200.81,520.53,drawn,two independent readings
+H001304,D,209H,1200.77,529.93,drawn,two independent readings
+H001305,D,209,1200.74,539.69,drawn,two independent readings
+H001306,D,208,1200.74,549.82,drawn,two independent readings
+H001307,D,207,1200.74,559.69,drawn,two independent readings
+H001308,D,206,1200.74,570.0,drawn,two independent readings
+H001309,D,205,1200.74,580.75,drawn,two independent readings
+H001310,D,204,1200.74,591.07,drawn,two independent readings
+H001311,D,203,1200.74,600.94,drawn,two independent readings
+H001312,D,202,1200.74,611.69,drawn,two independent readings
+H001313,D,201,1200.74,622.88,drawn,two independent readings
+H001314,C,209,1216.93,642.88,drawn,two independent readings
+H001315,C,208,1216.73,654.81,drawn,two independent readings
+H001316,C,207,1216.48,667.1,drawn,two independent readings
+H001317,C,206,1216.2,680.88,drawn,two independent readings
+H001318,C,205,1215.93,696.16,drawn,two independent readings
+H001319,C,204,1215.61,711.5,drawn,two independent readings
+H001320,C,203H,1215.42,722.19,drawn,two independent readings
+H001321,C,203,1215.24,731.19,drawn,two independent readings
+H001322,C,202,1214.99,742.94,drawn,two independent readings
+H001323,C,201,1214.74,754.85,drawn,two independent readings
+H001324,C,200,1214.56,766.78,drawn,two independent readings
+H001325,C,199H,1214.32,776.97,drawn,inferred from surrounding lots
+H001326,C,199,1215.3,787.38,drawn,inferred from surrounding lots
+H001327,C,198,1215.08,799.39,drawn,two independent readings
+H001328,C,197,1214.86,811.07,drawn,two independent readings
+H001329,C,196,1214.62,822.37,drawn,two independent readings
+H001330,C,195H,1214.49,830.78,drawn,two independent readings
+H001331,C,195,1214.28,839.84,drawn,two independent readings
+H001332,C,194,1214.05,851.88,drawn,two independent readings
+H001333,C,193,1213.81,863.63,drawn,two independent readings
+H001334,C,192,1213.59,875.39,drawn,two independent readings
+H001335,C,191,1213.37,887.5,drawn,two independent readings
+H001336,D,220H,1200.74,411.0,drawn,two independent readings
+H001337,D,240,1185.92,418.62,drawn,two independent readings
+H001338,D,239,1185.92,430.75,drawn,two independent readings
+H001339,D,238,1185.92,442.12,drawn,two independent readings
+H001340,D,237,1185.92,452.06,drawn,two independent readings
+H001341,D,236,1185.92,461.75,drawn,two independent readings
+H001342,D,235,1186.05,471.44,drawn,two independent readings
+H001343,D,234,1186.05,481.12,drawn,two independent readings
+H001344,D,233,1186.06,490.81,drawn,two independent readings
+H001345,D,232,1186.05,500.5,drawn,two independent readings
+H001346,D,231,1186.05,510.19,drawn,two independent readings
+H001347,D,230,1186.06,519.81,drawn,two independent readings
+H001348,D,229H,1185.96,529.31,drawn,two independent readings
+H001349,D,229,1185.87,539.19,drawn,two independent readings
+H001350,D,228,1185.87,549.32,drawn,two independent readings
+H001351,D,227,1185.87,559.19,drawn,two independent readings
+H001352,D,226,1185.87,569.5,drawn,two independent readings
+H001353,D,225,1185.9,580.25,drawn,two independent readings
+H001354,D,224,1185.93,590.56,drawn,two independent readings
+H001355,D,223,1185.93,600.44,drawn,two independent readings
+H001356,D,222,1185.93,611.13,drawn,two independent readings
+H001357,D,221,1185.93,622.26,drawn,two independent readings
+H001358,C,228,1201.93,642.26,drawn,two independent readings
+H001359,C,227,1201.73,654.19,drawn,two independent readings
+H001360,C,226,1201.48,666.47,drawn,two independent readings
+H001361,C,225,1201.2,680.25,drawn,two independent readings
+H001362,C,224,1200.93,695.53,drawn,two independent readings
+H001363,C,223,1200.61,710.87,drawn,two independent readings
+H001364,C,222H,1200.42,721.56,drawn,two independent readings
+H001365,C,222,1200.24,730.57,drawn,two independent readings
+H001366,C,221,1199.99,742.32,drawn,two independent readings
+H001367,C,220,1199.74,754.22,drawn,two independent readings
+H001368,C,219,1199.56,766.16,drawn,two independent readings
+H001369,C,218,1198.3,786.38,drawn,two independent readings
+H001370,C,217,1198.08,798.37,drawn,two independent readings
+H001371,C,216,1197.85,810.1,drawn,two independent readings
+H001372,C,215,1197.62,821.41,drawn,two independent readings
+H001373,C,214,1197.3,838.88,drawn,two independent readings
+H001374,C,213,1197.05,850.88,drawn,two independent readings
+H001375,C,212,1196.81,862.63,drawn,two independent readings
+H001376,C,211,1196.59,874.37,drawn,two independent readings
+H001377,C,210,1196.36,886.5,drawn,two independent readings
+H001378,D,240H,1185.92,410.25,drawn,two independent readings
+H001379,D,260,1171.06,417.94,drawn,two independent readings
+H001380,D,259,1171.05,430.0,drawn,two independent readings
+H001381,D,258,1171.05,441.44,drawn,two independent readings
+H001382,D,257,1171.06,451.44,drawn,inferred from surrounding lots
+H001383,D,256,1171.06,461.06,drawn,inferred from surrounding lots
+H001384,D,255,1171.06,470.75,drawn,two independent readings
+H001385,D,254,1171.06,480.44,drawn,two independent readings
+H001386,D,253,1171.06,490.12,drawn,two independent readings
+H001387,D,252,1171.06,499.82,drawn,two independent readings
+H001388,D,251,1171.06,509.5,drawn,inferred from surrounding lots
+H001389,D,250,1171.06,519.19,drawn,two independent readings
+H001390,D,249H,1171.05,528.75,drawn,two independent readings
+H001391,D,249,1170.99,538.62,drawn,two independent readings
+H001392,D,248,1170.99,548.69,drawn,two independent readings
+H001393,D,247,1170.98,558.6,drawn,two independent readings
+H001394,D,246,1171.0,568.91,drawn,two independent readings
+H001395,D,245,1171.05,579.63,drawn,two independent readings
+H001396,D,244,1171.12,589.94,drawn,two independent readings
+H001397,D,243,1171.1,599.85,drawn,two independent readings
+H001398,D,242,1171.12,610.6,drawn,two independent readings
+H001399,D,241,1171.11,621.75,drawn,two independent readings
+H001400,C,247,1187.17,641.72,drawn,two independent readings
+H001401,C,246,1186.99,653.66,drawn,two independent readings
+H001402,C,245,1186.73,665.97,drawn,two independent readings
+H001403,C,244,1186.46,679.72,drawn,two independent readings
+H001404,C,243,1186.17,694.97,drawn,two independent readings
+H001405,C,242,1185.87,710.34,drawn,two independent readings
+H001406,C,241,1185.5,730.03,drawn,two independent readings
+H001407,C,241H,1185.66,721.03,drawn,two independent readings
+H001408,C,240,1185.23,741.78,drawn,two independent readings
+H001409,C,239,1185.01,753.66,drawn,two independent readings
+H001410,C,238,1184.8,765.6,drawn,two independent readings
+H001411,C,237,1185.74,786.13,drawn,two independent readings
+H001412,C,236,1185.52,798.14,drawn,two independent readings
+H001413,C,235,1185.3,809.88,drawn,two independent readings
+H001414,C,234,1185.05,821.19,drawn,two independent readings
+H001415,C,233H,1184.9,829.56,drawn,two independent readings
+H001416,C,233,1184.73,838.62,drawn,two independent readings
+H001417,C,232,1184.49,850.63,drawn,two independent readings
+H001418,C,231,1184.25,862.39,drawn,two independent readings
+H001419,C,230,1184.02,874.14,drawn,two independent readings
+H001420,C,229,1183.8,886.26,drawn,two independent readings
+H001421,D,260H,1171.05,409.63,drawn,two independent readings
+H001422,D,280,1156.42,417.25,drawn,two independent readings
+H001423,D,279,1156.43,429.38,drawn,two independent readings
+H001424,D,278,1156.42,440.75,drawn,two independent readings
+H001425,D,277,1156.42,450.69,drawn,two independent readings
+H001426,D,276,1156.42,460.38,drawn,two independent readings
+H001427,D,275,1156.42,470.06,drawn,two independent readings
+H001428,D,274,1156.42,479.75,drawn,two independent readings
+H001429,D,273,1156.42,489.44,drawn,two independent readings
+H001430,D,272,1156.42,499.12,drawn,two independent readings
+H001431,D,271,1156.42,508.82,drawn,two independent readings
+H001432,D,270,1156.42,518.44,drawn,two independent readings
+H001433,D,269H,1156.46,528.06,drawn,two independent readings
+H001434,D,269,1156.49,538.07,drawn,two independent readings
+H001435,D,268,1156.49,548.19,drawn,two independent readings
+H001436,D,267,1156.49,558.07,drawn,two independent readings
+H001437,D,266,1156.49,568.38,drawn,two independent readings
+H001438,D,265,1156.55,579.13,drawn,two independent readings
+H001439,D,264,1156.62,589.44,drawn,two independent readings
+H001440,D,263,1156.62,599.32,drawn,two independent readings
+H001441,D,262,1156.61,610.03,drawn,two independent readings
+H001442,D,261,1156.62,621.16,drawn,two independent readings
+H001443,C,263C,1172.3,641.19,drawn,two independent readings
+H001444,C,263B,1172.1,653.09,drawn,two independent readings
+H001445,C,263A,1171.87,665.41,drawn,two independent readings
+H001446,C,263,1171.58,679.19,drawn,two independent readings
+H001447,C,262,1171.3,694.44,drawn,two independent readings
+H001448,C,261,1170.99,709.75,drawn,two independent readings
+H001449,C,260H,1170.8,720.44,drawn,two independent readings
+H001450,C,260,1170.6,729.47,drawn,two independent readings
+H001451,C,259,1170.38,741.22,drawn,two independent readings
+H001452,C,258,1170.12,753.12,drawn,inferred from surrounding lots
+H001453,C,257,1169.93,765.07,drawn,two independent readings
+H001454,C,256H,1169.7,775.45,drawn,inferred from surrounding lots
+H001455,C,256,1168.74,786.0,drawn,two independent readings
+H001456,C,255,1168.55,797.94,drawn,two independent readings
+H001457,C,254,1168.3,809.63,drawn,two independent readings
+H001458,C,253,1168.06,820.94,drawn,two independent readings
+H001459,C,252H,1167.92,829.31,drawn,two independent readings
+H001460,C,252,1167.78,838.44,drawn,two independent readings
+H001461,C,251,1167.55,850.5,drawn,inferred from surrounding lots
+H001462,C,250,1167.3,862.25,drawn,two independent readings
+H001463,C,249,1167.07,873.98,drawn,two independent readings
+H001464,C,248,1166.86,886.11,drawn,two independent readings
+H001465,D,280H,1156.43,408.88,drawn,two independent readings
+H001466,D,300,1142.18,416.25,drawn,two independent readings
+H001467,D,299,1142.18,428.44,drawn,two independent readings
+H001468,D,298,1142.18,439.88,drawn,two independent readings
+H001469,D,297,1142.18,449.88,drawn,two independent readings
+H001470,D,296,1142.18,459.62,drawn,two independent readings
+H001471,D,295,1142.18,469.38,drawn,two independent readings
+H001472,D,294,1142.18,479.06,drawn,two independent readings
+H001474,D,292,1142.18,498.51,drawn,two independent readings
+H001475,D,291,1142.18,508.26,drawn,two independent readings
+H001476,D,290,1142.18,518.0,drawn,two independent readings
+H001477,D,289H,1142.24,527.61,drawn,two independent readings
+H001478,D,289,1142.3,537.51,drawn,two independent readings
+H001479,D,288,1142.3,547.63,drawn,two independent readings
+H001480,D,287,1142.3,557.57,drawn,two independent readings
+H001481,D,286,1142.3,567.88,drawn,two independent readings
+H001482,D,285,1142.34,578.57,drawn,two independent readings
+H001483,D,284,1142.37,588.88,drawn,two independent readings
+H001484,D,283,1142.37,598.82,drawn,two independent readings
+H001485,D,282,1142.36,609.5,drawn,two independent readings
+H001486,D,281,1142.37,620.63,drawn,two independent readings
+H001487,C,279C,1157.12,640.79,drawn,two independent readings
+H001488,C,279B,1156.92,652.72,drawn,two independent readings
+H001489,C,279A,1156.68,665.03,drawn,two independent readings
+H001490,C,279,1156.39,678.81,drawn,two independent readings
+H001491,C,278,1156.11,694.09,drawn,two independent readings
+H001492,C,277,1155.8,709.44,drawn,two independent readings
+H001493,C,276,1155.42,729.1,drawn,two independent readings
+H001494,C,276H,1155.62,720.1,drawn,two independent readings
+H001495,C,275,1155.18,740.88,drawn,two independent readings
+H001496,C,274,1154.94,752.79,drawn,two independent readings
+H001497,C,273,1154.74,764.69,drawn,two independent readings
+H001498,C,272H,1154.44,775.12,drawn,inferred from surrounding lots
+H001499,C,272,1155.74,785.75,drawn,two independent readings
+H001500,C,271,1155.55,797.69,drawn,two independent readings
+H001501,C,270,1155.3,809.38,drawn,two independent readings
+H001502,C,269,1155.06,820.69,drawn,two independent readings
+H001503,C,268H,1154.93,829.07,drawn,two independent readings
+H001504,C,268,1154.78,838.19,drawn,two independent readings
+H001505,C,267,1154.55,850.25,drawn,two independent readings
+H001506,C,266,1154.3,862.0,drawn,two independent readings
+H001507,C,265,1154.07,873.7,drawn,two independent readings
+H001508,C,264,1153.86,885.83,drawn,two independent readings
+H001509,D,311H,1127.45,407.22,drawn,two independent readings
+H001510,D,310,1127.42,427.75,drawn,two independent readings
+H001511,D,309,1127.42,439.19,drawn,two independent readings
+H001512,D,308,1127.42,449.19,drawn,two independent readings
+H001513,D,307,1127.42,458.88,drawn,two independent readings
+H001514,D,306,1127.49,468.62,drawn,two independent readings
+H001515,D,305,1127.49,478.38,drawn,two independent readings
+H001516,D,304,1127.49,488.12,drawn,two independent readings
+H001517,D,303,1127.49,497.82,drawn,two independent readings
+H001518,D,302,1127.49,507.5,drawn,two independent readings
+H001519,D,301,1127.49,517.25,drawn,two independent readings
+H001520,D,420,1127.49,534.56,drawn,two independent readings
+H001521,D,419,1127.49,547.06,drawn,two independent readings
+H001522,D,418,1127.49,556.94,drawn,two independent readings
+H001523,D,417,1127.49,567.26,drawn,two independent readings
+H001524,D,416,1127.49,578.0,drawn,two independent readings
+H001525,D,415,1127.49,588.32,drawn,two independent readings
+H001526,D,414,1127.49,598.19,drawn,two independent readings
+H001527,D,413,1127.49,608.94,drawn,two independent readings
+H001528,D,412,1127.49,620.07,drawn,two independent readings
+H001529,C,295C,1142.29,640.1,drawn,two independent readings
+H001530,C,295B,1142.12,652.03,drawn,two independent readings
+H001531,C,295A,1141.85,664.47,drawn,two independent readings
+H001532,C,295,1141.55,678.94,drawn,two independent readings
+H001533,C,294,1141.27,694.35,drawn,two independent readings
+H001534,C,293,1140.97,709.28,drawn,two independent readings
+H001535,C,292H,1140.8,719.97,drawn,two independent readings
+H001536,C,292,1140.61,728.97,drawn,two independent readings
+H001537,C,291,1140.36,740.75,drawn,two independent readings
+H001538,C,290,1140.13,752.66,drawn,two independent readings
+H001539,C,289,1139.89,764.29,drawn,two independent readings
+H001540,C,288H,1139.77,774.32,drawn,inferred from surrounding lots
+H001541,C,288,1138.62,784.69,drawn,inferred from surrounding lots
+H001542,C,287,1138.41,796.62,drawn,two independent readings
+H001543,C,286,1138.18,808.38,drawn,two independent readings
+H001544,C,285,1137.93,819.69,drawn,two independent readings
+H001545,C,284H,1137.77,828.07,drawn,two independent readings
+H001546,C,284,1137.61,837.19,drawn,two independent readings
+H001547,C,283,1137.36,849.25,drawn,two independent readings
+H001548,C,282,1137.12,860.94,drawn,two independent readings
+H001549,C,281,1136.9,872.62,drawn,two independent readings
+H001550,C,280,1136.68,884.81,drawn,two independent readings
+H001551,D,322H,1112.55,406.5,drawn,two independent readings
+H001552,D,321,1112.55,427.06,drawn,two independent readings
+H001553,D,320,1112.56,438.51,drawn,two independent readings
+H001554,D,319,1112.56,448.51,drawn,two independent readings
+H001555,D,318,1112.56,458.25,drawn,two independent readings
+H001556,D,317,1112.68,467.94,drawn,two independent readings
+H001557,D,316,1112.68,477.62,drawn,two independent readings
+H001558,D,315,1112.68,487.38,drawn,two independent readings
+H001559,D,314,1112.68,497.12,drawn,two independent readings
+H001560,D,313,1112.68,506.88,drawn,two independent readings
+H001561,D,312,1112.68,516.56,drawn,two independent readings
+H001562,D,411,1112.62,533.93,drawn,two independent readings
+H001563,D,410,1112.62,546.5,drawn,two independent readings
+H001564,D,409,1112.62,556.44,drawn,two independent readings
+H001565,D,408,1112.62,566.75,drawn,two independent readings
+H001566,D,407,1112.68,577.44,drawn,two independent readings
+H001567,D,406,1112.74,587.75,drawn,two independent readings
+H001568,D,405,1112.74,597.69,drawn,two independent readings
+H001569,D,404,1112.74,608.38,drawn,two independent readings
+H001570,D,403,1112.74,619.5,drawn,two independent readings
+H001571,C,311C,1127.29,639.47,drawn,two independent readings
+H001572,C,311B,1127.12,651.41,drawn,two independent readings
+H001573,C,311A,1126.85,663.84,drawn,two independent readings
+H001574,C,311,1126.55,678.32,drawn,two independent readings
+H001575,C,310,1126.26,693.75,drawn,two independent readings
+H001576,C,309,1125.98,708.69,drawn,two independent readings
+H001577,C,308H,1125.78,719.38,drawn,two independent readings
+H001578,C,308,1125.62,728.41,drawn,two independent readings
+H001579,C,307,1125.36,740.16,drawn,two independent readings
+H001580,C,306,1125.13,752.04,drawn,two independent readings
+H001581,C,305,1124.89,763.69,drawn,two independent readings
+H001582,C,304H,1124.6,773.86,drawn,two independent readings
+H001583,C,304,1125.62,784.44,drawn,two independent readings
+H001584,C,303,1125.42,796.38,drawn,two independent readings
+H001585,C,302,1125.18,808.13,drawn,two independent readings
+H001586,C,301,1124.93,819.44,drawn,two independent readings
+H001587,C,300H,1124.8,827.82,drawn,two independent readings
+H001588,C,300,1124.66,836.94,drawn,two independent readings
+H001589,C,299,1124.42,849.0,drawn,two independent readings
+H001590,C,298,1124.18,860.69,drawn,two independent readings
+H001591,C,297,1123.93,872.38,drawn,two independent readings
+H001592,C,296,1123.74,884.57,drawn,two independent readings
+H001593,D,333H,1097.8,405.81,drawn,two independent readings
+H001594,D,332,1097.8,426.31,drawn,two independent readings
+H001595,D,331,1097.8,437.81,drawn,two independent readings
+H001596,D,330,1097.8,447.81,drawn,two independent readings
+H001597,D,329,1097.8,457.5,drawn,two independent readings
+H001598,D,328,1097.86,467.25,drawn,two independent readings
+H001599,D,327,1097.86,477.0,drawn,two independent readings
+H001600,D,326,1097.86,486.69,drawn,two independent readings
+H001601,D,325,1097.86,496.38,drawn,two independent readings
+H001602,D,324,1097.86,506.12,drawn,two independent readings
+H001603,D,323,1097.86,515.87,drawn,two independent readings
+H001604,D,402,1097.87,533.38,drawn,two independent readings
+H001605,D,401,1097.87,545.94,drawn,two independent readings
+H001606,D,400,1097.87,555.82,drawn,two independent readings
+H001607,D,399,1097.87,566.12,drawn,two independent readings
+H001608,D,398,1097.87,576.88,drawn,two independent readings
+H001609,D,397,1097.87,587.19,drawn,two independent readings
+H001610,D,396,1097.87,597.06,drawn,two independent readings
+H001611,D,395,1097.87,607.82,drawn,two independent readings
+H001612,D,394,1097.87,618.94,drawn,two independent readings
+H001613,C,330,1112.68,639.31,drawn,two independent readings
+H001614,C,329,1112.43,651.88,drawn,two independent readings
+H001615,C,328,1112.18,664.81,drawn,two independent readings
+H001616,C,327,1111.92,679.44,drawn,two independent readings
+H001617,C,326,1111.62,693.87,drawn,two independent readings
+H001618,C,325,1111.35,708.0,drawn,two independent readings
+H001619,C,324H,1111.14,718.78,drawn,two independent readings
+H001620,C,324,1111.0,727.78,drawn,two independent readings
+H001621,C,323,1110.74,739.56,drawn,two independent readings
+H001622,C,322,1110.49,751.44,drawn,two independent readings
+H001623,C,321,1110.27,763.07,drawn,two independent readings
+H001624,C,320H,1110.12,773.38,drawn,two independent readings
+H001625,C,320,1109.93,784.13,drawn,two independent readings
+H001626,C,319,1109.68,796.13,drawn,two independent readings
+H001627,C,318,1109.48,807.88,drawn,two independent readings
+H001628,C,317,1109.24,819.19,drawn,two independent readings
+H001629,C,316,1108.86,836.63,drawn,two independent readings
+H001630,C,316H,1109.05,827.56,drawn,two independent readings
+H001631,C,315,1108.62,848.63,drawn,two independent readings
+H001632,C,314,1108.38,860.38,drawn,two independent readings
+H001633,C,313,1108.18,872.13,drawn,two independent readings
+H001634,C,312,1107.92,884.29,drawn,two independent readings
+H001635,D,344H,1082.92,405.13,drawn,two independent readings
+H001636,D,344,1082.92,413.51,drawn,two independent readings
+H001637,D,343,1082.92,425.66,drawn,two independent readings
+H001638,D,342,1082.93,437.09,drawn,two independent readings
+H001639,D,341,1082.92,447.12,drawn,two independent readings
+H001640,D,340,1082.92,456.88,drawn,two independent readings
+H001641,D,339,1083.05,466.56,drawn,two independent readings
+H001642,D,338,1083.06,476.25,drawn,two independent readings
+H001643,D,337,1083.06,486.0,drawn,two independent readings
+H001644,D,336,1083.06,495.76,drawn,two independent readings
+H001645,D,335,1083.05,505.44,drawn,two independent readings
+H001646,D,334,1083.06,515.12,drawn,two independent readings
+H001647,D,393,1082.99,532.75,drawn,two independent readings
+H001648,D,392,1082.99,545.38,drawn,two independent readings
+H001649,D,391,1082.99,555.32,drawn,two independent readings
+H001650,D,390,1082.99,565.63,drawn,two independent readings
+H001651,D,389,1083.02,576.31,drawn,two independent readings
+H001652,D,388,1083.05,586.63,drawn,two independent readings
+H001653,D,387,1083.05,596.57,drawn,two independent readings
+H001654,D,386,1083.05,607.25,drawn,two independent readings
+H001655,D,385,1083.05,618.38,drawn,two independent readings
+H001656,C,349,1098.11,638.78,drawn,two independent readings
+H001657,C,348,1097.86,651.31,drawn,two independent readings
+H001658,C,347,1097.61,664.25,drawn,two independent readings
+H001659,C,346,1097.36,678.91,drawn,two independent readings
+H001660,C,345,1097.05,693.34,drawn,two independent readings
+H001661,C,344,1096.79,707.44,drawn,two independent readings
+H001662,C,343,1096.43,727.28,drawn,two independent readings
+H001663,C,343H,1096.6,718.25,drawn,two independent readings
+H001664,C,342,1096.17,739.03,drawn,two independent readings
+H001665,C,341,1095.93,750.91,drawn,two independent readings
+H001666,C,340,1095.7,762.53,drawn,two independent readings
+H001667,C,339H,1095.5,772.72,drawn,two independent readings
+H001668,C,339,1095.24,783.38,drawn,two independent readings
+H001669,C,338,1095.02,795.39,drawn,two independent readings
+H001670,C,337,1094.79,807.1,drawn,two independent readings
+H001671,C,336,1094.56,818.41,drawn,two independent readings
+H001672,C,335,1094.22,835.9,drawn,two independent readings
+H001673,C,335H,1094.39,826.81,drawn,two independent readings
+H001674,C,334,1094.0,847.91,drawn,two independent readings
+H001675,C,333,1093.75,859.64,drawn,two independent readings
+H001676,C,332,1093.52,871.39,drawn,two independent readings
+H001677,C,331,1093.3,883.53,drawn,two independent readings
+H001678,D,355H,1068.05,404.38,drawn,two independent readings
+H001679,D,355,1068.05,412.75,drawn,two independent readings
+H001680,D,354,1068.05,424.88,drawn,two independent readings
+H001681,D,353,1068.06,436.31,drawn,two independent readings
+H001682,D,352,1068.05,446.38,drawn,two independent readings
+H001683,D,351,1068.05,456.06,drawn,two independent readings
+H001684,D,350,1068.12,465.75,drawn,two independent readings
+H001685,D,349,1068.12,475.5,drawn,two independent readings
+H001686,D,348,1068.12,485.25,drawn,two independent readings
+H001687,D,347,1068.12,495.0,drawn,two independent readings
+H001688,D,346,1068.12,504.69,drawn,two independent readings
+H001689,D,345,1068.12,514.38,drawn,two independent readings
+H001690A,D,384A,1065.43,532.13,drawn,two independent readings
+H001690B,D,384B,1070.84,532.09,drawn,two independent readings
+H001691A,D,383A,1065.43,544.82,drawn,two independent readings
+H001691B,D,383B,1070.81,544.81,drawn,two independent readings
+H001692A,D,382A,1065.43,554.69,drawn,two independent readings
+H001692B,D,382B,1070.8,554.69,drawn,two independent readings
+H001693A,D,381A,1065.43,565.0,drawn,two independent readings
+H001693B,D,381B,1070.8,565.0,drawn,two independent readings
+H001694A,D,380A,1065.49,575.76,drawn,two independent readings
+H001694B,D,380B,1070.88,575.75,drawn,two independent readings
+H001695A,D,379A,1065.55,586.07,drawn,two independent readings
+H001695B,D,379B,1070.93,586.06,drawn,two independent readings
+H001696A,D,378A,1065.55,595.94,drawn,two independent readings
+H001696B,D,378B,1070.93,595.94,drawn,two independent readings
+H001697A,D,377A,1065.55,606.69,drawn,two independent readings
+H001697B,D,377B,1070.93,606.69,drawn,two independent readings
+H001698A,D,376A,1065.55,617.82,drawn,two independent readings
+H001698B,D,376B,1070.93,617.82,drawn,two independent readings
+H001699,C,368,1083.12,638.22,drawn,two independent readings
+H001700,C,367,1082.86,650.79,drawn,two independent readings
+H001701,C,366,1082.62,663.72,drawn,two independent readings
+H001702,C,365,1082.36,678.37,drawn,two independent readings
+H001703,C,364,1082.05,692.81,drawn,two independent readings
+H001704,C,363,1081.79,706.88,drawn,two independent readings
+H001705,C,362H,1081.6,717.69,drawn,two independent readings
+H001706,C,362,1081.42,726.72,drawn,two independent readings
+H001707,C,361,1081.19,738.47,drawn,two independent readings
+H001708,C,360,1080.93,750.37,drawn,two independent readings
+H001709,C,359,1080.7,762.03,drawn,inferred from surrounding lots
+H001710,C,358H,1080.44,772.35,drawn,two independent readings
+H001711,C,358,1080.12,783.13,drawn,two independent readings
+H001712,C,357,1079.92,795.1,drawn,inferred from surrounding lots
+H001713,C,356,1079.69,806.78,drawn,two independent readings
+H001714,C,355,1079.42,818.09,drawn,two independent readings
+H001715,C,354,1079.17,835.6,drawn,two independent readings
+H001716,C,354H,1079.3,826.5,drawn,two independent readings
+H001717,C,353,1078.93,847.63,drawn,inferred from surrounding lots
+H001718,C,352,1078.68,859.38,drawn,two independent readings
+H001719,C,351,1078.42,871.1,drawn,two independent readings
+H001720,C,350,1078.25,883.22,drawn,two independent readings
+H001721,D,366H,1053.05,403.75,drawn,two independent readings
+H001722,D,366,1053.06,412.12,drawn,two independent readings
+H001723,D,365,1053.05,424.25,drawn,two independent readings
+H001724,D,364,1053.05,435.69,drawn,two independent readings
+H001725,D,363,1053.06,445.76,drawn,two independent readings
+H001726,D,362,1053.05,455.44,drawn,two independent readings
+H001727,D,361,1053.06,465.12,drawn,two independent readings
+H001728,D,360,1053.06,474.88,drawn,two independent readings
+H001729,D,359,1053.06,484.63,drawn,two independent readings
+H001730,D,358,1053.06,494.38,drawn,two independent readings
+H001731,D,357,1053.05,504.07,drawn,two independent readings
+H001732,D,356,1053.06,513.75,drawn,inferred from surrounding lots
+H001733A,D,375A,1050.67,531.47,drawn,two independent readings
+H001733B,D,375B,1056.04,531.53,drawn,two independent readings
+H001734A,D,374A,1050.67,544.25,drawn,two independent readings
+H001734B,D,374B,1056.05,544.25,drawn,two independent readings
+H001735A,D,373A,1050.68,554.19,drawn,two independent readings
+H001735B,D,373B,1056.05,554.19,drawn,two independent readings
+H001736A,D,372A,1050.67,564.5,drawn,two independent readings
+H001736B,D,372B,1056.05,564.5,drawn,two independent readings
+H001737A,D,371A,1050.67,575.19,drawn,two independent readings
+H001737B,D,371B,1056.05,575.19,drawn,two independent readings
+H001738A,D,370A,1050.67,585.5,drawn,two independent readings
+H001738B,D,370B,1056.05,585.5,drawn,two independent readings
+H001739A,D,369A,1050.68,595.44,drawn,two independent readings
+H001739B,D,369B,1056.05,595.44,drawn,two independent readings
+H001740A,D,368A,1050.67,606.13,drawn,two independent readings
+H001740B,D,368B,1056.05,606.13,drawn,two independent readings
+H001741A,D,367A,1050.67,617.26,drawn,two independent readings
+H001741B,D,367B,1056.05,617.25,drawn,two independent readings
+H001742,C,384C,1067.3,637.69,drawn,two independent readings
+H001743,C,384B,1067.05,650.25,drawn,two independent readings
+H001744,C,384A,1066.8,663.19,drawn,two independent readings
+H001745,C,384,1066.55,677.81,drawn,two independent readings
+H001746,C,383,1066.24,692.25,drawn,two independent readings
+H001747,C,382,1065.98,706.38,drawn,two independent readings
+H001748,C,381H,1065.77,717.16,drawn,two independent readings
+H001749,C,381,1065.62,726.16,drawn,two independent readings
+H001750,C,380,1065.37,737.94,drawn,two independent readings
+H001751,C,379,1065.11,749.81,drawn,two independent readings
+H001752,C,378,1064.9,761.44,drawn,two independent readings
+H001753,C,377H,1064.58,771.76,drawn,two independent readings
+H001754,C,377,1064.24,782.5,drawn,two independent readings
+H001755,C,376,1064.05,794.5,drawn,two independent readings
+H001756,C,375,1063.8,806.25,drawn,two independent readings
+H001757,C,374,1063.55,817.56,drawn,two independent readings
+H001758,C,373,1063.28,835.06,drawn,two independent readings
+H001759,C,373H,1063.43,825.94,drawn,two independent readings
+H001760,C,372,1063.04,847.1,drawn,two independent readings
+H001761,C,371,1062.81,858.78,drawn,two independent readings
+H001762,C,370,1062.56,870.5,drawn,two independent readings
+H001763,C,369,1062.36,882.69,drawn,two independent readings
+H001764,D,541,1038.42,403.0,drawn,two independent readings
+H001765,D,540,1038.42,411.38,drawn,two independent readings
+H001766,D,539,1038.42,423.57,drawn,two independent readings
+H001767,D,538,1038.42,435.0,drawn,two independent readings
+H001768,D,537,1038.42,445.0,drawn,two independent readings
+H001769,D,536,1038.42,454.75,drawn,two independent readings
+H001770,D,535,1038.56,464.5,drawn,two independent readings
+H001771,D,534,1038.56,474.19,drawn,two independent readings
+H001772,D,533,1038.56,483.87,drawn,two independent readings
+H001773,D,532,1038.56,493.62,drawn,two independent readings
+H001774,D,531,1038.56,503.38,drawn,two independent readings
+H001775,D,530,1038.55,513.12,drawn,two independent readings
+H001776,D,529,1038.49,530.94,drawn,two independent readings
+H001777,D,528,1038.49,543.69,drawn,two independent readings
+H001778,D,527,1038.49,553.57,drawn,two independent readings
+H001779,D,526,1038.49,563.87,drawn,two independent readings
+H001780,D,525,1038.55,574.63,drawn,two independent readings
+H001781,D,524,1038.62,584.94,drawn,two independent readings
+H001782,D,523,1038.62,594.82,drawn,two independent readings
+H001783,D,522,1038.62,605.57,drawn,two independent readings
+H001784,D,521,1038.62,616.69,drawn,two independent readings
+H001785,C,400C,1051.44,637.1,drawn,two independent readings
+H001786,C,400B,1051.18,649.62,drawn,two independent readings
+H001787,C,400A,1050.93,662.57,drawn,two independent readings
+H001788,C,400,1050.67,677.25,drawn,two independent readings
+H001789,C,399,1050.37,691.69,drawn,two independent readings
+H001790,C,398,1050.1,705.75,drawn,two independent readings
+H001791,C,397,1049.74,725.57,drawn,two independent readings
+H001792,C,397H,1049.91,716.56,drawn,two independent readings
+H001793,C,396,1049.49,737.32,drawn,two independent readings
+H001794,C,395,1049.24,749.25,drawn,two independent readings
+H001795,C,394,1049.02,760.88,drawn,two independent readings
+H001796,C,393H,1048.71,771.2,drawn,two independent readings
+H001797,C,393,1048.36,782.0,drawn,two independent readings
+H001798,C,392,1048.12,794.0,drawn,two independent readings
+H001799,C,391,1047.91,805.72,drawn,two independent readings
+H001800,C,390,1047.69,817.03,drawn,two independent readings
+H001801,C,389,1047.3,834.5,drawn,two independent readings
+H001802,C,389H,1047.49,825.44,drawn,two independent readings
+H001803,C,388,1047.06,846.5,drawn,two independent readings
+H001804,C,387,1046.82,858.25,drawn,two independent readings
+H001805,C,386,1046.62,870.0,drawn,two independent readings
+H001806,C,385,1046.36,882.13,drawn,two independent readings
+H001807,D,520,1021.3,402.38,drawn,two independent readings
+H001808,D,519,1021.3,410.75,drawn,two independent readings
+H001809,D,518,1021.3,422.88,drawn,two independent readings
+H001810,D,517,1021.3,434.31,drawn,two independent readings
+H001811,D,516,1021.3,444.38,drawn,inferred from surrounding lots
+H001812,D,515,1021.3,454.07,drawn,two independent readings
+H001813,D,514,1021.36,463.75,drawn,inferred from surrounding lots
+H001814,D,513,1021.36,473.5,drawn,two independent readings
+H001815,D,512,1021.36,483.26,drawn,two independent readings
+H001816,D,511,1021.36,492.94,drawn,two independent readings
+H001817,D,510,1021.36,502.62,drawn,two independent readings
+H001818,D,509,1021.36,512.38,drawn,two independent readings
+H001819,D,508,1021.62,530.25,drawn,two independent readings
+H001820,D,507,1021.62,542.94,drawn,two independent readings
+H001821,D,506,1021.62,552.81,drawn,two independent readings
+H001822,D,505,1021.61,563.12,drawn,two independent readings
+H001823,D,504,1021.68,573.88,drawn,two independent readings
+H001824,D,503,1021.74,584.19,drawn,two independent readings
+H001825,D,502,1021.74,594.07,drawn,two independent readings
+H001826,D,501,1021.73,604.78,drawn,two independent readings
+H001827,D,500,1021.75,615.91,drawn,two independent readings
+H001828,C,416C,1036.24,636.56,drawn,two independent readings
+H001829,C,416B,1035.99,649.12,drawn,two independent readings
+H001830,C,416A,1035.73,662.03,drawn,two independent readings
+H001831,C,416,1035.49,676.66,drawn,two independent readings
+H001832,C,415,1035.17,691.09,drawn,two independent readings
+H001833,C,414,1034.92,705.22,drawn,two independent readings
+H001834,C,413H,1034.7,716.03,drawn,two independent readings
+H001835,C,413,1034.56,725.03,drawn,two independent readings
+H001836,C,412,1034.3,736.78,drawn,two independent readings
+H001837,C,411,1034.06,748.66,drawn,two independent readings
+H001838,C,410,1033.84,760.32,drawn,two independent readings
+H001839,C,409H,1033.46,770.68,drawn,two independent readings
+H001840,C,409,1033.05,781.5,drawn,two independent readings
+H001841,C,408,1032.83,793.48,drawn,two independent readings
+H001842,C,407,1032.61,805.19,drawn,two independent readings
+H001843,C,406,1032.37,816.5,drawn,two independent readings
+H001844,C,405,1032.05,833.96,drawn,two independent readings
+H001845,C,405H,1032.21,824.87,drawn,two independent readings
+H001846,C,404,1031.81,846.0,drawn,two independent readings
+H001847,C,403,1031.56,857.76,drawn,two independent readings
+H001848,C,402,1031.33,869.48,drawn,two independent readings
+H001849,C,401,1031.12,881.6,drawn,two independent readings
+H001850,C,432C,1021.42,636.29,drawn,two independent readings
+H001851,C,432B,1021.18,648.81,drawn,two independent readings
+H001852,C,432A,1020.93,661.75,drawn,two independent readings
+H001853,C,432,1020.68,676.4,drawn,two independent readings
+H001854,C,431,1020.36,690.81,drawn,two independent readings
+H001855,C,430,1020.1,704.91,drawn,two independent readings
+H001856,C,429,1019.73,724.72,drawn,two independent readings
+H001857,C,429H,1019.93,715.72,drawn,two independent readings
+H001858,C,428,1019.49,736.5,drawn,two independent readings
+H001859,C,427,1019.25,748.41,drawn,two independent readings
+H001860,C,426,1019.01,760.03,drawn,two independent readings
+H001861,C,425H,1018.63,769.66,drawn,two independent readings
+H001862,C,425,1018.17,779.72,drawn,two independent readings
+H001863,C,424,1017.99,791.69,drawn,two independent readings
+H001864,C,423,1017.75,803.41,drawn,two independent readings
+H001865,C,422,1017.48,814.72,drawn,two independent readings
+H001866,C,421,1017.23,832.22,drawn,two independent readings
+H001867,C,421H,1017.36,823.13,drawn,two independent readings
+H001868,C,420,1016.99,844.25,drawn,two independent readings
+H001869,C,419,1016.73,855.97,drawn,two independent readings
+H001870,C,418,1016.5,867.69,drawn,two independent readings
+H001871,C,417,1016.31,879.85,drawn,two independent readings
+H001872,F,18,996.94,397.85,drawn,inferred from surrounding lots
+H001873,F,17,996.84,407.84,drawn,two independent readings
+H001874,F,16,996.66,421.27,drawn,two independent readings
+H001875,F,15,996.47,434.71,drawn,two independent readings
+H001876,F,14,996.3,448.15,drawn,two independent readings
+H001877,F,13,996.16,461.59,drawn,two independent readings
+H001878,F,12,996.02,474.99,drawn,two independent readings
+H001879,F,11,995.81,488.01,drawn,two independent readings
+H001880,F,10,995.64,499.98,drawn,two independent readings
+H001881,F,9,995.56,510.04,drawn,two independent readings
+H001882,F,8,995.32,524.12,drawn,two independent readings
+H001883,F,7,995.04,539.22,drawn,two independent readings
+H001884,F,6,994.79,551.83,drawn,two independent readings
+H001885,F,5,994.58,565.26,drawn,two independent readings
+H001886,F,4,994.31,577.85,drawn,two independent readings
+H001887,F,3,994.12,590.41,drawn,two independent readings
+H001888,F,2,993.86,602.57,drawn,two independent readings
+H001889,F,1,993.65,614.32,drawn,inferred from surrounding lots
+H001890,E,19,1000.99,635.38,drawn,inferred from surrounding lots
+H001891,E,18,1000.66,648.07,drawn,two independent readings
+H001892,E,17,1000.29,660.75,drawn,two independent readings
+H001893,E,16,999.87,674.44,drawn,two independent readings
+H001894,E,15,999.46,689.38,drawn,two independent readings
+H001895,E,14,999.04,704.13,drawn,two independent readings
+H001896,E,13H,998.74,714.19,drawn,two independent readings
+H001897,E,13,998.51,722.97,drawn,two independent readings
+H001898,E,12,998.17,734.66,drawn,two independent readings
+H001899,E,11,997.81,746.56,drawn,two independent readings
+H001900,E,10,997.48,758.81,drawn,two independent readings
+H001901,E,9H,997.18,769.19,drawn,two independent readings
+H001902,E,9,996.89,779.25,drawn,two independent readings
+H001903,E,8,996.55,791.07,drawn,two independent readings
+H001904,E,7,996.2,802.89,drawn,two independent readings
+H001905,E,6,995.89,814.68,drawn,two independent readings
+H001906,E,5H,995.64,823.57,drawn,two independent readings
+H001907,E,5,995.37,832.39,drawn,two independent readings
+H001908,E,4,995.04,844.16,drawn,two independent readings
+H001909,E,3,994.7,855.98,drawn,two independent readings
+H001910,E,2,994.37,867.78,drawn,two independent readings
+H001911,E,1,994.02,879.6,drawn,two independent readings
+H001912,F,36,981.34,397.22,drawn,two independent readings
+H001913,F,35,981.14,407.22,drawn,two independent readings
+H001914,F,34,980.84,420.66,drawn,two independent readings
+H001915,F,33,980.55,434.06,drawn,two independent readings
+H001916,F,32,980.26,447.51,drawn,two independent readings
+H001917,F,31,979.96,460.94,drawn,two independent readings
+H001918,F,30,979.69,474.34,drawn,two independent readings
+H001919,F,29,979.37,487.35,drawn,two independent readings
+H001920,F,28,979.11,499.31,drawn,two independent readings
+H001921,F,27,978.88,509.41,drawn,two independent readings
+H001922,F,26,978.59,523.47,drawn,two independent readings
+H001923,F,25,978.24,538.57,drawn,two independent readings
+H001924,F,24,977.97,551.16,drawn,two independent readings
+H001925,F,23,977.67,564.59,drawn,two independent readings
+H001926,F,22,977.38,577.19,drawn,two independent readings
+H001927,F,21,977.11,589.78,drawn,two independent readings
+H001928,F,20,976.8,601.94,drawn,two independent readings
+H001929,F,19,976.55,613.69,drawn,two independent readings
+H001930,E,38,987.12,634.97,drawn,two independent readings
+H001931,E,37,986.77,647.66,drawn,two independent readings
+H001932,E,36,986.42,660.35,drawn,two independent readings
+H001933,E,35,985.98,674.03,drawn,two independent readings
+H001934,E,34,985.58,689.0,drawn,two independent readings
+H001935,E,33,985.17,703.74,drawn,two independent readings
+H001936,E,32H,984.86,713.81,drawn,two independent readings
+H001937,E,32,984.64,722.6,drawn,two independent readings
+H001938,E,31,984.29,734.28,drawn,two independent readings
+H001939,E,30,983.94,746.19,drawn,two independent readings
+H001940,E,29,983.61,758.41,drawn,two independent readings
+H001941,E,28H,983.3,768.75,drawn,two independent readings
+H001942,E,28,983.01,778.85,drawn,two independent readings
+H001943,E,27,982.68,790.66,drawn,two independent readings
+H001944,E,26,982.32,802.47,drawn,two independent readings
+H001945,E,25,982.02,814.28,drawn,two independent readings
+H001946,E,24H,981.76,823.13,drawn,two independent readings
+H001947,E,24,981.49,831.98,drawn,two independent readings
+H001948,E,23,981.16,843.75,drawn,two independent readings
+H001949,E,22,980.84,855.57,drawn,two independent readings
+H001950,E,21,980.49,867.38,drawn,two independent readings
+H001951,E,20,980.16,879.19,drawn,two independent readings
+H001952,F,54,965.43,397.44,drawn,two independent readings
+H001953,F,53,965.19,407.44,drawn,two independent readings
+H001954,F,52,964.89,420.84,drawn,inferred from surrounding lots
+H001955,F,51,964.59,434.29,drawn,inferred from surrounding lots
+H001956,F,50,964.29,447.73,drawn,two independent readings
+H001957,F,49,963.98,461.16,drawn,two independent readings
+H001958,F,48,963.69,474.57,drawn,two independent readings
+H001959,F,47,963.4,487.57,drawn,two independent readings
+H001960,F,46,963.12,499.57,drawn,two independent readings
+H001961,F,45,962.89,509.63,drawn,two independent readings
+H001962,F,44,962.61,523.25,drawn,two independent readings
+H001963,F,43,962.24,537.94,drawn,two independent readings
+H001964,F,42,961.98,550.53,drawn,two independent readings
+H001965,F,41,961.67,563.97,drawn,two independent readings
+H001966,F,40,961.39,576.57,drawn,two independent readings
+H001967,F,39,961.11,589.16,drawn,two independent readings
+H001968,F,38,960.83,601.31,drawn,two independent readings
+H001969,F,37,960.55,613.06,drawn,two independent readings
+H001970,E,57,972.36,634.38,drawn,two independent readings
+H001971,E,56,972.04,647.1,drawn,two independent readings
+H001972,E,55,971.65,659.78,drawn,two independent readings
+H001973,E,54,971.25,673.47,drawn,inferred from surrounding lots
+H001974,E,53,970.83,688.41,drawn,two independent readings
+H001975,E,52,970.42,703.16,drawn,two independent readings
+H001976,E,51H,970.09,713.22,drawn,two independent readings
+H001977,E,51,969.89,721.97,drawn,two independent readings
+H001978,E,50,969.54,733.66,drawn,two independent readings
+H001979,E,49,969.19,745.57,drawn,two independent readings
+H001980,E,48,968.85,757.81,drawn,two independent readings
+H001981,E,47H,968.55,768.26,drawn,two independent readings
+H001982,E,47,968.28,778.41,drawn,two independent readings
+H001983,E,46,967.92,790.22,drawn,two independent readings
+H001984,E,45,967.59,802.04,drawn,two independent readings
+H001985,E,44,967.25,813.84,drawn,two independent readings
+H001986,E,43H,967.01,822.69,drawn,two independent readings
+H001987,E,43,966.76,831.54,drawn,two independent readings
+H001988,E,42,966.4,843.34,drawn,two independent readings
+H001989,E,41,966.09,855.17,drawn,two independent readings
+H001990,E,40,965.73,866.97,drawn,two independent readings
+H001991,E,39,965.42,878.78,drawn,two independent readings
+H001992,F,72,949.47,396.84,drawn,two independent readings
+H001993,F,71,949.26,406.82,drawn,two independent readings
+H001994,F,70,948.95,420.26,drawn,two independent readings
+H001995,F,69,948.65,433.69,drawn,two independent readings
+H001996,F,68,948.35,447.1,drawn,two independent readings
+H001997,F,67,948.04,460.53,drawn,two independent readings
+H001998,F,66,947.75,473.97,drawn,two independent readings
+H001999,F,65,947.46,486.97,drawn,two independent readings
+H002000,F,64,947.18,498.94,drawn,two independent readings
+H002001,F,63,946.94,509.0,drawn,two independent readings
+H002002,F,62,946.67,522.62,drawn,two independent readings
+H002003,F,61,946.31,537.31,drawn,two independent readings
+H002004,F,60,946.04,549.91,drawn,two independent readings
+H002005,F,59,945.73,563.34,drawn,two independent readings
+H002006,F,58,945.45,575.94,drawn,two independent readings
+H002007,F,57,945.17,588.56,drawn,two independent readings
+H002008,F,56,944.89,600.75,drawn,inferred from surrounding lots
+H002009,F,55,944.62,612.5,drawn,two independent readings
+H002010,E,76,957.54,633.78,drawn,two independent readings
+H002011,E,75,957.22,646.47,drawn,two independent readings
+H002012,E,74,956.84,659.16,drawn,two independent readings
+H002013,E,73,956.43,672.88,drawn,two independent readings
+H002014,E,72,956.03,687.85,drawn,two independent readings
+H002015,E,71,955.6,702.56,drawn,two independent readings
+H002016,E,70H,955.3,712.63,drawn,two independent readings
+H002017,E,70,955.06,721.41,drawn,two independent readings
+H002018,E,69,954.75,733.1,drawn,two independent readings
+H002019,E,68,954.38,745.01,drawn,two independent readings
+H002020,E,67,954.04,757.25,drawn,two independent readings
+H002021,E,66H,953.77,767.76,drawn,two independent readings
+H002022,E,66,953.5,777.97,drawn,two independent readings
+H002023,E,65,953.19,789.78,drawn,two independent readings
+H002024,E,64,952.81,801.63,drawn,two independent readings
+H002025,E,63,952.47,813.47,drawn,two independent readings
+H002026,E,62H,952.26,822.28,drawn,two independent readings
+H002027,E,62,951.94,831.1,drawn,two independent readings
+H002028,E,61,951.64,842.91,drawn,two independent readings
+H002029,E,60,951.29,854.73,drawn,two independent readings
+H002030,E,59,950.94,866.53,drawn,two independent readings
+H002031,E,58,950.59,878.35,drawn,two independent readings
+H002032,F,90,933.53,396.22,drawn,two independent readings
+H002033,F,89,933.32,406.19,drawn,two independent readings
+H002034,F,88,933.01,419.62,drawn,two independent readings
+H002035,F,87,932.72,433.07,drawn,two independent readings
+H002036,F,86,932.42,446.48,drawn,two independent readings
+H002037,F,85,932.1,459.91,drawn,two independent readings
+H002038,F,84,931.83,473.35,drawn,two independent readings
+H002039,F,83,931.52,486.35,drawn,two independent readings
+H002040,F,82,931.24,498.32,drawn,two independent readings
+H002041,F,81,931.01,508.38,drawn,two independent readings
+H002042,F,80,930.73,522.0,drawn,two independent readings
+H002043,F,79,930.37,536.69,drawn,two independent readings
+H002044,F,78,930.1,549.28,drawn,two independent readings
+H002045,F,77,929.79,562.72,drawn,two independent readings
+H002046,F,76,929.51,575.32,drawn,two independent readings
+H002047,F,75,929.23,587.94,drawn,two independent readings
+H002048,F,74,928.95,600.13,drawn,two independent readings
+H002049,F,73,928.68,611.88,drawn,two independent readings
+H002050,E,95,942.12,633.19,drawn,two independent readings
+H002051,E,94,941.78,645.88,drawn,two independent readings
+H002052,E,93,941.41,658.57,drawn,two independent readings
+H002053,E,92,940.98,672.28,drawn,two independent readings
+H002054,E,91,940.59,687.22,drawn,two independent readings
+H002055,E,90,940.17,701.94,drawn,two independent readings
+H002056,E,89H,939.87,712.0,drawn,two independent readings
+H002057,E,89,939.62,720.78,drawn,two independent readings
+H002058,E,88,939.31,732.47,drawn,two independent readings
+H002059,E,87,938.94,744.38,drawn,two independent readings
+H002060,E,86,938.6,756.63,drawn,two independent readings
+H002061,E,85H,938.29,767.22,drawn,two independent readings
+H002062,E,85,938.03,777.53,drawn,two independent readings
+H002063,E,84,937.67,789.35,drawn,two independent readings
+H002064,E,83,937.34,801.17,drawn,two independent readings
+H002065,E,82,937.01,813.0,drawn,two independent readings
+H002066,E,81H,936.74,821.85,drawn,two independent readings
+H002067,E,81,936.51,830.67,drawn,two independent readings
+H002068,E,80,936.15,842.47,drawn,two independent readings
+H002069,E,79,935.85,854.29,drawn,two independent readings
+H002070,E,78,935.48,866.1,drawn,two independent readings
+H002071,E,77,935.16,877.91,drawn,two independent readings
+H002072,F,108,917.2,395.54,drawn,two independent readings
+H002073,F,107,916.94,405.54,drawn,two independent readings
+H002074,F,106,916.65,418.97,drawn,two independent readings
+H002075,F,105,916.33,432.41,drawn,two independent readings
+H002076,F,104,916.04,445.85,drawn,two independent readings
+H002077,F,103,915.73,459.28,drawn,two independent readings
+H002078,F,102,915.44,472.72,drawn,two independent readings
+H002079,F,101,915.14,485.72,drawn,two independent readings
+H002080,F,100,914.88,497.66,drawn,two independent readings
+H002081,F,99,914.61,507.72,drawn,two independent readings
+H002082,F,98,914.36,521.37,drawn,two independent readings
+H002083,F,97,913.99,536.06,drawn,two independent readings
+H002084,F,96,913.73,548.66,drawn,two independent readings
+H002085,F,95,913.42,562.09,drawn,two independent readings
+H002086,F,94,913.13,574.69,drawn,two independent readings
+H002087,F,93,912.87,587.28,drawn,two independent readings
+H002088,F,92,912.57,599.44,drawn,two independent readings
+H002089,F,91,912.3,611.19,drawn,two independent readings
+H002090,E,114,926.43,632.56,drawn,two independent readings
+H002091,E,113,926.08,645.28,drawn,two independent readings
+H002092,E,112,925.73,657.97,drawn,two independent readings
+H002093,E,111,925.3,672.19,drawn,two independent readings
+H002094,E,110,924.87,687.12,drawn,two independent readings
+H002095,E,109,924.48,701.32,drawn,two independent readings
+H002096,E,108H,924.18,711.38,drawn,two independent readings
+H002097,E,108,923.93,720.16,drawn,two independent readings
+H002098,E,107,923.62,731.85,drawn,two independent readings
+H002099,E,106,923.25,743.75,drawn,two independent readings
+H002100,E,105,922.92,756.0,drawn,two independent readings
+H002101,E,104H,922.61,766.69,drawn,two independent readings
+H002102,E,104,922.32,777.1,drawn,two independent readings
+H002103,E,103,922.0,788.91,drawn,two independent readings
+H002104,E,102,921.66,800.72,drawn,two independent readings
+H002105,E,101,921.36,812.53,drawn,two independent readings
+H002106,E,100H,921.1,821.38,drawn,two independent readings
+H002107,E,100,920.85,830.22,drawn,two independent readings
+H002108,E,99,920.51,842.03,drawn,two independent readings
+H002109,E,98,920.19,853.82,drawn,two independent readings
+H002110,E,97,919.86,865.63,drawn,two independent readings
+H002111,E,96,919.53,877.44,drawn,two independent readings
+H002112,F,126,900.89,394.91,drawn,two independent readings
+H002113,F,125,900.61,404.91,drawn,two independent readings
+H002114,F,124,900.31,418.35,drawn,two independent readings
+H002115,F,123,900.0,431.79,drawn,two independent readings
+H002116,F,122,899.69,445.23,drawn,two independent readings
+H002117,F,121,899.39,458.66,drawn,two independent readings
+H002118,F,120,899.07,472.06,drawn,two independent readings
+H002119,F,119,898.8,485.07,drawn,two independent readings
+H002120,F,118,898.5,497.07,drawn,two independent readings
+H002121,F,117,898.27,507.13,drawn,two independent readings
+H002122,F,116,897.98,520.75,drawn,two independent readings
+H002123,F,115,897.61,535.44,drawn,two independent readings
+H002124,F,114,897.35,548.0,drawn,two independent readings
+H002125,F,113,897.05,561.44,drawn,two independent readings
+H002126,F,112,896.76,574.07,drawn,two independent readings
+H002127,F,111,896.49,586.66,drawn,two independent readings
+H002128,F,110,896.2,598.81,drawn,two independent readings
+H002129,F,109,895.93,610.57,drawn,two independent readings
+H002130,E,133,911.05,631.94,drawn,two independent readings
+H002131,E,132,910.71,644.66,drawn,two independent readings
+H002132,E,131,910.36,657.35,drawn,two independent readings
+H002133,E,130,909.92,671.03,drawn,two independent readings
+H002134,E,129,909.53,685.97,drawn,two independent readings
+H002135,E,128,909.1,700.72,drawn,two independent readings
+H002136,E,127H,908.83,710.78,drawn,two independent readings
+H002137,E,127,908.56,719.53,drawn,two independent readings
+H002138,E,126,908.25,731.22,drawn,two independent readings
+H002139,E,125,907.88,743.13,drawn,two independent readings
+H002140,E,124,907.54,755.38,drawn,two independent readings
+H002141,E,123H,907.2,766.17,drawn,two independent readings
+H002142,E,123,906.96,776.66,drawn,two independent readings
+H002143,E,122,906.61,788.47,drawn,two independent readings
+H002144,E,121,906.26,800.28,drawn,two independent readings
+H002145,E,120,905.9,812.1,drawn,two independent readings
+H002146,E,119H,905.68,820.94,drawn,two independent readings
+H002147,E,119,905.39,829.78,drawn,two independent readings
+H002148,E,118,905.07,841.57,drawn,two independent readings
+H002149,E,117,904.73,853.38,drawn,two independent readings
+H002150,E,116,904.37,865.19,drawn,two independent readings
+H002151,E,115,904.02,876.97,drawn,two independent readings
+H002152,F,144,884.51,394.29,drawn,two independent readings
+H002153,F,143,884.25,404.28,drawn,two independent readings
+H002154,F,142,883.96,417.72,drawn,two independent readings
+H002155,F,141,883.65,431.16,drawn,two independent readings
+H002156,F,140,883.34,444.57,drawn,two independent readings
+H002157,F,139,883.06,457.97,drawn,two independent readings
+H002158,F,138,882.75,471.41,drawn,two independent readings
+H002159,F,137,882.46,484.44,drawn,two independent readings
+H002160,F,136,882.19,496.41,drawn,two independent readings
+H002161,F,135,881.93,506.47,drawn,two independent readings
+H002162,F,134,881.67,520.12,drawn,two independent readings
+H002163,F,133,881.31,534.81,drawn,two independent readings
+H002164,F,132,881.03,547.38,drawn,two independent readings
+H002165,F,131,880.74,560.82,drawn,two independent readings
+H002166,F,130,880.46,573.41,drawn,two independent readings
+H002167,F,129,880.16,586.0,drawn,two independent readings
+H002168,F,128,879.89,598.19,drawn,two independent readings
+H002169,F,127,879.62,609.94,drawn,two independent readings
+H002170,E,152,895.56,631.35,drawn,two independent readings
+H002171,E,151,895.21,644.03,drawn,inferred from surrounding lots
+H002172,E,150,894.86,656.72,drawn,two independent readings
+H002173,E,149,894.42,670.41,drawn,two independent readings
+H002174,E,148,894.03,685.35,drawn,two independent readings
+H002175,E,147,893.6,700.1,drawn,two independent readings
+H002176,E,146H,893.32,710.16,drawn,two independent readings
+H002177,E,146,893.07,718.94,drawn,two independent readings
+H002178,E,145,892.74,730.63,drawn,two independent readings
+H002179,E,144,892.38,742.5,drawn,two independent readings
+H002180,E,143,892.04,754.75,drawn,two independent readings
+H002181,E,142H,891.74,765.63,drawn,two independent readings
+H002182,E,142,891.44,776.22,drawn,two independent readings
+H002183,E,141,891.12,788.03,drawn,two independent readings
+H002184,E,140,890.76,799.85,drawn,two independent readings
+H002185,E,139,890.46,811.66,drawn,two independent readings
+H002186,E,138H,890.2,820.5,drawn,two independent readings
+H002187,E,138,889.94,829.32,drawn,two independent readings
+H002188,E,137,889.59,841.1,drawn,two independent readings
+H002189,E,136,889.28,852.91,drawn,two independent readings
+H002190,E,135,888.92,864.72,drawn,two independent readings
+H002191,E,134,888.6,876.53,drawn,two independent readings
+H002192,F,162,867.65,393.84,drawn,two independent readings
+H002193,F,161,867.45,403.85,drawn,two independent readings
+H002194,F,160,867.12,417.54,drawn,two independent readings
+H002195,F,159,866.85,430.72,drawn,two independent readings
+H002196,F,158,866.52,444.15,drawn,two independent readings
+H002197,F,157,866.24,457.56,drawn,two independent readings
+H002198,F,156,865.94,470.97,drawn,inferred from surrounding lots
+H002199,F,155,865.65,484.0,drawn,two independent readings
+H002200,F,154,865.36,495.97,drawn,two independent readings
+H002201,F,153,865.14,506.03,drawn,two independent readings
+H002202,F,152,864.85,519.66,drawn,two independent readings
+H002203,F,151,864.5,534.34,drawn,two independent readings
+H002204,F,150,864.21,546.97,drawn,two independent readings
+H002205,F,149,863.94,560.41,drawn,two independent readings
+H002206,F,148,863.62,572.97,drawn,two independent readings
+H002207,F,147,863.36,585.56,drawn,two independent readings
+H002208,F,146,863.07,597.75,drawn,two independent readings
+H002209,F,145,862.8,609.5,drawn,two independent readings
+H002210,E,169,879.94,630.72,drawn,two independent readings
+H002211,E,168,879.58,643.41,drawn,two independent readings
+H002212,E,167,879.24,656.1,drawn,two independent readings
+H002213,E,166,878.8,669.78,drawn,two independent readings
+H002214,E,165,878.4,684.72,drawn,two independent readings
+H002215,E,164,877.97,699.47,drawn,two independent readings
+H002216,E,163H,877.7,709.53,drawn,two independent readings
+H002217,E,163,877.44,718.32,drawn,two independent readings
+H002218,E,162,877.11,730.0,drawn,two independent readings
+H002219,E,161,876.75,741.88,drawn,two independent readings
+H002220,E,160,876.41,754.13,drawn,two independent readings
+H002221,E,159H,876.12,765.06,drawn,two independent readings
+H002222,E,159,875.82,775.76,drawn,inferred from surrounding lots
+H002223,E,158,875.49,787.57,drawn,two independent readings
+H002224,E,157,875.12,799.38,drawn,two independent readings
+H002225,E,156,874.78,811.22,drawn,two independent readings
+H002226,E,155H,874.58,820.03,drawn,two independent readings
+H002227,E,155,874.25,828.85,drawn,inferred from surrounding lots
+H002228,E,154,873.95,840.66,drawn,two independent readings
+H002229,E,153,873.6,852.47,drawn,two independent readings
+H002230A,E,152A,872.9,876.1,drawn,two independent readings
+H002230B,E,152B,873.25,864.28,drawn,two independent readings
+H002231,F,180,850.93,393.12,drawn,two independent readings
+H002232,F,179,850.69,402.9,drawn,two independent readings
+H002233,F,178,850.39,415.9,drawn,two independent readings
+H002234,F,177,850.1,429.34,drawn,two independent readings
+H002235,F,176,849.78,442.78,drawn,two independent readings
+H002236,F,175,849.51,456.18,drawn,two independent readings
+H002237,F,174,849.2,469.37,drawn,two independent readings
+H002238,F,173,848.93,482.41,drawn,two independent readings
+H002239,F,172,848.61,495.22,drawn,two independent readings
+H002240,F,171,848.37,505.5,drawn,two independent readings
+H002241,F,170,848.12,518.72,drawn,two independent readings
+H002242,F,169,847.73,533.41,drawn,two independent readings
+H002243,F,168,847.47,546.0,drawn,two independent readings
+H002244,F,167,847.18,559.44,drawn,two independent readings
+H002245,F,166,846.9,572.03,drawn,two independent readings
+H002246,F,165,846.59,584.6,drawn,two independent readings
+H002247,F,164,846.33,596.75,drawn,two independent readings
+H002248,F,163,846.05,608.5,drawn,two independent readings
+H002249,E,177,863.68,630.07,drawn,two independent readings
+H002250,E,176,863.34,642.75,drawn,two independent readings
+H002251,E,175,862.98,655.44,drawn,two independent readings
+H002252,E,174,862.55,669.16,drawn,two independent readings
+H002253,E,173,862.15,684.1,drawn,two independent readings
+H002254,E,172,861.73,698.82,drawn,two independent readings
+H002255,E,171H,861.43,708.88,drawn,two independent readings
+H002256,E,171,861.19,717.69,drawn,two independent readings
+H002257,E,170,860.87,729.38,drawn,two independent readings
+H002258A,E,169A,860.16,753.5,drawn,two independent readings
+H002258B,E,169B,860.5,741.25,drawn,two independent readings
+H002259,E,199BH,859.82,764.54,drawn,two independent readings
+H002260A,E,199A,856.39,775.19,drawn,two independent readings
+H002260B,E,199B,862.7,775.38,drawn,two independent readings
+H002261A,E,198A,856.05,787.0,drawn,two independent readings
+H002261B,E,198B,862.37,787.19,drawn,two independent readings
+H002262A,E,197A,855.71,798.81,drawn,two independent readings
+H002262B,E,197B,862.0,799.0,drawn,two independent readings
+H002263A,E,196A,855.38,810.63,drawn,two independent readings
+H002263B,E,196B,861.66,810.88,drawn,two independent readings
+H002264A,E,195A,855.15,818.94,drawn,two independent readings
+H002264B,E,195B,861.43,819.69,drawn,two independent readings
+H002265A,E,194A,854.87,828.23,drawn,two independent readings
+H002265B,E,194B,861.13,828.51,drawn,two independent readings
+H002266A,E,193A,854.53,840.08,drawn,two independent readings
+H002266B,E,193B,860.82,840.31,drawn,two independent readings
+H002267A,E,192A,854.22,851.88,drawn,two independent readings
+H002267B,E,192B,860.48,852.13,drawn,two independent readings
+H002268A,E,191A,853.87,863.7,drawn,two independent readings
+H002268B,E,191B,860.11,863.94,drawn,two independent readings
+H002269A,E,190A,853.53,875.52,drawn,two independent readings
+H002269B,E,190B,859.77,875.76,drawn,two independent readings
+H002270,F,198,837.4,396.38,drawn,two independent readings
+H002271,F,197,837.05,411.4,drawn,two independent readings
+H002272,F,196,836.7,426.94,drawn,two independent readings
+H002273,F,195,836.44,439.54,drawn,two independent readings
+H002274,F,194,836.19,449.6,drawn,two independent readings
+H002275,F,193,836.0,459.66,drawn,two independent readings
+H002276,F,192,835.75,469.72,drawn,two independent readings
+H002277,F,191,835.54,479.81,drawn,two independent readings
+H002278,F,190,835.31,490.53,drawn,two independent readings
+H002279,F,189,835.0,502.69,drawn,two independent readings
+H002280,F,188,834.59,521.34,drawn,two independent readings
+H002281,F,187,834.19,538.98,drawn,two independent readings
+H002282,F,186,833.92,549.47,drawn,two independent readings
+H002283,F,185,833.74,559.13,drawn,two independent readings
+H002284,F,184,833.56,568.79,drawn,two independent readings
+H002285,F,183,833.29,578.84,drawn,two independent readings
+H002286,F,182,833.06,589.35,drawn,two independent readings
+H002287,F,181,832.7,604.47,drawn,two independent readings
+H002288,E,183,847.73,629.41,drawn,two independent readings
+H002289,E,182,847.41,642.1,drawn,two independent readings
+H002290,E,181,847.04,654.82,drawn,two independent readings
+H002291,E,180,846.61,668.53,drawn,two independent readings
+H002292,E,179,846.21,683.47,drawn,two independent readings
+H002293,E,178,845.79,698.19,drawn,two independent readings
+H002294,E,177H,845.49,708.25,drawn,two independent readings
+H002295,E,213,845.25,717.03,drawn,two independent readings
+H002296,E,212,844.94,728.72,drawn,two independent readings
+H002297,E,211,844.57,740.63,drawn,two independent readings
+H002298,E,210,844.23,752.88,drawn,two independent readings
+H002299,E,209H,843.93,764.0,drawn,two independent readings
+H002300,E,209,843.63,774.85,drawn,two independent readings
+H002301,E,208,843.31,786.66,drawn,two independent readings
+H002302,E,207,842.95,798.47,drawn,two independent readings
+H002303,E,206,842.64,810.28,drawn,two independent readings
+H002304,E,205,842.37,819.1,drawn,two independent readings
+H002305,E,204,842.13,827.9,drawn,two independent readings
+H002306,E,203,841.77,839.72,drawn,two independent readings
+H002307,E,202,841.48,851.54,drawn,two independent readings
+H002308,E,201,841.11,863.35,drawn,two independent readings
+H002309,E,200,840.79,875.16,drawn,two independent readings
+H002310,E,189,832.75,628.85,drawn,two independent readings
+H002311,E,188,832.39,641.53,drawn,two independent readings
+H002312,E,187,832.05,654.22,drawn,two independent readings
+H002313,E,186,831.61,667.91,drawn,two independent readings
+H002314,E,185,831.21,682.88,drawn,two independent readings
+H002315,E,184,830.79,697.62,drawn,two independent readings
+H002316,E,183H,830.49,707.69,drawn,two independent readings
+H002317,E,227,830.26,716.47,drawn,two independent readings
+H002318,E,226,829.92,728.16,drawn,two independent readings
+H002319,E,225,829.56,740.06,drawn,two independent readings
+H002320,E,224,829.23,752.28,drawn,two independent readings
+H002321,E,223H,828.92,763.47,drawn,two independent readings
+H002322,E,223,828.65,774.41,drawn,two independent readings
+H002323,E,222,828.29,786.22,drawn,two independent readings
+H002324,E,221,827.94,798.03,drawn,two independent readings
+H002325,E,220,827.59,809.85,drawn,two independent readings
+H002326,E,219,827.38,818.66,drawn,two independent readings
+H002327,E,218,827.07,827.47,drawn,two independent readings
+H002328,E,217,826.76,839.28,drawn,two independent readings
+H002329,E,216,826.42,851.1,drawn,two independent readings
+H002330,E,215,826.06,862.91,drawn,two independent readings
+H002331,E,214,825.71,874.72,drawn,two independent readings
+H002337,B,377,1585.65,402.02,drawn,two independent readings
+H002338,B,378,1575.68,401.53,drawn,two independent readings
+H002339,B,379,1565.72,401.08,drawn,two independent readings
+H002344,B,383,1511.33,391.79,drawn,two independent readings
+H002345,B,384,1502.23,391.32,drawn,two independent readings
+H002346,B,384HA,1493.45,382.66,drawn,two independent readings
+H002347,B,384H,1492.81,397.79,drawn,two independent readings
+H002348,B,385A,1475.49,379.28,drawn,two independent readings
+H002349,B,385,1474.72,397.05,drawn,two independent readings
+H002350,B,386A,1457.43,378.52,drawn,two independent readings
+H002351,B,386,1456.68,396.38,drawn,two independent readings
+H002352,B,387B,1448.68,368.59,drawn,two independent readings
+H002353,B,387A,1448.15,382.22,drawn,two independent readings
+H002354,B,387,1447.55,395.97,drawn,two independent readings
+H002355,B,388B,1439.61,366.8,drawn,two independent readings
+H002356,B,388A,1439.03,381.81,drawn,two independent readings
+H002357,B,388,1438.43,395.57,drawn,two independent readings
+H002358,B,388HB,1430.55,365.0,drawn,two independent readings
+H002359,B,388HA,1429.9,381.4,drawn,two independent readings
+H002360,B,388H,1429.3,395.19,drawn,two independent readings
+H002361,B,389B,1421.55,361.84,drawn,two independent readings
+H002362,B,389A,1420.83,379.66,drawn,two independent readings
+H002363,B,389,1420.18,394.78,drawn,two independent readings
+H002367,B,390,1407.05,394.13,drawn,two independent readings
+H002368,B,390H,1397.93,393.75,drawn,two independent readings
+H002369,B,391,1388.8,393.38,drawn,two independent readings
+H002370,B,392,1379.68,393.0,drawn,two independent readings
+H002371,B,393,1371.39,392.62,drawn,two independent readings
+H002372,B,394,1363.07,392.14,drawn,two independent readings
+H002374,D,543,1251.81,374.91,drawn,two independent readings
+H002375,D,544,1241.72,374.46,drawn,two independent readings
+H002376,D,545,1232.6,374.1,drawn,two independent readings
+H002377,D,545H,1221.92,366.59,drawn,two independent readings
+H002378,D,546,1212.49,373.38,drawn,two independent readings
+H002379,D,547,1203.58,372.87,drawn,inferred from surrounding lots
+H002380,D,548,1194.49,372.56,drawn,two independent readings
+H002381,D,549,1183.41,372.39,drawn,two independent readings
+H002382,D,549H,1175.23,366.18,drawn,two independent readings
+H002383,D,550,1167.08,371.61,drawn,two independent readings
+H002384,D,551,1157.97,371.21,drawn,two independent readings
+H002385,D,552,1148.81,372.24,drawn,two independent readings
+H002386,D,553,1139.69,371.93,drawn,two independent readings
+H002387,D,554,1130.55,371.43,drawn,two independent readings
+H002388,D,555,1121.41,371.15,drawn,inferred from surrounding lots
+H002389,D,556,1112.1,370.68,drawn,two independent readings
+H002390,D,556H,1102.97,370.35,drawn,inferred from surrounding lots
+H002391,D,557,1093.67,370.51,drawn,inferred from surrounding lots
+H002392,D,558,1084.54,370.2,drawn,two independent readings
+H002393,D,559,1075.74,368.07,drawn,two independent readings
+H002394,D,559H,1066.62,367.75,drawn,two independent readings
+H002395,D,560,1057.62,370.86,drawn,two independent readings
+H002396,D,560H,1048.8,361.73,drawn,inferred from surrounding lots
+H002397,D,561,1039.37,369.87,drawn,inferred from surrounding lots
+H002398,D,562,1029.39,369.71,drawn,two independent readings
+H002399,D,562H,1020.24,369.69,drawn,two independent readings
+H002400,D,563,1011.07,370.8,drawn,two independent readings
+H002401,D,563H,1001.89,371.31,drawn,two independent readings
+H002404,F,201,967.43,375.47,drawn,two independent readings
+H002406,F,203,939.42,374.26,drawn,two independent readings
+H002408,F,205,911.58,373.05,drawn,two independent readings
+H002409,F,206,899.49,372.52,drawn,two independent readings
+H002411,F,208,871.61,371.35,drawn,two independent readings
+H002412,F,209,854.95,370.62,drawn,two independent readings
+H002414,G,58,817.61,369.5,drawn,two independent readings
+H002417,G,18,813.19,406.94,drawn,two independent readings
+H002418,G,17,812.97,417.57,drawn,two independent readings
+H002419,G,16,812.78,427.94,drawn,two independent readings
+H002420,G,15,812.57,438.35,drawn,two independent readings
+H002421,G,14,812.29,448.53,drawn,two independent readings
+H002422,G,13,812.06,458.94,drawn,two independent readings
+H002423,G,12,811.82,470.19,drawn,two independent readings
+H002424,G,11,811.62,481.38,drawn,two independent readings
+H002425,G,10,811.37,492.82,drawn,two independent readings
+H002426,G,9,811.12,504.88,drawn,two independent readings
+H002427,G,8H,810.87,515.5,drawn,two independent readings
+H002428,G,8,810.62,528.0,drawn,two independent readings
+H002429,G,7,810.3,540.87,drawn,two independent readings
+H002430,G,6,810.1,550.88,drawn,two independent readings
+H002431,G,5,809.92,560.88,drawn,two independent readings
+H002432,G,4,809.68,570.88,drawn,two independent readings
+H002433,G,3,809.44,580.84,drawn,two independent readings
+H002434,G,2,809.23,591.22,drawn,two independent readings
+H002435,G,1,808.99,602.44,drawn,two independent readings
+H002436,H,23,810.84,624.32,drawn,two independent readings
+H002437,H,22,810.53,636.47,drawn,two independent readings
+H002438,H,21,810.37,644.19,drawn,two independent readings
+H002439,H,20,810.12,651.88,drawn,two independent readings
+H002440,H,19,809.83,664.07,drawn,two independent readings
+H002441,H,18,809.52,676.22,drawn,two independent readings
+H002442,H,17,809.21,688.41,drawn,two independent readings
+H002443,H,16,808.9,700.56,drawn,two independent readings
+H002444,H,15,808.61,712.75,drawn,two independent readings
+H002445,H,14,808.29,724.94,drawn,two independent readings
+H002446,H,13,808.0,737.1,drawn,two independent readings
+H002447,H,12,807.65,749.28,drawn,two independent readings
+H002448,H,11,807.37,761.44,drawn,two independent readings
+H002449,H,10,807.05,773.63,drawn,two independent readings
+H002450,H,9,806.74,785.82,drawn,two independent readings
+H002451,H,8,806.44,797.94,drawn,two independent readings
+H002452,H,7,806.11,810.13,drawn,two independent readings
+H002453,H,6,805.82,822.32,drawn,two independent readings
+H002454,H,5,805.5,834.47,drawn,two independent readings
+H002455,H,4,805.19,846.66,drawn,two independent readings
+H002456,H,3,804.87,858.82,drawn,two independent readings
+H002457,H,2,804.58,871.0,drawn,two independent readings
+H002458,H,1,804.27,883.19,drawn,two independent readings
+H002459,G,59,801.33,369.13,drawn,two independent readings
+H002460,G,38H,798.55,381.77,drawn,inferred from surrounding lots
+H002461,G,38,798.3,394.32,drawn,two independent readings
+H002462,G,37,797.99,406.63,drawn,two independent readings
+H002463,G,36,797.79,417.19,drawn,two independent readings
+H002464,G,35,797.59,427.62,drawn,two independent readings
+H002465,G,34,797.37,438.07,drawn,two independent readings
+H002466,G,33,797.11,448.25,drawn,two independent readings
+H002467,G,32,796.87,458.63,drawn,two independent readings
+H002468,G,31,796.65,469.82,drawn,two independent readings
+H002469,G,30,796.43,481.07,drawn,two independent readings
+H002470,G,29,796.18,492.5,drawn,two independent readings
+H002471,G,28,795.93,504.57,drawn,two independent readings
+H002472,G,27H,795.68,515.19,drawn,two independent readings
+H002473,G,27,795.42,527.69,drawn,two independent readings
+H002474,G,26,795.11,540.56,drawn,two independent readings
+H002475,G,25,794.92,550.51,drawn,two independent readings
+H002476,G,24,794.74,560.51,drawn,two independent readings
+H002477,G,23,794.49,570.5,drawn,two independent readings
+H002478,G,22,794.24,580.5,drawn,two independent readings
+H002479,G,21,794.05,590.88,drawn,two independent readings
+H002480,G,20,793.8,602.13,drawn,two independent readings
+H002481,H,46,798.02,617.07,drawn,two independent readings
+H002482,H,45,797.74,627.19,drawn,two independent readings
+H002483,H,44,797.45,639.38,drawn,two independent readings
+H002484,H,43,797.12,651.57,drawn,two independent readings
+H002485,H,42,796.84,663.72,drawn,two independent readings
+H002486,H,41,796.51,675.91,drawn,two independent readings
+H002487,H,40,796.21,688.07,drawn,two independent readings
+H002488,H,39,795.9,700.25,drawn,two independent readings
+H002489,H,38,795.61,712.44,drawn,two independent readings
+H002490,H,37,795.29,724.6,drawn,two independent readings
+H002491,H,36,794.98,736.78,drawn,two independent readings
+H002492,H,35,794.66,748.94,drawn,two independent readings
+H002493,H,34,794.36,761.13,drawn,two independent readings
+H002494,H,33,794.05,773.31,drawn,two independent readings
+H002495,H,32,793.74,785.44,drawn,two independent readings
+H002496,H,31,793.44,797.63,drawn,two independent readings
+H002497,H,30,793.12,809.81,drawn,two independent readings
+H002498,H,29,792.83,821.97,drawn,two independent readings
+H002499,H,28,792.48,834.16,drawn,two independent readings
+H002500,H,27,792.2,846.32,drawn,two independent readings
+H002501,H,26,791.87,858.5,drawn,two independent readings
+H002502,H,25,791.58,870.69,drawn,two independent readings
+H002503,H,24,791.28,882.85,drawn,two independent readings
+H002504,G,60,784.88,368.75,drawn,two independent readings
+H002505,G,57H,782.32,381.38,drawn,inferred from surrounding lots
+H002506,G,57,782.08,393.94,drawn,inferred from surrounding lots
+H002507,G,56,781.81,406.28,drawn,two independent readings
+H002508,G,55,781.58,416.87,drawn,two independent readings
+H002509,G,54,781.34,427.28,drawn,two independent readings
+H002510,G,53,781.12,437.69,drawn,two independent readings
+H002511,G,52,780.89,447.88,drawn,two independent readings
+H002512,G,51,780.69,458.29,drawn,inferred from surrounding lots
+H002513,G,50,780.42,469.5,drawn,two independent readings
+H002514,G,49,780.19,480.72,drawn,two independent readings
+H002515,G,48,779.96,492.15,drawn,two independent readings
+H002516,G,47,779.67,504.22,drawn,two independent readings
+H002517,G,46H,779.47,514.85,drawn,two independent readings
+H002518,G,46,779.17,527.35,drawn,two independent readings
+H002519,G,45,778.88,540.22,drawn,two independent readings
+H002520,G,44,778.68,550.19,drawn,two independent readings
+H002521,G,43,778.49,560.19,drawn,two independent readings
+H002522,G,42,778.22,570.16,drawn,two independent readings
+H002523,G,41,778.0,580.13,drawn,two independent readings
+H002524,G,40,777.82,590.53,drawn,two independent readings
+H002525,G,39,777.54,601.78,drawn,two independent readings
+H002526,H,69,785.02,616.69,drawn,two independent readings
+H002527,H,68,784.74,626.88,drawn,two independent readings
+H002528,H,67,784.45,639.07,drawn,two independent readings
+H002529,H,66,784.12,651.22,drawn,two independent readings
+H002530,H,65,783.82,663.41,drawn,two independent readings
+H002531,H,64,783.52,675.56,drawn,two independent readings
+H002532,H,63,783.22,687.75,drawn,two independent readings
+H002533,H,62,782.9,699.94,drawn,two independent readings
+H002534,H,61,782.62,712.07,drawn,two independent readings
+H002535,H,60,782.27,724.25,drawn,two independent readings
+H002536,H,59,782.01,736.44,drawn,two independent readings
+H002537,H,58,781.67,748.59,drawn,two independent readings
+H002538,H,57,781.36,760.78,drawn,two independent readings
+H002539,H,56,781.05,772.94,drawn,two independent readings
+H002540,H,55,780.74,785.13,drawn,two independent readings
+H002541,H,54,780.44,797.32,drawn,two independent readings
+H002542,H,53,780.12,809.47,drawn,two independent readings
+H002543,H,52,779.81,821.66,drawn,two independent readings
+H002544,H,51,779.49,833.81,drawn,two independent readings
+H002545,H,50,779.2,846.0,drawn,two independent readings
+H002546,H,49,778.87,858.2,drawn,two independent readings
+H002547,H,48,778.58,870.32,drawn,two independent readings
+H002548,H,47,778.27,882.5,drawn,two independent readings
+H002549,G,61,768.84,365.28,drawn,two independent readings
+H002550,G,62,768.3,378.93,drawn,two independent readings
+H002551,G,63,767.7,392.66,drawn,two independent readings
+H002552,G,64,767.06,407.97,drawn,two independent readings
+H002553,G,65,766.47,421.69,drawn,two independent readings
+H002554,G,66,765.82,437.07,drawn,two independent readings
+H002555,G,67,765.3,450.69,drawn,two independent readings
+H002556,G,68,764.65,466.03,drawn,two independent readings
+H002557,G,69,764.05,479.76,drawn,two independent readings
+H002558,G,70,763.43,495.1,drawn,two independent readings
+H002559,G,71,762.87,508.81,drawn,two independent readings
+H002560,G,72,762.21,524.19,drawn,two independent readings
+H002561,G,73,761.68,537.84,drawn,two independent readings
+H002562,G,74,761.05,553.18,drawn,two independent readings
+H002563,G,75,760.46,566.92,drawn,two independent readings
+H002564,H,92,773.28,614.41,drawn,two independent readings
+H002565,H,91,772.96,626.56,drawn,two independent readings
+H002566,H,90,772.67,638.75,drawn,two independent readings
+H002567,H,89,772.34,650.94,drawn,two independent readings
+H002568,H,88,772.05,663.1,drawn,two independent readings
+H002569,H,87,771.73,675.28,drawn,two independent readings
+H002570,H,86,771.43,687.44,drawn,two independent readings
+H002571,H,85,771.1,699.6,drawn,two independent readings
+H002572,H,84,770.81,711.78,drawn,two independent readings
+H002573,H,83,770.48,723.97,drawn,two independent readings
+H002574,H,82,770.18,736.16,drawn,two independent readings
+H002575,H,81,769.86,748.31,drawn,two independent readings
+H002576,H,80,769.55,760.47,drawn,two independent readings
+H002577,H,79,769.25,772.66,drawn,two independent readings
+H002578,H,78,768.93,784.81,drawn,two independent readings
+H002579,H,77,768.63,797.01,drawn,two independent readings
+H002580,H,76,768.3,809.19,drawn,two independent readings
+H002581,H,75,768.0,821.35,drawn,two independent readings
+H002582,H,74,767.68,833.53,drawn,two independent readings
+H002583,H,73,767.39,845.69,drawn,two independent readings
+H002584,H,72,767.06,857.85,drawn,two independent readings
+H002585,H,71,766.78,870.03,drawn,two independent readings
+H002586,H,70,766.45,882.22,drawn,two independent readings
+H002589,M,14,1318.75,303.1,drawn,inferred from surrounding lots
+H002592,M,18,1309.84,296.66,drawn,inferred from surrounding lots
+H002593,M,19,1309.37,308.93,drawn,inferred from surrounding lots
+H002595,M,23,1300.81,293.56,drawn,inferred from surrounding lots
+H002596,M,24,1300.3,307.19,drawn,inferred from surrounding lots
+H002598,M,28,1291.93,287.69,drawn,two independent readings
+H002599,M,29,1291.53,297.28,drawn,two independent readings
+H002601,M,31,1290.63,319.18,drawn,inferred from surrounding lots
+H002602,M,34,1282.87,285.93,drawn,two independent readings
+H002604,M,36,1281.99,307.84,drawn,two independent readings
+H002605,M,37,1281.51,318.81,drawn,two independent readings
+H002606,M,40,1273.85,282.8,drawn,two independent readings
+H002607,M,41,1273.27,296.56,drawn,two independent readings
+H002608,M,42,1272.85,307.45,drawn,two independent readings
+H002609,M,43,1272.38,318.47,drawn,two independent readings
+H002610,M,46,1264.78,281.06,drawn,two independent readings
+H002611,M,47,1264.18,294.81,drawn,two independent readings
+H002612,M,48,1263.73,307.07,drawn,two independent readings
+H002613,M,49,1263.25,318.09,drawn,two independent readings
+H002614,M,52,1255.71,279.32,drawn,two independent readings
+H002615,M,53,1255.06,294.44,drawn,two independent readings
+H002616,M,54,1254.6,306.7,drawn,two independent readings
+H002617,M,55,1254.13,317.72,drawn,two independent readings
+H002618,M,61,1244.99,317.32,drawn,two independent readings
+H002619,M,58,1246.62,277.6,drawn,two independent readings
+H002620,M,59,1246.05,291.33,drawn,two independent readings
+H002621,M,60,1245.52,304.96,drawn,two independent readings
+H002622,M,66,1236.39,304.59,drawn,two independent readings
+H002623,M,67,1235.86,316.95,drawn,two independent readings
+H002624,M,64,1237.48,277.24,drawn,two independent readings
+H002626,M,71,1227.93,287.8,drawn,two independent readings
+H002627,M,72,1227.36,301.53,drawn,two independent readings
+H002628,M,73,1226.8,315.23,drawn,two independent readings
+H002629,M,74,1226.31,327.51,drawn,two independent readings
+H002632,M,76,1219.32,273.82,drawn,two independent readings
+H002633,M,77,1218.81,287.46,drawn,two independent readings
+H002634,M,78,1218.22,301.18,drawn,two independent readings
+H002635,M,79,1217.68,314.86,drawn,two independent readings
+H002636,M,80,1217.18,327.15,drawn,two independent readings
+H002637,M,81,1216.75,338.1,drawn,two independent readings
+H002638,M,82,1210.2,273.44,drawn,two independent readings
+H002639,M,83,1209.67,287.07,drawn,two independent readings
+H002640,M,84,1209.09,300.8,drawn,two independent readings
+H002641,M,85,1208.56,314.47,drawn,two independent readings
+H002642,M,86,1208.05,326.82,drawn,two independent readings
+H002643,M,87,1207.62,337.75,drawn,two independent readings
+H002644,M,88,1201.08,273.07,drawn,two independent readings
+H002645,M,89,1200.54,286.69,drawn,two independent readings
+H002646,M,90,1199.97,300.44,drawn,two independent readings
+H002647,M,91,1199.43,314.1,drawn,two independent readings
+H002648,M,92,1198.93,326.44,drawn,two independent readings
+H002649,M,93,1198.48,337.41,drawn,two independent readings
+H002650,M,94,1191.88,274.06,drawn,two independent readings
+H002651,M,95,1191.42,286.32,drawn,two independent readings
+H002652,M,96,1190.84,300.06,drawn,two independent readings
+H002653,M,97,1190.31,313.71,drawn,two independent readings
+H002654,M,98,1189.76,327.42,drawn,two independent readings
+H002655,M,99,1189.29,338.41,drawn,two independent readings
+H002656,M,100,1182.7,275.07,drawn,two independent readings
+H002657,M,101,1182.18,288.71,drawn,two independent readings
+H002658,M,102,1181.6,302.43,drawn,two independent readings
+H002659,M,103,1181.12,314.72,drawn,two independent readings
+H002660,M,104,1180.67,325.7,drawn,two independent readings
+H002661,M,105,1180.24,336.65,drawn,two independent readings
+H002662,M,106,1173.58,274.7,drawn,two independent readings
+H002663,M,107,1173.06,288.34,drawn,two independent readings
+H002664,M,108,1172.47,302.05,drawn,two independent readings
+H002665,M,109,1172.0,314.35,drawn,two independent readings
+H002666,M,110,1171.53,325.34,drawn,two independent readings
+H002667,M,111,1171.11,336.28,drawn,two independent readings
+H002668,M,112,1164.45,274.32,drawn,two independent readings
+H002669,M,113,1163.92,287.94,drawn,two independent readings
+H002670,M,114,1163.35,301.71,drawn,two independent readings
+H002671,M,115,1162.87,314.0,drawn,two independent readings
+H002672,M,116,1162.4,324.97,drawn,two independent readings
+H002673,M,117,1161.98,335.9,drawn,two independent readings
+H002674,M,118,1155.2,276.69,drawn,two independent readings
+H002675,M,119,1154.68,290.34,drawn,two independent readings
+H002676,M,120,1154.17,302.7,drawn,two independent readings
+H002677,M,121,1153.74,313.65,drawn,two independent readings
+H002678,M,122,1153.28,324.62,drawn,two independent readings
+H002679,M,123,1152.86,335.52,drawn,two independent readings
+H002680,M,124,1146.08,276.32,drawn,two independent readings
+H002681,M,125,1145.56,289.96,drawn,two independent readings
+H002682,M,126,1145.03,302.34,drawn,two independent readings
+H002683,M,127,1144.61,313.28,drawn,two independent readings
+H002684,M,128,1144.16,324.25,drawn,two independent readings
+H002685,M,129,1143.73,335.16,drawn,two independent readings
+H002686,M,130,1136.9,277.31,drawn,two independent readings
+H002687,M,131,1136.43,289.59,drawn,two independent readings
+H002688,M,132,1135.9,301.97,drawn,two independent readings
+H002689,M,133,1135.48,312.9,drawn,two independent readings
+H002690,M,134,1135.04,323.87,drawn,two independent readings
+H002691,M,135,1134.6,334.79,drawn,two independent readings
+H002692,M,136,1127.71,278.31,drawn,two independent readings
+H002693,M,137,1127.25,290.59,drawn,two independent readings
+H002694,M,138,1126.77,301.59,drawn,two independent readings
+H002695,M,139,1126.36,312.52,drawn,two independent readings
+H002696,M,140,1125.89,323.5,drawn,two independent readings
+H002697,M,141,1125.47,334.41,drawn,two independent readings
+H002698,M,142,1118.58,277.95,drawn,two independent readings
+H002699,M,143,1118.12,290.21,drawn,two independent readings
+H002700,M,144,1117.65,301.22,drawn,two independent readings
+H002701,M,145,1117.22,312.13,drawn,two independent readings
+H002702,M,146,1116.76,323.12,drawn,two independent readings
+H002703,M,147,1116.35,334.04,drawn,two independent readings
+H002704,M,148,1109.4,278.97,drawn,two independent readings
+H002705,M,149,1108.99,289.87,drawn,two independent readings
+H002706,M,150,1108.53,300.84,drawn,two independent readings
+H002707,M,151,1108.09,311.76,drawn,inferred from surrounding lots
+H002708,M,152,1107.64,322.75,drawn,two independent readings
+H002709,M,153,1107.22,333.66,drawn,two independent readings
+H002710,M,154,1100.26,278.92,label only,two independent readings
+H002711,M,155,1099.86,289.52,drawn,two independent readings
+H002712,M,156,1099.39,300.5,drawn,two independent readings
+H002713,M,157,1098.96,311.38,drawn,two independent readings
+H002714,M,158,1098.52,322.37,drawn,two independent readings
+H002715,M,159,1098.08,333.29,drawn,two independent readings
+H002716,M,160,1091.15,278.22,drawn,two independent readings
+H002717,M,161,1090.67,290.47,drawn,two independent readings
+H002718,M,162,1090.1,304.24,drawn,two independent readings
+H002719,M,163,1089.55,317.91,drawn,two independent readings
+H002720,M,164,1089.01,331.58,drawn,two independent readings
+H002721,M,165,1081.87,281.94,drawn,two independent readings
+H002722,M,166,1081.3,295.64,drawn,two independent readings
+H002723,M,167,1080.77,309.28,drawn,two independent readings
+H002724,M,168,1080.23,321.67,drawn,two independent readings
+H002725,M,169,1079.83,332.57,drawn,two independent readings
+H002726,M,170,1072.72,281.58,drawn,two independent readings
+H002727,M,171,1072.17,295.26,drawn,two independent readings
+H002728,M,172,1071.64,308.91,drawn,two independent readings
+H002729,M,173,1071.11,321.29,drawn,two independent readings
+H002730,M,174,1070.71,332.2,drawn,two independent readings
+H002731,M,175,1063.5,283.92,drawn,two independent readings
+H002732,M,176,1062.93,297.64,drawn,two independent readings
+H002733,M,177,1062.45,309.91,drawn,two independent readings
+H002734,M,178,1061.99,320.92,drawn,two independent readings
+H002735,M,179,1061.56,331.84,drawn,two independent readings
+H002736,M,180,1054.38,283.54,drawn,two independent readings
+H002737,M,181,1053.8,297.26,drawn,two independent readings
+H002738,M,182,1053.33,309.54,drawn,two independent readings
+H002739,M,183,1052.86,320.53,drawn,two independent readings
+H002740,M,184,1052.43,331.47,drawn,two independent readings
+H002741,M,185,1045.14,285.91,drawn,two independent readings
+H002742,M,186,1044.61,298.26,drawn,two independent readings
+H002743,M,187,1044.21,309.16,drawn,two independent readings
+H002744,M,188,1043.73,320.16,drawn,two independent readings
+H002745,M,189,1043.31,331.09,drawn,two independent readings
+H002746,M,190,1036.0,285.55,drawn,two independent readings
+H002747,M,191,1035.48,297.92,drawn,two independent readings
+H002748,M,192,1035.06,308.84,drawn,two independent readings
+H002749,M,193,1034.61,319.78,drawn,two independent readings
+H002750,M,194,1034.18,330.72,drawn,two independent readings
+H002751,M,195,1026.78,287.9,drawn,two independent readings
+H002752,M,196,1026.23,300.26,drawn,two independent readings
+H002753,M,197,1025.83,311.16,drawn,two independent readings
+H002754,M,198,1025.36,322.16,drawn,two independent readings
+H002755,M,199,1024.94,333.08,drawn,two independent readings
+H002756,M,200,1017.59,288.86,drawn,two independent readings
+H002757,M,201,1017.02,302.62,drawn,two independent readings
+H002758,M,202,1016.6,313.54,drawn,two independent readings
+H002759,M,203,1016.13,324.56,drawn,two independent readings
+H002760,M,204,1015.71,335.45,drawn,two independent readings
+H002761,M,205,1008.4,289.9,drawn,two independent readings
+H002762,M,206,1007.88,302.28,drawn,two independent readings
+H002763,M,207,1007.47,313.16,drawn,two independent readings
+H002764,M,208,1006.99,324.17,drawn,two independent readings
+H002765,M,209,1006.58,335.07,drawn,two independent readings
+H002766,M,210,999.16,292.25,drawn,two independent readings
+H002767,M,211,998.66,304.62,drawn,two independent readings
+H002768,M,212,998.23,315.54,drawn,two independent readings
+H002769,M,213,997.75,326.56,drawn,two independent readings
+H002770,M,214,997.35,337.45,drawn,two independent readings
+H002771,M,215,989.92,294.65,drawn,two independent readings
+H002772,M,216,989.43,306.98,drawn,two independent readings
+H002773,M,217,988.99,317.93,drawn,two independent readings
+H002774,M,218,988.52,328.93,drawn,two independent readings
+H002775,M,219,988.11,339.83,drawn,two independent readings
+H002776,M,220,980.8,294.3,drawn,two independent readings
+H002777,M,221,980.27,306.65,drawn,two independent readings
+H002778,M,222,979.87,317.55,drawn,two independent readings
+H002779,M,223,979.4,328.56,drawn,two independent readings
+H002780,M,224,978.97,339.45,drawn,two independent readings
+H002781,M,225,971.55,296.65,drawn,two independent readings
+H002782,M,226,971.06,308.97,drawn,two independent readings
+H002783,M,227,970.62,319.94,drawn,two independent readings
+H002784,M,228,970.14,330.93,drawn,two independent readings
+H002785,M,229,969.75,341.84,drawn,two independent readings
+H002786,M,230,962.3,299.04,drawn,two independent readings
+H002787,M,231,961.84,311.32,drawn,two independent readings
+H002788,M,232,961.36,322.31,drawn,two independent readings
+H002789,M,233,960.92,333.28,drawn,two independent readings
+H002790,M,234,960.56,342.85,drawn,two independent readings
+H002791,M,235,953.11,300.04,drawn,two independent readings
+H002792,M,236,952.69,310.97,drawn,two independent readings
+H002793,M,237,952.24,321.94,drawn,two independent readings
+H002794,M,238,951.8,332.9,drawn,two independent readings
+H002795,M,239,951.44,342.47,drawn,two independent readings
+H002796,M,240,943.93,301.06,drawn,two independent readings
+H002797,M,241,943.55,310.63,drawn,two independent readings
+H002798,M,242,943.11,321.57,drawn,two independent readings
+H002799,M,243,942.67,332.54,drawn,two independent readings
+H002800,M,244,942.32,342.09,drawn,two independent readings
+H002801,M,245,934.68,303.44,drawn,two independent readings
+H002802,M,246,934.17,317.07,drawn,two independent readings
+H002803,M,247,933.58,330.82,drawn,two independent readings
+H002804,M,248,933.18,341.74,drawn,two independent readings
+H002805,M,249,925.51,304.43,drawn,two independent readings
+H002806,M,250,925.04,316.69,drawn,two independent readings
+H002807,M,251,924.46,330.48,drawn,two independent readings
+H002808,M,252,924.04,341.4,drawn,two independent readings
+H002809,M,253,916.27,306.81,drawn,inferred from surrounding lots
+H002810,M,254,915.85,317.7,drawn,two independent readings
+H002811,M,255,915.33,330.1,drawn,two independent readings
+H002812,M,256,914.92,341.02,drawn,two independent readings
+H002813,M,257,907.13,306.43,drawn,two independent readings
+H002814,M,258,906.73,317.32,drawn,two independent readings
+H002815,M,259,906.2,329.73,drawn,two independent readings
+H002816,M,260,905.77,340.64,drawn,two independent readings
+H002817,M,261,897.8,311.53,drawn,two independent readings
+H002818,M,262,897.19,326.63,drawn,two independent readings
+H002819,M,263,896.7,338.88,drawn,two independent readings
+H002820,M,264,888.62,312.51,drawn,two independent readings
+H002821,M,265,888.06,326.23,drawn,two independent readings
+H002822,M,266,887.57,338.51,drawn,two independent readings
+H002823,M,267,879.48,312.16,drawn,two independent readings
+H002824,M,268,878.93,325.86,drawn,two independent readings
+H002825,M,269,878.44,338.13,drawn,two independent readings
+H002826,M,270,870.15,317.2,drawn,two independent readings
+H002827,M,271,869.42,335.07,drawn,two independent readings
+H002828,M,272,860.97,318.21,drawn,two independent readings
+H002829,M,273,860.29,334.71,drawn,two independent readings
+H002830,M,274,851.73,320.59,drawn,two independent readings
+H002831,M,275,851.1,335.71,drawn,two independent readings
+H002832,M,276,842.55,321.62,drawn,two independent readings
+H002833,M,277,841.98,335.33,drawn,two independent readings
+H002834,M,278,833.31,323.99,drawn,two independent readings
+H002835,M,279,832.8,336.31,drawn,two independent readings
+H002837,K,2,742.73,376.53,drawn,inferred from surrounding lots
+H002838,K,3,742.28,387.5,drawn,inferred from surrounding lots
+H002839,K,6,733.97,359.74,drawn,inferred from surrounding lots
+H002840,K,7,733.67,370.72,drawn,inferred from surrounding lots
+H002841,K,8,733.39,381.67,drawn,inferred from surrounding lots
+H002843,K,13,724.82,361.74,drawn,inferred from surrounding lots
+H002844,K,14,724.45,372.71,drawn,inferred from surrounding lots
+H002847,K,22,715.17,377.36,drawn,inferred from surrounding lots
+H002848,K,5,741.32,426.84,drawn,inferred from surrounding lots
+H002849,K,11,732.3,422.5,drawn,inferred from surrounding lots
+H002850,K,12,731.92,436.22,drawn,inferred from surrounding lots
+H002851,K,18,723.22,419.51,drawn,inferred from surrounding lots
+H002852,K,19,722.84,434.6,drawn,inferred from surrounding lots
+H002853,K,25,714.17,417.36,drawn,inferred from surrounding lots
+H002854,K,26,713.71,433.85,drawn,inferred from surrounding lots
+H002855,K,31,705.02,417.15,drawn,inferred from surrounding lots
+H002856,K,32,704.59,433.6,drawn,inferred from surrounding lots
+H002857,K,36,696.21,404.63,drawn,inferred from surrounding lots
+H002858,K,37,695.84,418.35,drawn,inferred from surrounding lots
+H002859,K,38,695.44,433.42,drawn,inferred from surrounding lots
+H002860,K,42,687.18,400.26,drawn,inferred from surrounding lots
+H002861,K,43,686.97,408.49,drawn,inferred from surrounding lots
+H002862,K,44,686.64,420.85,drawn,inferred from surrounding lots
+H002863,K,45,686.27,434.54,drawn,inferred from surrounding lots
+H002864,K,50,669.98,412.21,drawn,inferred from surrounding lots
+H002865,K,51,672.71,424.67,drawn,inferred from surrounding lots
+H002866,K,52,675.66,438.07,drawn,inferred from surrounding lots
+H002867,K,57,661.46,415.99,drawn,inferred from surrounding lots
+H002868,K,58,663.8,426.69,drawn,inferred from surrounding lots
+H002869,K,59,666.76,440.08,drawn,inferred from surrounding lots
+H002870,K,64,652.8,419.31,drawn,inferred from surrounding lots
+H002871,K,65,654.89,428.71,drawn,inferred from surrounding lots
+H002872,K,66,657.84,442.07,drawn,inferred from surrounding lots
+H002873,K,72,645.66,429.3,drawn,inferred from surrounding lots
+H002874,K,73,648.91,444.02,drawn,inferred from surrounding lots
+H002875,K,79,637.03,432.57,drawn,inferred from surrounding lots
+H002876,K,80,640.0,445.95,drawn,inferred from surrounding lots
+H002877,K,86,628.14,434.58,drawn,inferred from surrounding lots
+H002878,K,87,631.06,447.93,drawn,inferred from surrounding lots
+H002879,K,93,618.89,435.19,drawn,inferred from surrounding lots
+H002880,K,94,622.16,449.95,drawn,inferred from surrounding lots
+H002881,K,101,609.98,437.16,drawn,inferred from surrounding lots
+H002882,K,102,613.21,451.86,drawn,inferred from surrounding lots
+H002883,K,109,601.06,439.11,drawn,inferred from surrounding lots
+H002884,K,110,604.29,453.85,drawn,inferred from surrounding lots
+H002885,K,117,592.13,441.1,drawn,inferred from surrounding lots
+H002886,K,118,595.39,455.8,drawn,inferred from surrounding lots
+H002887,K,125,583.22,443.06,drawn,inferred from surrounding lots
+H002888,K,126,586.46,457.82,drawn,inferred from surrounding lots
+H002889,K,133,574.29,445.05,drawn,inferred from surrounding lots
+H002890,K,134,577.55,459.75,drawn,inferred from surrounding lots
+H002891,K,141,565.37,447.0,drawn,inferred from surrounding lots
+H002892,K,142,568.63,461.74,drawn,inferred from surrounding lots
+H002893,K,149,556.47,448.98,drawn,inferred from surrounding lots
+H002894,K,150,559.7,463.68,drawn,inferred from surrounding lots
+H002895,K,158,547.54,450.98,drawn,inferred from surrounding lots
+H002896,K,159,550.8,465.7,drawn,inferred from surrounding lots
+H002897,K,167,538.61,452.91,drawn,inferred from surrounding lots
+H002898,K,168,541.86,467.63,drawn,inferred from surrounding lots
+H002899,K,176,529.7,454.88,drawn,inferred from surrounding lots
+H002900,K,177,532.93,469.59,drawn,inferred from surrounding lots
+H002901,K,185,520.76,456.84,drawn,inferred from surrounding lots
+H002902,K,186,524.02,471.56,drawn,inferred from surrounding lots
+H002903,K,195,511.86,458.85,drawn,inferred from surrounding lots
+H002904,K,196,515.1,473.55,drawn,inferred from surrounding lots
+H002905,K,205,502.92,460.76,drawn,inferred from surrounding lots
+H002906,K,206,506.18,475.5,drawn,inferred from surrounding lots
+H002907,K,215,494.15,462.21,drawn,inferred from surrounding lots
+H002908,K,216,497.25,476.97,drawn,inferred from surrounding lots
+H002909,K,225,484.93,464.88,drawn,inferred from surrounding lots
+H002910,K,226,487.75,479.68,drawn,inferred from surrounding lots
+H002911,K,235,474.25,465.75,drawn,inferred from surrounding lots
+H002912,K,236,476.65,482.02,drawn,inferred from surrounding lots
+H002913,K,246,465.02,465.87,drawn,inferred from surrounding lots
+H002914,K,247,467.42,482.12,drawn,inferred from surrounding lots
+H002915,K,256,452.73,457.69,drawn,inferred from surrounding lots
+H002916,K,257,453.33,469.15,drawn,inferred from surrounding lots
+H002917,K,258,454.11,480.77,drawn,inferred from surrounding lots
+H002918,K,259,454.68,488.97,drawn,inferred from surrounding lots
+H002919,K,268,443.53,457.67,drawn,inferred from surrounding lots
+H002920,K,269,444.39,472.48,drawn,inferred from surrounding lots
+H002921,K,270,445.22,484.77,drawn,inferred from surrounding lots
+H002922,K,271,445.83,494.35,drawn,inferred from surrounding lots
+H002923,K,280,434.35,458.3,drawn,inferred from surrounding lots
+H002924,K,281,435.29,473.05,drawn,inferred from surrounding lots
+H002925,K,282,436.09,485.33,drawn,inferred from surrounding lots
+H002926,K,283,436.74,494.91,drawn,inferred from surrounding lots
+H002927,K,293,424.61,458.22,drawn,inferred from surrounding lots
+H002928,K,294,424.03,471.97,drawn,inferred from surrounding lots
+H002929,K,295,423.61,482.9,drawn,inferred from surrounding lots
+H002930,K,296,423.16,493.87,drawn,inferred from surrounding lots
+H002931,K,306,415.48,457.84,drawn,inferred from surrounding lots
+H002932,K,307,414.9,471.59,drawn,inferred from surrounding lots
+H002933,K,308,414.48,482.53,drawn,inferred from surrounding lots
+H002934,K,309,414.02,493.5,drawn,inferred from surrounding lots
+H002935,K,319,406.34,457.49,drawn,inferred from surrounding lots
+H002936,K,320,405.78,471.25,drawn,inferred from surrounding lots
+H002937,K,321,405.36,482.15,drawn,inferred from surrounding lots
+H002938,K,322,404.89,493.12,drawn,inferred from surrounding lots
+H002939,K,332,397.22,457.11,drawn,inferred from surrounding lots
+H002940,K,333,396.66,470.87,drawn,inferred from surrounding lots
+H002941,K,334,396.23,481.79,drawn,inferred from surrounding lots
+H002942,K,335,395.75,492.78,drawn,inferred from surrounding lots
+H002943,K,345,388.09,456.74,drawn,inferred from surrounding lots
+H002944,K,346,387.52,470.5,drawn,inferred from surrounding lots
+H002945,K,347,387.1,481.41,drawn,inferred from surrounding lots
+H002946,K,348,386.62,492.43,drawn,inferred from surrounding lots
+H002947,K,358,379.08,453.66,drawn,inferred from surrounding lots
+H002948,K,359,378.61,464.63,drawn,inferred from surrounding lots
+H002949,K,360,378.18,475.57,drawn,inferred from surrounding lots
+H002950,K,361,377.73,486.53,drawn,inferred from surrounding lots
+H002951,J,1,738.09,473.68,drawn,inferred from surrounding lots
+H002952,J,2,737.22,487.4,drawn,inferred from surrounding lots
+H002953,J,3,736.56,498.35,drawn,inferred from surrounding lots
+H002954,J,4,735.84,509.3,drawn,inferred from surrounding lots
+H002955,J,5,735.05,521.57,drawn,inferred from surrounding lots
+H002956,J,6,729.51,464.92,drawn,inferred from surrounding lots
+H002957,J,7,728.8,475.88,drawn,inferred from surrounding lots
+H002958,J,8,728.12,486.82,drawn,inferred from surrounding lots
+H002959,J,9,727.43,497.75,drawn,inferred from surrounding lots
+H002960,J,10,726.72,508.71,drawn,inferred from surrounding lots
+H002961,J,11,726.04,519.64,drawn,inferred from surrounding lots
+H002962,J,12,725.34,530.58,drawn,inferred from surrounding lots
+H002963,J,13,720.59,464.46,drawn,inferred from surrounding lots
+H002964,J,14,719.91,475.39,drawn,inferred from surrounding lots
+H002965,J,15,719.21,486.32,drawn,inferred from surrounding lots
+H002966,J,16,718.52,497.23,drawn,inferred from surrounding lots
+H002967,J,17,717.8,508.19,drawn,inferred from surrounding lots
+H002968,J,18,717.14,519.11,drawn,inferred from surrounding lots
+H002969,J,19,716.43,530.07,drawn,inferred from surrounding lots
+H002970,J,20,711.47,463.86,drawn,inferred from surrounding lots
+H002971,J,21,710.78,474.79,drawn,inferred from surrounding lots
+H002972,J,22,710.09,485.77,drawn,inferred from surrounding lots
+H002973,J,23,709.39,496.67,drawn,inferred from surrounding lots
+H002974,J,24,708.69,507.62,drawn,inferred from surrounding lots
+H002975,J,25,708.01,518.54,drawn,inferred from surrounding lots
+H002976,J,26,707.3,529.5,drawn,inferred from surrounding lots
+H002977,J,27,702.07,463.09,drawn,inferred from surrounding lots
+H002978,J,28,701.39,474.02,drawn,inferred from surrounding lots
+H002979,J,29,700.68,484.97,drawn,inferred from surrounding lots
+H002980,J,30,700.01,495.89,drawn,inferred from surrounding lots
+H002981,J,31,699.3,506.84,drawn,inferred from surrounding lots
+H002982,J,32,698.59,517.8,drawn,inferred from surrounding lots
+H002983,J,33,697.94,528.72,drawn,inferred from surrounding lots
+H002984,J,34,692.96,462.52,drawn,inferred from surrounding lots
+H002985,J,35,692.27,473.42,drawn,inferred from surrounding lots
+H002986,J,36,691.57,484.37,drawn,inferred from surrounding lots
+H002987,J,37,690.89,495.3,drawn,inferred from surrounding lots
+H002988,J,38,690.18,506.25,drawn,inferred from surrounding lots
+H002989,J,39,689.49,517.22,drawn,inferred from surrounding lots
+H002990,J,40,688.8,528.16,drawn,inferred from surrounding lots
+H002991,J,41,684.05,463.32,drawn,inferred from surrounding lots
+H002992,J,42,683.43,472.88,drawn,inferred from surrounding lots
+H002993,J,43,682.72,483.86,drawn,inferred from surrounding lots
+H002994,J,44,682.05,494.79,drawn,inferred from surrounding lots
+H002995,J,45,681.34,505.73,drawn,inferred from surrounding lots
+H002996,J,46,680.66,516.67,drawn,inferred from surrounding lots
+H002997,J,47,679.95,527.59,drawn,inferred from surrounding lots
+H002998,J,48,674.47,469.58,drawn,inferred from surrounding lots
+H002999,J,49,673.62,483.25,drawn,inferred from surrounding lots
+H003000,J,50,672.93,494.19,drawn,inferred from surrounding lots
+H003001,J,51,672.22,505.15,drawn,inferred from surrounding lots
+H003002,J,52,671.54,516.07,drawn,inferred from surrounding lots
+H003003,J,53,670.84,527.02,drawn,inferred from surrounding lots
+H003004,J,54,665.42,469.96,drawn,inferred from surrounding lots
+H003005,J,55,664.64,482.27,drawn,inferred from surrounding lots
+H003006,J,56,663.93,493.22,drawn,inferred from surrounding lots
+H003007,J,57,663.26,504.14,drawn,inferred from surrounding lots
+H003008,J,58,662.56,515.09,drawn,inferred from surrounding lots
+H003009,J,59,661.86,526.04,drawn,inferred from surrounding lots
+H003010,J,60,656.22,470.77,drawn,inferred from surrounding lots
+H003011,J,61,655.52,481.67,drawn,inferred from surrounding lots
+H003012,J,62,654.82,492.62,drawn,inferred from surrounding lots
+H003013,J,63,654.14,503.55,drawn,inferred from surrounding lots
+H003014,J,64,653.42,514.5,drawn,inferred from surrounding lots
+H003015,J,65,652.74,525.47,drawn,inferred from surrounding lots
+H003016,J,66,646.71,472.0,drawn,inferred from surrounding lots
+H003017,J,67,646.12,481.59,drawn,inferred from surrounding lots
+H003018,J,68,645.43,492.54,drawn,inferred from surrounding lots
+H003019,J,69,644.72,503.48,drawn,inferred from surrounding lots
+H003020,J,70,644.03,514.42,drawn,inferred from surrounding lots
+H003021,J,71,643.34,525.4,drawn,inferred from surrounding lots
+H003022,J,72,637.58,471.43,drawn,inferred from surrounding lots
+H003023,J,73,636.99,481.0,drawn,inferred from surrounding lots
+H003024,J,74,636.31,491.97,drawn,inferred from surrounding lots
+H003025,J,75,635.59,502.93,drawn,inferred from surrounding lots
+H003026,J,76,634.94,513.85,drawn,inferred from surrounding lots
+H003027,J,77,634.21,524.8,drawn,inferred from surrounding lots
+H003028,J,78,627.79,479.21,drawn,inferred from surrounding lots
+H003029,J,79,627.01,491.52,drawn,inferred from surrounding lots
+H003030,J,80,626.3,502.5,drawn,inferred from surrounding lots
+H003031,J,81,625.63,513.42,drawn,inferred from surrounding lots
+H003032,J,82,624.93,524.38,drawn,inferred from surrounding lots
+H003033,J,83,618.59,480.05,drawn,inferred from surrounding lots
+H003034,J,84,617.9,490.95,drawn,inferred from surrounding lots
+H003035,J,85,617.19,501.91,drawn,inferred from surrounding lots
+H003036,J,86,616.51,512.83,drawn,inferred from surrounding lots
+H003037,J,87,615.8,523.79,drawn,inferred from surrounding lots
+H003038,J,88,609.55,479.19,drawn,inferred from surrounding lots
+H003039,J,89,608.86,490.13,drawn,inferred from surrounding lots
+H003040,J,90,608.19,501.07,drawn,inferred from surrounding lots
+H003041,J,91,607.46,512.02,drawn,inferred from surrounding lots
+H003042,J,92,606.79,522.97,drawn,inferred from surrounding lots
+H003043,J,93,600.33,480.0,drawn,inferred from surrounding lots
+H003044,J,94,599.74,489.56,drawn,inferred from surrounding lots
+H003045,J,95,599.05,500.5,drawn,inferred from surrounding lots
+H003046,J,96,598.34,511.46,drawn,inferred from surrounding lots
+H003047,J,97,597.68,522.38,drawn,inferred from surrounding lots
+H003048,J,98,590.99,486.09,drawn,inferred from surrounding lots
+H003049,J,99,590.13,499.77,drawn,inferred from surrounding lots
+H003050,J,100,589.43,510.72,drawn,inferred from surrounding lots
+H003051,J,101,588.74,521.66,drawn,inferred from surrounding lots
+H003052,J,102,581.79,486.86,drawn,inferred from surrounding lots
+H003053,J,103,581.02,499.17,drawn,inferred from surrounding lots
+H003054,J,104,580.3,510.13,drawn,inferred from surrounding lots
+H003055,J,105,579.64,521.05,drawn,inferred from surrounding lots
+H003056,J,106,572.46,487.77,drawn,inferred from surrounding lots
+H003057,J,107,571.79,498.72,drawn,inferred from surrounding lots
+H003058,J,108,571.06,509.66,drawn,inferred from surrounding lots
+H003059,J,109,570.39,520.58,drawn,inferred from surrounding lots
+H003060,J,110,563.27,488.57,drawn,inferred from surrounding lots
+H003061,J,111,562.66,498.14,drawn,inferred from surrounding lots
+H003062,J,112,561.97,509.09,drawn,inferred from surrounding lots
+H003063,J,113,561.26,519.98,drawn,inferred from surrounding lots
+H003064,J,114,553.71,494.8,drawn,inferred from surrounding lots
+H003065,J,115,552.84,508.52,drawn,inferred from surrounding lots
+H003066,J,116,552.15,519.44,drawn,inferred from surrounding lots
+H003067,J,117,544.51,495.58,drawn,inferred from surrounding lots
+H003068,J,118,543.71,507.93,drawn,inferred from surrounding lots
+H003069,J,119,543.06,518.85,drawn,inferred from surrounding lots
+H003070,J,120,535.3,496.41,drawn,inferred from surrounding lots
+H003071,J,121,534.62,507.35,drawn,inferred from surrounding lots
+H003072,J,122,533.93,518.29,drawn,inferred from surrounding lots
+H003073,J,123,526.08,497.18,drawn,inferred from surrounding lots
+H003074,J,124,525.49,506.75,drawn,inferred from surrounding lots
+H003075,J,125,524.8,517.69,drawn,inferred from surrounding lots
+H003076,J,126,516.55,503.44,drawn,inferred from surrounding lots
+H003077,J,127,515.68,517.13,drawn,inferred from surrounding lots
+H003078,J,128,507.35,504.23,drawn,inferred from surrounding lots
+H003079,J,129,506.54,516.53,drawn,inferred from surrounding lots
+H003080,J,130,498.05,505.94,drawn,inferred from surrounding lots
+H003081,J,131,497.46,515.5,drawn,inferred from surrounding lots
+H003082,J,132,488.59,510.81,drawn,inferred from surrounding lots
+H003084,I,2,751.27,567.9,drawn,inferred from surrounding lots
+H003085,I,3,742.68,555.18,drawn,inferred from surrounding lots
+H003086,I,4,742.15,567.53,drawn,inferred from surrounding lots
+H003087,I,5,733.49,556.19,drawn,inferred from surrounding lots
+H003088,I,6,733.03,567.16,drawn,inferred from surrounding lots
+H003089,I,7,724.36,555.78,drawn,inferred from surrounding lots
+H003090,I,8,723.89,566.75,drawn,inferred from surrounding lots
+H003091,I,9,715.23,555.41,drawn,inferred from surrounding lots
+H003092,I,10,714.76,566.37,drawn,inferred from surrounding lots
+H003093,I,11,706.11,555.03,drawn,inferred from surrounding lots
+H003094,I,12,705.64,566.0,drawn,inferred from surrounding lots
+H003095,I,13,696.98,554.65,drawn,inferred from surrounding lots
+H003096,I,14,696.52,565.62,drawn,inferred from surrounding lots
+H003097,I,15,687.86,554.27,drawn,inferred from surrounding lots
+H003098,I,16,687.37,565.23,drawn,inferred from surrounding lots
+H003099,I,17,678.74,553.9,drawn,inferred from surrounding lots
+H003100,I,18,678.24,564.85,drawn,inferred from surrounding lots
+H003101,I,19,669.59,553.51,drawn,inferred from surrounding lots
+H003102,I,20,669.12,564.48,drawn,inferred from surrounding lots
+H003103,I,21,660.46,553.13,drawn,inferred from surrounding lots
+H003104,I,22,660.0,564.1,drawn,inferred from surrounding lots
+H003105,I,23,651.34,552.76,drawn,inferred from surrounding lots
+H003106,I,24,650.87,563.72,drawn,inferred from surrounding lots
+H003107,I,25,642.22,552.38,drawn,inferred from surrounding lots
+H003108,I,26,641.75,563.35,drawn,inferred from surrounding lots
+H003109,I,27,633.08,551.98,drawn,inferred from surrounding lots
+H003110,I,28,632.62,562.94,drawn,inferred from surrounding lots
+H003111,I,29,623.95,551.6,drawn,inferred from surrounding lots
+H003112,I,30,623.49,562.57,drawn,inferred from surrounding lots
+H003113,I,31,614.83,551.22,drawn,inferred from surrounding lots
+H003114,I,32,614.37,562.19,drawn,inferred from surrounding lots
+H003115,I,33,605.71,550.85,drawn,inferred from surrounding lots
+H003116,I,34,605.24,561.82,drawn,inferred from surrounding lots
+H003117,I,35,596.56,550.49,drawn,inferred from surrounding lots
+H003118,I,36,596.12,561.44,drawn,inferred from surrounding lots
+H003119,I,37,587.44,550.08,drawn,inferred from surrounding lots
+H003120,I,38,586.99,561.06,drawn,inferred from surrounding lots
+H003121,I,39,578.32,549.71,drawn,inferred from surrounding lots
+H003122,I,40,577.87,560.69,drawn,inferred from surrounding lots
+H003123,I,41,569.19,549.34,drawn,inferred from surrounding lots
+H003124,I,42,568.74,560.31,drawn,inferred from surrounding lots
+H003125,I,43,560.06,548.97,drawn,inferred from surrounding lots
+H003126,I,44,559.62,559.93,drawn,inferred from surrounding lots
+H003127,I,45,550.93,548.61,drawn,inferred from surrounding lots
+H003128,I,46,550.49,559.56,drawn,inferred from surrounding lots
+H003129,I,47,541.8,548.23,drawn,inferred from surrounding lots
+H003130,I,48,541.37,559.18,drawn,inferred from surrounding lots
+H003131,I,49,532.72,546.5,drawn,inferred from surrounding lots
+H003132,I,50,532.24,558.81,drawn,inferred from surrounding lots
+H003133,I,51,523.6,546.13,drawn,inferred from surrounding lots
+H003134,I,52,523.1,558.41,drawn,inferred from surrounding lots
+H003135,I,53,514.46,545.76,drawn,inferred from surrounding lots
+H003136,I,54,513.97,558.04,drawn,inferred from surrounding lots
+H003137,I,55,505.32,545.44,drawn,inferred from surrounding lots
+H003138,I,56,504.85,557.7,drawn,inferred from surrounding lots
+H003139,I,57,496.2,545.07,drawn,inferred from surrounding lots
+H003140,I,58,495.73,557.32,drawn,inferred from surrounding lots
+H003141,I,59,487.06,544.69,drawn,inferred from surrounding lots
+H003142,I,60,486.58,556.95,drawn,inferred from surrounding lots
+H003143,I,61,477.94,544.31,drawn,inferred from surrounding lots
+H003144,I,62,477.45,556.57,drawn,inferred from surrounding lots
+H003145,I,63,468.93,541.11,drawn,inferred from surrounding lots
+H003146,I,64,468.38,554.78,drawn,inferred from surrounding lots
+H003147,L,69,442.43,267.08,drawn,two independent readings
+H003148,L,70,441.9,280.71,drawn,two independent readings
+H003149,L,71,441.31,294.47,drawn,two independent readings
+H003150,L,72,440.79,308.13,drawn,two independent readings
+H003151,L,73,440.22,321.88,drawn,two independent readings
+H003152,L,74,433.6,259.8,drawn,two independent readings
+H003153,L,75,433.03,273.56,drawn,two independent readings
+H003154,L,76,432.62,284.46,drawn,two independent readings
+H003155,L,77,432.13,295.47,drawn,two independent readings
+H003156,L,78,431.66,307.75,drawn,two independent readings
+H003157,L,79,431.09,321.51,drawn,two independent readings
+H003158,L,80,424.72,252.65,drawn,two independent readings
+H003159,L,81,424.18,266.33,drawn,two independent readings
+H003160,L,82,423.63,280.0,drawn,two independent readings
+H003161,L,83,423.07,293.75,drawn,two independent readings
+H003162,L,84,422.53,307.38,drawn,two independent readings
+H003163,L,85,421.96,321.14,drawn,two independent readings
+H003164,L,86,415.69,249.55,drawn,two independent readings
+H003165,L,87,415.35,259.07,drawn,two independent readings
+H003166,L,88,414.86,270.07,drawn,two independent readings
+H003167,L,89,414.44,281.01,drawn,two independent readings
+H003168,L,90,413.95,293.38,drawn,two independent readings
+H003169,L,91,413.39,306.99,drawn,two independent readings
+H003170,L,92,412.83,320.76,drawn,two independent readings
+H003171,L,93,406.28,257.36,drawn,two independent readings
+H003172,L,94,405.87,266.97,drawn,two independent readings
+H003173,L,95,405.38,279.26,drawn,two independent readings
+H003174,L,96,404.81,292.99,drawn,two independent readings
+H003175,L,97,404.27,306.62,drawn,two independent readings
+H003176,L,98,403.71,320.39,drawn,two independent readings
+H003177,L,99,396.75,266.6,drawn,two independent readings
+H003178,L,100,396.25,278.89,drawn,two independent readings
+H003179,L,101,395.68,292.61,drawn,two independent readings
+H003180,L,102,395.15,306.25,drawn,two independent readings
+H003181,L,103,394.59,320.01,drawn,two independent readings
+H003182,L,104,387.11,278.53,drawn,two independent readings
+H003183,L,105,386.56,292.23,drawn,two independent readings
+H003184,L,106,386.02,305.9,drawn,two independent readings
+H003185,L,107,385.54,316.91,drawn,two independent readings
