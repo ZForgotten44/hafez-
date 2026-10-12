@@ -11,8 +11,8 @@ def run(pdfs=None):
         pd = os.path.join(REPO, 'h-number-map', 'site', 'pdf'); pdfs = {}
         if os.path.isdir(pd):
             for f in sorted(os.listdir(pd)):
-                m = re.match(r'Cedar_Grove_H-Map_(full|overview|area_[A-Z])\.pdf$', f)
-                if m: pdfs[m.group(1)] = dict(file='pdf/' + f, name=f)
+                m = re.match(r'Cedar_Grove_H-Map_(?:(full|overview|area_[A-Z])\.pdf|(lots)\.xlsx)$', f)
+                if m: pdfs[m.group(1) or 'xlsx'] = dict(file='pdf/' + f, name=f)
     D = svgmap.load(); lots = D['lots']; reg = D['reg']; cells = {c['id']: c for c in D['cells']}
     # --- lots (compact rows)
     rows = []
@@ -21,7 +21,7 @@ def run(pdfs=None):
             xs = [p[0] for p in o['poly']]; ys = [p[1] for p in o['poly']]; bb = [min(xs), min(ys), max(xs), max(ys)]
         else: bb = [o['cx'] - 3, o['cy'] - 3, o['cx'] + 3, o['cy'] + 3]
         ev = 0 if 'old_ocr_agrees' in o['ev'] else 1
-        rows.append([o['d'], o['h'], o['s'], o['l'], o['hn'], o['cx'], o['cy'], *[round(v, 2) for v in bb], ev])
+        rows.append([o['d'], o['h'], o['s'], o['l'], o['hn'], o['cx'], o['cy'], *[round(v, 2) for v in bb], ev, 0 if o['poly'] else 1])
     # --- review items
     reasons = []; rv = []
     for r in reg['review']:

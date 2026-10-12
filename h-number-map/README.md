@@ -1,12 +1,12 @@
 # Cedar Grove Cemetery - H-Number Map
 
-An interactive map and printable PDFs that show every lot with its **H-number**, built from the cemetery's CAD drawing
-(`Ground Maps/Cedar Grove 2022 with CR.ai`) and the decoder (`s4/s4decoder1.py`).
+An interactive map and printable PDFs that show every lot with its **H-number**, built from the cemetery's vector drawing
+(`Ground Maps/Cedar Grove 2022 with CR.ai`, an Illustrator vector drawing saved with PDF content: lines plus live text objects) and the decoder (`s4/s4decoder1.py`).
 
 * **`site/index.html`** - the interactive map (one file). Search by H-number, legacy lot or recorded name; click any lot.
 * **`site/pdf/`** - PDFs drawn from the same data: `Cedar_Grove_H-Map_full.pdf` (42 x 24 in overview + 14 tabloid detail pages +
   unresolved-locations appendix), `..._overview.pdf`, and one PDF per legacy area.
-* **`verified_lots.csv`**, **`unresolved_locations.csv`** - plain lists.
+* **`lots_with_h_numbers.csv`**, **`unresolved_locations.csv`**, and `site/pdf/Cedar_Grove_H-Map_lots.xlsx` (the same lists as an Excel workbook).
 * **`pipeline2/`** - the build. `python3 pipeline2/run_all.py` regenerates everything from the repo (about 6 minutes). See `pipeline2/README.md`.
 * `pipeline/`, `placed_lots.csv`, `lots_not_placed_on_map.csv`, `map_labels_not_in_decoder.csv`, the 44x34in and letter-tile PDFs -
   the earlier OCR-based build. Superseded; kept for reference. (Its scripts need two source PDFs that are not in the repo.)
@@ -14,12 +14,12 @@ An interactive map and printable PDFs that show every lot with its **H-number**,
 ## What changed in this version
 
 The old map was redrawn from a PDF whose lot numbers were vector strokes, so old numbers sat under the new ones and
-labels sat off-centre. The CAD drawing keeps lot numbers as **real text** and lot outlines as separate lines, so:
+labels sat off-centre. The vector drawing keeps lot numbers as **real text** and lot outlines as separate lines, so:
 
 * No legacy annotation is part of the map. Section titles, chapel/parking/office notes and the mausoleum legend are text in the
   source and are simply not drawn. Roads, curbs, building and mausoleum footprints and every lot outline are kept.
-  Original text can be switched on in **Layers > Original drawing annotations** (road names, building names, mausoleum legend from the CAD file).
-  The old overall map's maroon "SECTION X" blocks are not in the CAD file, so that layer does not reproduce them.
+  Original text can be switched on in **Layers > Original drawing annotations** (road names, building names, mausoleum legend from the drawing file).
+  The old overall map's maroon "SECTION X" blocks are not in the drawing file, so that layer does not reproduce them.
 * Nothing is erased or covered, so nothing can be erased by mistake. There are no white patches.
 * Each number is fitted inside its own outline: centred, aligned, inset by a clear margin, never clipped, never overlapping.
 
@@ -27,11 +27,14 @@ labels sat off-centre. The CAD drawing keeps lot numbers as **real text** and lo
 
 | | lots |
 |---|---|
-| Verified H-number and verified outline | **3,103** (3,102 drawn outlines + 1 label whose outline is not drawn) |
-| - section confirmed by two independent readings | 2,709 |
-| - section inferred from surrounding lots | 394 |
+| Lots with an H-number on the map | **3,103** (3,102 drawn outlines + 1 label whose outline is not drawn) |
+| - legacy section corroborated by a second, independent reading | 2,709 |
+| - legacy section inferred from surrounding lots (not individually reviewed) | 394 (327 with 90-100% neighbour agreement, 46 with 60-89%, 21 whose label exists in only one section) |
 | Visible on the map, identity unresolved ("needs review") | **218** |
-| Known to the decoder, no position on the map | **68** |
+| Known to the decoder, no position on the map | **68** (34 of them match a drawn lot that is also among the 218) |
+
+The 394 inferred-section lots are drawn with their H-number but are not counted as verified in the site panel ("Placed lot, section inferred").
+A spot-check of those, starting with the 46 weakest, is the next review task.
 
 Needs-review lots are tinted with a dashed amber outline and carry **no** number. Their decoder candidate (when there is one) is
 shown only in the details panel, marked as a candidate. Reasons: label not in the legacy section this part of the map belongs to (77),
@@ -42,7 +45,7 @@ All of them are in `unresolved_locations.csv`, the site's **To review** tab and 
 Open human decisions (unchanged from before, now visible as concrete lots): Section B 373-380H collision (the margin-strip
 numbers sit in the main grid), Section G duplicate `19`, Section A `20H, 39H ... 343H` (map shows plain `20`, `39`), the B/C/D
 labels 395-414 and 320/340/360/344H/362H/308H/326H on the Section B side, the mausoleum-garden rows, and the per-lot grave capacity.
-Three lots are verified but too small to carry a legible number (E 195A, E 195B, H 21): they are clickable and listed.
+Three lots are placed but too small to carry a legible number (E 195A, E 195B, H 21): they are clickable and listed.
 
 ## Checks that ran (pipeline2/qa.py)
 

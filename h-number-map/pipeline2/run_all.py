@@ -12,5 +12,5 @@ try:
     import build_pdf; print('== PDFs'); pdfs = build_pdf.run()
 except ImportError:
     pdfs = {}
-print('== site'); build_site.run(pdfs)
 import export_lists; export_lists.run()
+print('== site'); build_site.run(pdfs or None)

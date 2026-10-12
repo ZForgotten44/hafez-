@@ -134,10 +134,11 @@ aside#panel[hidden]{display:none}
 .btn{height:40px;padding:0 14px;border:1px solid var(--line-2);border-radius:var(--r);background:var(--surface);font-weight:600;font-size:13.5px;color:var(--navy)}
 .btn:hover{background:var(--surface-2)} .btn.pri{background:var(--navy);border-color:var(--navy);color:#fff} .btn.pri:hover{background:#13315a}
 .btn.dng{color:var(--danger)} .btn:disabled{opacity:.5;cursor:default}
-.form label{display:block;font-size:11.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--faint);margin:10px 0 4px}
+.form label{display:block;font-size:11.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--faint);margin:8px 0 3px}
+.form .field{height:36px}.form textarea.field{height:auto;min-height:44px}.form details{margin-top:10px}.form summary{cursor:pointer;font-weight:600;color:var(--navy-2);font-size:13.5px;padding:6px 0}
 .form .two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .form .chk{display:flex;gap:8px;align-items:center;margin-top:8px;font-size:13.5px;text-transform:none;letter-spacing:0;font-weight:500;color:var(--text)}
-.rform{border:1px solid var(--line-2);border-radius:var(--r);padding:4px 12px 12px;margin:10px 0;background:var(--surface-2)}
+.rform{border:1px solid var(--line-2);border-radius:var(--r);padding:2px 12px 8px;margin:8px 0;background:var(--surface-2)}
 .status{font-size:12.5px;min-height:18px;margin-top:6px;color:var(--mid)} .status.ok{color:var(--ok)} .status.err{color:var(--danger)}
 
 .toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(10px);background:var(--navy);color:#fff;padding:10px 16px;border-radius:var(--r);font-weight:600;font-size:13.5px;box-shadow:var(--shadow);opacity:0;pointer-events:none;transition:opacity .18s,transform .18s;z-index:300;max-width:90vw}
@@ -228,7 +229,7 @@ var DATA = /*__DATA__*/null;
 (function(){
 'use strict';
 var LOTS=DATA.lots, REVIEW=DATA.review, UNPL=DATA.unplaced, AREAS=DATA.areas, REASONS=DATA.reasons, ANN=DATA.ann, CB=DATA.bbox, PDFS=DATA.pdfs;
-// lot row: [d,h,s,l,hn,cx,cy,x0,y0,x1,y1,ev]
+// lot row: [d,h,s,l,hn,cx,cy,x0,y0,x1,y1,ev,labelOnly]
 var $=function(id){return document.getElementById(id)};
 function esc(s){var d=document.createElement('div');d.textContent=String(s==null?'':s);return d.innerHTML}
 var tt;function toast(m){var t=$('toast');t.textContent=m;t.classList.add('show');clearTimeout(tt);tt=setTimeout(function(){t.classList.remove('show')},2600)}
@@ -329,8 +330,8 @@ function areaOfSel(){return sel.k==='lot'?LOTS[sel.i][2]:sel.k==='unplaced'?UNPL
 function renderPanel(){var p=$('panel');p.hidden=false;measure();if(isMobile())document.documentElement.style.setProperty('--sheet-h','48%');
   var h='';
   if(sel.k==='lot'){var r=LOTS[sel.i];
-    h='<div class="p-head"><div><div class="p-h" id="p-h">'+esc(r[1])+'</div><div style="margin-top:8px"><span class="chip ok">Verified lot</span></div></div><button class="p-x" id="p-x" aria-label="Close details">&#10005;</button></div><div class="p-body">'
-     +'<dl class="kv"><dt>Legacy reference</dt><dd>Section '+esc(r[2])+' &middot; Lot '+esc(r[3])+'</dd><dt>Map position</dt><dd>Verified outline</dd></dl>'
+    h='<div class="p-head"><div><div class="p-h" id="p-h">'+esc(r[1])+'</div><div style="margin-top:8px"><span class="chip '+(r[11]===0?'ok':'gen')+'">'+(r[11]===0?'Verified lot':'Placed lot, section inferred')+'</span></div></div><button class="p-x" id="p-x" aria-label="Close details">&#10005;</button></div><div class="p-body">'
+     +'<dl class="kv"><dt>Legacy reference</dt><dd>Section '+esc(r[2])+' &middot; Lot '+esc(r[3])+'</dd><dt>Map position</dt><dd>'+(r[12]?'Label position only (outline not drawn in the source)':'Outline drawn in the source')+'</dd></dl>'
      +'<p class="note" style="margin:0 0 4px">'+evText(r[11])+'</p>'
      +'<div id="rec-box"></div>'
      +'<div class="btns"><button class="btn" id="p-copy" type="button">Copy H-number</button><button class="btn" id="p-list" type="button">Add to list</button></div></div>'}
@@ -373,14 +374,14 @@ function f(id,lbl,val,type,ph){return '<label for="'+id+'">'+lbl+'</label><input
 function recForm(r,k){return '<div class="rform" data-k="'+k+'">'+f('rn'+k,'Name',r.name)+'<div class="two"><div>'+f('rb'+k,'Birth',r.birth,'text','e.g. 1931 or 4 Mar 1931')+'</div><div>'+f('rd'+k,'Death',r.death,'text','e.g. 2004')+'</div></div>'
   +f('rp'+k,'Grave position',r.position,'text','e.g. east half, row 2')+'<label class="chk"><input type="checkbox" id="rv'+k+'"'+(r.positionVerified?' checked':'')+'> Position verified on site or in a source</label>'
   +'<label for="rt'+k+'">Notes</label><textarea class="field" id="rt'+k+'">'+esc(r.notes||'')+'</textarea>'+f('rs'+k,'Source reference',r.source,'text','e.g. burial register p. 42')
-  +'<div class="btns"><button type="button" class="btn dng" data-del="'+k+'">Remove this record</button></div></div>'}
+  +'<div class="btns" style="margin-top:8px"><button type="button" class="btn dng" data-del="'+k+'" style="height:32px;font-size:12.5px">Remove this record</button></div></div>'}
 var formN=0;
 function renderForm(rec){var box=$('rec-box'),rs=(rec&&rec.records||[]).map(function(r){return Object.assign({},r)});formN=0;
   box.innerHTML='<div class="box form"><h3>Edit grave information</h3>'
    +'<div class="two"><div>'+f('c-cap','Grave count',rec&&rec.capacity,'number','unknown')+'</div><div><label class="chk" style="margin-top:30px"><input type="checkbox" id="c-ver"'+(rec&&rec.capacityVerified?' checked':'')+'> Count verified</label></div></div>'
    +'<div id="rforms">'+rs.map(function(r){return recForm(r,formN++)}).join('')+'</div>'
    +'<div class="btns"><button class="btn" id="r-add" type="button">Add a record</button></div>'
-   +'<label for="c-notes">Lot notes</label><textarea class="field" id="c-notes">'+esc(rec&&rec.notes||'')+'</textarea>'+f('c-src','Lot source reference',rec&&rec.source)
+   +'<details'+((rec&&(rec.notes||rec.source))?' open':'')+'><summary>Lot notes and source</summary><label for="c-notes">Lot notes</label><textarea class="field" id="c-notes">'+esc(rec&&(rec.notes||rec.note)||'')+'</textarea>'+f('c-src','Lot source reference',rec&&rec.source)+'</details>'
    +'<div class="btns"><button class="btn pri" id="r-save" type="button">Save</button><button class="btn" id="r-cancel" type="button">Cancel</button></div><div class="status" id="r-status"></div></div>';
   $('r-add').onclick=function(){var d=document.createElement('div');d.innerHTML=recForm({},formN++);$('rforms').appendChild(d.firstChild)};
   $('rforms').addEventListener('click',function(e){var b=e.target.closest('[data-del]');if(b){var el=b.closest('.rform');el.parentNode.removeChild(el)}});
@@ -502,8 +503,8 @@ function exportReviewCsv(){var rows=[['status','reason','h_number_candidate','le
   REVIEW.forEach(function(v){rows.push(['needs_review',v.r.map(function(i){return REASONS[i]}).join(' | '),v.h||'',v.s||'',v.l||'',v.t||'',v.x,v.y])});
   UNPL.forEach(function(u){rows.push(['known_h_no_map_position',u.n||'Decoder lot with no matching label on the drawing',u.h,u.s,u.l,'','',''])});
   saveFile('Cedar_Grove_unresolved_locations.csv',new Blob([csv(rows)],{type:'text/csv'}))}
-function exportLotsCsv(){var rows=[['h_number','legacy_section','legacy_lot','map_status']];LOTS.forEach(function(r){rows.push([r[1],r[2],r[3],'verified'])});
-  saveFile('Cedar_Grove_verified_lots.csv',new Blob([csv(rows)],{type:'text/csv'}))}
+function exportLotsCsv(){var rows=[['h_number','legacy_section','legacy_lot','section_evidence']];LOTS.forEach(function(r){rows.push([r[1],r[2],r[3],r[11]===0?'two independent readings':'inferred from surrounding lots'])});
+  saveFile('Cedar_Grove_lots_with_H-numbers.csv',new Blob([csv(rows)],{type:'text/csv'}))}
 function exportListCsv(){if(!LIST.length){toast('Your list is empty. Open a lot and choose Add to list.');return}
   var rows=[['h_number','legacy_section','legacy_lot','name','birth','death','notes']];LIST.forEach(function(h){var ix=byH[h];if(!ix)return;var r=LOTS[ix[0]],d=RECS[h],rs=(d&&d.records)||[];
     if(!rs.length)rows.push([h,r[2],r[3],'','','','']);rs.forEach(function(x){rows.push([h,r[2],r[3],x.name,x.birth,x.death,x.notes])})});
@@ -512,10 +513,11 @@ $('b-export').onclick=function(){var areas=Object.keys(AREAS).sort();
   openModal('<h2>Export</h2><p class="note" style="margin:0">PDFs are drawn from the same map data as the screen, with every H-number inside its lot. Overview sheet first, then detail pages.</p>'
    +'<div class="xopt"><span><b>Full map (PDF)</b><small>Overview sheet plus detail pages for the whole cemetery</small></span><button class="btn pri" data-pdf="full">Download</button></div>'
    +'<div class="xopt"><span><b>Overview sheet only</b><small>One large sheet; numbers appear where they are readable</small></span><button class="btn" data-pdf="overview">Download</button></div>'
-   +'<div style="margin-top:14px"><b style="font-size:14px">By area</b><div class="xgrid">'+areas.map(function(s){return '<button class="btn" data-pdf="area_'+s+'">Legacy section '+s+'</button>'}).join('')+'</div></div>'
+   +'<div class="xopt"><span><b>Excel workbook (.xlsx)</b><small>Lots with H-numbers, lots to review, and decoder lots with no map position, one sheet each, plus a read-me sheet</small></span><button class="btn pri" data-pdf="xlsx">Download</button></div>'
    +'<div class="xopt"><span><b>Unresolved locations (CSV)</b><small>'+REVIEW.length+' lots to review, '+UNPL.length+' known H-numbers without a position</small></span><button class="btn" data-act="rvcsv">Download</button></div>'
-   +'<div class="xopt"><span><b>Verified lots (CSV)</b><small>'+LOTS.length+' lots: H-number and legacy reference</small></span><button class="btn" data-act="lotcsv">Download</button></div>'
+   +'<div class="xopt"><span><b>Lots with H-numbers (CSV)</b><small>'+LOTS.length+' lots: H-number, legacy reference, how the section was confirmed</small></span><button class="btn" data-act="lotcsv">Download</button></div>'
    +'<div class="xopt"><span><b>My list ('+LIST.length+')</b><small>Lots you added with Add to list</small></span><button class="btn" data-act="listcsv">Download</button></div>'
+   +'<div style="margin-top:14px"><b style="font-size:14px">By area</b><div class="xgrid">'+areas.map(function(s){return '<button class="btn" data-pdf="area_'+s+'">Legacy section '+s+'</button>'}).join('')+'</div></div>'
    +'<div class="btns" style="justify-content:flex-end"><button class="btn" data-close>Close</button></div>');
   Array.prototype.forEach.call(modalRoot.querySelectorAll('[data-pdf]'),function(b){b.onclick=function(){exportPdf(b.getAttribute('data-pdf'))}});
   Array.prototype.forEach.call(modalRoot.querySelectorAll('[data-act]'),function(b){b.onclick=function(){var a=b.getAttribute('data-act');if(a==='rvcsv')exportReviewCsv();if(a==='lotcsv')exportLotsCsv();if(a==='listcsv')exportListCsv()}})};

@@ -4,180 +4,157 @@ const IMG = __dirname + '/img/';
 const THEME = { name: 'Cedar Grove Atlas', headFontFace: 'Cambria', bodyFontFace: 'Calibri',
   colors: { dk1: '1A2130', lt1: 'FFFFFF', dk2: '0C2340', lt2: 'F2F4F7', accent1: '0C2340', accent2: 'B8892F', accent3: '2F6B46', accent4: 'C9892F', accent5: '566274', accent6: '8FA3B8', hlink: '3A5578', folHlink: '566274' } };
 const pres = new pptxgen();
-pres.layout = 'LAYOUT_WIDE';            // 13.33 x 7.5 in
+pres.layout = 'LAYOUT_WIDE';
 pres.theme = { headFontFace: THEME.headFontFace, bodyFontFace: THEME.bodyFontFace };
-pres.title = 'Cedar Grove H-Number Atlas: progress report';
-const C = pres.SchemeColor;
-const NAVY = '0C2340', GOLD = 'B8892F', GREEN = '2F6B46', AMBER = 'C9892F', SLATE = '566274', LIGHT = 'F2F4F7', INK = '1A2130';
+pres.title = 'Cedar Grove H-Number Atlas: progress update';
+const NAVY = '0C2340', GOLD = 'B8892F', GREEN = '2F6B46', AMBER = 'B87A1F', SLATE = '566274', LIGHT = 'F2F4F7', INK = '1A2130', RULE = 'DDE3EA';
+pres.defineSlideMaster({ title: 'TITLE', background: { color: NAVY } });
+pres.defineSlideMaster({ title: 'CONTENT', background: { color: 'FFFFFF' }, slideNumber: { x: 12.2, y: 7.05, w: 0.6, h: 0.3, fontSize: 10, color: SLATE, fontFace: 'Calibri', align: 'right' } });
 
-pres.defineSlideMaster({ title: 'TITLE', background: { color: NAVY }, objects: [], slideNumber: undefined });
-pres.defineSlideMaster({ title: 'CONTENT', background: { color: 'FFFFFF' },
-  objects: [
-    { text: { text: 'Cedar Grove Cemetery  |  H-Number Atlas progress report', options: { x: 0.6, y: 7.05, w: 7, h: 0.3, fontSize: 10, color: SLATE, fontFace: 'Calibri', margin: 0 } } },
-  ],
-  slideNumber: { x: 12.2, y: 7.05, w: 0.6, h: 0.3, fontSize: 10, color: SLATE, fontFace: 'Calibri', align: 'right' },
-  placeholders: [{ placeholder: { options: { name: 'title', type: 'title', x: 0.6, y: 0.35, w: 12.1, h: 0.8, fontSize: 32, bold: true, color: NAVY, fontFace: 'Cambria', valign: 'middle', margin: 0 }, text: '' } }] });
+const title = (s, t) => s.addText(t, { x: 0.6, y: 0.35, w: 12.1, h: 0.8, fontSize: 30, bold: true, color: NAVY, fontFace: 'Cambria', valign: 'middle', margin: 0, isTextBox: true, objectName: 'Title' });
+const txt = (s, t, o) => s.addText(t, Object.assign({ fontFace: 'Calibri', fontSize: 14, color: INK, margin: 0, valign: 'top', isTextBox: true }, o));
+const chip = (s, text, x, y, w, fill) => s.addText(text, { x, y, w, h: 0.32, fontSize: 12, bold: true, color: 'FFFFFF', fill: { color: fill }, align: 'center', valign: 'middle', fontFace: 'Calibri', margin: 0, isTextBox: true, objectName: 'Status ' + text });
+const badge = (s, n, x, y) => s.addText(String(n), { x: x - 0.17, y: y - 0.17, w: 0.34, h: 0.34, shape: pres.shapes.OVAL, fill: { color: GOLD }, line: { color: 'FFFFFF', width: 1.5 }, color: 'FFFFFF', bold: true, fontSize: 13, align: 'center', valign: 'middle', margin: 0, fontFace: 'Calibri', objectName: 'Callout ' + n });
+const legend = (s, items, x, y, w, pitch) => items.forEach((it, i) => { const yy = y + i * (pitch || 0.52);
+  s.addText(String(it[0]), { x, y: yy + 0.07, w: 0.32, h: 0.32, shape: pres.shapes.OVAL, fill: { color: GOLD }, color: 'FFFFFF', bold: true, fontSize: 12, align: 'center', valign: 'middle', margin: 0, fontFace: 'Calibri' });
+  txt(s, it[1], { x: x + 0.45, y: yy, w: w - 0.45, h: (pitch || 0.52) - 0.02, valign: 'middle' }); });
+const shot = (s, file, x, y, w, h, name, alt) => s.addImage({ path: IMG + file, x, y, w, h, altText: alt || name, objectName: name, shadow: { type: 'outer', color: '000000', opacity: 0.18, blur: 8, offset: 2, angle: 90 } });
+const dims = (file) => { const sz = require('child_process').execSync(`python3 -c "from PIL import Image;i=Image.open('${IMG}${file}');print(i.size[0],i.size[1])"`).toString().trim().split(' ').map(Number); return sz; };
+const hAt = (file, w) => { const d = dims(file); return w * d[1] / d[0]; };
 
-function title(s, t) { s.addText(t, { x: 0.6, y: 0.35, w: 12.1, h: 0.8, fontSize: 30, bold: true, color: NAVY, fontFace: 'Cambria', valign: 'middle', margin: 0, isTextBox: true, objectName: 'Title' }); }
-function chip(s, text, x, y, w, fill, color) { s.addText(text, { x, y, w, h: 0.32, fontSize: 12, bold: true, color: color || 'FFFFFF', fill: { color: fill }, align: 'center', valign: 'middle', fontFace: 'Calibri', margin: 0, isTextBox: true, objectName: 'Chip ' + text }); }
-function badge(s, n, x, y) { s.addText(String(n), { x: x - 0.17, y: y - 0.17, w: 0.34, h: 0.34, shape: pres.shapes.OVAL, fill: { color: GOLD }, line: { color: 'FFFFFF', width: 1.5 }, color: 'FFFFFF', bold: true, fontSize: 13, align: 'center', valign: 'middle', margin: 0, fontFace: 'Calibri', objectName: 'Callout ' + n }); }
-function legend(s, items, x, y, w) { // items: [n, text]
-  items.forEach((it, i) => { const yy = y + i * 0.58;
-    s.addText(String(it[0]), { x, y: yy + 0.04, w: 0.32, h: 0.32, shape: pres.shapes.OVAL, fill: { color: GOLD }, color: 'FFFFFF', bold: true, fontSize: 12, align: 'center', valign: 'middle', margin: 0, fontFace: 'Calibri' });
-    s.addText(it[1], { x: x + 0.45, y: yy, w: w - 0.45, h: 0.5, fontSize: 14, color: INK, fontFace: 'Calibri', valign: 'middle', margin: 0, isTextBox: true }); }); }
-function shot(s, file, x, y, w, h, name, alt) { s.addImage({ path: IMG + file, x, y, w, h, altText: alt || name, objectName: name, shadow: { type: 'outer', color: '000000', opacity: 0.18, blur: 8, offset: 2, angle: 90 } }); }
-
-// ---------------------------------------------------------------- 1 title
+// 1 ------------------------------------------------------------------ cover
 { const s = pres.addSlide({ masterName: 'TITLE' });
-  s.addText('Cedar Grove H-Number Atlas', { x: 0.7, y: 1.7, w: 6.4, h: 1.7, fontSize: 44, bold: true, color: 'FFFFFF', fontFace: 'Cambria', valign: 'top', margin: 0, isTextBox: true });
-  s.addText('Progress report: the map, the numbers behind it, and what comes next', { x: 0.7, y: 3.55, w: 5.9, h: 1.2, fontSize: 20, color: 'CADCFC', fontFace: 'Calibri', valign: 'top', margin: 0, isTextBox: true });
-  s.addText('University of Notre Dame, Cedar Grove Cemetery  |  October 2026', { x: 0.7, y: 6.5, w: 6.4, h: 0.4, fontSize: 14, color: 'CADCFC', fontFace: 'Calibri', margin: 0, isTextBox: true });
-  s.addImage({ path: IMG + 'zoom_curved_new.png', x: 7.15, y: 1.3, w: 5.5, h: 3.52, altText: 'Current map: curved lots with centered H-numbers', objectName: 'Hero screenshot' });
-  s.addText('Current map, curved lot rows (H002891 to H003082)', { x: 7.15, y: 4.9, w: 5.5, h: 0.3, fontSize: 11, color: 'CADCFC', fontFace: 'Calibri', margin: 0, isTextBox: true });
-  s.addNotes('Purpose of this deck: show what changed in the H-number map, how it is built, what is verified, and what needs decisions or information from cemetery staff. All screenshots are taken from the previous and current versions of the site.'); }
+  s.addText('Cedar Grove\nH-Number Atlas', { x: 0.7, y: 1.9, w: 6.2, h: 1.7, fontSize: 44, bold: true, color: 'FFFFFF', fontFace: 'Cambria', valign: 'top', margin: 0, isTextBox: true });
+  s.addText('Map cleanup, H-number placement, and remaining records work', { x: 0.7, y: 3.75, w: 5.6, h: 1.0, fontSize: 20, color: 'CADCFC', fontFace: 'Calibri', valign: 'top', margin: 0, isTextBox: true });
+  s.addText('Mahmoud Hafez  |  October 12, 2026', { x: 0.7, y: 6.4, w: 5.8, h: 0.4, fontSize: 14, color: 'CADCFC', fontFace: 'Calibri', margin: 0, isTextBox: true });
+  s.addImage({ path: IMG + 'dense_new.png', x: 7.15, y: 1.75, w: 5.5, h: 5.5 * 640 / 1000, altText: 'Current map: H-numbers inside lot outlines', objectName: 'Cover screenshot' });
+  s.addText('Current map: H-numbers inside their lot outlines', { x: 7.15, y: 5.4, w: 5.5, h: 0.3, fontSize: 12, color: 'CADCFC', fontFace: 'Calibri', margin: 0, isTextBox: true });
+  s.addNotes('A progress snapshot as of October 12, 2026. It covers what changed in the map, how the numbers are produced, what the evidence supports, and what I need from cemetery staff.'); }
 
-// ---------------------------------------------------------------- 2 overview before / after
-{ const s = pres.addSlide({ masterName: 'CONTENT' });
-  title(s, 'The whole map is cleaner and easier to read');
-  const W = 6.0, H = 6.0 * 860 / 1440, Y = 1.7, XL = 0.6, XR = 6.73;
-  chip(s, 'BEFORE: previous site', XL, 1.3, 2.3, SLATE); chip(s, 'NOW: current site', XR, 1.3, 2.0, NAVY);
-  shot(s, 'app_overview_old.png', XL, Y, W, H, 'Before overview', 'Previous site, full cemetery view');
-  shot(s, 'app_overview_new.png', XR, Y, W, H, 'Now overview', 'Current site, full cemetery view');
-  const k = W / 1440;
-  badge(s, 1, XL + 750 * k, Y + 343 * k); badge(s, 2, XL + 420 * k, Y + 700 * k);
-  badge(s, 3, XR + 1000 * k, Y + 350 * k); badge(s, 4, XR + 300 * k, Y + 262 * k);
-  legend(s, [[1, 'Dark "SECTION" title blocks covered lots. They are gone.'], [2, 'Legend, parking and office notes are gone from the default map.']], 0.6, 5.35, 6.0);
-  legend(s, [[3, 'Roads, buildings and every lot outline are kept, in lighter lines.'], [4, 'Search, areas with H-number ranges, and a list of lots to review.']], 6.73, 5.35, 6.0);
-  s.addNotes('Same window size, full cemetery. The old overall map had section titles, the mausoleum legend and descriptive notes baked in. They are text in the CAD source, so the new map simply does not draw them. The original text can be switched on from Layers.'); }
+// 2 ------------------------------------------------------------------ overview
+{ const s = pres.addSlide({ masterName: 'CONTENT' }); title(s, 'Annotations removed; roads and lot outlines kept');
+  const W = 6.0, H = 6.0 * 630 / 1200, Y = 1.75, XL = 0.6, XR = 6.73, k = W / 1200;
+  chip(s, 'BEFORE: previous site', XL, 1.35, 2.3, SLATE); chip(s, 'NOW: rebuilt map', XR, 1.35, 2.0, NAVY);
+  txt(s, 'Same map bounds in both screenshots', { x: 9.0, y: 1.35, w: 3.7, h: 0.32, fontSize: 12, color: SLATE, align: 'right', valign: 'middle' });
+  shot(s, 'overview_old.png', XL, Y, W, H, 'Before overview', 'Previous site, whole cemetery'); shot(s, 'overview_new.png', XR, Y, W, H, 'Now overview', 'Rebuilt map, whole cemetery');
+  badge(s, 1, XL + 510 * k, Y + 220 * k); badge(s, 2, XL + 75 * k, Y + 160 * k); badge(s, 3, XR + 760 * k, Y + 400 * k);
+  legend(s, [[1, 'Dark "SECTION" title blocks sat over the lots.'], [2, 'Legend and descriptive notes were part of the picture.']], 0.6, 5.1, 6.0);
+  legend(s, [[3, 'Original roads and lot outlines retained, with stronger lines.']], 6.73, 5.1, 6.0);
+  txt(s, 'The first version drew new numbers over the old labels. In the rebuilt map the old text is never drawn. The original annotations can be switched on from Layers.', { x: 6.73, y: 5.7, w: 6.0, h: 0.9, fontSize: 14, color: SLATE });
+  s.addNotes('Both views cover the same bounds. The earlier overall map had section titles, a legend and descriptive notes baked in. They are text objects in the source drawing, so the rebuilt map does not draw them. I left roads, lot outlines and building footprints in. All 11,890 lot-outline segments of the source are in the base layer; I removed only the legend frame and its rule. Original text can be switched on from Layers.'); }
 
-// ---------------------------------------------------------------- 3 dense close-up
-function closeup(title0, oldF, newF, oldB, newB, leg1, leg2, note, caption) {
-  const s = pres.addSlide({ masterName: 'CONTENT' }); title(s, title0);
-  const W = 6.0, H = 6.0 * 640 / 1000, Y = 1.7, XL = 0.6, XR = 6.73, k = W / 1000;
-  chip(s, 'BEFORE', XL, 1.3, 1.3, SLATE); chip(s, 'NOW', XR, 1.3, 1.0, NAVY);
-  s.addText(caption, { x: 2.05, y: 1.3, w: 4.5, h: 0.32, fontSize: 12, color: SLATE, fontFace: 'Calibri', valign: 'middle', margin: 0, isTextBox: true });
-  shot(s, oldF, XL, Y, W, H, 'Before close-up', 'Previous site, close-up'); shot(s, newF, XR, Y, W, H, 'Now close-up', 'Current site, same area and zoom');
+// 3 ------------------------------------------------------------------ dense
+function closeup(t, oldF, newF, oldB, newB, leg1, leg2, note, caption, W, legY, pitch) {
+  const s = pres.addSlide({ masterName: 'CONTENT' }); title(s, t);
+  const H = W * 640 / 1000, Y = 1.75, XL = 0.6, XR = 6.73, k = W / 1000;
+  chip(s, 'BEFORE', XL, 1.35, 1.3, SLATE); chip(s, 'NOW', XR, 1.35, 1.0, NAVY);
+  txt(s, caption, { x: 2.1, y: 1.35, w: 4.4, h: 0.32, fontSize: 12, color: SLATE, valign: 'middle' });
+  shot(s, oldF, XL, Y, W, H, 'Before close-up', 'Previous site, close-up'); shot(s, newF, XR, Y, W, H, 'Now close-up', 'Rebuilt map, same lots and zoom');
   oldB.forEach(b => badge(s, b[0], XL + b[1] * k, Y + b[2] * k)); newB.forEach(b => badge(s, b[0], XR + b[1] * k, Y + b[2] * k));
-  legend(s, leg1, 0.6, 5.65, 6.0); legend(s, leg2, 6.73, 5.65, 6.0); s.addNotes(note); return s; }
-closeup('Each lot shows one number, centered inside it', 'zoom_dense_old.png', 'zoom_dense_new.png',
-  [[1, 310, 140], [2, 368, 330]], [[3, 575, 340], [4, 342, 215]],
-  [[1, 'Old numbers still show underneath the new ones.'], [2, 'Heavy outlines crowd the numbers against the lot ends.']],
-  [[3, 'One H-number per lot, centered, with clear space around it.'], [4, 'Thin outlines; no old numbers anywhere.']],
-  'Same map area and zoom in both versions (about H001900 to H002270). In the previous version the old lot labels were drawn as tiny shapes and could not be removed from the PDF, so the new numbers were drawn on top of them. The new build never draws them.',
-  'Same area and zoom, east side of the main grid');
-closeup('Curved and angled lots keep their numbers inside', 'zoom_curved_old.png', 'zoom_curved_new.png',
-  [[1, 630, 200], [2, 205, 235], [3, 98, 150]], [[4, 500, 150], [5, 180, 305]],
-  [[1, 'A "SECTION" block sits over lots 2894 to 2909.'], [2, 'Numbers run across lot edges; black smudges are erased old labels.']],
-  [[4, 'Each number turns with its lot and stays fully inside it.'], [5, 'Narrow lots get a smaller number, never a clipped one.']],
-  'Same area and zoom (the curved rows west of the main grid, H002891 to H003082). The new placement measures each number and fits it inside the lot outline with a margin. It was checked automatically: none of 773,021 number pixels touch a lot line.',
-  'Same area and zoom, curved rows');
+  legend(s, leg1, 0.6, legY, 6.0, pitch); legend(s, leg2, 6.73, legY, 6.0, pitch); s.addNotes(note); return s; }
+closeup('Confirmed H-numbers now fit inside their lot outlines', 'dense_old.png', 'dense_new.png', [[1, 310, 140], [2, 368, 330]], [[3, 575, 340], [4, 342, 215]],
+  [[1, 'Old numbers still showed beneath the new ones.'], [2, 'Heavy outlines pushed numbers against the lot ends.']],
+  [[3, 'One H-number per confirmed lot, inside its outline.'], [4, 'Legacy labels are not drawn in the rebuilt layer.']],
+  'Same lots at the same zoom in both versions (around H001900 to H002270). In the first version the old labels were drawn as tiny shapes that could not be removed from the PDF, so I drew the new numbers on top of them. The rebuilt layer takes numbers from the source drawing as text and never draws the old ones. Lots I could not confirm (218 visible, 3 too small for a number) are handled on the next slides.',
+  'Same lots, same zoom', 6.0, 5.85, 0.52);
+closeup('Labels follow the lot orientation, even on curves', 'curved_old.png', 'curved_new.png', [[1, 630, 200], [2, 205, 235], [3, 98, 150]], [[4, 500, 150], [5, 180, 305]],
+  [[1, 'A "SECTION" block sits over lots 2894 to 2909.'], [2, 'Numbers cross lot edges.'], [3, 'Black smudges mark erased old labels.']],
+  [[4, 'Each number turns with its lot and stays inside it.'], [5, 'Narrow lots get smaller numbers: zoom in on screen. PDF detail pages print the smallest at 7.4 pt.']],
+  'Same lots at the same zoom (the curved rows west of the main grid, H002891 to H003082). The new placement measures each number and fits it inside the outline with a margin. On the PDF detail pages the smallest number is 7.4 pt and 20 lots print under 8 pt; none are under 7 pt. Three lots (E 195A, E 195B, H 21) are too small for any legible number and are listed instead. An automatic check found no number touching a lot line in the tested renders, which shows readability, not that every number belongs to the right physical lot.',
+  'Same lots, same zoom', 5.7, 5.5, 0.5);
 
-// ---------------------------------------------------------------- 5 progress
-{ const s = pres.addSlide({ masterName: 'CONTENT' }); title(s, 'Where things stand: what is mapped, unmatched, and still missing');
-  const cols = [{ x: 0.6, w: 3.7, head: 'On the map', color: GREEN }, { x: 4.55, w: 4.95, head: 'Unmatched', color: AMBER }, { x: 9.75, w: 2.98, head: 'Information still missing', color: SLATE }];
-  cols.forEach(c => s.addText(c.head, { x: c.x, y: 1.3, w: c.w, h: 0.4, fontSize: 18, bold: true, color: c.color, fontFace: 'Cambria', margin: 0, isTextBox: true }));
-  // column 1
-  s.addText('3,103', { x: 0.6, y: 1.75, w: 3.7, h: 0.9, fontSize: 54, bold: true, color: GREEN, fontFace: 'Cambria', margin: 0, isTextBox: true });
-  s.addText('lots verified: drawn outline, H-number and legacy label all agree', { x: 0.6, y: 2.65, w: 3.7, h: 0.7, fontSize: 14, color: INK, fontFace: 'Calibri', margin: 0, valign: 'top', isTextBox: true });
-  s.addChart(pres.charts.BAR, [{ name: 'Verified lots', labels: ['Section confirmed by two readings', 'Section inferred from neighbours'], values: [2709, 394] }],
-    { x: 0.5, y: 3.5, w: 3.9, h: 2.4, barDir: 'bar', chartColors: [GREEN], showTitle: true, title: 'How the 3,103 were confirmed', titleFontSize: 14, titleColor: INK, titleFontFace: '+mn-lt',
-      showValue: true, dataLabelColor: INK, dataLabelFontSize: 12, dataLabelFontFace: '+mn-lt', dataLabelFormatCode: '#,##0', dataLabelPosition: 'outEnd', showLegend: false,
-      catAxisLabelColor: INK, catAxisLabelFontSize: 11, catAxisLabelFontFace: '+mn-lt', valAxisHidden: true, valGridLine: { style: 'none' }, catGridLine: { style: 'none' }, catAxisOrientation: 'maxMin', valAxisMaxVal: 3300 });
-  // column 2
-  s.addText('218', { x: 4.55, y: 1.75, w: 1.9, h: 0.9, fontSize: 54, bold: true, color: AMBER, fontFace: 'Cambria', margin: 0, isTextBox: true });
-  s.addText('visible lots whose number is unresolved', { x: 4.55, y: 2.65, w: 2.3, h: 0.7, fontSize: 14, color: INK, fontFace: 'Calibri', margin: 0, valign: 'top', isTextBox: true });
-  s.addText('68', { x: 7.2, y: 1.75, w: 1.5, h: 0.9, fontSize: 54, bold: true, color: AMBER, fontFace: 'Cambria', margin: 0, isTextBox: true });
-  s.addText('decoder lots with no map position', { x: 7.2, y: 2.65, w: 2.3, h: 0.7, fontSize: 14, color: INK, fontFace: 'Calibri', margin: 0, valign: 'top', isTextBox: true });
-  s.addChart(pres.charts.BAR, [{ name: 'Visible lots', labels: ['Label not in this area\'s section', 'No area evidence (crypt rows)', 'Same label twice in a section', 'Number far from neighbours', 'Label unknown to decoder', 'Outline with no label'], values: [77, 72, 28, 20, 12, 9] }],
-    { x: 4.45, y: 3.5, w: 5.1, h: 2.9, barDir: 'bar', chartColors: [AMBER], showTitle: true, title: 'Why the 218 are unresolved', titleFontSize: 14, titleColor: INK, titleFontFace: '+mn-lt',
-      showValue: true, dataLabelColor: INK, dataLabelFontSize: 12, dataLabelFontFace: '+mn-lt', dataLabelPosition: 'outEnd', showLegend: false,
-      catAxisLabelColor: INK, catAxisLabelFontSize: 11, catAxisLabelFontFace: '+mn-lt', valAxisHidden: true, valGridLine: { style: 'none' }, catGridLine: { style: 'none' }, catAxisOrientation: 'maxMin', valAxisMaxVal: 95 });
-  // column 3
-  s.addText([{ text: '0', options: { fontSize: 54, bold: true, color: SLATE, fontFace: 'Cambria', breakLine: true } }, { text: 'burial records entered so far', options: { fontSize: 14, color: INK, fontFace: 'Calibri' } }], { x: 9.75, y: 1.75, w: 2.98, h: 1.6, margin: 0, valign: 'top', isTextBox: true });
-  s.addText([{ text: '0', options: { fontSize: 54, bold: true, color: SLATE, fontFace: 'Cambria', breakLine: true } }, { text: 'lots with a verified grave count', options: { fontSize: 14, color: INK, fontFace: 'Calibri' } }], { x: 9.75, y: 3.5, w: 2.98, h: 1.6, margin: 0, valign: 'top', isTextBox: true });
-  s.addText('Unresolved lots are shaded, never numbered by guesswork. A candidate H-number appears only in the lot panel.', { x: 9.75, y: 5.2, w: 2.98, h: 1.2, fontSize: 12, color: SLATE, fontFace: 'Calibri', margin: 0, valign: 'top', isTextBox: true });
-  s.addText('Previous build, for reference (project figures): 3,063 lots placed, 136 unplaced entries listed, 49 unmatched labels. The categories are not identical, so the counts are shown side by side, not as a percentage.', { x: 0.6, y: 6.5, w: 12.1, h: 0.45, fontSize: 12, color: SLATE, fontFace: 'Calibri', margin: 0, valign: 'middle', isTextBox: true });
-  s.addNotes('All counts come from the current build (pipeline2/classify.py output). Verified means a drawn outline, a decoded H-number and a section confirmed either by an independent earlier reading (2,709) or by surrounding lots (394). The 218 unresolved visible lots and the 68 decoder lots with no position are listed in unresolved_locations.csv. No grave counts or burial records have been entered yet.'); }
+// 5 ------------------------------------------------------------------ progress
+{ const s = pres.addSlide({ masterName: 'CONTENT' }); title(s, 'Where the lots stand: placed, unresolved, or unplaced');
+  const H = (t) => ({ text: t, options: { bold: true, color: 'FFFFFF', fill: { color: NAVY }, fontSize: 13, fontFace: 'Calibri', valign: 'middle' } });
+  const c = (t, col, b, al) => ({ text: t, options: { color: col || INK, bold: !!b, fontSize: 13, fontFace: 'Calibri', valign: 'middle', align: al || 'left' } });
+  const rows = [[H('Status'), H('Lots'), H('What it means')],
+    [c('Placed, section corroborated', GREEN, true), c('2,709', GREEN, true, 'right'), c('A second, earlier reading of the drawing puts the label in the same legacy section.')],
+    [c('Placed, section inferred', SLATE, true), c('394', SLATE, true, 'right'), c('Section inferred from neighbouring lots. Not yet reviewed one by one.')],
+    [c('Visible lot, number unresolved', AMBER, true), c('218', AMBER, true, 'right'), c('An outline is on the drawing; the evidence does not support one H-number. Shaded, never numbered.')],
+    [c('Decoder lot, no map position', AMBER, true), c('68', AMBER, true, 'right'), c('Known to the decoder; no label resolves to it. 34 of these match a drawn lot counted in the 218.')]];
+  s.addTable(rows, { x: 0.6, y: 1.3, w: 12.1, colW: [3.5, 0.9, 7.7], border: { type: 'solid', color: RULE, pt: 0.75 }, fill: { color: 'FFFFFF' }, margin: [0.05, 0.1, 0.05, 0.1], rowH: [0.38, 0.5, 0.5, 0.5, 0.5], objectName: 'Status table' });
+  const ch = (labels, values, colors, x, ttl, max) => s.addChart(pres.charts.BAR, [{ name: ttl, labels, values }], { x, y: 3.85, w: 5.95, h: 2.65, barDir: 'bar', chartColors: colors, showTitle: true, title: ttl, titleFontSize: 14, titleColor: INK, titleFontFace: '+mn-lt',
+    showValue: true, dataLabelColor: INK, dataLabelFontSize: 12, dataLabelFontFace: '+mn-lt', dataLabelFormatCode: '#,##0', dataLabelPosition: 'outEnd', showLegend: false, catAxisLabelColor: INK, catAxisLabelFontSize: 12, catAxisLabelFontFace: '+mn-lt',
+    valAxisHidden: true, valGridLine: { style: 'none' }, catGridLine: { style: 'none' }, catAxisOrientation: 'maxMin', valAxisMaxVal: max });
+  ch(['Corroborated by two readings', 'Inferred, 90-100% neighbours agree', 'Inferred, 60-89% agree', 'Inferred, label in one section only'], [2709, 327, 46, 21], [GREEN, SLATE, SLATE, SLATE], 0.55, 'The 3,103 placed lots, by evidence', 3600);
+  ch(['Label not in this area\'s section', 'No area evidence (crypt rows)', 'Same label twice in a section', 'Number far from neighbours', 'Label unknown to decoder', 'Outline with no label'], [77, 72, 28, 20, 12, 9], [AMBER], 6.75, 'Why the 218 visible lots are unresolved', 100);
+  txt(s, 'The 218 and 68 overlap, so they should not be added together. No burial records and no verified grave counts are in the shared database yet.', { x: 0.6, y: 6.55, w: 11.4, h: 0.45, fontSize: 12, color: SLATE, valign: 'middle' });
+  s.addNotes('I left the 218 visible lots unresolved because the evidence did not support a single reliable assignment. They carry no number on the map; a decoder candidate, where one exists, appears only in the lot panel. The 394 inferred-section lots are drawn with their H-number but I have not reviewed them individually: 327 have 90 to 100 percent agreement among nearby lots, 46 have 60 to 89 percent, and 21 have labels that exist in only one legacy section. The earlier build reported 3,063 placed, 136 unplaced and 49 unmatched labels; the categories differ, so I did not turn them into a percentage. The shared database was checked on October 12, 2026: no grave records (one leftover test note on H000001).'); }
 
-// ---------------------------------------------------------------- 6 pipeline
-{ const s = pres.addSlide({ masterName: 'CONTENT' }); title(s, 'How the map is built, and why each step exists');
-  const steps = [
-    ['1', 'Original drawings', 'Two PDFs: an overall map and nine section pages. Lot numbers are drawn as tiny shapes, not text.', 'Now: the CAD file holds real text, so numbers are read directly.'],
-    ['2', 'Glyph recognition', 'Software matched each drawn digit against templates for 0 to 9, A, B and H.', 'Now: kept only as an independent cross-check.'],
-    ['3', 'Coordinate registration', 'Section pages were lined up on the overall map (error under 0.05 map units).', 'Now: old readings are aligned to the CAD file (0.1 unit).'],
-    ['4', 'H-number decoding', 'The Python decoder turns "Section B, lot 20H" into H000001. It is the only source of H-numbers.', 'Now: unchanged.'],
-    ['5', 'SVG rendering', 'The map is drawn as scalable shapes, so it stays sharp at any zoom and prints cleanly.', 'Now: each number is measured and fitted inside its lot.'],
-    ['6', 'Site and PDFs', 'The interactive site and the printable PDFs are generated from the same data.', 'Now: rebuilt, with lot panels and review states.'] ];
-  const cw = 3.75, ch = 2.45, gx = 0.425, gy = 0.3, x0 = 0.6, y0 = 1.45;
-  steps.forEach((st, i) => { const col = i % 3, row = Math.floor(i / 3), x = x0 + col * (cw + gx), y = y0 + row * (ch + gy);
-    s.addShape(pres.shapes.RECTANGLE, { x, y, w: cw, h: ch, fill: { color: LIGHT }, line: { color: 'DDE3EA', width: 0.75 }, objectName: 'Step card ' + st[0] });
-    s.addText(st[0], { x: x + 0.2, y: y + 0.2, w: 0.42, h: 0.42, shape: pres.shapes.OVAL, fill: { color: NAVY }, color: 'FFFFFF', bold: true, fontSize: 14, align: 'center', valign: 'middle', margin: 0, fontFace: 'Calibri' });
-    s.addText(st[1], { x: x + 0.75, y: y + 0.2, w: cw - 0.95, h: 0.42, fontSize: 17, bold: true, color: NAVY, fontFace: 'Cambria', valign: 'middle', margin: 0, isTextBox: true });
-    s.addText(st[2], { x: x + 0.2, y: y + 0.75, w: cw - 0.4, h: 0.95, fontSize: 14, color: INK, fontFace: 'Calibri', valign: 'top', margin: 0, isTextBox: true });
-    s.addText(st[3], { x: x + 0.2, y: y + 1.72, w: cw - 0.4, h: 0.6, fontSize: 13, italic: true, color: SLATE, fontFace: 'Calibri', valign: 'top', margin: 0, isTextBox: true });
-    if (col < 2) s.addShape(pres.shapes.RIGHT_ARROW, { x: x + cw + 0.04, y: y + ch / 2 - 0.15, w: 0.35, h: 0.3, fill: { color: GOLD }, line: { color: GOLD, width: 0.5 } }); });
-  s.addNotes('Steps 1 to 3 existed because the original PDF stores numbers as vector strokes. That is why the first version needed shape recognition and page alignment, and why its numbers could not be separated from the old labels. While rebuilding, the CAD file in the Ground Maps folder turned out to keep numbers as text and lot outlines as lines. That removed the need for recognition and covering-up. The older recognition results are still used as an independent check of which legacy section a label belongs to.'); }
+// 6 ------------------------------------------------------------------ pipeline
+{ const s = pres.addSlide({ masterName: 'CONTENT' }); title(s, 'Numbers stored as text changed the method');
+  s.addShape(pres.shapes.RECTANGLE, { x: 0.6, y: 1.3, w: 12.1, h: 0.95, fill: { color: LIGHT }, line: { color: RULE, width: 0.75 }, objectName: 'Key change' });
+  txt(s, [{ text: 'The key finding: ', options: { bold: true, color: NAVY } }, { text: 'the source drawing (an Illustrator .ai vector file) stores lot numbers as live text and lot outlines as separate lines. I rebuilt the pipeline around that, so numbers are read instead of recognized and nothing has to be covered up.', options: { color: INK } }], { x: 0.8, y: 1.38, w: 11.7, h: 0.8, fontSize: 15, valign: 'middle' });
+  const box = (x, y, w, h, t, fill, col) => s.addText(t, { x, y, w, h, fontSize: 14, color: col, fill: { color: fill }, line: { color: fill === 'FFFFFF' ? RULE : fill, width: 0.75 }, align: 'center', valign: 'middle', fontFace: 'Calibri', margin: 0.08, objectName: 'Step: ' + t });
+  const arrow = (x, y) => s.addShape(pres.shapes.RIGHT_ARROW, { x, y, w: 0.34, h: 0.28, fill: { color: GOLD }, line: { color: GOLD, width: 0.5 } });
+  txt(s, 'Earlier build: the drawing held numbers as strokes', { x: 0.6, y: 2.45, w: 8, h: 0.32, fontSize: 14, bold: true, color: SLATE });
+  const A = ['Overall map and nine section pages (PDF)', 'Recognize each drawn character', 'Align the pages to the overall map', 'Decode to H-number'];
+  A.forEach((t, i) => { const x = 0.6 + i * 3.17; box(x, 2.85, 2.6, 0.95, t, 'FFFFFF', INK); if (i < 3) arrow(x + 2.63, 3.18); });
+  txt(s, 'Current build: the drawing holds numbers as text', { x: 0.6, y: 4.2, w: 8, h: 0.32, fontSize: 14, bold: true, color: NAVY });
+  const B = ['Read text and lines from the .ai file', 'Trace each lot outline', 'Match labels to lots; decode H-number', 'Check neighbours, duplicates, collisions', 'Render map, PDFs and site'];
+  B.forEach((t, i) => { const x = 0.6 + i * 2.525; box(x, 4.6, 2.0, 0.95, t, NAVY, 'FFFFFF'); if (i < 4) arrow(x + 2.03, 4.93); });
+  // cross-check connector: earlier recognition -> current check
+  const xa = 0.6 + 3.17 + 1.3, xb = 0.6 + 3 * 2.525 + 1.0;
+  s.addShape(pres.shapes.LINE, { x: xa, y: 3.8, w: 0, h: 0.28, line: { color: GOLD, width: 1.5, dashType: 'dash' } });
+  s.addShape(pres.shapes.LINE, { x: xa, y: 4.08, w: xb - xa, h: 0, line: { color: GOLD, width: 1.5, dashType: 'dash' } });
+  s.addShape(pres.shapes.LINE, { x: xb, y: 4.08, w: 0, h: 0.5, line: { color: GOLD, width: 1.5, dashType: 'dash', endArrowType: 'triangle' } });
+  txt(s, 'earlier readings kept as an independent cross-check of each label\'s legacy section', { x: xa + 0.15, y: 3.8, w: 5.5, h: 0.26, fontSize: 12, italic: true, color: SLATE, valign: 'middle' });
+  txt(s, 'Alignment: earlier pages were aligned to the overall map within 0.05 map units, and the earlier readings to the source drawing within about 0.1 (roughly 2% of a lot width). This transfers labels between drawings; it is not survey accuracy.', { x: 0.6, y: 5.85, w: 12.1, h: 0.7, fontSize: 12, color: SLATE });
+  s.addNotes('Steps in the earlier build existed because the original PDF stores numbers as vector strokes, so they had to be recognized and the pages aligned. While rebuilding I found that the Illustrator file in the Ground Maps folder keeps numbers as live text and lot outlines as separate lines. That removed the need to recognize or cover anything. The earlier recognition results are still useful: they independently say which legacy section a label belongs to, and I use that as a cross-check. The 0.05 and 0.1 figures are map units on the drawing, not physical measurements.'); }
 
-// ---------------------------------------------------------------- 7 tools
-{ const s = pres.addSlide({ masterName: 'CONTENT' }); title(s, 'Tools and technical work, in plain terms');
-  const tools = [
-    ['Python 3', 'Runs the whole build, from the drawing to the finished site, with one command.'],
-    ['PyMuPDF', 'Reads the lines and text out of the drawing, and writes the PDFs.'],
-    ['OpenCV, NumPy, SciPy', 'Find each lot\'s outline and match positions between the two drawings.'],
-    ['Shapely', 'Geometry maths that keeps every number inside its own lot.'],
-    ['s4decoder1.py', 'The decoder: legacy lot label in, H-number out.'],
-    ['SVG and plain JavaScript', 'The interactive map. Stays sharp when zoomed and needs no add-ons.'],
-    ['Playwright and Chromium', 'Take the screenshots and run the automatic checks in a real browser.'],
-    ['Shared database (Artifact)', 'Stores grave records. Only people with edit access can write.'] ];
-  const cw = 2.85, ch = 1.95, gx = 0.233, gy = 0.25, x0 = 0.6, y0 = 1.45;
-  tools.forEach((t, i) => { const col = i % 4, row = Math.floor(i / 4), x = x0 + col * (cw + gx), y = y0 + row * (ch + gy);
-    s.addShape(pres.shapes.RECTANGLE, { x, y, w: cw, h: ch, fill: { color: LIGHT }, line: { color: 'DDE3EA', width: 0.75 }, objectName: 'Tool card ' + (i + 1) });
-    s.addText(t[0], { x: x + 0.2, y: y + 0.15, w: cw - 0.4, h: 0.5, fontSize: 16, bold: true, color: NAVY, fontFace: 'Cambria', valign: 'middle', margin: 0, isTextBox: true });
-    s.addText(t[1], { x: x + 0.2, y: y + 0.7, w: cw - 0.4, h: 1.15, fontSize: 14, color: INK, fontFace: 'Calibri', valign: 'top', margin: 0, isTextBox: true }); });
-  s.addText([{ text: 'Data formats: ', options: { bold: true, color: NAVY } }, { text: '.ai / PDF (source drawing)  >  JSON (working data)  >  SVG (map), PDF (print), CSV (lists and imports). Excel (.xlsx) import is built but not yet tested.', options: { color: INK } }],
-    { x: 0.6, y: 5.85, w: 12.1, h: 0.45, fontSize: 14, fontFace: 'Calibri', margin: 0, valign: 'middle', isTextBox: true });
-  s.addText([{ text: 'Automatic checks: ', options: { bold: true, color: NAVY } }, { text: 'every number lies inside its lot (3,103 of 3,103); 0 of 773,021 number pixels touch a lot line on screen, and 0 of 1.74 million in the PDF.', options: { color: INK } }],
-    { x: 0.6, y: 6.35, w: 12.1, h: 0.5, fontSize: 14, fontFace: 'Calibri', margin: 0, valign: 'middle', isTextBox: true });
-  s.addNotes('Everything is in the repository under h-number-map/pipeline2. Running run_all.py rebuilds the map, PDFs and lists from the source drawing in about six minutes. The first version also used template matching for digit recognition (glyphs.py, recog.py); that code is kept in h-number-map/pipeline for reference.'); }
+// 7 ------------------------------------------------------------------ tools
+{ const s = pres.addSlide({ masterName: 'CONTENT' }); title(s, 'Tools, grouped by the job they did');
+  const jobs = [
+    ['Read the source drawings', 'Python 3, PyMuPDF', 'Pull every line and every text label out of the .ai file, and write the PDFs.'],
+    ['Find and fit the lot shapes', 'OpenCV, NumPy, SciPy, Shapely', 'Trace each lot outline, match numbers to the right lot, and keep each number inside it.'],
+    ['Decode H-numbers', 'Project decoder (s4decoder1.py)', 'Turns "Section F, lot 34" into H001914. It is the only source of H-numbers.'],
+    ['Build the map and site', 'SVG, plain JavaScript, shared database', 'A sharp, zoomable map with lot panels. Records are stored so that only people with edit access can change them.'],
+    ['Check the result', 'Playwright, Chromium', 'Take the screenshots and run the automatic placement checks in a real browser.'] ];
+  const y0 = 1.35, rh = 0.84;
+  txt(s, 'Job', { x: 0.7, y: y0, w: 3.2, h: 0.3, fontSize: 12, bold: true, color: SLATE, valign: 'middle' }); txt(s, 'Tools', { x: 4.1, y: y0, w: 3.4, h: 0.3, fontSize: 12, bold: true, color: SLATE, valign: 'middle' }); txt(s, 'Why it mattered', { x: 7.7, y: y0, w: 5, h: 0.3, fontSize: 12, bold: true, color: SLATE, valign: 'middle' });
+  jobs.forEach((j, i) => { const y = y0 + 0.35 + i * rh;
+    s.addShape(pres.shapes.RECTANGLE, { x: 0.6, y, w: 12.1, h: rh - 0.08, fill: { color: i % 2 ? 'FFFFFF' : LIGHT }, line: { color: RULE, width: 0.5 }, objectName: 'Row ' + (i + 1) });
+    txt(s, j[0], { x: 0.7, y, w: 3.3, h: rh - 0.08, fontSize: 16, bold: true, color: NAVY, fontFace: 'Cambria', valign: 'middle' });
+    txt(s, j[1], { x: 4.1, y, w: 3.4, h: rh - 0.08, fontSize: 14, valign: 'middle' });
+    txt(s, j[2], { x: 7.7, y, w: 4.9, h: rh - 0.08, fontSize: 14, valign: 'middle' }); });
+  txt(s, [{ text: 'Checks: ', options: { bold: true, color: NAVY } }, { text: 'no label-to-line collisions were detected in the tested screen and PDF renders. That supports readability; it does not prove a number belongs to the right physical lot.', options: { color: INK } }], { x: 0.6, y: 6.0, w: 12.1, h: 0.5, fontSize: 14 });
+  txt(s, [{ text: 'Formats: ', options: { bold: true, color: NAVY } }, { text: '.ai (source) > JSON (working data) > SVG (map), PDF, CSV and Excel (.xlsx) (outputs).', options: { color: INK } }], { x: 0.6, y: 6.55, w: 12.1, h: 0.35, fontSize: 14 });
+  s.addNotes('Everything is under h-number-map/pipeline2 in the repository, and run_all.py rebuilds the map, PDFs and lists from the source drawing in about six minutes. Automatic checks: all 3,103 numbers lie inside their lot with clearance, and in the browser and PDF pixel tests no number pixel touches a lot line. The first version also used template matching for digit recognition; that code is kept in h-number-map/pipeline.'); }
 
-// ---------------------------------------------------------------- 8 site: find and select
-{ const s = pres.addSlide({ masterName: 'CONTENT' }); title(s, 'Website: find a lot and open it');
-  const XL = 0.6, XR = 6.73, W = 6.0;
-  chip(s, 'Working: tested in a browser', XL, 1.3, 2.9, GREEN); chip(s, 'Working: tested in a browser', XR, 1.3, 2.9, GREEN);
-  shot(s, 'crop_search.png', XL, 1.75, W, W * 400 / 830, 'Search screenshot', 'Search box with the matching lot listed');
-  shot(s, 'crop_selected.png', XR, 1.75, W, W * 540 / 880, 'Selected lot screenshot', 'A selected lot, highlighted, with its details panel');
-  s.addText([{ text: 'Search ', options: { bold: true, color: NAVY } }, { text: 'by H-number, by legacy lot such as "B 20H", or by recorded name (names appear once records exist). Close matches are suggested while typing.', options: { color: INK } }], { x: XL, y: 5.2, w: W, h: 1.2, fontSize: 14, fontFace: 'Calibri', margin: 0, valign: 'top', isTextBox: true });
-  s.addText([{ text: 'Click any lot ', options: { bold: true, color: NAVY } }, { text: 'and the map zooms to it, highlights it and opens its panel beside the map, so the lot stays visible. Back and Fit map return to earlier views.', options: { color: INK } }], { x: XR, y: 5.55, w: W, h: 1.2, fontSize: 14, fontFace: 'Calibri', margin: 0, valign: 'top', isTextBox: true });
-  s.addNotes('Both screenshots are cropped from the current site opened in a browser. The panel shows the H-number, the legacy reference, how the match was confirmed, and grave fields that are honestly empty. Shared records show as unavailable in these screenshots because they were taken outside the hosted page.'); }
+// 8 ------------------------------------------------------------------ workflow
+{ const s = pres.addSlide({ masterName: 'CONTENT' }); title(s, 'One task from start to finish: find lot F 34 and open it');
+  const WL = 5.5, WR = 5.6, XL = 0.6, XR = 7.1, Y = 1.85;
+  chip(s, '1  Type a legacy label or H-number', XL, 1.4, 3.6, NAVY); chip(s, '2  Select it: the lot is zoomed, highlighted, described', XR, 1.4, 4.9, NAVY);
+  shot(s, 'flow1_full.png', XL, Y, WL, hAt('flow1_full.png', WL), 'Search step', 'Typing F 34 lists lot H001914'); shot(s, 'flow2_full.png', XR, Y, WR, hAt('flow2_full.png', WR), 'Select step', 'Lot H001914 highlighted with its details panel');
+  s.addShape(pres.shapes.RIGHT_ARROW, { x: 6.2, y: 3.0, w: 0.75, h: 0.5, fill: { color: GOLD }, line: { color: GOLD, width: 0.5 }, objectName: 'Workflow arrow' });
+  chip(s, 'Working: tested in a browser', XL, 4.55, 2.9, GREEN);
+  txt(s, 'Search takes an H-number, a legacy lot, or a recorded name. Name search is implemented but cannot be shown until burial records exist.', { x: XL, y: 4.95, w: 5.5, h: 0.9, fontSize: 14 });
+  txt(s, [{ text: 'Open decision: ', options: { bold: true, color: NAVY } }, { text: 'the sidebar still groups lots by legacy section letter, labelled as cross-reference. I kept it because no approved area grouping exists yet.', options: { color: INK } }], { x: XL, y: 5.9, w: 5.5, h: 0.95, fontSize: 14 });
+  txt(s, 'The panel stays beside the lot, so the selected lot is never covered. Back and Fit map return to earlier views.', { x: XR, y: 5.6, w: 5.6, h: 0.7, fontSize: 14 });
+  s.addNotes('One lot is followed throughout: legacy label F 34 is H001914. The sidebar groups lots by legacy section letter with H-number ranges and is labelled as cross-reference; I did not invent a new numbered grouping.'); }
 
-// ---------------------------------------------------------------- 9 site: records, editing, exports
-{ const s = pres.addSlide({ masterName: 'CONTENT' }); title(s, 'Website: records, editing and exports');
-  const Y = 1.7, H = 4.0, wv = H * 744 / 930, wf = H * 744 / 1000, we = H * 520 / 516;
-  const xv = 0.6, xf = xv + wv + 0.4, xe = xf + wf + 0.4;
-  shot(s, 'crop_viewer.png', xv, Y, wv, H, 'Panel for viewers', 'Lot panel as a viewer sees it: empty record fields, no Edit button');
-  shot(s, 'crop_form.png', xf, Y, wf, H, 'Edit form', 'Edit form for people with edit access');
-  shot(s, 'crop_export.png', xe, Y, we, H, 'Export dialog', 'Export dialog listing PDFs and CSV lists');
-  chip(s, 'Viewers', xv, 1.3, 1.2, SLATE); chip(s, 'Editors', xf, 1.3, 1.2, SLATE); chip(s, 'Exports', xe, 1.3, 1.2, SLATE);
-  const yv = Y + H + 0.15, tx = (x, w, t) => s.addText(t, { x, y: yv + 0.4, w, h: 0.85, fontSize: 12, color: INK, fontFace: 'Calibri', margin: 0, valign: 'top', isTextBox: true });
-  chip(s, 'Working', xv, yv, 1.1, GREEN); tx(xv, wv, 'Fields start empty and say so. No guessed graves. No Edit button.');
-  chip(s, 'Not yet tested live', xf, yv, 1.9, AMBER); tx(xf, wf + 0.3, 'Edit button and form only for people with edit access. Tried with a simulated sign-in. Import is built, untested.');
-  chip(s, 'PDFs, CSV built', xe, yv, 1.5, GREEN); chip(s, 'Download untested', xe + 1.6, yv, 1.6, AMBER); chip(s, 'Excel: planned', xe + 3.3, yv, 1.1, SLATE);
-  tx(xe, we, 'Full map and each area as PDF, plus CSV lists. Excel (.xlsx) export is planned; CSV opens in Excel.');
-  s.addNotes('Be clear about status. The panel screenshots come from a browser test with a stand-in sign-in and an empty database, so they show real screens but not a live editor session. Permission is enforced by the shared database rule (anyone who can open the page reads; only people with edit access write); a normal-user write was refused when checked. No burial data has been entered. Excel export existed in the previous site and has not been rebuilt; CSV replaces it for now.'); }
+// 9 ------------------------------------------------------------------ records
+{ const s = pres.addSlide({ masterName: 'CONTENT' }); title(s, 'Records, editing and exports: built, with live testing still to do');
+  const Y = 1.8, xa = 0.6, wa = 2.55, xb = 3.5, wb = 3.3, xc = 7.15, wc = 4.6;
+  chip(s, 'Editing: not tested live', xa, 1.4, 2.55, AMBER); chip(s, 'Viewing: working', xb, 1.4, 1.8, GREEN); chip(s, 'Files built; download untested', xc, 1.4, 2.8, AMBER);
+  shot(s, 'panel_form.png', xa, Y, wa, hAt('panel_form.png', wa), 'Edit form', 'Edit form: grave count, one record, Save and Cancel');
+  shot(s, 'panel_viewer.png', xb, Y, wb, hAt('panel_viewer.png', wb), 'Viewer panel', 'Lot panel as a viewer sees it');
+  shot(s, 'export_dialog.png', xc, Y, wc, hAt('export_dialog.png', wc), 'Export dialog', 'Export dialog: PDF, Excel and CSV');
+  txt(s, 'Each record is one burial in the lot. Grave position is optional text, marked verified or not. Fields start empty and say so.', { x: xb, y: 5.6, w: wb, h: 0.8, fontSize: 12 });
+  txt(s, 'A standard viewer\'s write was refused in a service-level test. Editing is not yet tried with real editor accounts in the browser.', { x: xb, y: 6.3, w: wb, h: 0.65, fontSize: 12, color: SLATE });
+  txt(s, 'PDF, CSV and Excel (.xlsx) files are generated. Downloading them from the hosted page, and the record import, still need testing.', { x: xc, y: 6.1, w: wc, h: 0.8, fontSize: 12 });
+  s.addNotes('Status, plainly. The form and viewer screenshots come from a browser test with a stand-in sign-in and an empty database, so they show the real screens, not a live editor session. Separately, a write as a standard viewer was refused by the shared database rules. No burial data has been entered. PDF, CSV and Excel files are generated by the build; the Excel workbook was added this week. Downloading them from the hosted page and the CSV or Excel record import have not been tested with real accounts or data.'); }
 
-// ---------------------------------------------------------------- 10 next steps
-{ const s = pres.addSlide({ masterName: 'CONTENT' }); title(s, 'What happens next, in priority order');
-  const hdr = (t) => ({ text: t, options: { bold: true, color: 'FFFFFF', fill: { color: NAVY }, fontSize: 14, fontFace: 'Calibri', valign: 'middle' } });
-  const c1 = (n, h, d) => ({ text: [{ text: n + '. ' + h, options: { bold: true, color: NAVY, fontSize: 14, breakLine: true } }, { text: d, options: { color: INK, fontSize: 13 } }], options: { valign: 'top', fontFace: 'Calibri' } });
-  const c2 = (t) => ({ text: t, options: { color: INK, fontSize: 13, valign: 'top', fontFace: 'Calibri' } });
-  const rows = [
-    [hdr('What needs to happen'), hdr('What we need from cemetery staff')],
-    [c1(1, 'Settle the numbering conflicts', 'Section B 373 to 380H appear in two places. Section G has lot 19 twice. Section A lots 20H to 343H show as plain numbers on the map. Several B-side labels (395 to 414) are unknown to the decoder.'), c2('Someone who knows the original numbering to say which version is right for each conflict.')],
-    [c1(2, 'Finish the map corrections', '72 crypt-row labels have no section. 9 outlined lots have no label. 3 lots are too small for a number (E 195A, E 195B, H 21).'), c2('Which numbering the crypt rows follow, and a site check of the 9 unlabelled lots.')],
-    [c1(3, 'Verify grave counts per lot', 'Lots hold different numbers of graves, so the map shows "grave count not verified" until it is confirmed.'), c2('A per-lot capacity sheet: lot, number of graves, and how they are arranged.')],
-    [c1(4, 'Provide the master record spreadsheet', 'One row per burial, matched to a lot by H-number or by section and lot. The import is ready.'), c2('Columns: H-number or section + lot, name, birth, death, grave position, source, notes.')],
-    [c1(5, 'Test live and decide', 'Try editing, import and downloads with real accounts. Settle area names, logo and where the site is hosted.'), c2('Editor accounts for testing, and a decision on area names and hosting.')] ];
-  s.addTable(rows, { x: 0.6, y: 1.35, w: 12.1, colW: [7.3, 4.8], border: { type: 'solid', color: 'DDE3EA', pt: 0.75 }, fill: { color: 'FFFFFF' }, margin: [0.07, 0.12, 0.07, 0.12], rowH: [0.4, 1.12, 0.9, 0.9, 0.9, 0.9], objectName: 'Next steps table' });
-  s.addNotes('Items 1 and 2 address the 286 unresolved entries (218 visible lots and 68 decoder lots with no position). They need a person who knows the original numbering, not more software. Item 3 decides whether the site can ever show a grave count. Item 4 is independent of the map, so it can start whenever the spreadsheet exists.'); }
+// 10 ----------------------------------------------------------------- next
+{ const s = pres.addSlide({ masterName: 'CONTENT' }); title(s, 'Next steps: who does what');
+  const col = (x, head, items) => { s.addShape(pres.shapes.RECTANGLE, { x, y: 1.35, w: 3.9, h: 4.35, fill: { color: LIGHT }, line: { color: RULE, width: 0.5 }, objectName: head });
+    txt(s, head, { x: x + 0.2, y: 1.5, w: 3.5, h: 0.4, fontSize: 17, bold: true, color: NAVY, fontFace: 'Cambria', valign: 'middle' });
+    s.addText(items.map((t, i) => ({ text: t, options: { bullet: true, breakLine: i < items.length - 1, paraSpaceAfter: 8 } })), { x: x + 0.2, y: 2.05, w: 3.5, h: 3.6, fontSize: 16, color: INK, fontFace: 'Calibri', margin: 0, valign: 'top', isTextBox: true }); };
+  col(0.6, 'My next development work', ['Spot-check the 394 inferred-section lots, weakest 46 first', 'Fix the exceptions I can: 9 unlabelled outlines, 3 lots too small for a number', 'Validate the record import and report matched and skipped rows', 'Test editing and downloads on the hosted page']);
+  col(4.7, 'Needed from cemetery staff', ['A sample burial-record spreadsheet, even 20 rows', 'Any lot-capacity or grave-position records', 'Someone to rule on the numbering conflicts: B 373 to 380H, G lot 19, A 20H to 343H, B-side 395 to 414, crypt rows', 'A short session to test editing with real accounts']);
+  col(8.8, 'To settle together', ['Area names to show instead of legacy section letters', 'Which resolved conflicts to accept', 'Logo and where the site is hosted']);
+  s.addShape(pres.shapes.RECTANGLE, { x: 0.6, y: 5.95, w: 12.1, h: 0.85, fill: { color: NAVY }, line: { color: NAVY, width: 0.5 }, objectName: 'Next milestone' });
+  txt(s, [{ text: 'Next review: ', options: { bold: true, color: 'CADCFC' } }, { text: 'remaining map exceptions, a sample record import, and verified PDF and Excel downloads.', options: { color: 'FFFFFF' } }], { x: 0.85, y: 5.95, w: 11.6, h: 0.85, fontSize: 16, valign: 'middle' });
+  s.addNotes('The numbering conflicts need someone who knows the original scheme, not more software. The map work, import validation and download testing can continue on my side in the meantime. The spreadsheet does not need to be complete for the first import test.'); }
 
-(async () => { await pres.writeFile({ fileName: __dirname + '/Cedar_Grove_H-Number_Atlas_Progress.pptx' }); await applyTheme(__dirname + '/Cedar_Grove_H-Number_Atlas_Progress.pptx', THEME); console.log('written'); })();
+(async () => { const f = __dirname + '/Cedar_Grove_H-Number_Atlas_Progress.pptx'; await pres.writeFile({ fileName: f }); await applyTheme(f, THEME); console.log('written'); })();

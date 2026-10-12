@@ -11,13 +11,13 @@ def blend(c, k=0.5):
 
 def style_for(d):
     col = tuple(d['color']) if d['color'] else None
-    if col == LOT_COLOR: return dict(role='lot', stroke='#8fa3b8', w=0.9)
+    if col == LOT_COLOR: return dict(role='lot', stroke='#6c84a0', w=1.0)
     if col is None: return dict(role='other', stroke=None, w=0)
-    if col in ((0.7, 0.8, 0.4), (0.8, 0.8, 0.4), (0.8, 0.7, 0.4)): return dict(role='road', stroke='#cdd3b0', w=1.1)
-    if col in ((0.8, 0.6, 0.4), (0.6, 0.3, 0.0)): return dict(role='garden', stroke='#d2bd9d', w=0.9)
-    if col in ((0.6, 0.0, 0.6), (0.3, 0.0, 0.6)): return dict(role='building', stroke='#bda3c4', w=1.0)
-    if col == (0.0, 0.0, 0.0): return dict(role='building', stroke='#a4abb5', w=0.9)
-    return dict(role='other', stroke=blend(col, 0.55), w=0.9)
+    if col in ((0.7, 0.8, 0.4), (0.8, 0.8, 0.4), (0.8, 0.7, 0.4)): return dict(role='road', stroke='#b2ba8a', w=1.5)
+    if col in ((0.8, 0.6, 0.4), (0.6, 0.3, 0.0)): return dict(role='garden', stroke='#c4a679', w=1.2)
+    if col in ((0.6, 0.0, 0.6), (0.3, 0.0, 0.6)): return dict(role='building', stroke='#a186ae', w=1.3)
+    if col == (0.0, 0.0, 0.0): return dict(role='building', stroke='#858d99', w=1.2)
+    return dict(role='other', stroke=blend(col, 0.4), w=1.1)
 
 def path_d(items):
     out = []; cur = None
