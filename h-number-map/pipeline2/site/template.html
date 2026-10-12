@@ -505,6 +505,15 @@ function exportReviewCsv(){var rows=[['status','reason','h_number_candidate','le
   saveFile('Cedar_Grove_unresolved_locations.csv',new Blob([csv(rows)],{type:'text/csv'}))}
 function exportLotsCsv(){var rows=[['h_number','legacy_section','legacy_lot','section_evidence']];LOTS.forEach(function(r){rows.push([r[1],r[2],r[3],r[11]===0?'two independent readings':'inferred from surrounding lots'])});
   saveFile('Cedar_Grove_lots_with_H-numbers.csv',new Blob([csv(rows)],{type:'text/csv'}))}
+function exportXlsx(){toast('Preparing the workbook\u2026');loadScript(XLSX_URL).then(function(){
+  var ok=LOTS.filter(function(r){return r[11]===0}).length,wb=XLSX.utils.book_new();
+  function sh(name,rows,w){var ws=XLSX.utils.aoa_to_sheet(rows);ws['!cols']=w.map(function(x){return{wch:x}});XLSX.utils.book_append_sheet(wb,ws,name)}
+  sh('Read me',[['Cedar Grove Cemetery - H-map lot lists'],[],['Lots with H-numbers',LOTS.length,'Outline (or label position) and a decoded H-number. Section corroborated by two independent readings ('+ok+') or inferred from surrounding lots ('+(LOTS.length-ok)+').'],['Lots to review',REVIEW.length,'Visible on the drawing; identity could not be tied to one H-number. Not drawn as H-numbers.'],['No map position',UNPL.length,'Known to the decoder; no label on the drawing resolves to them. Some match a drawn lot in the review list.'],[],['Legacy section and lot are cross-reference only. Burial records are not part of this workbook.']],[22,10,110]);
+  sh('Lots with H-numbers',[['H-number','Legacy section','Legacy lot','Section evidence','Outline']].concat(LOTS.slice().sort(function(a,b){return a[4]-b[4]||(a[1]<b[1]?-1:1)}).map(function(r){return[r[1],r[2],r[3],r[11]===0?'two independent readings':'inferred from surrounding lots',r[12]?'label only':'drawn']})),[12,14,11,32,12]);
+  sh('Lots to review',[['Reason','H-number candidate','Legacy section','Legacy lot','Label on drawing','Map x','Map y']].concat(REVIEW.map(function(v){return[v.r.map(function(i){return REASONS[i]}).join(' | '),v.h||'',v.s||'',v.l||'',v.t||'',v.x,v.y]})),[70,16,14,11,16,9,9]);
+  sh('No map position',[['H-number','Legacy section','Legacy lot','Note']].concat(UNPL.map(function(u){return[u.h,u.s,u.l,u.n||'No label on the drawing resolves to this decoder lot']})),[12,14,11,80]);
+  var buf=XLSX.write(wb,{type:'array',bookType:'xlsx'});
+  return saveFile('Cedar_Grove_H-Map_lots.xlsx',new Blob([buf],{type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'}))},function(){toast('The Excel writer could not be loaded in this view')})}
 function exportListCsv(){if(!LIST.length){toast('Your list is empty. Open a lot and choose Add to list.');return}
   var rows=[['h_number','legacy_section','legacy_lot','name','birth','death','notes']];LIST.forEach(function(h){var ix=byH[h];if(!ix)return;var r=LOTS[ix[0]],d=RECS[h],rs=(d&&d.records)||[];
     if(!rs.length)rows.push([h,r[2],r[3],'','','','']);rs.forEach(function(x){rows.push([h,r[2],r[3],x.name,x.birth,x.death,x.notes])})});
@@ -513,14 +522,14 @@ $('b-export').onclick=function(){var areas=Object.keys(AREAS).sort();
   openModal('<h2>Export</h2><p class="note" style="margin:0">PDFs are drawn from the same map data as the screen, with every H-number inside its lot. Overview sheet first, then detail pages.</p>'
    +'<div class="xopt"><span><b>Full map (PDF)</b><small>Overview sheet plus detail pages for the whole cemetery</small></span><button class="btn pri" data-pdf="full">Download</button></div>'
    +'<div class="xopt"><span><b>Overview sheet only</b><small>One large sheet; numbers appear where they are readable</small></span><button class="btn" data-pdf="overview">Download</button></div>'
-   +'<div class="xopt"><span><b>Excel workbook (.xlsx)</b><small>Lots with H-numbers, lots to review, and decoder lots with no map position, one sheet each, plus a read-me sheet</small></span><button class="btn pri" data-pdf="xlsx">Download</button></div>'
+   +'<div class="xopt"><span><b>Excel workbook (.xlsx)</b><small>Lots with H-numbers, lots to review, and decoder lots with no map position, one sheet each, plus a read-me sheet</small></span><button class="btn pri" data-act="xlsx">Download</button></div>'
    +'<div class="xopt"><span><b>Unresolved locations (CSV)</b><small>'+REVIEW.length+' lots to review, '+UNPL.length+' known H-numbers without a position</small></span><button class="btn" data-act="rvcsv">Download</button></div>'
    +'<div class="xopt"><span><b>Lots with H-numbers (CSV)</b><small>'+LOTS.length+' lots: H-number, legacy reference, how the section was confirmed</small></span><button class="btn" data-act="lotcsv">Download</button></div>'
    +'<div class="xopt"><span><b>My list ('+LIST.length+')</b><small>Lots you added with Add to list</small></span><button class="btn" data-act="listcsv">Download</button></div>'
    +'<div style="margin-top:14px"><b style="font-size:14px">By area</b><div class="xgrid">'+areas.map(function(s){return '<button class="btn" data-pdf="area_'+s+'">Legacy section '+s+'</button>'}).join('')+'</div></div>'
    +'<div class="btns" style="justify-content:flex-end"><button class="btn" data-close>Close</button></div>');
   Array.prototype.forEach.call(modalRoot.querySelectorAll('[data-pdf]'),function(b){b.onclick=function(){exportPdf(b.getAttribute('data-pdf'))}});
-  Array.prototype.forEach.call(modalRoot.querySelectorAll('[data-act]'),function(b){b.onclick=function(){var a=b.getAttribute('data-act');if(a==='rvcsv')exportReviewCsv();if(a==='lotcsv')exportLotsCsv();if(a==='listcsv')exportListCsv()}})};
+  Array.prototype.forEach.call(modalRoot.querySelectorAll('[data-act]'),function(b){b.onclick=function(){var a=b.getAttribute('data-act');if(a==='xlsx')exportXlsx();if(a==='rvcsv')exportReviewCsv();if(a==='lotcsv')exportLotsCsv();if(a==='listcsv')exportListCsv()}})};
 
 /* ---------- import (editors only) ---------- */
 var XLSX_URL='https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js';

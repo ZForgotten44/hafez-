@@ -11,8 +11,8 @@ def run(pdfs=None):
         pd = os.path.join(REPO, 'h-number-map', 'site', 'pdf'); pdfs = {}
         if os.path.isdir(pd):
             for f in sorted(os.listdir(pd)):
-                m = re.match(r'Cedar_Grove_H-Map_(?:(full|overview|area_[A-Z])\.pdf|(lots)\.xlsx)$', f)
-                if m: pdfs[m.group(1) or 'xlsx'] = dict(file='pdf/' + f, name=f)
+                m = re.match(r'Cedar_Grove_H-Map_(full|overview|area_[A-Z])\.pdf$', f)
+                if m: pdfs[m.group(1)] = dict(file='pdf/' + f, name=f)
     D = svgmap.load(); lots = D['lots']; reg = D['reg']; cells = {c['id']: c for c in D['cells']}
     # --- lots (compact rows)
     rows = []
