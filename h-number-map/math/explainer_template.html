@@ -1,0 +1,258 @@
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Cedar Grove Numbering Explained</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700&family=Libre+Baskerville:wght@400;700&display=swap" rel="stylesheet">
+<style>
+/* Layout: a sticky contents rail beside long-form sections; each section ends in something you can change. */
+:root{
+  --bg:#faf9f6; --surface:#ffffff; --surface2:#f2f0ea; --ink:#1a2130; --mid:#566274; --faint:#7d8798; --line:#e2dfd6; --line2:#cfcabd;
+  --navy:#0c2340; --navy2:#3a5578; --gold:#b8892f; --legacy:#b4531f; --legacy-bg:#f8e7dc; --h:#17496e; --h-bg:#dcebf5; --ok:#2f6b46; --ok-bg:#e4f0e8; --bad:#a23325; --bad-bg:#f8e3df;
+  --code-bg:#f4f2ec; --code-ink:#1d2a3a; --kw:#8a3b8f; --str:#2f6b46; --num:#b4531f; --cm:#7d8798;
+  --serif:'Libre Baskerville',Georgia,serif; --sans:'DM Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif; --mono:'DM Mono',ui-monospace,Menlo,Consolas,monospace;
+  --shadow:0 6px 20px -8px rgba(12,35,64,.25),0 1px 4px rgba(12,35,64,.08);
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#10161f; --surface:#171f2b; --surface2:#1e2837; --ink:#e6ebf2; --mid:#a2aec0; --faint:#7f8ba0; --line:#2a3546; --line2:#3a4860;
+  --navy:#cadcfc; --navy2:#9fb7de; --gold:#d6a94c; --legacy:#f0985f; --legacy-bg:#3a261b; --h:#7fb8e6; --h-bg:#16324a; --ok:#78c595; --ok-bg:#1a3326; --bad:#f08b7e; --bad-bg:#3a1f1b;
+  --code-bg:#0f1520; --code-ink:#d7e0ee; --kw:#d59be0; --str:#8fd4a4; --num:#f0a574; --cm:#7f8ba0; --shadow:0 6px 20px -8px rgba(0,0,0,.6);color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#10161f; --surface:#171f2b; --surface2:#1e2837; --ink:#e6ebf2; --mid:#a2aec0; --faint:#7f8ba0; --line:#2a3546; --line2:#3a4860;
+  --navy:#cadcfc; --navy2:#9fb7de; --gold:#d6a94c; --legacy:#f0985f; --legacy-bg:#3a261b; --h:#7fb8e6; --h-bg:#16324a; --ok:#78c595; --ok-bg:#1a3326; --bad:#f08b7e; --bad-bg:#3a1f1b;
+  --code-bg:#0f1520; --code-ink:#d7e0ee; --kw:#d59be0; --str:#8fd4a4; --num:#f0a574; --cm:#7f8ba0; --shadow:0 6px 20px -8px rgba(0,0,0,.6);color-scheme:dark}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:70px}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 var(--sans);-webkit-font-smoothing:antialiased}
+.wrap{display:grid;grid-template-columns:210px minmax(0,1fr);gap:40px;max-width:1240px;margin:0 auto;padding:0 20px 80px}
+nav.rail{position:sticky;top:0;align-self:start;height:100vh;padding:28px 0;overflow:auto;font-size:14px}
+nav.rail b{display:block;font:700 12px var(--sans);letter-spacing:.07em;text-transform:uppercase;color:var(--faint);margin:0 0 10px}
+nav.rail a{display:block;padding:6px 10px;border-radius:6px;color:var(--mid);text-decoration:none;margin-bottom:2px}
+nav.rail a:hover{background:var(--surface2);color:var(--ink)}
+nav.rail a.on{background:var(--surface2);color:var(--navy);font-weight:600}
+main{min-width:0}
+header.hero{padding:56px 0 28px}
+header.hero .kicker{font:700 12px var(--sans);letter-spacing:.09em;text-transform:uppercase;color:var(--gold)}
+h1{font:700 clamp(30px,4.6vw,46px)/1.12 var(--serif);color:var(--navy);margin:10px 0 14px;text-wrap:balance}
+header.hero p.lead{font-size:19px;color:var(--mid);max-width:44em;margin:0}
+section{padding-top:56px}
+h2{font:700 clamp(24px,3vw,31px)/1.2 var(--serif);color:var(--navy);margin:0 0 12px;text-wrap:balance}
+h3{font:700 19px/1.3 var(--sans);color:var(--ink);margin:30px 0 8px}
+p{max-width:46em;margin:0 0 14px} .wide{max-width:none}
+.lede{font-size:17.5px;color:var(--mid)}
+.note{font-size:14px;color:var(--mid)}
+.pill{display:inline-block;font:700 11px var(--sans);letter-spacing:.05em;text-transform:uppercase;padding:2px 8px;border-radius:99px}
+.pill.legacy{background:var(--legacy-bg);color:var(--legacy)} .pill.h{background:var(--h-bg);color:var(--h)} .pill.ok{background:var(--ok-bg);color:var(--ok)} .pill.bad{background:var(--bad-bg);color:var(--bad)}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:20px 22px;margin:18px 0}
+.card.play{border-color:var(--line2);box-shadow:var(--shadow)}
+.card h3:first-child{margin-top:0}
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px} .grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.stat{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px 18px}
+.stat .n{font:700 34px/1.1 var(--serif);color:var(--navy)} .stat .l{font-size:14px;color:var(--mid);margin-top:4px}
+figure{margin:18px 0} figure img{display:block;width:100%;border-radius:10px;border:1px solid var(--line);background:var(--surface2)}
+figcaption{font-size:14px;color:var(--mid);margin-top:8px;max-width:52em}
+.calls{counter-reset:c;margin:10px 0 0;padding:0;list-style:none}
+.calls li{counter-increment:c;display:flex;gap:10px;margin:6px 0;font-size:14.5px;color:var(--ink)}
+.calls li::before{content:counter(c);flex:0 0 22px;height:22px;border-radius:50%;background:var(--gold);color:#fff;font:700 12px/22px var(--sans);text-align:center;margin-top:2px}
+label.f{display:block;font:600 12px var(--sans);letter-spacing:.04em;text-transform:uppercase;color:var(--faint);margin:0 0 4px}
+input[type=text],input[type=number],select,textarea{font:15px var(--sans);color:var(--ink);background:var(--surface2);border:1px solid var(--line2);border-radius:8px;padding:8px 10px;width:100%}
+input[type=range]{width:100%;accent-color:var(--navy2)}
+textarea{font-family:var(--mono);font-size:12.5px;line-height:1.5}
+input:focus,select:focus,textarea:focus,button:focus-visible{outline:2px solid var(--navy2);outline-offset:1px}
+.row{display:flex;flex-wrap:wrap;gap:14px;align-items:flex-end;margin:10px 0} .row>div{flex:1 1 150px;min-width:0}
+button{font:600 14px var(--sans);color:var(--navy);background:var(--surface);border:1px solid var(--line2);border-radius:8px;padding:8px 14px;cursor:pointer}
+button:hover{background:var(--surface2)} button.pri{background:var(--navy);color:var(--bg);border-color:var(--navy)}
+button.seg{border-radius:0;margin-right:-1px} button.seg.on{background:var(--navy);color:var(--bg);border-color:var(--navy)}
+.out{font:500 15px/1.6 var(--mono);background:var(--code-bg);border-radius:10px;padding:12px 14px;overflow-x:auto;color:var(--code-ink)}
+.out b{color:var(--navy)} .out .h{color:var(--h);font-weight:500} .out .lg{color:var(--legacy);font-weight:500}
+pre.code{margin:14px 0;background:var(--code-bg);color:var(--code-ink);border:1px solid var(--line);border-radius:10px;padding:14px 16px;overflow-x:auto;font:13px/1.55 var(--mono);tab-size:4;position:relative}
+pre.code .k{color:var(--kw)} pre.code .s{color:var(--str)} pre.code .n{color:var(--num)} pre.code .c{color:var(--cm);font-style:italic}
+.cp{position:absolute;right:8px;top:8px;font-size:12px;padding:3px 8px}
+table.t{border-collapse:collapse;width:100%;font-size:14px} table.t th{text-align:left;font:700 11.5px var(--sans);letter-spacing:.05em;text-transform:uppercase;color:var(--faint);padding:8px 10px;border-bottom:2px solid var(--line2)}
+table.t td{padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:top} table.t td.num{text-align:right;font-family:var(--mono);font-variant-numeric:tabular-nums}
+.scroll{overflow-x:auto}
+.chips{display:flex;flex-wrap:wrap;gap:3px;margin:4px 0 10px}
+.chip{font:500 12px var(--mono);padding:2px 5px;border-radius:5px;background:var(--surface2);border:1px solid var(--line);color:var(--ink);white-space:nowrap}
+.chip.h{background:#f3e4bf;border-color:#d9bf7e;color:#5a4410} .chip.suffix{background:var(--h-bg);border-color:var(--h);color:var(--h)} .chip.odd{background:var(--bad-bg);border-color:var(--bad);color:var(--bad)} .chip.gap{background:var(--bad-bg);border:1px dashed var(--bad);color:var(--bad)}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .chip.h{background:#4a3a12;border-color:#8a6d22;color:#f0d68a}}
+:root[data-theme="dark"] .chip.h{background:#4a3a12;border-color:#8a6d22;color:#f0d68a}
+.legend{display:flex;flex-wrap:wrap;gap:12px;font-size:13px;color:var(--mid);margin:6px 0}
+.legend i{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:5px;vertical-align:-1px}
+#mapbox{position:relative;background:var(--surface2);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+#mapsvg{display:block;width:100%;height:auto} #mapsvg polygon{stroke:var(--surface);stroke-width:.35}
+#maptip{position:absolute;pointer-events:none;background:var(--navy);color:var(--bg);font:13px var(--mono);padding:5px 9px;border-radius:6px;white-space:nowrap;display:none}
+canvas{display:block;width:100%;height:auto;border-radius:8px;background:var(--surface2);border:1px solid var(--line)}
+math{font-size:1.12em} .mathblock{overflow-x:auto;padding:12px 4px;margin:6px 0} .mathblock math{display:block math}
+.eqn{font:500 15px/1.7 var(--mono);background:var(--code-bg);border-radius:10px;padding:12px 16px;margin:10px 0;overflow-x:auto;color:var(--code-ink)}
+.eqn .lbl{color:var(--faint)}
+.bad{color:var(--bad)} .good{color:var(--ok)}
+.sweepgrid{display:grid;gap:2px}
+kbd{font:500 12px var(--mono);background:var(--surface2);border:1px solid var(--line2);border-radius:4px;padding:1px 5px}
+details{border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin:12px 0;background:var(--surface)} details summary{cursor:pointer;font-weight:600;color:var(--navy)}
+.toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);background:var(--navy);color:var(--bg);padding:9px 16px;border-radius:8px;font-weight:600;font-size:14px;opacity:0;pointer-events:none;transition:opacity .2s}
+.toast.show{opacity:1}
+@media (max-width:980px){.wrap{grid-template-columns:1fr;gap:0}nav.rail{position:static;height:auto;display:flex;flex-wrap:wrap;gap:4px;padding:14px 0;border-bottom:1px solid var(--line)}nav.rail b{display:none}nav.rail a{padding:5px 9px;font-size:13px}.grid2,.grid3{grid-template-columns:1fr}}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+</style>
+<div class="wrap">
+<nav class="rail" id="rail"><b>Contents</b>
+<a href="#raw">1 The raw maps</a><a href="#legacy">2 The old numbering</a><a href="#why">3 Why it confuses</a><a href="#h">4 The H-number idea</a><a href="#math">5 The math, step by step</a><a href="#code">6 The code</a><a href="#giant">7 The giant formula</a><a href="#compare">8 Old and new, side by side</a><a href="#appendix">9 Checks and errata</a></nav>
+<main>
+<header class="hero"><div class="kicker">Cedar Grove Cemetery, University of Notre Dame</div>
+<h1>How the old lot numbers worked, why they were hard to use, and the math that replaces them</h1>
+<p class="lead">This page starts from the raw maps, shows how legacy lot labels behave across the cemetery, and then rebuilds the H-number system as arithmetic you can change and test. Every number on this page comes from the project decoder, and the final formula was checked against all 3,199 lot labels the decoder accepts.</p></header>
+
+<section id="raw"><h2>1 · The raw maps</h2>
+<p class="lede">These are the original maps the cemetery worked from: one overall map and one page per section. They are drawn as vector line art with no lot data attached, so everything a person could learn from them was whatever was printed next to each lot.</p>
+<figure><img src="__IMG_oldpdf_overall_s__" alt="Overall Cedar Grove map: hundreds of empty lot boxes with section names in red"><figcaption><b>Cemetery - Overall Map (original PDF).</b> Every lot is drawn, but not one lot has a number on it. The only names are the section titles (A to M), and the section borders are never drawn, so you cannot tell where one section's lots stop and the next one's start.</figcaption></figure>
+<div class="grid2"><figure><img src="__IMG_oldpdf_overall_zoom__" alt="Enlarged overall map, rows of unlabeled boxes"><figcaption>The overall map enlarged 5 times. Still no numbers; just boxes, with a section title lying across them.</figcaption></figure>
+<figure><img src="__IMG_oldpdf_B__" alt="Section B page of the individual-section map"><figcaption><b>Section B, from "All Sections on Individual Pages".</b> The numbers finally appear, but they are a few points tall and written sideways, and the same page is dotted with H, A, B and C marks.</figcaption></figure></div>
+<figure><img src="__IMG_oldpdf_B_zoom__" alt="Enlarged corner of the Section B page with labels like B362, C344, A362, C326 and B308"><figcaption>One corner of the Section B page at 4 times. Look at the left edge: <b>B362, C344, A362, C326, B308</b>. These are lots in Section B whose labels start with another section's letter. Next to them sit plain numbers that run 404, 405, 406 up one column and 363, 364, 365 up the next. A person standing in the cemetery has to know all of these exceptions.</figcaption></figure>
+<h3>The working screenshots that came next</h3>
+<div class="grid2"><figure><img src="__IMG_raw_aerial__" alt="Aerial view of Section B with a hairline grid of lots and tiny numbers"><figcaption>The working map: an aerial photo with the lot grid drawn on top (screenshot saved 2026-04-23). The numbers are a few pixels tall.</figcaption></figure>
+<figure><img src="__IMG_raw_zoom__" alt="Native-resolution zoom of lot numbers over grass and headstones"><figcaption>The same screenshot at native resolution, enlarged 3 times. Numbers sit over grass and headstones, rotated, some carrying an "H".</figcaption></figure>
+<figure><img src="__IMG_raw_annotated__" alt="Hand-annotated copy of the Section B map with arrows and a circled lot"><figcaption>A hand-marked working copy (SECTION B.pdf): arrows, question marks and a circled corner lot with a handwritten "H-00001". This is where the idea of one running number starts.</figcaption></figure>
+<figure><img src="__IMG_old_dense__" alt="Close-up of the earlier digital map where old and new numbers overlap"><figcaption>An earlier digital attempt: new H-numbers drawn on top of the old tiny shapes, so the two overlap.</figcaption></figure></div>
+</section>
+
+<section id="legacy"><h2>2 · What the old numbering is</h2>
+<p class="lede">A legacy lot is named by two things: a <b>section letter</b> (A to M) and a <b>label</b>. The label is not a plain counter. These are all real labels the decoder accepts:</p>
+<div class="chips" id="sampleChips"></div>
+<p>In the decoder every lot also has a row and a position in that row, because the old labels follow rules that change from section to section. The next block shows the first row of each section, in the order a person would walk it. Gold marks an H-lot, blue a lettered sub-lot, red something unusual.</p>
+<div class="card wide" id="anatomy"></div>
+</section>
+
+<section id="why"><h2>3 · Why it is confusing</h2>
+<p class="lede">A numbering system has four jobs: every lot gets one name, names run in an order you can predict, nearby lots get nearby numbers, and the rules are the same everywhere. Here is how the legacy labels do on each, measured from the decoder.</p>
+<div class="grid3" id="stats"></div>
+
+<div class="card play"><h3>Try it: one label, many places</h3>
+<p class="note">Type a lot number. The same label exists in many sections, and each one is a different spot on the ground.</p>
+<div class="row"><div style="max-width:240px"><label class="f" for="lbl">Legacy label</label><input id="lbl" type="text" value="19" autocomplete="off"></div><div><button id="lblr" type="button">Show a random label</button></div></div>
+<div id="lblout"></div></div>
+
+<h3>Rules that change from section to section</h3>
+<p>Each section got its own increment, direction and special cases. A person has to learn all of them to place a lot, and the H-number side has none of this. Bars show how the decoder handles each section's lots: pure arithmetic, arithmetic plus per-row constants, or an explicit list.</p>
+<div class="card wide scroll" id="rules"></div>
+
+<h3>The whole cemetery, colored by the number on the lot</h3>
+<p>Each lot below is colored by the old label number, by the old section letter, or by its H-number. The legacy view restarts at 1 in every section, so the map reads like noise. The H view changes steadily along one path.</p>
+<div class="card play"><div class="row"><div style="flex:0 0 auto"><button class="seg on" data-mode="n" type="button">Old label number</button><button class="seg" data-mode="s" type="button">Old section</button><button class="seg" data-mode="h" type="button">H-number</button></div><div class="note" id="mapnote" style="flex:1 1 260px"></div></div>
+<div id="mapbox"><svg id="mapsvg" xmlns="http://www.w3.org/2000/svg"></svg><div id="maptip"></div></div>
+<div class="legend" id="maplegend"></div></div>
+
+<h3>Walk the path: old number versus H-number</h3>
+<p>Plot every lot in sweep order. The H-number is just the position along the path, so it is the straight diagonal. The old label number, plotted against the same path, jumps up and down.</p>
+<div class="card play"><div class="row"><div><label class="f" for="sawstart">Start at H-number: <span id="sawstartv"></span></label><input id="sawstart" type="range" min="1" max="3100" value="1"></div><div><label class="f" for="sawwidth">Window of lots: <span id="sawwidthv"></span></label><input id="sawwidth" type="range" min="40" max="3185" value="400"></div></div>
+<canvas id="saw" width="1000" height="360"></canvas><div class="legend" id="sawlegend"></div></div>
+
+<h3>Defects found while deriving the formulas</h3>
+<div id="defects"></div>
+</section>
+
+<section id="h"><h2>4 · The H-number idea</h2>
+<p class="lede">Instead of naming lots by what is written on them, number them by <b>where they fall along one fixed path</b> through the cemetery. The first lot on the path is H000001, the next is H000002, and so on to H003185. Graves inside a lot get one more digit.</p>
+<div class="grid2"><div class="card"><h3>The three rules</h3><ol><li>The path visits the cemetery in six stretches (called passes below), one after another, each one starting where the last stopped.</li><li>Inside a stretch, it goes level by level, and within a level it walks the lots in a fixed order.</li><li>A lot's H-number is how many lots the path has already visited, plus one.</li></ol>
+<div class="mathblock"><math display="block"><mrow><msub><mi>H</mi><mrow><mi>lot</mi></mrow></msub><mo>=</mo><mi>O</mi><mo>+</mo><munderover><mo>∑</mo><mrow><mi>j</mi><mo>&lt;</mo><mi>r</mi></mrow><mrow></mrow></munderover><msub><mi>W</mi><mi>j</mi></msub><mo>+</mo><mi>k</mi></mrow></math></div>
+<p class="note"><b>O</b> lots visited before this stretch, <b>W<sub>j</sub></b> number of lots on level j of the stretch, <b>r</b> the level of this lot, <b>k</b> its place on that level.</p></div>
+<div class="card"><h3>Graves</h3><div class="mathblock"><math display="block"><mrow><msub><mi>H</mi><mi>grave</mi></msub><mo>=</mo><mn>10</mn><mo>×</mo><msub><mi>H</mi><mi>lot</mi></msub><mo>+</mo><mi>g</mi></mrow></math></div><p>Grave 1 is the top grave of the lot and g runs from 1 to 9. Lot H000001 has graves H0000011, H0000012 and so on. Double-row lots keep their A or B between the lot and the grave digit, as in H001698A3.</p></div></div>
+<h3>The six stretches</h3>
+<div class="card wide" id="passes"></div>
+<p class="note">Where two sections share a stretch, their levels are woven together: level 1 of the first section, level 1 of the second, then level 2 of each, and so on. That is why one section's H-numbers are not a single block.</p>
+</section>
+
+<section id="math"><h2>5 · The math, step by step</h2>
+<p class="lede">Each block below is a piece of the real system. Change the numbers and watch the H-numbers move.</p>
+
+<div class="card play" id="p1"><h3>Step 1 · The two-section sweep (B and A)</h3>
+<p>Sections B and A each have <b>N</b> columns and share <b>R</b> levels. The sweep takes one level at a time. Constants follow from N and R:</p>
+<div class="eqn"><span class="lbl">SWEEP  = </span>N<sub>B</sub> + N<sub>A</sub><br><span class="lbl">OFFSET = </span>SWEEP × R<br><span class="lbl">H(B, level r, column c) = </span>SWEEP × (r − 1) + c<br><span class="lbl">H(A, level r, column c) = </span>SWEEP × (r − 1) + N<sub>B</sub> + c</div>
+<div class="row"><div><label class="f" for="p1n">Columns per section N: <span id="p1nv"></span></label><input id="p1n" type="range" min="2" max="22" value="22"></div><div><label class="f" for="p1r">Levels R: <span id="p1rv"></span></label><input id="p1r" type="range" min="2" max="19" value="19"></div>
+<div style="flex:0 0 auto"><label class="f">Visit order inside a level</label><button class="seg on" data-ord="blocks" type="button">B then A</button><button class="seg" data-ord="alt" type="button">alternate B, A</button></div></div>
+<div class="row"><div><label class="f" for="p1sec">Section</label><select id="p1sec"><option>B</option><option>A</option></select></div><div><label class="f" for="p1lv">Level r</label><input id="p1lv" type="number" min="1" value="1"></div><div><label class="f" for="p1c">Column c</label><input id="p1c" type="number" min="1" value="1"></div></div>
+<div class="out" id="p1out"></div>
+<canvas id="p1cv" width="1000" height="420"></canvas>
+<p class="note">Hover over the grid to read a lot. The reference PDF and the decoder docstring describe the order as "B column 1, A column 1, B column 2 and so on", but the formulas and the code number a whole level of B first and then the same level of A. Flip the switch above to see how that choice moves every H-number after the first lot.</p></div>
+
+<div class="card play" id="p2"><h3>Step 2 · Why the old label is harder than the H-number</h3>
+<p>H comes from a position. The old label has to be turned <i>into</i> a position first. Section A is the clean example: every row has 19 labels, counted right to left, with three H-lots slipped in. Change the rules and see the labels and their H-numbers.</p>
+<div class="row"><div><label class="f" for="p2inc">Label step per row: <span id="p2incv"></span></label><input id="p2inc" type="range" min="10" max="25" value="19"></div><div><label class="f" for="p2tw">H-lots sit just before these places q (comma list)</label><input id="p2tw" type="text" value="13,5,1"></div><div><label class="f" for="p2rows">Rows shown</label><input id="p2rows" type="number" min="1" max="4" value="2"></div></div>
+<div class="eqn"><span class="lbl">row r = </span>⌈ n / step ⌉   <span class="lbl">place q = </span>n − step × (r − 1)<br><span class="lbl">column c = </span>(N − 2 − q) + [q ≤ t₁] + [q ≤ t₂] + …   <span class="lbl">H-lot: </span>one column earlier<br><span class="lbl">H(A, n) = </span>SWEEP × (r − 1) + N<sub>B</sub> + c</div>
+<div id="p2out"></div>
+<h4 style="margin:18px 0 6px">Section B, where the column rules disagree</h4>
+<p class="note">B's reference formulas give column 2 the label 19 + 20(r − 1), but column 3 (the first body column) also gets 19 + 20(r − 1). Its last column steps by 19 while the body steps by 20. The decoder resolves a repeated label by letting the later rule overwrite the earlier one.</p>
+<div class="row"><div><label class="f" for="p2b1">Body step: <span id="p2b1v"></span></label><input id="p2b1" type="range" min="15" max="25" value="20"></div><div><label class="f" for="p2b2">Last-column step: <span id="p2b2v"></span></label><input id="p2b2" type="range" min="15" max="25" value="19"></div><div><label class="f" for="p2b3">Last-column first label: <span id="p2b3v"></span></label><input id="p2b3" type="range" min="1" max="30" value="12"></div></div>
+<div class="out" id="p2bout"></div></div>
+
+<div class="card play" id="p3"><h3>Step 3 · Rows of different widths (sections D and C)</h3>
+<p>In D and C the rows are not all the same length, so a fixed SWEEP no longer works. Instead the offset of a level is the <b>running total of all earlier rows</b>:</p>
+<div class="eqn"><span class="lbl">H(D, row r, place k) = </span>836 + Σ<sub>j&lt;r</sub> (W<sub>D</sub>(j) + W<sub>C</sub>(j)) + k<br><span class="lbl">H(C, row r, place k) = </span>836 + Σ<sub>j&lt;r</sub> (W<sub>D</sub>(j) + W<sub>C</sub>(j)) + W<sub>D</sub>(r) + k</div>
+<div class="row"><div style="flex:0 0 auto"><button class="seg on" data-w="real" type="button">Real row widths</button><button class="seg" data-w="ideal" type="button">Idealised: 22 columns, 19 rows (older reference sheet)</button></div></div>
+<div class="scroll"><table class="t" id="p3tab"></table></div>
+<div class="row"><div><label class="f" for="p3sec">Section</label><select id="p3sec"><option>D</option><option>C</option></select></div><div><label class="f" for="p3r">Row r</label><input id="p3r" type="number" min="1" max="24" value="5"></div><div><label class="f" for="p3k">Place k</label><input id="p3k" type="number" min="1" value="3"></div></div>
+<div class="out" id="p3out"></div>
+<p class="note">Edit any width in the table: one extra lot in row 5 moves every later lot by one. The older reference sheet assumed every row had 22 lots and ended with lot C-417 at H001672. The real rows are uneven, which is why the decoder now ends C-417 at H001871.</p></div>
+
+<div class="card play" id="p4"><h3>Step 4 · Twins and trios inside a row (Section C)</h3>
+<p>Many rows also contain an <b>H-lot</b> next to a plain lot with the same number, and some rows start with an A, B, C trio. Each twin or trio lot pushes everything after it one place along.</p>
+<div class="eqn"><span class="lbl">k(plain lot n) = </span>(top − n) + 1 + 3·[trio row] + #{ twins t : t &gt; n, or t = n with its H-lot first }<br><span class="lbl">k(H-lot t)     = </span>k(plain t) − 1 (H-lot first)  or  k(plain t) + 1 (H-lot after)</div>
+<div class="row"><div><label class="f" for="p4row">C row (1 to 24)</label><input id="p4row" type="number" min="1" max="24" value="3"></div><div style="flex:2 1 280px"><label class="f" for="p4tw">Twins in this row (number + b for before, a for after)</label><input id="p4tw" type="text" value="51b,47b,43b"></div><div><label class="f" for="p4trio">Trio at the start</label><select id="p4trio"><option value="0">no</option><option value="1">yes (top, C, B, A)</option></select></div></div>
+<div id="p4out"></div></div>
+
+<div class="card play" id="p5"><h3>Step 5 · Straight-line sections (M, J, I, L)</h3>
+<p>Where a section was numbered straight through, H is the lot number plus a constant. Enter a lot to see it:</p>
+<div class="eqn"><span class="lbl">H(J, n) = </span>2950 + n   (n = 1 … 132)<br><span class="lbl">H(I, n) = </span>3082 + n   (n = 1 … 64)<br><span class="lbl">H(L, n) = </span>3146 + (n − 68)   (n = 69 … 107)<br><span class="lbl">H(M, n) = </span>n + 2556   (n = 82 … 279; the first 51 lots of M are listed)<br><span class="lbl">H(F, n) = </span>n + 2203 for the margin lots 199 … 210</div>
+<div class="row"><div><label class="f" for="p5sec">Section</label><select id="p5sec"><option>J</option><option>I</option><option>L</option><option>M</option><option>F</option></select></div><div><label class="f" for="p5n">Lot n</label><input id="p5n" type="number" value="57"></div></div><div class="out" id="p5out"></div></div>
+
+<div class="card play" id="p6"><h3>Step 6 · Graves</h3>
+<div class="row"><div><label class="f" for="p6h">Lot H-number</label><input id="p6h" type="number" min="1" max="3185" value="1"></div><div><label class="f" for="p6g">Grave g (1 to 9)</label><input id="p6g" type="number" min="1" max="9" value="3"></div><div><label class="f" for="p6s">Double-row suffix</label><select id="p6s"><option value="">none</option><option>A</option><option>B</option></select></div></div><div class="out" id="p6out"></div></div>
+</section>
+
+<section id="code"><h2>6 · The code that does it</h2>
+<p class="lede">These are the real functions. The first group is the project decoder (<code>s4/s4decoder1.py</code>); the second group is the arithmetic rebuild written for this page (<code>h-number-map/math/hformula.py</code>).</p>
+<div id="snips"></div>
+</section>
+
+<section id="giant"><h2>7 · The giant formula</h2>
+<p class="lede">Enter an old section letter and lot label. The formula below returns the H-number. It is a single JavaScript expression with every constant written into it, and it reproduces the decoder for all 3,199 labels.</p>
+<div class="card play"><div class="row"><div style="max-width:140px"><label class="f" for="gs">Section</label><select id="gs"></select></div><div style="max-width:260px"><label class="f" for="gl">Lot label</label><input id="gl" type="text" value="20H" autocomplete="off"></div><div style="flex:0 0 auto"><button id="gex" type="button">Try an example</button></div></div>
+<div class="out" id="gout"></div><div id="gtrace" style="margin-top:12px"></div></div>
+<div class="card play"><h3>Reverse: H-number to old label</h3><div class="row"><div style="max-width:200px"><label class="f" for="gh">H-number</label><input id="gh" type="number" min="1" max="3185" value="1690"></div></div><div class="out" id="grev"></div><p class="note">Reverse lookup runs the formula over every known label and keeps the matches; one H-number can have several names (a double-row lot answers to nA, nB and n).</p></div>
+
+<h3>The formula, typeset</h3>
+<div class="card wide"><div class="mathblock"><math display="block"><mrow><mi>H</mi><mo>(</mo><mi>S</mi><mo>,</mo><mi>ℓ</mi><mo>)</mo><mo>=</mo><msub><mi>O</mi><mrow><mi>p</mi><mo>(</mo><mi>S</mi><mo>)</mo></mrow></msub><mo>+</mo><munder><mo>∑</mo><mrow><mi>j</mi><mo>&lt;</mo><mi>r</mi></mrow></munder><mrow><mo>(</mo><msubsup><mi>W</mi><mi>j</mi><mn>1</mn></msubsup><mo>+</mo><msubsup><mi>W</mi><mi>j</mi><mn>2</mn></msubsup><mo>)</mo></mrow><mo>+</mo><msub><mi>σ</mi><mi>S</mi></msub><mo>⋅</mo><msubsup><mi>W</mi><mi>r</mi><mn>1</mn></msubsup><mo>+</mo><msub><mi>κ</mi><mi>S</mi></msub><mo>(</mo><mi>ℓ</mi><mo>)</mo></mrow></math></div>
+<p class="note">S the section, ℓ the label. <b>O<sub>p</sub></b> the lots in all earlier passes (0, 836, 1871, 2331, 2586, 2835). <b>W¹, W²</b> row widths of the first and second section of the pass. <b>σ<sub>S</sub></b> is 1 for the second section of a pass, else 0. <b>κ<sub>S</sub>(ℓ)</b> is the lot's place on its row. The table below gives κ for each section.</p></div>
+<div class="card wide scroll"><table class="t" id="kappa"></table></div>
+
+<h3>The one-line version</h3>
+<p class="note">This is the exact text the calculator above runs. Copy it into any JavaScript console as <code>H("B","20H")</code>.</p>
+<div style="position:relative"><button class="cp" id="cpg" type="button">Copy</button><pre class="code" id="giantsrc" style="white-space:pre-wrap;word-break:break-all;max-height:380px;overflow:auto"></pre></div>
+
+<h3>Change the constants and re-check</h3>
+<p>The declarations below are the formula's constants (row widths, twin lists, blocks, base offsets). Edit them, press Apply, and the page re-evaluates all 3,199 labels and reports how many H-numbers moved.</p>
+<div class="card play"><textarea id="consts" rows="12" spellcheck="false"></textarea><div class="row"><div style="flex:0 0 auto"><button class="pri" id="capply" type="button">Apply and re-check</button> <button id="creset" type="button">Reset</button></div><div class="out" id="cres" style="flex:1 1 300px"></div></div></div>
+</section>
+
+<section id="compare"><h2>8 · Old and new, side by side</h2>
+<div class="grid2"><figure><img src="__IMG_old_overview__" alt="Old overview"><figcaption><span class="pill legacy">Before</span> Whole map with the legacy annotations.</figcaption></figure><figure><img src="__IMG_new_overview__" alt="New overview"><figcaption><span class="pill h">Now</span> The rebuilt map: old annotations are not drawn, roads and lot outlines are kept.</figcaption></figure>
+<figure><img src="__IMG_old_dense__" alt="Old close-up"><figcaption><span class="pill legacy">Before</span> Old numbers and new numbers on top of each other.</figcaption></figure><figure><img src="__IMG_new_dense__" alt="New close-up"><figcaption><span class="pill h">Now</span> One H-number per confirmed lot, inside its outline.</figcaption></figure>
+<figure><img src="__IMG_old_curved__" alt="Old curved rows"><figcaption><span class="pill legacy">Before</span> A section title sits over lots and numbers cross edges.</figcaption></figure><figure><img src="__IMG_new_curved__" alt="New curved rows"><figcaption><span class="pill h">Now</span> Numbers turn with each lot and stay inside it.</figcaption></figure></div>
+<div class="card wide scroll"><table class="t" id="cmp"></table></div>
+</section>
+
+<section id="appendix"><h2>9 · Checks and errata</h2>
+<div id="verify"></div>
+<h3>What the formulas exposed in the decoder and its documents</h3>
+<div id="errata"></div>
+<h3>Reproduce it</h3>
+<pre class="code"><span class="c"># from the repository root</span>
+python3 h-number-map/math/extract_decoder.py   <span class="c"># dump every H-number and label the decoder knows</span>
+python3 h-number-map/math/verify.py            <span class="c"># compare hformula.py with the decoder: 3,199 of 3,199</span>
+python3 h-number-map/math/gen_giant.py         <span class="c"># compile the one-line expression</span>
+node h-number-map/math/test_giant.js           <span class="c"># check the one-line expression: 3,197 of 3,197 (two internal keys excluded)</span></pre>
+</section>
+</main></div>
+<div class="toast" id="toast"></div>
+<script>
+var X = /*__DATA__*/null;
+/*__SCRIPT__*/
+</script>
