@@ -44,7 +44,7 @@ input[type=range]{accent-color:var(--fg);width:110px}
 .pop.on{display:grid}
 .pop label{flex-direction:column;align-items:flex-start;gap:5px}.pop select,.pop input[type=range]{width:100%}
 .wbar{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(max(14px,env(safe-area-inset-bottom,0px)) + 66px);display:none;align-items:center;gap:12px;padding:10px 16px;background:var(--surf);border:1px solid var(--rule);border-radius:26px;box-shadow:0 10px 30px rgba(0,0,0,.25);width:min(720px,calc(100vw - 24px))}
-.wbar.on{display:flex}.walking .pop{bottom:calc(max(14px,env(safe-area-inset-bottom,0px)) + 140px)}.wbar input[type=range]{flex:1;width:auto;min-width:0}
+.embed .top,.embed .credit{display:none}.wbar.on{display:flex}.walking .pop{bottom:calc(max(14px,env(safe-area-inset-bottom,0px)) + 140px)}.wbar input[type=range]{flex:1;width:auto;min-width:0}
 .wbar .rd{font:700 15px var(--mono);min-width:76px}
 .wbar .sp{font:500 11px var(--mono);color:var(--g5);display:flex;gap:6px;align-items:center}.wbar .sp input{width:80px}
 @media (max-width:760px){.top .card:last-child{display:none}.bar{border-radius:20px;padding:8px 10px}.credit{display:none}.wbar{flex-wrap:wrap;border-radius:20px}.wbar .sp{display:none}}
@@ -57,6 +57,7 @@ input[type=range]{accent-color:var(--fg);width:110px}
 <div class="pop" id="pop">
 <label>Colour<select id="cmode"><option value="real">Realistic stone</option><option value="h">H-number (gold)</option><option value="sec">Old section</option><option value="old">Old label</option></select></label>
 <label>Pass<select id="pass"><option value="0">All six</option><option value="1">Pass 1 · B, A</option><option value="2">Pass 2 · D, C</option><option value="3">Pass 3 · F, E</option><option value="4">Pass 4 · margins, G, H</option><option value="5">Pass 5 · M</option><option value="6">Pass 6 · K, J, I, L</option></select></label>
+<label>Ground<select id="ground"><option value="photo">Aerial photo</option><option value="map">Lot map</option></select></label>
 <label>Season<select id="season"><option value="summer">Summer</option><option value="autumn">Autumn</option><option value="spring">Spring</option><option value="bare">Bare (early spring)</option></select></label>
 <label>Walk camera<select id="wstyle"><option value="glide">Glide above</option><option value="eye">Eye level</option></select></label>
 <label>Sun<input id="sun" type="range" min="0" max="100" value="38" aria-label="Sun position"></label>
@@ -119,7 +120,10 @@ tex.encoding=THREE.sRGBEncoding;tex.anisotropy=Math.min(8,renderer.capabilities.
 var nc=document.createElement('canvas');nc.width=nc.height=256;var nx=nc.getContext('2d'),id=nx.createImageData(256,256);for(var q=0;q<256*256;q++){var v=150+Math.floor((Math.random()+Math.random()+Math.random()-1.5)*60);id.data[q*4]=id.data[q*4+1]=id.data[q*4+2]=Math.max(60,Math.min(255,v));id.data[q*4+3]=255}nx.putImageData(id,0,0);
 var grain=new THREE.CanvasTexture(nc);grain.wrapS=grain.wrapT=THREE.RepeatWrapping;
 var gg=new THREE.PlaneGeometry(X1-X0,Y1-Y0);var uv=gg.attributes.uv,uv2=new Float32Array(uv.count*2);for(var u_=0;u_<uv.count;u_++){uv2[u_*2]=uv.getX(u_)*((X1-X0)/6);uv2[u_*2+1]=uv.getY(u_)*((Y1-Y0)/6)}gg.setAttribute('uv2',new THREE.BufferAttribute(uv2,2));
-var ground=new THREE.Mesh(gg,new THREE.MeshBasicMaterial({map:tex,aoMap:grain,aoMapIntensity:.5}));ground.rotation.x=-Math.PI/2;ground.position.set(CX,0,CZ);scene.add(ground);
+var groundMat=new THREE.MeshBasicMaterial({map:tex,aoMap:grain,aoMapIntensity:.5}),ground=new THREE.Mesh(gg,groundMat),photoTex=null,photoWant=!/[#&]photo=0/.test(location.hash);
+function setPhoto(on){photoWant=on;var use=on&&photoTex;groundMat.map=use?photoTex:tex;groundMat.needsUpdate=true;$('ground').value=use?'photo':'map';shadowDirty=true}
+(function(){var o=$('ground').querySelector('option[value=photo]');o.disabled=true;
+  new THREE.TextureLoader().load(D.photo||'ground.jpg',function(t){t.encoding=THREE.sRGBEncoding;t.anisotropy=Math.min(8,renderer.capabilities.getMaxAnisotropy());photoTex=t;o.disabled=false;setPhoto(photoWant)},undefined,function(){o.textContent='Aerial photo (not in this copy)'})})();ground.rotation.x=-Math.PI/2;ground.position.set(CX,0,CZ);scene.add(ground);
 var shade=new THREE.Mesh(new THREE.PlaneGeometry(X1-X0,Y1-Y0),new THREE.ShadowMaterial({opacity:.4}));shade.rotation.x=-Math.PI/2;shade.position.set(CX,.1,CZ);shade.receiveShadow=true;scene.add(shade);
 var apron=new THREE.Mesh(new THREE.PlaneGeometry(14000,14000),new THREE.MeshBasicMaterial({color:new THREE.Color(dark?'#2b3a2a':'#80905f')}));apron.rotation.x=-Math.PI/2;apron.position.set(CX,-1.5,CZ);scene.add(apron);
 /* ---- geometry toolkit ---- */
@@ -398,7 +402,7 @@ function show(i,pinned){var l=lots[i];if(!l)return;
   $('info').innerHTML='<span class="k">'+(pinned?'Selected lot':'Lot under the pointer')+'</span><b>'+pad(l.h)+'</b><div class="row2"><div><span class="k">Old address</span>'+l.s+'-'+l.l+'</div><div><span class="k">Pass</span>'+passOf(l.h)+'</div><div><span class="k">Graves</span>'+pad(l.h)+'1 to '+pad(l.h)+'9</div></div>'}
 var pmPend=false,pmE=null;renderer.domElement.addEventListener('pointermove',function(e){if(e.buttons||view==='walk')return;pmE=e;if(pmPend)return;pmPend=true;setTimeout(function(){pmPend=false;var i=pick(pmE);if(i!==hoverI){hoverI=i;if(i!=null&&sel==null)show(i,false)}},90)});
 renderer.domElement.addEventListener('pointerdown',function(e){down=[e.clientX,e.clientY]});
-renderer.domElement.addEventListener('pointerup',function(e){if(!down)return;var moved=Math.hypot(e.clientX-down[0],e.clientY-down[1])>5;down=null;if(moved||view==='walk')return;var i=pick(e);if(i!=null){sel=i;f=i;setCurrent(i,true)}else{sel=null;setCurrent(null)}});
+renderer.domElement.addEventListener('pointerup',function(e){if(!down)return;var moved=Math.hypot(e.clientX-down[0],e.clientY-down[1])>5;down=null;if(moved||view==='walk')return;var i=pick(e);if(i!=null){sel=i;f=i;setCurrent(i,true);if(window.parent!==window)window.parent.postMessage({cg:'lot',h:lots[i].h},'*')}else{sel=null;setCurrent(null)}});
 function goH(){var h=+$('gh').value;if(!(h>=1&&h<=3185))return;var best=null;lots.forEach(function(l){if(l.h===h)best=l});
   if(!best){$('info').innerHTML='<span class="k">No outline</span>'+pad(h)+' has no lot outline on the map (see the unresolved list in the project folder).';return}
   sel=best.i;f=best.i;setCurrent(best.i,true);if(view==='walk'){$('seek').value=f;return}
@@ -406,7 +410,7 @@ function goH(){var h=+$('gh').value;if(!(h>=1&&h<=3185))return;var best=null;lot
 $('gob').addEventListener('click',goH);$('gh').addEventListener('keydown',function(e){if(e.key==='Enter')goH()});
 [].forEach.call(document.querySelectorAll('[data-view]'),function(b){b.addEventListener('click',function(){setView(b.getAttribute('data-view'))})});
 document.addEventListener('keydown',function(e){if(e.key==='Escape'&&$('pop').classList.contains('on'))$('opt').click()});$('opt').addEventListener('click',function(){var on=!$('pop').classList.contains('on');$('pop').classList.toggle('on',on);$('opt').classList.toggle('on',on);$('opt').setAttribute('aria-expanded',on)});
-$('sun').addEventListener('input',function(){shadowDirty=true});$('cmode').addEventListener('change',recolor);$('season').addEventListener('change',seasonTrees);
+$('sun').addEventListener('input',function(){shadowDirty=true});$('ground').addEventListener('change',function(){setPhoto(this.value==='photo')});$('cmode').addEventListener('change',recolor);$('season').addEventListener('change',seasonTrees);
 $('pass').addEventListener('change',function(){recolor();if(view==='walk'){passBounds();f=lo;$('seek').value=f;setTrail()}});
 $('play').addEventListener('click',function(){playing=!playing;if(playing&&f>=hi-.5){f=lo}$('play').textContent=playing?'Pause':'Resume'});
 $('seek').addEventListener('input',function(){f=+$('seek').value;setCurrent(Math.round(f),true);setTrail()});
@@ -441,6 +445,8 @@ function loop(now){requestAnimationFrame(loop);var dt=Math.min(.1,(now-last)/100
   if(shadowDirty){renderer.shadowMap.needsUpdate=true;shadowDirty=false}renderer.render(scene,camera);if((frame++%5)===0)updateLabels();updateTag()}
 $('credit').textContent=D.pub?'Ground drawn from the lot map. Trees, buildings and stone shapes are approximate.':'Aerial imagery © Google Earth, used for this internal project. Tree positions are approximate.';
 recolor();seasonTrees();setView('over');camera.position.set(CX,700,CZ+700);controls.target.set(CX,0,CZ+20);requestAnimationFrame(loop);
+if(/[#&]embed/.test(location.hash))document.body.classList.add('embed');
+window.addEventListener('message',function(e){var d=e.data||{};if(d.cg==='photo')setPhoto(!!d.on);else if(d.cg==='goto'&&d.h){$('gh').value=d.h;goH()}});
 (function(){var m=/[#&?]h=(\d+)/.exec(location.hash),w=/[#&?]walk(?:=(\d))?/.exec(location.hash);
   if(m){$('gh').value=m[1];setTimeout(goH,300)}
   else if(w){if(w[1]){$('pass').value=w[1];recolor()}setTimeout(function(){setView('walk')},300)}})();

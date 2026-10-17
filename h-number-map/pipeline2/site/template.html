@@ -98,7 +98,7 @@ textarea.field{height:auto;min-height:64px;padding:9px 12px;resize:vertical}
 #zoomctl button{display:flex;align-items:center;justify-content:center;gap:7px;min-width:48px;height:46px;border:0;border-bottom:1px solid var(--line);background:none;color:var(--navy);font-weight:600;font-size:13px;padding:0 12px}
 #zoomctl button:last-child{border-bottom:0} #zoomctl button:hover:not(:disabled){background:var(--surface-2)} #zoomctl button:disabled{opacity:.4;cursor:default}
 #zoomctl svg{width:17px;height:17px}
-#layers{left:12px;top:12px}
+#layers{left:12px;top:12px;z-index:9}.lgrp{font:700 11px var(--sans);letter-spacing:.06em;text-transform:uppercase;color:var(--faint);padding:8px 8px 2px}
 .layers-btn{height:38px;display:inline-flex;align-items:center;gap:7px;padding:0 12px;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);font-weight:600;font-size:13px;color:var(--navy)}
 .layers-btn svg{width:15px;height:15px}
 #layers-menu{margin-top:6px;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);padding:6px;min-width:230px}
@@ -180,7 +180,7 @@ table.t td{padding:5px 6px;border-bottom:1px solid var(--line);overflow-wrap:any
   <span id="capnote"></span>
   <div class="hbtns">
     <button class="tbtn on" id="b-browse" type="button" aria-pressed="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h10"/></svg><span class="lbl">Browse map</span></button>
-    <a class="tbtn" id="b-3d" href="3d.html" style="text-decoration:none"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9L12 3zM12 12l8-4.5M12 12v9M12 12L4 7.5"/></svg><span class="lbl">3D view</span></a>
+    <button class="tbtn" id="b-3d" type="button" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9L12 3zM12 12l8-4.5M12 12v9M12 12L4 7.5"/></svg><span class="lbl">3D view</span></button>
     <button class="tbtn" id="b-export" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m0 0l-4-4m4 4l4-4M5 21h14"/></svg><span class="lbl">Export</span></button>
     <button class="tbtn" id="b-import" type="button" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21V9m0 0l-4 4m4-4l4 4M5 3h14"/></svg><span class="lbl">Import records</span></button>
   </div>
@@ -195,6 +195,7 @@ table.t td{padding:5px 6px;border-bottom:1px solid var(--line);overflow-wrap:any
   </aside>
   <div id="mapwrap">
     <svg id="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" aria-label="Map of lots with H-numbers">
+      <image id="photo" href="ground.jpg" x="220" y="60" width="1580" height="980" preserveAspectRatio="none" hidden=""/>
       <g id="base">__BASE__</g>
       <g id="ann" hidden=""></g>
       <g id="hintg"><polygon id="hint" points="" hidden=""/></g>
@@ -206,10 +207,16 @@ table.t td{padding:5px 6px;border-bottom:1px solid var(--line);overflow-wrap:any
     <div class="ctl" id="layers">
       <button class="layers-btn" id="layers-btn" type="button" aria-expanded="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3l9 5-9 5-9-5 9-5zM3 13l9 5 9-5"/></svg>Layers</button>
       <div id="layers-menu" hidden>
+        <div class="lgrp">View</div>
+        <label class="lrow"><input type="radio" name="ly-view" id="ly-2d" checked><span>2D lot map<small>Every lot outline with its H-number.</small></span></label>
+        <label class="lrow"><input type="radio" name="ly-view" id="ly-3d"><span>3D model<small>Headstones, trees and buildings. Click a stone to open its lot.</small></span></label>
+        <div class="lgrp">Layers</div>
+        <label class="lrow"><input type="checkbox" id="ly-photo" disabled><span>Ground photo<small id="ly-photo-s">Checking for the aerial photo…</small></span></label>
         <label class="lrow"><input type="checkbox" id="ly-review" checked><span>Lots to review<small>Outlined lots that could not be tied to one H-number.</small></span></label>
         <label class="lrow"><input type="checkbox" id="ly-ann"><span>Original drawing annotations<small>Road names, building names and the mausoleum legend from the source drawing.</small></span></label>
       </div>
     </div>
+    <iframe id="v3d" title="3D model of Cedar Grove" hidden style="position:absolute;inset:0;width:100%;height:100%;border:0;background:var(--map);z-index:1"></iframe>
     <div class="ctl" id="zoomhint" hidden>Zoom in to read H-numbers</div>
     <div class="ctl" id="legend"><span>Numbers are H-numbers (H and leading zeros left off)</span><span><i class="rvk"></i>Needs review</span><span id="lg-rec" hidden><i class="rec"></i>Has grave records</span></div>
     <div class="ctl" id="zoomctl">
@@ -335,7 +342,7 @@ function renderPanel(){var p=$('panel');p.hidden=false;measure();if(isMobile())d
      +'<dl class="kv"><dt>Legacy reference</dt><dd>Section '+esc(r[2])+' &middot; Lot '+esc(r[3])+'</dd><dt>Map position</dt><dd>'+(r[12]?'Label position only (outline not drawn in the source)':'Outline drawn in the source')+'</dd></dl>'
      +'<p class="note" style="margin:0 0 4px">'+evText(r[11])+'</p>'
      +'<div id="rec-box"></div>'
-     +'<div class="btns"><button class="btn" id="p-copy" type="button">Copy H-number</button><button class="btn" id="p-list" type="button">Add to list</button><a class="btn" id="p-3d" href="3d.html#h='+(parseInt(String(r[1]).replace(/\D/g,''),10)||'')+'" style="text-decoration:none;display:inline-flex;align-items:center">View in 3D</a></div></div>'}
+     +'<div class="btns"><button class="btn" id="p-copy" type="button">Copy H-number</button><button class="btn" id="p-list" type="button">Add to list</button><button class="btn" id="p-3d" type="button">View in 3D</button></div></div>'}
   else if(sel.k==='review'){var v=REVIEW[sel.i];
     h='<div class="p-head"><div><div class="p-h" style="font-size:22px">Needs review</div><div style="margin-top:8px"><span class="chip rv">Not shown as an H-number</span></div></div><button class="p-x" id="p-x" aria-label="Close details">&#10005;</button></div><div class="p-body">'
      +'<div class="box rvbox"><h3>Why</h3><ul style="margin:0;padding-left:18px">'+v.r.map(function(i){return '<li>'+esc(REASONS[i])+'</li>'}).join('')+'</ul></div>'
@@ -351,7 +358,8 @@ function renderPanel(){var p=$('panel');p.hidden=false;measure();if(isMobile())d
   p.innerHTML=h;sheetPx();$('p-x').onclick=function(){clearSel()};
   var cp=$('p-copy');if(cp)cp.onclick=function(){copy(sel.k==='lot'?LOTS[sel.i][1]:UNPL[sel.i].h,'H-number copied')};
   var pl=$('p-list');if(pl)pl.onclick=function(){addToList(sel.i)};
-  if(sel.k!=='review')renderRec()}
+  var p3=$('p-3d');if(p3)p3.onclick=function(){go3(true)};
+  if(sel.k!=='review')renderRec();if(in3d&&sel.k==='lot'&&v3loaded&&num3())post3({cg:'goto',h:num3()})}
 
 /* ---------- records ---------- */
 function curH(){return sel.k==='lot'?LOTS[sel.i][1]:UNPL[sel.i].h}
@@ -486,6 +494,20 @@ function markList(){}
 
 /* ---------- layers ---------- */
 $('layers-btn').onclick=function(){var m=$('layers-menu');m.hidden=!m.hidden;this.setAttribute('aria-expanded',String(!m.hidden))};
+var in3d=false,v3loaded=false;
+function num3(){return sel&&sel.k==='lot'?(parseInt(String(LOTS[sel.i][1]).replace(/\D/g,''),10)||0):0}
+function post3(m){var f=$('v3d');if(v3loaded&&f.contentWindow)f.contentWindow.postMessage(m,'*')}
+function setPhoto(on){vis($('photo'),on);post3({cg:'photo',on:on})}
+function setView3(on){in3d=on;var f=$('v3d');
+  if(on&&!f.src){f.src='3d.html#embed'+(num3()?'&h='+num3():'')+($('ly-photo').checked?'&photo=1':'&photo=0');f.onload=function(){v3loaded=true}}
+  f.hidden=!on;$('svg').style.visibility=on?'hidden':'visible';['legend','zoomctl','zoomhint'].forEach(function(id){$(id).style.display=on?'none':''});
+  if(on&&v3loaded&&num3())post3({cg:'goto',h:num3()});if(!on){measure();render()}}
+(function(){var im=new Image();im.onload=function(){$('ly-photo').disabled=false;$('ly-photo').checked=true;setPhoto(true);$('ly-photo-s').textContent='Google Earth view under the lots, in the 2D map and the 3D model.'};im.onerror=function(){$('ly-photo-s').textContent='Not included in this copy of the page.'};im.src='ground.jpg'})();
+$('ly-photo').onchange=function(){setPhoto(this.checked)};
+function go3(on){$('ly-3d').checked=on;$('ly-2d').checked=!on;$('b-3d').classList.toggle('on',on);$('b-3d').setAttribute('aria-pressed',String(on));setView3(on)}
+$('b-3d').onclick=function(){go3(!in3d)};
+$('ly-2d').onchange=function(){if(this.checked)go3(false)};$('ly-3d').onchange=function(){if(this.checked)go3(true)};
+window.addEventListener('message',function(e){var d=e.data||{};if(d.cg==='lot'){for(var i=0;i<LOTS.length;i++)if((parseInt(String(LOTS[i][1]).replace(/\D/g,''),10)||0)===d.h){if(!(sel&&sel.k==='lot'&&sel.i===i)){pushHist();applySel('lot',i,true)}break}}});
 $('ly-review').onchange=function(){wrap.classList.toggle('no-review',!this.checked)};
 function buildAnn(){var g=$('ann');g.innerHTML=ANN.map(function(a){return '<text transform="translate('+a[1]+' '+a[2]+') rotate('+a[4]+')" font-size="'+Math.max(2.4,a[3]*.9)+'">'+esc(a[0])+'</text>'}).join('')}
 buildAnn();$('ly-ann').onchange=function(){vis($('ann'),this.checked)};

@@ -10,7 +10,10 @@ FONTS = '@font-face{font-family:"Space Grotesk";font-style:normal;font-weight:30
 for w in (400, 500, 600):
     FONTS += '@font-face{font-family:"IBM Plex Mono";font-style:normal;font-weight:%d;font-display:swap;src:url(data:font/woff2;base64,%s) format("woff2")}' % (w, b64('fonts/IBMPlexMono-%d.woff2' % w))
 D = json.load(open('three/data3d.json'))
-if public:
+photo = D['tex']
+if not public:
+    D['photo'] = photo; open('three/ground.jpg', 'wb').write(base64.b64decode(photo.split(',')[1]))   # also published beside the pages that offer the aerial layer
+if True:
     # ground without imagery: lawn, with the roads and paths read from the gaps between blocks of lots
     x0, y0, x1, y1 = D['ext']; S = 1.4; W, H = int((x1 - x0) * S), int((y1 - y0) * S)
     P = lambda x, y: (int(round((x - x0) * S)), int(round((y - y0) * S)))
@@ -29,7 +32,8 @@ if public:
     for b in D['bld']:
         cv2.fillPoly(img, [np.int32([P(a / 10, c / 10) for a, c in np.array(b['p']).reshape(-1, 2)])], (150, 154, 156))
     ok, buf = cv2.imencode('.jpg', np.clip(img, 0, 255).astype(np.uint8), [cv2.IMWRITE_JPEG_QUALITY, 82])
-    D['tex'] = 'data:image/jpeg;base64,' + base64.b64encode(buf.tobytes()).decode(); D['pub'] = 1
+    D['tex'] = 'data:image/jpeg;base64,' + base64.b64encode(buf.tobytes()).decode()
+    if public: D['pub'] = 1
 html = open('cemetery3d_page2.html').read().replace('/*__FONTS__*/', FONTS).replace('/*__DATA__*/null', json.dumps(D, separators=(',', ':')).replace('</', '<\\/'))
 out = '../site/3d.html' if public else 'Cedar_Grove_3D.html'
 if public: html = '<!doctype html>\n' + html
