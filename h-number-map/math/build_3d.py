@@ -32,5 +32,6 @@ if public:
     D['tex'] = 'data:image/jpeg;base64,' + base64.b64encode(buf.tobytes()).decode(); D['pub'] = 1
 html = open('cemetery3d_page2.html').read().replace('/*__FONTS__*/', FONTS).replace('/*__DATA__*/null', json.dumps(D, separators=(',', ':')).replace('</', '<\\/'))
 out = '../site/3d.html' if public else 'Cedar_Grove_3D.html'
+if public: html = '<!doctype html>\n' + html
 open(out, 'w').write(html)
 print(out, len(html) // 1024, 'KB')
