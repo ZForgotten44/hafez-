@@ -51,24 +51,24 @@ var LOTS=X.maplots.filter(function(l){return l[4]}).map(function(l){return {s:l[
   ids.forEach(function(id,i){
     var sec=els[i],hs=[].slice.call(sec.querySelectorAll(':scope > h3, :scope > h4, :scope .demo > header > h3'));
     var n=0,li=document.createElement('li');li.className='sec'+(i===0?' x':'');li.setAttribute('data-id',id);
-    var html='<a href="#'+id+'"><i>'+String(i+1).padStart(2,'0')+'</i><span>'+titles[id]+'</span><b aria-hidden="true">'+(hs.length?'▾':'')+'</b></a>';
+    var html='<a href="#'+id+'"><i>'+String(i+1).padStart(2,'0')+'</i><span>'+titles[id]+'</span><b aria-hidden="true">'+(hs.length?'+':'')+'</b></a>';
     if(hs.length){html+='<ul>';hs.forEach(function(h){if(!h.id)h.id=id+'-'+(++n);var t=h.textContent.replace(/\s+/g,' ').trim().replace(/^[ABC] /,'');html+='<li><a href="#'+h.id+'" data-h="'+h.id+'">'+esc(t.length>34?t.slice(0,32)+'…':t)+'</a></li>'});html+='</ul>'}
     li.innerHTML=html;list.appendChild(li);subs[id]=hs;
     li.querySelector('a').addEventListener('click',function(e){if(root.getAttribute('data-rail')==='open'&&hs.length){li.classList.toggle('x');li.setAttribute('data-u','1')}if(window.innerWidth<=980)setRail(false)});
     [].forEach.call(li.querySelectorAll('ul a'),function(a){a.addEventListener('click',function(){if(window.innerWidth<=980)setRail(false)})});
   });
-  function setRail(open){if(open)root.setAttribute('data-rail','open');else root.removeAttribute('data-rail');$('bmenu').setAttribute('aria-expanded',open);$('rtoggle').textContent=open?'«':'»';try{if(window.innerWidth>980)localStorage.setItem('cg-rail',open?'1':'0')}catch(e){}}
-  on($('rtoggle'),'click',function(){setRail(root.getAttribute('data-rail')!=='open')});
+  function setRail(open){if(open)root.setAttribute('data-rail','open');else root.removeAttribute('data-rail');$('bmenu').setAttribute('aria-expanded',open);try{if(window.innerWidth>980)localStorage.setItem('cg-rail',open?'1':'0')}catch(e){}}
+  
   on($('bmenu'),'click',function(){setRail(root.getAttribute('data-rail')!=='open')});
   try{if(window.innerWidth>980&&localStorage.getItem('cg-rail')==='1')setRail(true)}catch(e){}
   document.addEventListener('keydown',function(e){if(e.key==='Escape'&&window.innerWidth<=980&&root.getAttribute('data-rail')==='open')setRail(false)});
 
   function cur(){var y=window.scrollY+110,c=-1;els.forEach(function(s,i){if(s.offsetTop<=y)c=i});return c}
   function go(i){if(i<0){window.scrollTo({top:0});return}if(i>=els.length)return;els[i].scrollIntoView()}
-  on($('bprev'),'click',function(){go(cur()-1)});on($('bnext'),'click',function(){go(cur()+1)});
-  document.addEventListener('keydown',function(e){if(e.target&&/INPUT|TEXTAREA|SELECT/.test(e.target.tagName))return;if(e.key==='ArrowRight'&&e.altKey)go(cur()+1);if(e.key==='ArrowLeft'&&e.altKey)go(cur()-1)});
+  
+  
   var secs=[].slice.call(list.children);
-  function mark(){var c=cur();secs.forEach(function(li,i){li.classList.toggle('on',i===c);if(i===c)li.classList.add('x');else if(!li.getAttribute('data-u'))li.classList.remove('x')});$('bpos').textContent=String(c+1).padStart(2,'0')+' / 09';
+  function mark(){var c=cur();secs.forEach(function(li,i){li.classList.toggle('on',i===c);if(i===c)li.classList.add('x');else if(!li.getAttribute('data-u'))li.classList.remove('x')});
     if(c>=0){var y=window.scrollY+120,best=null;subs[ids[c]].forEach(function(h){if(h.getBoundingClientRect().top+window.scrollY<=y)best=h.id});[].forEach.call(secs[c].querySelectorAll('ul a'),function(a){a.classList.toggle('on',a.getAttribute('data-h')===best)})}}
   window.addEventListener('scroll',mark,{passive:true});mark();
 })();
@@ -113,7 +113,7 @@ function chipBtn(S,L,kind,target,group){var b=document.createElement('button');b
   picks.forEach(function(p){if(FW[p[0]+'|'+p[1]]!=null){var b=chipBtn(p[0],p[1],kindOf(p[1]),$('sampledetail'),sg);b.textContent=p[0]+'-'+p[1];sg.appendChild(b)}});
   var an=$('anatomy');
   SEC.forEach(function(s){var rows=X.chips[s];if(!rows)return;var d=document.createElement('div');d.className='anat';d.innerHTML='<h5>Section '+s+'<small>first two rows, in walking order</small></h5>';
-    var w=document.createElement('div');w.className='rowsc';w.innerHTML='<div class="sbtn"><button type="button" aria-label="Scroll left">◂</button><button type="button" aria-label="Scroll right">▸</button></div>';var sc=document.createElement('div');sc.className='sc';
+    var w=document.createElement('div');w.className='rowsc';w.innerHTML='<div class="sbtn"><button type="button" aria-label="Scroll left">←</button><button type="button" aria-label="Scroll right">→</button></div>';var sc=document.createElement('div');sc.className='sc';
     rows.forEach(function(row,ri){var g=document.createElement('div');g.className='line';var l=document.createElement('span');l.className='rl';l.textContent='row '+(ri+1);g.appendChild(l);
       row.forEach(function(cc){if(cc[0]==null){var x=document.createElement('span');x.className='chip gap static';x.textContent='gap';g.appendChild(x);return}g.appendChild(chipBtn(s,cc[0],cc[1],$('anatdetail'),an))});sc.appendChild(g)});
     w.appendChild(sc);var bs=w.querySelectorAll('.sbtn button');on(bs[0],'click',function(){sc.scrollBy({left:-320,behavior:'smooth'})});on(bs[1],'click',function(){sc.scrollBy({left:320,behavior:'smooth'})});
@@ -145,14 +145,14 @@ var emphStats;
 
 /* whole-cemetery map */
 (function(){
-  var bb=X.bbox,svg=$('mapsvg'),NS='http://www.w3.org/2000/svg',mode='n',polys=[];
+  var bb=X.bbox,svg=$('mapsvg'),NS='http://www.w3.org/2000/svg',mode='n',polys=[],labs=[];
   svg.setAttribute('viewBox',(bb[0]-6)+' '+(bb[1]-6)+' '+(bb[2]-bb[0]+12)+' '+(bb[3]-bb[1]+12));
   function color(l){if(mode==='s')return scol(l[0]);if(mode==='h')return 'hsl('+Math.round(240-240*(l[3]-1)/3184)+',65%,52%)';var n=parseInt(l[1].replace(/[^0-9]/g,''),10)||0;return 'hsl('+((n*47)%360)+',60%,'+(40+(n*13)%25)+'%)'}
   X.maplots.forEach(function(l){if(!l[4])return;var p=document.createElementNS(NS,'polygon');p.setAttribute('points',l[4].map(function(q){return q.join(',')}).join(' '));p._l=l;svg.appendChild(p);polys.push(p)});
   var acc={};X.maplots.forEach(function(l){if(l[5]!=null){(acc[l[0]]=acc[l[0]]||[]).push([l[5],l[6]])}});
-  Object.keys(acc).forEach(function(s){var a=acc[s].sort(function(x,y){return x[0]-y[0]}),b=acc[s].slice().sort(function(x,y){return x[1]-y[1]});var t=document.createElementNS(NS,'text');t.setAttribute('x',a[a.length>>1][0]);t.setAttribute('y',b[b.length>>1][1]);t.setAttribute('text-anchor','middle');t.setAttribute('style','font:700 26px var(--sans);fill:var(--fg);stroke:var(--bg);stroke-width:5px;paint-order:stroke;pointer-events:none');t.textContent=s;svg.appendChild(t)});
-  function paint(){polys.forEach(function(p){p.setAttribute('fill',color(p._l))});
-    $('mapnote').textContent={n:'Colored by the number written on the lot. Neighbouring lots get unrelated colors because every section restarts and skips.',s:'Colored by old section letter. Section letters are drawn on the map.',h:'Colored by H-number: one smooth sweep from blue (H000001) to red (H003185).'}[mode];
+  Object.keys(acc).forEach(function(s){var a=acc[s].sort(function(x,y){return x[0]-y[0]}),b=acc[s].slice().sort(function(x,y){return x[1]-y[1]});var t=document.createElementNS(NS,'text');t.setAttribute('x',a[a.length>>1][0]);t.setAttribute('y',b[b.length>>1][1]);t.setAttribute('text-anchor','middle');t.setAttribute('style','font:700 26px var(--sans);fill:var(--fg);stroke:var(--bg);stroke-width:5px;paint-order:stroke;pointer-events:none');t.textContent=s;svg.appendChild(t);labs.push(t)});
+  function paint(){polys.forEach(function(p){p.setAttribute('fill',color(p._l))});labs.forEach(function(t){t.style.display=mode==='h'?'none':''});
+    $('mapnote').textContent={n:'Colored by the number written on the lot. Neighbouring lots get unrelated colors because every section restarts and skips.',s:'Colored by old section letter. Section letters are drawn on the map.',h:'Colored by H-number: one smooth sweep from blue (H000001) to red (H003185). There are no sections here, only one numbered path.'}[mode];
     $('maplegend').innerHTML=mode==='s'?SEC.map(function(s){return '<span><i style="background:'+scol(s)+'"></i>'+s+'</span>'}).join(''):mode==='h'?'<span><i style="background:hsl(240,65%,52%)"></i>H000001</span><span><i style="background:hsl(120,65%,52%)"></i>middle</span><span><i style="background:hsl(0,65%,52%)"></i>H003185</span>':'<span>Each color is a label number. Colors repeat because label numbers repeat in every section.</span>'}
   [].forEach.call(document.querySelectorAll('button.seg[data-mode]'),function(b){on(b,'click',function(){mode=b.getAttribute('data-mode');[].forEach.call(document.querySelectorAll('button.seg[data-mode]'),function(x){x.classList.toggle('on',x===b)});paint()})});
   var tip=$('maptip'),box=$('mapbox');
@@ -160,18 +160,16 @@ var emphStats;
   on(svg,'mouseleave',function(){tip.style.display='none'});paint();
 })();
 
-/* ---------------- walk the path: map from above, 3D walk, chart ---------------- */
+/* ---------------- walk the path, on the map from above ---------------- */
 (function(){
-  var NS='http://www.w3.org/2000/svg',view='map',cmode='n',playing=false,posF=0,seq=[],heading=0,raf=0,lastT=0,speed=6;
+  var NS='http://www.w3.org/2000/svg',cmode='n',playing=false,posF=0,seq=[],raf=0,lastT=0,speed=6;
   var ctl=$('walkctl');
-  ctl.innerHTML='<div><label class="f">View</label><button class="btn seg on" data-v="map" type="button">Map from above</button><button class="btn seg" data-v="walk" type="button">Walk in 3D</button><button class="btn seg" data-v="chart" type="button">Chart</button></div>'
-   +'<div><label class="f">Color lots by</label><button class="btn seg on" data-c="n" type="button">Old label number</button><button class="btn seg" data-c="h" type="button">H-number</button></div>'
+  ctl.innerHTML='<div><label class="f">Color lots by</label><button class="btn seg on" data-c="n" type="button">Old label number</button><button class="btn seg" data-c="h" type="button">H-number</button></div>'
    +'<div><label class="f" for="wspeed">Walking speed</label><select id="wspeed" style="width:auto"><option value="3">Slow (3 lots/s)</option><option value="6" selected>Normal (6 lots/s)</option><option value="14">Fast (14 lots/s)</option></select></div>'
-   +'<div><button class="btn fill play" id="wplay" type="button">Walk</button> <button class="btn" id="wreset" type="button">Reset</button></div>';
+   +'<div><button class="btn fill" id="wplay" type="button">Walk the path</button> <button class="btn" id="wreset" type="button">Reset</button></div>';
   var svg=$('wmap'),polys=[],gW=document.createElementNS(NS,'g'),gT=document.createElementNS(NS,'g');
   var base=document.createElementNS(NS,'g');svg.appendChild(base);svg.appendChild(gW);svg.appendChild(gT);
   LOTS.forEach(function(l){var p=document.createElementNS(NS,'polygon');p.setAttribute('points',l.poly.map(function(q){return q.join(',')}).join(' '));p._l=l;base.appendChild(p);polys.push(p)});
-  var cv=$('wcv'),cx=cv.getContext('2d');
   function num(l){return parseInt(l.replace(/[^0-9]/g,''),10)||0}
   function lotColor(l,st,wd,visited){if(cmode==='h')return 'hsl('+Math.round(240-240*(l.h-st)/Math.max(1,wd-1))+',68%,'+(visited?62:50)+'%)';var n=num(l.l);return 'hsl('+((n*47)%360)+',62%,'+(visited?(isDark()?42:66):(40+(n*13)%25))+'%)'}
   function rebuild(){
@@ -181,81 +179,58 @@ var emphStats;
     svg.style.cssText='display:block;width:100%;height:min(66vh,620px)';var asp=(svg.clientWidth||1000)/(svg.clientHeight||520),w=Math.max(x1-x0+30,90*asp),h=Math.max(y1-y0+30,90),mx=(x0+x1)/2,my=(y0+y1)/2;if(w/h<asp)w=h*asp;else h=w/asp;
     svg.setAttribute('viewBox',(mx-w/2)+' '+(my-h/2)+' '+w+' '+h);
     var inW={};seq.forEach(function(l,i){inW[l.h]=i});
-    polys.forEach(function(p){var l=p._l,i=inW[l.h];p._i=i;p.setAttribute('fill',i==null?css('--g3'):lotColor(l,st,wd,false));p.setAttribute('opacity',i==null?'.55':'1')});
+    polys.forEach(function(p){var l=p._l,i=inW[l.h];p._i=i;p.setAttribute('fill',i==null?css('--g3'):lotColor(l,st,wd,false));p.setAttribute('opacity',i==null?'.5':'1')});
     gW.innerHTML='';
     if(seq.length&&seq.length<=160){var fs=Math.max(2.2,Math.min(5,w/60));seq.forEach(function(l){var t=document.createElementNS(NS,'text');t.setAttribute('x',l.cx);t.setAttribute('y',l.cy);t.setAttribute('text-anchor','middle');t.setAttribute('style','font:600 '+fs+'px var(--mono);fill:#0b0b0a;pointer-events:none;paint-order:stroke;stroke:#fff;stroke-width:'+fs*0.28+'px');t.innerHTML='<tspan x="'+l.cx+'" dy="-0.15em">'+esc(l.l)+'</tspan><tspan x="'+l.cx+'" dy="1.05em" style="font-size:'+fs*0.78+'px;font-weight:500">'+l.h+'</tspan>';gW.appendChild(t)})}
     update();
   }
   function cpos(f){var i=Math.floor(f),a=seq[i],b=seq[Math.min(i+1,seq.length-1)];if(!a)return null;var t=f-i;return {x:a.cx+(b.cx-a.cx)*t,y:a.cy+(b.cy-a.cy)*t}}
-  function targetHeading(f){var i=Math.floor(f),a=seq[i];if(!a)return heading;var sx=0,sy=0,n=0;for(var j=i+1;j<=i+6&&j<seq.length;j++){sx+=seq[j].cx-a.cx;sy+=seq[j].cy-a.cy;n++}if(!n)return heading;sx/=n;sy/=n;if(Math.hypot(sx,sy)<1)return heading;return Math.atan2(sy,sx)}
   function update(){
     var st=+$('sawstart').value,wd=+$('sawwidth').value,i=Math.floor(posF),cur=seq[i];$('walkposv').textContent=(seq.length?Math.round(posF)+1:0)+' of '+seq.length;
-    // trail + walker on the map
     gT.innerHTML='';var cp=cpos(posF);
-    if(cp&&view==='map'){var pts=[];for(var k=0;k<=i;k++)pts.push(seq[k].cx+','+seq[k].cy);pts.push(cp.x+','+cp.y);var pl=document.createElementNS(NS,'polyline');pl.setAttribute('points',pts.join(' '));pl.setAttribute('fill','none');pl.setAttribute('stroke','#0b0b0a');pl.setAttribute('stroke-width','1.6');pl.setAttribute('stroke-opacity','.8');pl.setAttribute('stroke-linejoin','round');gT.appendChild(pl);
-      var c=document.createElementNS(NS,'circle');c.setAttribute('cx',cp.x);c.setAttribute('cy',cp.y);c.setAttribute('r',5);c.setAttribute('fill','#c5a448');c.setAttribute('stroke','#0b0b0a');c.setAttribute('stroke-width','1.6');gT.appendChild(c)}
+    if(cp){var vb=svg.getAttribute('viewBox').split(' '),u=+vb[2]/560,pts=[];for(var k=0;k<=i;k++)pts.push(seq[k].cx+','+seq[k].cy);pts.push(cp.x+','+cp.y);var pl=document.createElementNS(NS,'polyline');pl.setAttribute('points',pts.join(' '));pl.setAttribute('fill','none');pl.setAttribute('stroke','#0b0b0a');pl.setAttribute('stroke-width',u*.9);pl.setAttribute('stroke-opacity','.75');pl.setAttribute('stroke-linejoin','round');pl.setAttribute('stroke-linecap','round');gT.appendChild(pl);
+      var c=document.createElementNS(NS,'circle');c.setAttribute('cx',cp.x);c.setAttribute('cy',cp.y);c.setAttribute('r',u*3.2);c.setAttribute('fill','#c5a448');c.setAttribute('stroke','#0b0b0a');c.setAttribute('stroke-width',u*.9);gT.appendChild(c)}
     polys.forEach(function(p){if(p._i!=null)p.setAttribute('fill',lotColor(p._l,st,wd,p._i<i))});
-    // readout
     var o=$('wnow');
     if(!cur){o.innerHTML='No lots with outlines in this range. Move the start.';$('wstrip').innerHTML=''}
-    else{o.innerHTML='You are at <b>'+cur.s+'-'+esc(cur.l)+'</b>, which is <b>'+pad(cur.h)+'</b>. Lot '+(i+1)+' of '+seq.length+' in this walk.';
+    else{o.innerHTML='You are at <b>'+cur.s+'-'+esc(cur.l)+'</b>, which is <b>'+pad(cur.h)+'</b>. Lot '+(i+1)+' of '+seq.length+' in this walk. The old label on the lot jumps around. The H-number goes up by one each step.';
       var s='';for(var j=i;j<Math.min(seq.length,i+9);j++)s+='<div class="c'+(j===i?' cur':'')+'">'+seq[j].s+'-'+esc(seq[j].l)+'<small>'+pad(seq[j].h)+'</small></div>';$('wstrip').innerHTML=s}
-    if(view==='walk')draw3d();if(view==='chart')drawChart();
   }
-  function draw3d(){
-    var Wd=cv.width,Hh=cv.height,f=Wd*0.8,ox=Wd/2,oy=Hh*0.4,camH=34,pit=0.7,cp=Math.cos(pit),sp=Math.sin(pit);
-    var st=+$('sawstart').value,wd=+$('sawwidth').value,c=cpos(posF);cx.clearRect(0,0,Wd,Hh);
-    cx.fillStyle=css('--surf');cx.fillRect(0,0,Wd,Hh);
-    if(!c)return;
-    var th=targetHeading(posF),dif=Math.atan2(Math.sin(th-heading),Math.cos(th-heading));heading+=playing?dif*0.14:dif;
-    var sn=Math.sin(heading),cs=Math.cos(heading),items=[],cur=Math.floor(posF);
-    var inW={};seq.forEach(function(l,i){inW[l.h]=i});
-    LOTS.forEach(function(l){var dx=l.cx-c.x,dy=l.cy-c.y;if(Math.abs(dx)>300||Math.abs(dy)>300)return;var fw=dx*cs+dy*sn;if(fw<-20||fw>330)return;
-      var P=[],ok=true,zs=0;for(var k=0;k<l.poly.length;k++){var ddx=l.poly[k][0]-c.x,ddy=l.poly[k][1]-c.y,fwd=ddx*cs+ddy*sn,lat=-ddx*sn+ddy*cs,zc=fwd*cp+camH*sp,yc=fwd*sp-camH*cp;if(zc<2){ok=false;break}zs+=zc;P.push([ox+f*lat/zc,oy-f*yc/zc])}
-      if(ok)items.push({l:l,P:P,z:zs/l.poly.length,i:inW[l.h],lat:-dx*sn+dy*cs,fwd:fw})});
-    items.sort(function(a,b){return b.z-a.z});
-    cx.lineJoin='round';
-    items.forEach(function(it){cx.beginPath();it.P.forEach(function(p,k){k?cx.lineTo(p[0],p[1]):cx.moveTo(p[0],p[1])});cx.closePath();
-      cx.fillStyle=it.i==null?css('--g3'):lotColor(it.l,st,wd,it.i<cur);cx.globalAlpha=it.i==null?.7:1;cx.fill();cx.globalAlpha=1;cx.lineWidth=Math.max(.5,Math.min(2,60/it.z));cx.strokeStyle=css('--bg');cx.stroke()});
-    // path ahead
-    cx.strokeStyle='#c5a448';cx.lineWidth=4;cx.lineCap='round';cx.beginPath();var first=true;
-    for(var j=cur;j<Math.min(seq.length,cur+40);j++){var l=seq[j],ddx=l.cx-c.x,ddy=l.cy-c.y,fwd=ddx*cs+ddy*sn,lat=-ddx*sn+ddy*cs,zc=fwd*cp+camH*sp,yc=fwd*sp-camH*cp;if(zc<2)continue;var px=ox+f*lat/zc,py=oy-f*yc/zc;if(first){cx.moveTo(px,py);first=false}else cx.lineTo(px,py)}cx.stroke();
-    // labels on the nearest lots
-    cx.textAlign='center';
-    items.slice().reverse().forEach(function(it){if(it.i==null||it.z>170)return;var w=0;for(var k=0;k<it.P.length;k++)w=Math.max(w,Math.abs(it.P[k][0]-it.P[0][0]));var sz=Math.min(30,f*4.4/it.z);if(sz<9)return;var mx=0,my=0;it.P.forEach(function(p){mx+=p[0];my+=p[1]});mx/=it.P.length;my/=it.P.length;
-      cx.font='700 '+sz+'px "IBM Plex Mono",monospace';cx.lineWidth=sz*0.22;cx.strokeStyle='#fff';cx.fillStyle='#0b0b0a';var t=it.l.s+'-'+it.l.l;cx.strokeText(t,mx,my-sz*0.1);cx.fillText(t,mx,my-sz*0.1);
-      cx.font='500 '+sz*0.74+'px "IBM Plex Mono",monospace';cx.lineWidth=sz*0.18;var t2=pad(it.l.h);cx.strokeText(t2,mx,my+sz*0.85);cx.fillText(t2,mx,my+sz*0.85)});
-    cx.fillStyle=css('--fg');cx.font='600 15px "IBM Plex Mono",monospace';cx.textAlign='left';cx.fillText('heading '+Math.round(((heading*180/Math.PI)+450)%360)+'° (0° = north)',14,Hh-14);
-  }
-  var S=A.saw;
-  function drawChart(){
-    var cvs=$('saw'),cc=cvs.getContext('2d'),st=+$('sawstart').value,wd=+$('sawwidth').value,pts=S.filter(function(r){return r[0]>=st&&r[0]<st+wd}),Wd=cvs.width,Hh=cvs.height,m=58,b=46;cc.clearRect(0,0,Wd,Hh);
-    var mx=1;pts.forEach(function(r){if(r[2]>mx)mx=r[2]});mx=Math.ceil(mx/10)*10;
-    var xs=function(h){return m+(h-st)/Math.max(wd-1,1)*(Wd-m-16)},ys=function(v){return Hh-b-(v/mx)*(Hh-b-26)};
-    cc.font='500 13px "IBM Plex Mono",monospace';cc.fillStyle=css('--g5');cc.strokeStyle=css('--g3');cc.lineWidth=1;
-    for(var i=0;i<=4;i++){var v=mx*i/4,y=ys(v);cc.beginPath();cc.moveTo(m,y);cc.lineTo(Wd-8,y);cc.stroke();cc.textAlign='right';cc.fillText(Math.round(v),m-8,y+4)}
-    for(i=0;i<=4;i++){var h=st+Math.round((wd-1)*i/4),x=xs(h);cc.textAlign='center';cc.fillText(h,x,Hh-b+18)}
-    cc.fillStyle=css('--g6');cc.font='600 13px "Space Grotesk",sans-serif';cc.textAlign='center';cc.fillText('H-number (position along the path) →',(Wd+m)/2,Hh-8);
-    cc.save();cc.translate(14,(Hh-b)/2);cc.rotate(-Math.PI/2);cc.fillText('old label number →',0,0);cc.restore();
-    cc.strokeStyle=css('--fg');cc.lineWidth=2;cc.globalAlpha=.6;cc.beginPath();cc.moveTo(m,Hh-b);cc.lineTo(Wd-16,26);cc.stroke();cc.globalAlpha=1;
-    var rad=Math.max(1.8,Math.min(4.5,900/Math.max(pts.length,1)));
-    pts.forEach(function(r){cc.fillStyle=scol(r[1]);cc.beginPath();cc.arc(xs(r[0]),ys(r[2]),rad,0,6.3);cc.fill()});
-    if(seq[Math.floor(posF)]){var hx=xs(seq[Math.floor(posF)].h);cc.strokeStyle='#c5a448';cc.lineWidth=3;cc.beginPath();cc.moveTo(hx,16);cc.lineTo(hx,Hh-b);cc.stroke()}
-    var used={};pts.forEach(function(r){used[r[1]]=1});
-    $('sawlegend').innerHTML='<span><i style="background:var(--fg)"></i>straight line: where the label number would sit if it matched H, scaled to fit</span><span><i style="background:#c5a448"></i>you are here</span>'+Object.keys(used).map(function(s){return '<span><i style="background:'+scol(s)+'"></i>section '+s+'</span>'}).join('');
-  }
-  function setView(v){view=v;$('wmapbox').hidden=v!=='map';$('w3box').hidden=v!=='walk';$('wchart').hidden=v!=='chart';[].forEach.call(ctl.querySelectorAll('[data-v]'),function(b){b.classList.toggle('on',b.getAttribute('data-v')===v)});update()}
-  [].forEach.call(ctl.querySelectorAll('[data-v]'),function(b){on(b,'click',function(){setView(b.getAttribute('data-v'))})});
   [].forEach.call(ctl.querySelectorAll('[data-c]'),function(b){on(b,'click',function(){cmode=b.getAttribute('data-c');[].forEach.call(ctl.querySelectorAll('[data-c]'),function(x){x.classList.toggle('on',x===b)});update()})});
-  function stop(){playing=false;if(raf)cancelAnimationFrame(raf);raf=0;var b=$('wplay');b.classList.remove('on');b.textContent='Walk'}
+  function stop(){playing=false;if(raf)cancelAnimationFrame(raf);raf=0;var b=$('wplay');b.classList.remove('on');b.textContent='Walk the path'}
   function tick(t){if(!playing)return;var dt=Math.min(.1,(t-lastT)/1000);lastT=t;posF+=speed*dt;if(posF>=seq.length-1){posF=seq.length-1;stop();$('walkpos').value=Math.round(posF);update();return}$('walkpos').value=Math.round(posF);update();raf=requestAnimationFrame(tick)}
   on($('wplay'),'click',function(){if(playing){stop();return}if(posF>=seq.length-1)posF=0;playing=true;var b=$('wplay');b.classList.add('on');b.textContent='Pause';lastT=performance.now();raf=requestAnimationFrame(tick)});
-  on($('wreset'),'click',function(){stop();$('sawstart').value=1;$('sawwidth').value=120;posF=0;heading=0;rebuild();toast('Walk reset')});
+  on($('wreset'),'click',function(){stop();$('sawstart').value=1;$('sawwidth').value=60;posF=0;rebuild();toast('Walk reset')});
   on($('wspeed'),'input',function(){speed=+$('wspeed').value});
   on($('walkpos'),'input',function(){posF=+$('walkpos').value;update()});
   on($('sawstart'),'input',function(){stop();rebuild()});on($('sawwidth'),'input',function(){stop();rebuild()});
   redraws.push(function(){rebuild()});
-  rebuild();if(seq.length>1)heading=targetHeading(0);setView('walk');
+  rebuild();
+})();
+
+/* ---------------- hero illustration: a path that numbers twelve stones ---------------- */
+(function(){
+  var host=$('heroart');if(!host)return;var NS='http://www.w3.org/2000/svg',Wd=1000,Hh=330;
+  var st=[],N=3,R=2,cw=84,ch=88;
+  for(var r=0;r<R;r++)['B','A'].forEach(function(s){for(var c=0;c<N;c++){var x0=s==='B'?130:560;st.push({x:x0+c*cw,y:96+r*(ch+28)})}});
+  var pts=st.map(function(p){return [p.x+27,p.y+56]});
+  function smooth(p){var d='M'+p[0][0]+' '+p[0][1];for(var i=0;i<p.length-1;i++){var a=p[i-1]||p[i],b=p[i],c=p[i+1],e=p[i+2]||c;d+=' C'+(b[0]+(c[0]-a[0])/6)+' '+(b[1]+(c[1]-a[1])/6)+' '+(c[0]-(e[0]-b[0])/6)+' '+(c[1]-(e[1]-b[1])/6)+' '+c[0]+' '+c[1]}return d}
+  var h='<svg viewBox="0 0 '+Wd+' '+Hh+'" xmlns="http://www.w3.org/2000/svg">'
+   +'<circle class="hart-sun" cx="880" cy="70" r="38"/>'
+   +'<path class="hart-hill2" d="M0 262 C150 204 300 232 460 247 S780 212 1000 237 V330 H0Z"/>'
+   +'<path class="hart-hill1" d="M0 292 C170 246 330 288 520 276 S850 256 1000 282 V330 H0Z"/>';
+  [[70,226,30,70],[960,224,26,62],[470,246,22,48]].forEach(function(t){h+='<ellipse class="hart-tree" cx="'+t[0]+'" cy="'+t[1]+'" rx="'+t[2]+'" ry="'+t[3]+'"/>'});
+  h+='<text class="hart-label" x="'+(130+cw)+'" y="84">Section B</text><text class="hart-label" x="'+(560+cw)+'" y="84">Section A</text>';
+  st.forEach(function(p){h+='<path class="hart-stone" d="M'+p.x+' '+(p.y+62)+' V'+(p.y+24)+' a27 24 0 0 1 54 0 V'+(p.y+62)+' Z"/>'});
+  h+='<path class="hart-path" id="hartpath" d="'+smooth(pts)+'"/>';
+  st.forEach(function(p,i){h+='<text class="hart-num" x="'+(p.x+27)+'" y="'+(p.y+46)+'" style="animation-delay:'+(0.25+i*0.42).toFixed(2)+'s">'+(i+1)+'</text>'});
+  h+='</svg><button class="btn sm replay" type="button" id="hartreplay">Replay</button>';
+  host.innerHTML=h;
+  var path=$('hartpath');try{var L=path.getTotalLength();host.style.setProperty('--len',Math.ceil(L)+2);path.style.strokeDasharray=Math.ceil(L)+2;path.style.strokeDashoffset=Math.ceil(L)+2}catch(e){}
+  function go(){host.classList.remove('go','static');void host.offsetWidth;host.classList.add('go')}
+  var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(reduce)host.classList.add('static');else go();
+  on($('hartreplay'),'click',function(){host.classList.remove('static');go()});
 })();
 
 /* defects */

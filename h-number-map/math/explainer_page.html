@@ -1,5 +1,5 @@
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Cedar Grove Numbering Explained</title>
+<title>Cedar Grove H-Numbering Explained</title>
 <style>
 /*__FONTS__*/
 /* Layout: open, ruled columns (ZF Games language). Bordered panels only mark interactive workspaces. A collapsible contents
@@ -11,18 +11,18 @@
   --acc:#c5a448; --acc-ink:#0b0b0a; --ok:#1f6b3f; --bad:#a3271a; --info:#1f4f8f;
   --sans:'Space Grotesk',ui-sans-serif,system-ui,-apple-system,'Segoe UI',sans-serif;
   --mono:'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
-  --fs:17px; --rp:3px; --rc:5px; --railw:56px;
+  --fs:17px; --rp:22px; --rc:12px; --rcard:16px; --railw:60px; --acc-soft:#ece0b4; --t1:#c5a448; --t2:#4f86c6; --t3:#3f9a63; --t4:#d9694f;
 }
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
   color-scheme:dark;
   --bg:#0b0b0a; --fg:#f4f2ec; --g2:#1c1c1a; --g3:#2b2b28; --g4:#45443f; --g5:#b9b7af; --g6:#d0cec6; --g7:#e8e6de;
   --surf:#141413; --panel:#181817; --code:#0f0f0e; --bar:#0b0b0a; --rule:#45443f;
-  --acc:#c5a448; --acc-ink:#0b0b0a; --ok:#78c595; --bad:#f08b7e; --info:#86b3e6}}
+  --acc:#c5a448; --acc-ink:#0b0b0a; --ok:#78c595; --bad:#f08b7e; --info:#86b3e6; --acc-soft:#2e2812; --t2:#86b3e6; --t3:#78c595; --t4:#f08b7e}}
 :root[data-theme="dark"]{
   color-scheme:dark;
   --bg:#0b0b0a; --fg:#f4f2ec; --g2:#1c1c1a; --g3:#2b2b28; --g4:#45443f; --g5:#b9b7af; --g6:#d0cec6; --g7:#e8e6de;
   --surf:#141413; --panel:#181817; --code:#0f0f0e; --bar:#0b0b0a; --rule:#45443f;
-  --acc:#c5a448; --acc-ink:#0b0b0a; --ok:#78c595; --bad:#f08b7e; --info:#86b3e6}
+  --acc:#c5a448; --acc-ink:#0b0b0a; --ok:#78c595; --bad:#f08b7e; --info:#86b3e6; --acc-soft:#2e2812; --t2:#86b3e6; --t3:#78c595; --t4:#f08b7e}
 :root[data-size="lg"]{--fs:20px}
 :root[data-rail="open"]{--railw:290px}
 *{box-sizing:border-box}
@@ -149,8 +149,8 @@ thead{display:table-header-group}
 .chip{font:500 .8em var(--mono);padding:4px 8px;border-radius:2px;background:transparent;border:1px solid var(--g4);color:var(--fg);white-space:nowrap;cursor:pointer;min-height:30px}
 .chip:hover{border-color:var(--fg)}
 .chip[aria-pressed="true"]{background:var(--acc);color:var(--acc-ink);border-color:var(--acc)}
-.chip.h{border-style:double;border-width:3px;padding:2px 6px} .chip.h::before{content:"◆ ";font-size:.75em}
-.chip.suffix{border-style:dashed;border-color:var(--fg)} .chip.suffix::before{content:"▲ ";font-size:.75em}
+.chip.h{border-style:double;border-width:3px;padding:2px 6px} .chip.h::before{content:""}
+.chip.suffix{border-style:dashed;border-color:var(--fg)} .chip.suffix::before{content:""}
 .chip.odd,.chip.gap,.chip.clash{border-color:var(--bad);color:var(--bad)} .chip.odd::before,.chip.gap::before,.chip.clash::before{content:"! ";font-weight:700}
 .chip.static{cursor:default}
 .key{display:flex;flex-wrap:wrap;gap:6px 18px;font-size:.84em;color:var(--g6);margin:8px 0}
@@ -224,6 +224,105 @@ details{border-top:1px solid var(--rule);padding:8px 0;margin:8px 0} details sum
 .sidebox img{display:block;width:100%;border:1px solid var(--rule)}
 .toast{position:fixed;left:50%;bottom:calc(22px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--fg);color:var(--bg);padding:9px 16px;border-radius:var(--rc);font-weight:600;font-size:.88em;opacity:0;pointer-events:none;transition:opacity .2s;z-index:70}
 .toast.show{opacity:1}
+
+/* v4: curved, softer, no triangles. Radii follow the ZF Games shape language (cards 12-16, panels 22, pills 999). */
+.btn.play::before,.btn.play.on::before{content:none}
+.sechead{grid-template-columns:auto minmax(0,1fr);gap:0 18px;align-items:center;border-top:0;padding-top:38px;position:relative}
+.sechead::before{content:"";position:absolute;left:0;right:0;top:0;height:18px;background:var(--g4);opacity:.7;-webkit-mask:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='18' viewBox='0 0 120 18'><path d='M0 9 Q15 -1 30 9 T60 9 T90 9 T120 9' fill='none' stroke='black' stroke-width='2' stroke-linecap='round'/></svg>") repeat-x;mask:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='18' viewBox='0 0 120 18'><path d='M0 9 Q15 -1 30 9 T60 9 T90 9 T120 9' fill='none' stroke='black' stroke-width='2' stroke-linecap='round'/></svg>") repeat-x}
+.secnum{font-weight:500;font-size:.95em;color:var(--fg);border:1.5px solid var(--fg);border-radius:999px;padding:5px 14px;letter-spacing:0}
+h2{font-size:clamp(2em,4.2vw,3em)}
+.panel{border:1px solid var(--rule);border-radius:var(--rp);padding:22px 24px;background:var(--panel)}
+.demo{border:1px solid var(--rule);border-radius:var(--rp);background:var(--panel);overflow:hidden}
+.demo>header{background:var(--surf);border-bottom:1px solid var(--rule);padding:14px 22px}
+.demo .body{padding:18px 22px 22px}
+.out,.eqn{border:0;border-radius:var(--rcard);background:var(--code)}
+canvas{border-radius:var(--rcard);border-color:transparent}
+.imgwrap{border-radius:var(--rcard)}
+.mapbox{border-radius:var(--rcard);border-color:transparent}
+.crop{border-radius:10px}
+.tag,.mode{border-radius:999px;padding:3px 10px}
+.mode.exp{background:var(--acc);color:var(--acc-ink);border-color:var(--acc)}
+.detail{border-left:0;background:var(--surf);border-radius:var(--rcard);padding:12px 16px}
+.aside{border-left:4px solid var(--acc);background:var(--surf);border-radius:0 var(--rcard) var(--rcard) 0;padding:14px 20px}
+.take{border-left:4px solid var(--acc);border-radius:0 12px 12px 0;background:var(--surf);padding:10px 16px}
+.terms{border:0;gap:12px;margin:14px 0}
+.terms>div{background:var(--surf);border:0;border-radius:var(--rcard);margin:0;padding:18px 20px}
+.abc{gap:14px}
+.abc>div{background:var(--surf);border:0;border-radius:var(--rcard);margin:0;padding:18px 22px 20px}
+.abc .L{color:var(--acc);font-size:3.2em}
+.chip{border-radius:999px;padding:5px 12px;border-color:var(--g3);background:var(--surf)}
+.chip.h{border:1px solid var(--acc);background:var(--acc-soft);padding:5px 12px}
+.chip.h::before{content:"";display:inline-block;width:.55em;height:.55em;border-radius:50%;background:var(--acc);margin-right:.5em;font-size:1em}
+.chip.suffix{border:1px solid var(--g5);border-style:solid}
+.chip.suffix::before{content:"";display:inline-block;width:.5em;height:.5em;border-radius:50%;border:2px solid currentColor;margin-right:.5em;font-size:1em}
+.chip.odd::before,.chip.gap::before,.chip.clash::before{content:"!";font-weight:700;margin-right:.4em;font-size:1em}
+.kd{border-radius:50%;width:12px;height:12px;border:1px solid var(--g5);background:var(--surf)} .kd.h{background:var(--acc);border-color:var(--acc)} .kd.s{border:2px solid var(--fg);background:transparent} .kd.o{border-color:var(--bad);background:var(--bad)}
+.addr{background:var(--surf);border-radius:var(--rcard);overflow:hidden}
+.addr button[aria-pressed="true"]{background:var(--acc)}
+.anat{border-top:0;background:var(--surf);border-radius:var(--rcard);padding:14px 18px;margin:10px 0}
+.sbtn button{border-radius:999px}
+.fig{border-top:0;padding-top:0;margin:18px 0 34px}
+.fig .cap{background:var(--surf);border-radius:var(--rcard);padding:16px 18px}
+.def{border-top:0;background:var(--surf);border-radius:var(--rcard);padding:16px 20px;margin:12px 0}
+.cw{border-color:var(--rule);border-radius:var(--rp)}
+pre.code.solo{border-color:var(--rule);border-radius:var(--rcard)}
+.cmp{border-top:0;background:var(--surf);border-radius:var(--rp);padding:18px 20px 14px}
+.cmpview{border-radius:var(--rcard);border-color:transparent}
+.cmpview .lab{border-radius:999px;border-color:transparent}
+.cmpview .pan .mk{z-index:1}
+.sidebox .rel{position:relative} .sidebox .rel img{border-radius:var(--rcard);border-color:transparent}
+table.t th{border-bottom:2px solid var(--g4)}
+table.stats td.n{color:var(--fg)}
+.scroll,#passes,#decisions,#complete{border-radius:var(--rcard)}
+#bmenu{border-radius:999px;border-color:var(--g4)}
+.util{border-radius:999px}
+nav.rail{border-right:0}
+nav.rail .sec>a{border-left:0;border-radius:999px;margin:2px 6px 2px 0;padding:8px 6px}
+nav.rail .sec.on>a{background:var(--surf)}
+nav.rail ul{border-left:2px solid var(--g3)}
+nav.rail .sec>a b{font-size:1.1em}
+.bar{border-bottom:1px solid var(--g3)}
+/* hero art */
+.heroart{margin:6px 0 4px;border-radius:var(--rp);overflow:hidden;background:var(--surf);position:relative}
+.heroart svg{display:block;width:100%;height:auto}
+.heroart .replay{position:absolute;right:14px;bottom:12px}
+.hart-hill1{fill:var(--g2)} .hart-hill2{fill:var(--g3);opacity:.7} .hart-sun{fill:var(--acc);opacity:.9}
+.hart-stone{fill:var(--panel);stroke:var(--g5);stroke-width:2.5} .hart-tree{fill:var(--g4);opacity:.55}
+.hart-path{fill:none;stroke:var(--acc);stroke-width:5;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:var(--len,2400);stroke-dashoffset:var(--len,2400)}
+.heroart.go .hart-path{animation:hdraw 5.2s cubic-bezier(.5,0,.2,1) forwards}
+.hart-num{font:700 26px var(--mono);fill:var(--fg);text-anchor:middle;opacity:0}
+.heroart.go .hart-num{animation:hpop .5s ease-out forwards}
+.hart-label{font:600 15px var(--mono);fill:var(--g5);text-anchor:middle}
+.heroart.static .hart-path{stroke-dashoffset:0}.heroart.static .hart-num{opacity:1}
+@keyframes hdraw{to{stroke-dashoffset:0}} @keyframes hpop{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.hart-path{stroke-dashoffset:0}.hart-num{opacity:1;animation:none!important}}
+/* the formula, as the centrepiece */
+.fh{background:var(--surf);border-radius:28px;padding:clamp(22px,4vw,44px);margin:20px 0 26px;position:relative;overflow:hidden}
+.fh::after{content:"";position:absolute;right:-90px;top:-90px;width:260px;height:260px;border-radius:50%;background:var(--acc);opacity:.18;pointer-events:none}
+.fh-k{font:500 .72em var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--g5)}
+.fh-math{overflow-x:auto;padding:14px 0 10px}
+.fh-math math{font-size:clamp(1.55em,3.6vw,3.1em);display:block}
+.mt{padding:.05em .14em;border-radius:.25em;border-bottom:.14em solid transparent}
+.mt.t1{border-color:var(--t1)} .mt.t2{border-color:var(--t2)} .mt.t3{border-color:var(--t3)} .mt.t4{border-color:var(--t4)}
+.mt.on.t1{background:color-mix(in srgb,var(--t1) 26%,transparent)} .mt.on.t2{background:color-mix(in srgb,var(--t2) 26%,transparent)} .mt.on.t3{background:color-mix(in srgb,var(--t3) 26%,transparent)} .mt.on.t4{background:color-mix(in srgb,var(--t4) 26%,transparent)}
+.fh-terms{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-top:6px}
+.ft{all:unset;box-sizing:border-box;cursor:pointer;padding:12px 16px;border-radius:var(--rcard);background:var(--bg);border:2px solid transparent;font-size:.9em;line-height:1.35}
+.ft b{display:block;font:600 1.15em var(--mono);margin-bottom:3px} .ft small{display:block;color:var(--g5);font-size:.86em}
+.ft.t1 b{color:var(--t1)} .ft.t2 b{color:var(--t2)} .ft.t3 b{color:var(--t3)} .ft.t4 b{color:var(--t4)}
+.ft[aria-pressed="true"]{border-color:var(--fg)} .ft:hover{border-color:var(--g4)} .ft:focus-visible{outline:2px solid var(--fg);outline-offset:2px}
+.fh-live{margin-top:14px;font:500 .95em/1.6 var(--mono);background:var(--bg);border-radius:var(--rcard);padding:14px 18px}
+.fh-live .eq{font-size:1.15em;font-weight:600} .fh-live .v1{color:var(--t1)} .fh-live .v2{color:var(--t2)} .fh-live .v3{color:var(--t3)} .fh-live .v4{color:var(--t4)}
+.fh-proof{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-top:18px}
+.fh-proof div{padding:14px 4px 0;border-top:2px solid var(--g3)} .fh-proof b{display:block;font:700 2em/1.1 var(--sans);letter-spacing:-.03em} .fh-proof span{font-size:.84em;color:var(--g6)}
+.fh-how{margin:20px 0 0;padding:0;list-style:none;counter-reset:fh;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.fh-how li{counter-increment:fh;background:var(--bg);border-radius:var(--rcard);padding:12px 16px 14px;font-size:.9em;line-height:1.45}
+.fh-how li::before{content:counter(fh);display:inline-grid;place-items:center;width:1.8em;height:1.8em;border-radius:50%;background:var(--acc);color:var(--acc-ink);font:600 .8em var(--mono);margin-bottom:6px}
+@media (max-width:980px){.fh-terms,.fh-proof,.fh-how{grid-template-columns:minmax(0,1fr)} .fh{border-radius:22px}}
+/* passes */
+#passbtns .btn{margin:0 4px 6px 0}
+.psim{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:12px}
+.pread{font:500 .85em var(--mono);color:var(--g6)}
+.pgrad{display:inline-block;height:12px;width:150px;border-radius:999px;background:linear-gradient(90deg,hsl(40,62%,82%),hsl(40,62%,32%));vertical-align:middle;margin:0 8px}
 @media (max-width:980px){
   .wrap{grid-template-columns:minmax(0,1fr);gap:0}
   nav.rail{position:fixed;left:0;top:calc(53px + env(safe-area-inset-top,0px));bottom:0;height:auto;width:min(310px,88vw);z-index:50;background:var(--bg);transform:translateX(-102%);transition:transform .2s;padding-left:max(10px,env(safe-area-inset-left,0px))}
@@ -266,19 +365,19 @@ details{border-top:1px solid var(--rule);padding:8px 0;margin:8px 0} details sum
 </style>
 <div class="bar"><div class="in">
 <button id="bmenu" type="button" aria-expanded="false" aria-controls="rail">☰ Contents</button>
-<div class="brand">Cedar Grove Numbering<small>EXPLAINED</small></div>
-<div class="nav2"><button id="bprev" type="button" aria-label="Previous section" title="Previous section (Alt+←)">◂</button><span class="pos" id="bpos">00 / 09</span><button id="bnext" type="button" aria-label="Next section" title="Next section (Alt+→)">▸</button></div>
+<div class="brand">Cedar Grove H-Numbering<small>EXPLAINED</small></div>
 <button class="util" id="bsize" type="button" aria-pressed="false" title="Larger text for projection">Aa</button>
 <button class="util hide-s" id="bfs" type="button" title="Full screen">Full screen</button>
 <button class="util" id="btheme" type="button" title="Switch light and dark">Theme: auto</button>
 </div></div>
 <div class="wrap">
-<nav class="rail" id="rail" aria-label="Sections"><div class="rt"><button id="rtoggle" type="button" aria-label="Expand or collapse the menu">»</button></div><ol id="railist"></ol></nav>
+<nav class="rail" id="rail" aria-label="Sections"><ol id="railist"></ol></nav>
 <main>
 <header class="hero" id="top"><div class="kicker">Cedar Grove Cemetery · University of Notre Dame</div>
-<h1>Cedar Grove Numbering, Explained</h1>
+<h1>Cedar Grove <span style="white-space:nowrap">H-Numbering,</span> Explained</h1>
 <p class="sub">How the old lot numbers worked, why they were hard to use, and the arithmetic behind the H-number system.</p>
 <p class="lede">By the end you will be able to read an old lot label and say what is ambiguous about it, follow how an H-number is counted along one path, type any old section and label into one formula to get its H-number, and see which results are confirmed and which still need a decision.</p>
+<div class="heroart" id="heroart" aria-hidden="true"></div>
 <div class="terms" role="list" aria-label="Four units">
 <div role="listitem"><b>Legacy label</b><div class="ex">19A</div><p>What is written on or beside a lot. Only unique inside its section.</p></div>
 <div role="listitem"><b>Physical lot</b><div class="ex">one plot of ground</div><p>The outline drawn on the map. The map has <span id="nPoly">3,103</span> lot outlines.</p></div>
@@ -326,7 +425,6 @@ details{border-top:1px solid var(--rule);padding:8px 0;margin:8px 0} details sum
 <figure><div class="imgwrap" style="--ar:__AR_raw_zoom__" tabindex="0" role="button" data-cap="The same screenshot at native resolution, enlarged 3 times: numbers over grass and headstones."><img src="__IMG_raw_zoom__" alt="Native-resolution zoom of lot numbers over grass and headstones"><span class="hint">Click to enlarge</span></div><figcaption style="margin-top:8px">The same screenshot at native resolution, enlarged 3 times. Numbers sit over grass and headstones.</figcaption></figure>
 <figure><div class="imgwrap" style="--ar:__AR_raw_annotated__" tabindex="0" role="button" data-cap="Hand-marked working copy of Section B (SECTION B.pdf) with arrows, question marks and a circled corner lot labelled H-00001."><img src="__IMG_raw_annotated__" alt="Hand-annotated copy of the Section B map with arrows and a circled lot"><span class="hint">Click to enlarge</span></div><figcaption style="margin-top:8px">A hand-marked working copy of Section B (SECTION B.pdf): arrows, question marks, and a circled corner lot with a handwritten "H-00001".</figcaption></figure>
 <figure><div class="imgwrap" style="--ar:__AR_old_dense__" tabindex="0" role="button" data-cap="An earlier digital version of the map with new H-numbers drawn over the old number shapes."><img src="__IMG_old_dense__" alt="Close-up of the earlier digital map where old and new numbers overlap"><span class="hint">Click to enlarge</span></div><figcaption style="margin-top:8px">An earlier digital version of this project: H-numbers drawn over the old number shapes, so the two overlap.</figcaption></figure></div>
-<div class="nextprev"><span></span><a class="btn" href="#legacy">02 The old numbering ▸</a></div>
 </section>
 
 <section id="legacy"><div class="sechead"><span class="secnum">02</span><h2>The old numbering</h2></div>
@@ -337,9 +435,8 @@ details{border-top:1px solid var(--rule);padding:8px 0;margin:8px 0} details sum
 <div class="chips" id="sampleChips"></div><div class="detail" id="sampledetail" aria-live="polite">Click a label to see its address and H-number.</div>
 <h3>The first two rows of every section</h3>
 <p>Each section is shown in the order a person would walk its first rows. A row never wraps, because wrapping would change how its spatial order looks. Scroll a section sideways with its arrows. Click any label for details.</p>
-<div class="key" aria-label="Legend"><span><i></i>plain number</span><span><i style="border:3px double var(--fg)"></i>◆ legacy H-lot (label ends in H)</span><span><i style="border:1px dashed var(--fg)"></i>▲ letter suffix (A, B, C)</span><span><i style="border-color:var(--bad)"></i>! unusual label</span></div>
+<div class="key" aria-label="Legend"><span><i class="kd"></i>plain number</span><span><i class="kd h"></i>legacy H-lot (label ends in H)</span><span><i class="kd s"></i>letter suffix (A, B, C)</span><span><i class="kd o"></i>unusual label</span></div>
 <div id="anatomy"></div><div class="detail" id="anatdetail" aria-live="polite">Click a label above.</div>
-<div class="nextprev"><a class="btn" href="#raw">◂ 01 The raw maps</a><a class="btn" href="#why">03 Why it confuses ▸</a></div>
 </section>
 
 <section id="why"><div class="sechead"><span class="secnum">03</span><h2>Why it confuses</h2></div>
@@ -370,18 +467,14 @@ details{border-top:1px solid var(--rule);padding:8px 0;margin:8px 0} details sum
 <h4>Walk the path: old number against H-number</h4>
 <p>Follow the path lot by lot. See it on the map from above, from inside the cemetery in a 3D walk, or as a chart. The old number you read on the lot jumps. The H-number counts up by one.</p>
 <div class="panel" id="walk">
-<div class="wtabs" id="walkctl" style="display:flex;gap:18px;flex-wrap:wrap;align-items:flex-end"></div>
-<div class="row" style="margin-top:12px"><div><label class="f" for="sawstart">Start at H-number: <span id="sawstartv"></span></label><input id="sawstart" type="range" min="1" max="3100" value="1"></div><div><label class="f" for="sawwidth">Number of lots in the walk: <span id="sawwidthv"></span></label><input id="sawwidth" type="range" min="20" max="900" value="120"></div><div><label class="f" for="walkpos">Position: <span id="walkposv"></span></label><input id="walkpos" type="range" min="0" max="119" value="0"></div></div>
-<div id="wmapbox" class="mapbox"><svg id="wmap" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Map from above with the walk highlighted"></svg><span class="orient" style="left:8px;top:8px">N ↑</span></div>
-<div id="w3box" hidden><canvas id="wcv" width="1000" height="540" role="img" aria-label="Walk through the cemetery in 3D"></canvas><p class="note" style="margin:6px 0 0">You are walking along the path and the camera looks the way you are heading. Each lot shows its old label above its H-number. Lots outside the walk are gray.</p></div>
-<div id="wchart" hidden><canvas id="saw" width="1000" height="380" role="img" aria-label="Old label number plotted against H-number"></canvas><div class="key" id="sawlegend"></div>
-<p class="note">Horizontal: H-number (position along the path). Vertical: the old label number of the lot at that position. H climbs steadily by construction, because H is defined as the order of the sweep. The old numbers drop and restart. This shows the labels do not follow one order. It does not by itself show that H is easier to walk on the ground.</p></div>
+<div id="walkctl" style="display:flex;gap:18px;flex-wrap:wrap;align-items:flex-end"></div>
+<div class="row" style="margin-top:12px"><div><label class="f" for="sawstart">Start at H-number: <span id="sawstartv"></span></label><input id="sawstart" type="range" min="1" max="3100" value="1"></div><div><label class="f" for="sawwidth">Number of lots in the walk: <span id="sawwidthv"></span></label><input id="sawwidth" type="range" min="20" max="900" value="60"></div><div><label class="f" for="walkpos">Position: <span id="walkposv"></span></label><input id="walkpos" type="range" min="0" max="59" value="0"></div></div>
+<div id="wmapbox" class="mapbox"><svg id="wmap" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Map from above with the walk highlighted"></svg><span class="orient" style="left:10px;top:10px">N ↑</span></div>
 <div class="out" id="wnow" aria-live="polite"></div><div class="wnow" id="wstrip" aria-label="Next lots"></div></div>
 
 <h3><span class="tag bad">C</span> Data inconsistencies</h3>
 <p>Each finding is shown as finding, example, practical consequence, and resolution status.</p>
 <div id="defects"></div>
-<div class="nextprev"><a class="btn" href="#legacy">◂ 02 The old numbering</a><a class="btn" href="#h">04 The H-number idea ▸</a></div>
 </section>
 
 <section id="h"><div class="sechead"><span class="secnum">04</span><h2>The H-number idea</h2></div>
@@ -389,7 +482,7 @@ details{border-top:1px solid var(--rule);padding:8px 0;margin:8px 0} details sum
 <div class="demo"><header><h3>See the path before the equation</h3><span class="mode">Illustration · 12 lots</span><button class="btn sm" id="anreset" type="button">Reset this example</button></header>
 <div class="body"><div class="step"><b>Question</b><div>How can twelve lots in two sections get one running number?</div></div>
 <div class="step dg"><b>Diagram</b><div><canvas id="ancv" width="1000" height="330" role="img" aria-label="Animated numbering of twelve lots"></canvas></div></div>
-<div class="step ctl"><b>Controls</b><div class="row" style="margin:0"><div style="flex:0 0 auto"><button class="btn fill play" id="anplay" type="button">Play</button> <button class="btn" id="anstep" type="button">Step ▸</button></div></div></div>
+<div class="step ctl"><b>Controls</b><div class="row" style="margin:0"><div style="flex:0 0 auto"><button class="btn fill play" id="anplay" type="button">Play</button> <button class="btn" id="anstep" type="button">Step</button></div></div></div>
 <div class="step"><b>Working</b><div class="out" id="anout" aria-live="polite"></div></div>
 <p class="take">Takeaway: a lot's H-number is how many lots the path has already visited, plus one.</p></div></div>
 
@@ -399,16 +492,15 @@ details{border-top:1px solid var(--rule);padding:8px 0;margin:8px 0} details sum
 <div class="card"><h3 style="margin-top:0">Words used on this page</h3><ul style="padding-left:1.1em;font-size:.94em;margin:0"><li><b>Pass</b>: one of six stretches of the path.</li><li><b>Level</b> (also called row): one step of a pass. A level lists lots from one or two sections.</li><li><b>Column</b> and <b>place</b>: a lot's position on its level.</li></ul><p class="note" style="margin-top:8px">Level, row and column are <b>decoder indexing</b>. They count positions in the decoder's tables. They are not always the compass rows and columns on the ground, and some sections are drawn rotated.</p></div></div>
 
 <h3>The six passes on the map</h3>
-<p>Select a pass. The map zooms to it and draws the route, with arrowheads showing direction. Shading runs from light (first lot) to dark (last lot). The small map shows where you are.</p>
-<div class="panel"><div class="row" style="margin-top:0"><div style="flex:1 1 100%"><div id="passbtns" style="display:flex;flex-wrap:wrap"></div></div></div>
-<div class="grid2" style="grid-template-columns:minmax(0,2fr) minmax(220px,1fr);align-items:start;gap:22px"><div class="mapbox"><svg id="passsvg" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Map zoomed to the selected pass"></svg><span class="orient" style="left:8px;top:8px">N ↑</span><div style="position:absolute;right:8px;bottom:8px;width:24%;border:1px solid var(--fg);background:var(--bg)"><svg id="passmini" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Overview"></svg></div></div><div id="passinfo"></div></div></div>
+<p>Select a pass to see which part of the cemetery it covers. The gold runs from light (the first lot) to dark (the last lot). Press Simulate to watch the path fill in, pass by pass.</p>
+<div class="panel"><div class="psim"><div id="passbtns"></div><button class="btn fill" id="passplay" type="button">Simulate the six passes</button><span class="pread" id="passread"></span></div>
+<div class="grid2" style="grid-template-columns:minmax(0,2.2fr) minmax(220px,1fr);align-items:start;gap:22px"><div class="mapbox"><svg id="passsvg" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Map highlighting the selected pass"></svg><span class="orient" style="left:10px;top:10px">N ↑</span></div><div id="passinfo"></div></div></div>
 <div id="passes"></div>
 
 <h3>Reading a full address</h3>
 <div class="panel"><div class="row"><div style="max-width:280px"><label class="f" for="addrin">Try an address</label><input id="addrin" type="text" value="H001698A3" autocomplete="off" spellcheck="false"></div><div style="flex:0 0 auto"><button class="btn sm" id="addrreset" type="button">Reset this example</button></div></div><div id="addrparts"></div>
 <div class="mathblock"><math display="block"><mrow><msub><mi>H</mi><mi>grave</mi></msub><mo>=</mo><mn>10</mn><mo>×</mo><msub><mi>H</mi><mi>lot</mi></msub><mo>+</mo><mi>g</mi></mrow></math></div>
 <p class="note">The numeric form holds only for lots without an A or B. A double-row lot keeps its letter between the lot number and the grave digit (H001698A3), and the numeric form cannot carry that letter. Lot H000001 has graves H0000011 to H0000019.</p></div>
-<div class="nextprev"><a class="btn" href="#why">◂ 03 Why it confuses</a><a class="btn" href="#math">05 The math ▸</a></div>
 </section>
 
 <section id="math"><div class="sechead"><span class="secnum">05</span><h2>The math, step by step</h2></div>
@@ -463,26 +555,35 @@ details{border-top:1px solid var(--rule);padding:8px 0;margin:8px 0} details sum
 <div class="step ctl"><b>Controls</b><div class="row" style="margin-top:0"><div><label class="f" for="p6h">Lot H-number</label><input id="p6h" type="number" min="1" max="3185" value="1698"></div><div><label class="f" for="p6g">Grave g (1 to 9)</label><input id="p6g" type="number" min="1" max="9" value="3"></div><div><label class="f" for="p6s">Double-row suffix</label><select id="p6s"><option value="">none</option><option selected>A</option><option>B</option></select></div></div></div>
 <div class="step"><b>Working</b><div class="out" id="p6out" aria-live="polite"></div></div>
 <p class="take">Takeaway: the address is lot, then optional A or B, then grave digit. The numeric shortcut 10 × lot + g drops the letter, so use it only when there is no suffix.</p></div></div>
-<div class="nextprev"><a class="btn" href="#h">◂ 04 The H-number idea</a><a class="btn" href="#code">06 The code ▸</a></div>
 </section>
 
 <section id="code"><div class="sechead"><span class="secnum">06</span><h2>The code</h2></div>
 <p class="lede">These are the real functions. Choose one from the list. Each starts with a sentence on what it does and which demonstration it implements. Code from the existing decoder and code from the arithmetic rebuild are in separate groups.</p>
 <div class="aside"><b>One expression does not remove the complexity.</b> The formula still carries constants, ordered lookup lists and exceptions. Section 07 shows how much of the rule set lives in those tables.</div>
 <div id="snips"></div>
-<div class="nextprev"><a class="btn" href="#math">◂ 05 The math</a><a class="btn" href="#giant">07 The giant formula ▸</a></div>
 </section>
 
 <section id="giant"><div class="sechead"><span class="secnum">07</span><h2>The giant formula</h2></div>
-<p class="lede">Enter an old section letter and lot label. The formula returns the H-number. It is one JavaScript expression with every constant written into it.</p>
+<p class="lede">This is the formula the whole system rests on. Every old section letter and lot label goes in, and one H-number comes out. It reproduces the decoder for every real label.</p>
+<div class="fh" id="fh"><div class="fh-k">The H-number formula</div>
+<div class="fh-math" role="img" aria-label="H of S and ell equals O sub p of S, plus the sum over j less than r of W one j plus W two j, plus sigma S times W one r, plus kappa S of ell"><math display="block"><mrow><mi>H</mi><mo>(</mo><mi>S</mi><mo>,</mo><mi>ℓ</mi><mo>)</mo><mo>=</mo><mrow class="mt t1" data-t="1"><msub><mi>O</mi><mrow><mi>p</mi><mo>(</mo><mi>S</mi><mo>)</mo></mrow></msub></mrow><mo>+</mo><mrow class="mt t2" data-t="2"><munder><mo>∑</mo><mrow><mi>j</mi><mo>&lt;</mo><mi>r</mi></mrow></munder><mrow><mo>(</mo><msubsup><mi>W</mi><mi>j</mi><mn>1</mn></msubsup><mo>+</mo><msubsup><mi>W</mi><mi>j</mi><mn>2</mn></msubsup><mo>)</mo></mrow></mrow><mo>+</mo><mrow class="mt t3" data-t="3"><msub><mi>σ</mi><mi>S</mi></msub><mo>⋅</mo><msubsup><mi>W</mi><mi>r</mi><mn>1</mn></msubsup></mrow><mo>+</mo><mrow class="mt t4" data-t="4"><msub><mi>κ</mi><mi>S</mi></msub><mo>(</mo><mi>ℓ</mi><mo>)</mo></mrow></mrow></math></div>
+<div class="fh-terms" role="group" aria-label="Terms of the formula">
+<button class="ft t1" type="button" data-t="1" aria-pressed="false"><b>O</b>lots in earlier passes<small>0, 836, 1,871, 2,331, 2,586, 2,835</small></button>
+<button class="ft t2" type="button" data-t="2" aria-pressed="false"><b>Σ</b>lots on earlier levels of this pass<small>W¹, W² are the level widths of the pass's two sections</small></button>
+<button class="ft t3" type="button" data-t="3" aria-pressed="false"><b>σ · W</b>the first section's level<small>σ is 1 for the second section of a pass, else 0</small></button>
+<button class="ft t4" type="button" data-t="4" aria-pressed="false"><b>κ</b>the lot's place on its level<small>this is where the old label is turned into a position</small></button></div>
+<div class="fh-live" id="fhlive" aria-live="polite"></div>
+<div class="fh-proof"><div><b id="fp1">3,197</b><span>real labels where the formula equals the decoder</span></div><div><b>3,139</b><span>distinct H-numbers they land on, out of 3,185 positions</span></div><div><b>13</b><span>old sections, one formula</span></div><div><b>6</b><span>passes along the path</span></div></div>
+<h4 style="margin:22px 0 0">How we got here</h4>
+<ol class="fh-how"><li>Count the lots along one path. A lot's number is the lots already visited, plus one.</li><li>Cut the path into six passes. Each pass starts after the last one, which gives O.</li><li>Inside a pass, walk level by level. The lots on earlier levels add up to Σ.</li><li>When two sections share a pass, the second one starts after the first one's level. That is σ · W.</li><li>Write each section's old labelling rule as a place on the level. That is κ, and the table below lists it for every section.</li><li>Compile everything into one expression and check it against the decoder, label by label.</li></ol></div>
+
 <div class="panel"><h4 style="margin-top:0">Old address to H-number</h4>
 <div class="row"><div style="max-width:140px"><label class="f" for="gs">Section</label><select id="gs"></select></div><div style="max-width:260px"><label class="f" for="gl">Lot label</label><input id="gl" type="text" value="20H" autocomplete="off"></div><div style="flex:0 0 auto"><button class="btn" id="gex" type="button">Try an example</button> <button class="btn" id="greset" type="button">Reset</button></div></div>
 <div id="gres" aria-live="polite"></div><div id="gtrace"></div></div>
 <div class="panel"><h4 style="margin-top:0">H-number to old label</h4><div class="row"><div style="max-width:200px"><label class="f" for="gh">H-number</label><input id="gh" type="number" min="1" max="3185" value="1690"></div></div><div id="grev" aria-live="polite"></div></div>
 
-<h3>The formula, typeset</h3>
-<div class="card"><div class="mathblock"><math display="block"><mrow><mi>H</mi><mo>(</mo><mi>S</mi><mo>,</mo><mi>ℓ</mi><mo>)</mo><mo>=</mo><msub><mi>O</mi><mrow><mi>p</mi><mo>(</mo><mi>S</mi><mo>)</mo></mrow></msub><mo>+</mo><munder><mo>∑</mo><mrow><mi>j</mi><mo>&lt;</mo><mi>r</mi></mrow></munder><mrow><mo>(</mo><msubsup><mi>W</mi><mi>j</mi><mn>1</mn></msubsup><mo>+</mo><msubsup><mi>W</mi><mi>j</mi><mn>2</mn></msubsup><mo>)</mo></mrow><mo>+</mo><msub><mi>σ</mi><mi>S</mi></msub><mo>⋅</mo><msubsup><mi>W</mi><mi>r</mi><mn>1</mn></msubsup><mo>+</mo><msub><mi>κ</mi><mi>S</mi></msub><mo>(</mo><mi>ℓ</mi><mo>)</mo></mrow></math></div>
-<p class="note">S is the section, ℓ the label. <b>O<sub>p</sub></b>: lots in all earlier passes (0, 836, 1871, 2331, 2586, 2835). <b>W¹, W²</b>: level widths of the first and second section of the pass. <b>σ<sub>S</sub></b>: 1 for the second section of a pass, else 0. <b>κ<sub>S</sub>(ℓ)</b>: the lot's place on its level, given in the table.</p></div>
+<h3>κ for each section</h3>
+<p class="note">κ is the lot's place on its level. Each section turns its old label into a place in its own way.</p>
 <div class="scroll"><table class="t" id="kappa"></table></div>
 
 <h3>The one-line version</h3>
@@ -492,7 +593,6 @@ details{border-top:1px solid var(--rule);padding:8px 0;margin:8px 0} details sum
 <h3>Change the constants and re-check <span class="tag">Experimental constants</span></h3>
 <p>These are the formula's constants: row widths, twin lists, blocks and base offsets. Edit them and press Apply. The page re-runs every label and reports how many H-numbers move. The edits affect this demonstration only.</p>
 <div class="panel"><textarea id="consts" rows="12" spellcheck="false" aria-label="Experimental constants"></textarea><div class="row"><div style="flex:0 0 auto"><button class="btn fill" id="capply" type="button">Apply and re-check</button> <button class="btn" id="creset" type="button">Reset constants</button></div><div class="out" id="cres" style="flex:1 1 300px;margin:0"></div></div></div>
-<div class="nextprev"><a class="btn" href="#code">◂ 06 The code</a><a class="btn" href="#compare">08 Old and new ▸</a></div>
 </section>
 
 <section id="compare"><div class="sechead"><span class="secnum">08</span><h2>Old and new, side by side</h2></div>
@@ -501,7 +601,6 @@ details{border-top:1px solid var(--rule);padding:8px 0;margin:8px 0} details sum
 <h3>What changed, in short</h3>
 <div class="scroll"><table class="t" id="cmpt"></table></div>
 <p class="note" style="margin-top:10px">Faster lookup and fewer mistakes are expected benefits of this change. They have not been measured.</p>
-<div class="nextprev"><a class="btn" href="#giant">◂ 07 The giant formula</a><a class="btn" href="#appendix">09 Checks and errata ▸</a></div>
 </section>
 
 <section id="appendix"><div class="sechead"><span class="secnum">09</span><h2>Checks and errata</h2></div>
@@ -518,7 +617,6 @@ details{border-top:1px solid var(--rule);padding:8px 0;margin:8px 0} details sum
 <div id="decisions"></div>
 <h3>Reproduce it</h3>
 <pre class="code solo"><span class="ln"><span class="c"># from the repository root</span></span><span class="ln">python3 h-number-map/math/extract_decoder.py   <span class="c"># dump every H-number and label the decoder knows</span></span><span class="ln">python3 h-number-map/math/verify.py            <span class="c"># compare hformula.py with the decoder: 3,199 of 3,199</span></span><span class="ln">python3 h-number-map/math/gen_giant.py         <span class="c"># compile the one-line expression</span></span><span class="ln">node h-number-map/math/test_giant.js           <span class="c"># check the one-line expression: 3,197 of 3,197 real labels</span></span></pre>
-<div class="nextprev"><a class="btn" href="#compare">◂ 08 Old and new</a><a class="btn" href="#top">Back to the top ▴</a></div>
 </section>
 </main></div>
 <div id="lb" role="dialog" aria-modal="true" aria-label="Enlarged image"><div class="bar2"><button class="btn" id="lbclose" type="button">Close ✕</button></div><div class="stage" id="lbstage"></div><div class="cap" id="lbcap"></div></div>

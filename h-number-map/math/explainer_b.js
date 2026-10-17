@@ -25,39 +25,35 @@
   draw();redraws.push(draw);
 })();
 
-/* passes */
+/* passes: the whole map, muted gold shading, and a simulation through all six */
 (function(){
-  var bb=X.bbox,svg=$('passsvg'),mini=$('passmini'),NS='http://www.w3.org/2000/svg',polys=[],mpolys=[],sel=0;
-  var asp=(bb[2]-bb[0]+12)/(bb[3]-bb[1]+12);
-  mini.setAttribute('viewBox',(bb[0]-6)+' '+(bb[1]-6)+' '+(bb[2]-bb[0]+12)+' '+(bb[3]-bb[1]+12));
-  var gMain=document.createElementNS(NS,'g'),gTrace=document.createElementNS(NS,'g'),gMiniBox=document.createElementNS(NS,'g');
-  LOTS.forEach(function(l){var pts=l.poly.map(function(q){return q.join(',')}).join(' ');var p=document.createElementNS(NS,'polygon');p.setAttribute('points',pts);p._l=l;gMain.appendChild(p);polys.push(p);
-    var m=document.createElementNS(NS,'polygon');m.setAttribute('points',pts);mini.appendChild(m);mpolys.push(m)});
-  svg.appendChild(gMain);svg.appendChild(gTrace);mini.appendChild(gMiniBox);
+  var bb=X.bbox,svg=$('passsvg'),NS='http://www.w3.org/2000/svg',polys=[],sel=0,sim=0,raf=0,cursor=null;
+  svg.setAttribute('viewBox',(bb[0]-6)+' '+(bb[1]-6)+' '+(bb[2]-bb[0]+12)+' '+(bb[3]-bb[1]+12));
+  LOTS.forEach(function(l){var p=document.createElementNS(NS,'polygon');p.setAttribute('points',l.poly.map(function(q){return q.join(',')}).join(' '));p._l=l;svg.appendChild(p);polys.push(p)});
+  var g=document.createElementNS(NS,'g');svg.appendChild(g);
   var btns=$('passbtns');
-  PASSES.forEach(function(p,i){var b=document.createElement('button');b.type='button';b.className='btn seg'+(i===0?' on':'');b.textContent='Pass '+p.n;on(b,'click',function(){sel=i;[].forEach.call(btns.children,function(x,j){x.classList.toggle('on',j===i)});paint()});btns.appendChild(b)});
+  PASSES.forEach(function(p,i){var b=document.createElement('button');b.type='button';b.className='btn seg'+(i===0?' on':'');b.textContent='Pass '+p.n;on(b,'click',function(){stopSim();select(i)});btns.appendChild(b)});
+  function select(i){sel=i;cursor=null;[].forEach.call(btns.children,function(x,j){x.classList.toggle('on',j===i)});paint()}
+  function gold(h,p){return 'hsl(40,62%,'+(82-52*(h-p.lo)/Math.max(1,p.hi-p.lo)).toFixed(1)+'%)'}
   function paint(){
-    var p=PASSES[sel],inr=LOTS.filter(function(l){return l.h>=p.lo&&l.h<=p.hi});
-    var x0=1e9,y0=1e9,x1=-1e9,y1=-1e9;inr.forEach(function(l){l.poly.forEach(function(q){if(q[0]<x0)x0=q[0];if(q[0]>x1)x1=q[0];if(q[1]<y0)y0=q[1];if(q[1]>y1)y1=q[1]})});
-    if(!inr.length){x0=bb[0];x1=bb[2];y0=bb[1];y1=bb[3]}
-    var w=x1-x0+30,h=y1-y0+30;if(w/h<asp)w=h*asp;else h=w/asp;var mx=(x0+x1)/2,my=(y0+y1)/2;
-    svg.setAttribute('viewBox',(mx-w/2)+' '+(my-h/2)+' '+w+' '+h);
-    polys.forEach(function(q){var l=q._l,on_=l.h>=p.lo&&l.h<=p.hi;q.setAttribute('fill',on_?ramp((l.h-p.lo)/Math.max(1,p.hi-p.lo)):css('--g3'));q.setAttribute('opacity',on_?'1':'.45')});
-    mpolys.forEach(function(q,i){var l=LOTS[i],on_=l.h>=p.lo&&l.h<=p.hi;q.setAttribute('fill',on_?css('--fg'):css('--g3'))});
-    gMiniBox.innerHTML='';var r=document.createElementNS(NS,'rect');r.setAttribute('x',mx-w/2);r.setAttribute('y',my-h/2);r.setAttribute('width',w);r.setAttribute('height',h);r.setAttribute('fill','none');r.setAttribute('stroke','#c5a448');r.setAttribute('stroke-width',(bb[2]-bb[0])/60);gMiniBox.appendChild(r);
-    gTrace.innerHTML='';
-    if(inr.length>1){
-      var u=w/100,pts=inr.map(function(l){return l.cx+','+l.cy}).join(' ');
-      var pl=document.createElementNS(NS,'polyline');pl.setAttribute('points',pts);pl.setAttribute('fill','none');pl.setAttribute('stroke',css('--fg'));pl.setAttribute('stroke-opacity','.55');pl.setAttribute('stroke-width',u*.22);pl.setAttribute('stroke-linejoin','round');gTrace.appendChild(pl);
-      var k=Math.max(1,Math.floor(inr.length/16));
-      for(var i=0;i+1<inr.length;i+=k){var a=inr[i],b=inr[i+1],dx=b.cx-a.cx,dy=b.cy-a.cy,L=Math.hypot(dx,dy);if(L<.5)continue;var ux=dx/L,uy=dy/L,mxp=(a.cx+b.cx)/2,myp=(a.cy+b.cy)/2,s=u*1.5;
-        var t=document.createElementNS(NS,'polygon');t.setAttribute('points',[[mxp+ux*s,myp+uy*s],[mxp-ux*s*.7-uy*s*.8,myp-uy*s*.7+ux*s*.8],[mxp-ux*s*.7+uy*s*.8,myp-uy*s*.7-ux*s*.8]].map(function(q){return q.join(',')}).join(' '));t.setAttribute('fill',css('--fg'));t.setAttribute('stroke',css('--bg'));t.setAttribute('stroke-width',u*.12);gTrace.appendChild(t)}
-      [[inr[0],'first'],[inr[inr.length-1],'last']].forEach(function(e){var c=document.createElementNS(NS,'circle');c.setAttribute('cx',e[0].cx);c.setAttribute('cy',e[0].cy);c.setAttribute('r',u*1.6);c.setAttribute('fill','#c5a448');c.setAttribute('stroke','#0b0b0a');c.setAttribute('stroke-width',u*.28);gTrace.appendChild(c);
-        var tx=document.createElementNS(NS,'text');tx.setAttribute('x',e[0].cx+u*2.4);tx.setAttribute('y',e[0].cy+u*5);tx.setAttribute('style','font:700 '+u*2.6+'px var(--mono);fill:var(--fg);stroke:var(--bg);stroke-width:'+u*.7+'px;paint-order:stroke');tx.textContent=e[1]+' '+pad(e[0].h);gTrace.appendChild(tx)})}
-    $('passinfo').innerHTML='<h4 style="margin-top:0">Pass '+p.n+' · sections '+esc(p.secs)+'</h4><div class="out">'+pad(p.lo)+' to '+pad(p.hi)+'<br>'+fmt(p.hi-p.lo+1)+' positions<br>'+fmt(inr.length)+' have an outline on the map</div><p>'+esc(p.how)+'</p><p class="note">The black line is the route in H order, and the arrowheads show which way it runs. Inside the pass the route goes level by level, so it sweeps across a section and steps over, rather than running down one line.</p>';
+    var p=PASSES[sel],inr=[];
+    polys.forEach(function(q){var l=q._l,inP=l.h>=p.lo&&l.h<=p.hi;if(inP)inr.push(l);
+      var shown=inP&&(cursor==null||l.h<=cursor);q.setAttribute('fill',shown?gold(l.h,p):css('--g3'));q.setAttribute('opacity',inP?(shown?'1':'.6'):'.45')});
+    g.innerHTML='';
+    if(inr.length&&cursor==null){var u=(bb[2]-bb[0])/150;
+      [[inr[0],'first'],[inr[inr.length-1],'last']].forEach(function(e){var c=document.createElementNS(NS,'circle');c.setAttribute('cx',e[0].cx);c.setAttribute('cy',e[0].cy);c.setAttribute('r',u*2.6);c.setAttribute('fill','#c5a448');c.setAttribute('stroke','#0b0b0a');c.setAttribute('stroke-width',u*.7);g.appendChild(c);
+        var tx=document.createElementNS(NS,'text');tx.setAttribute('x',e[0].cx+u*4);tx.setAttribute('y',e[0].cy+u*1.4);tx.setAttribute('style','font:700 '+u*4.4+'px var(--mono);fill:var(--fg);stroke:var(--bg);stroke-width:'+u*1.2+'px;paint-order:stroke');tx.textContent=e[1]+' '+pad(e[0].h);g.appendChild(tx)})}
+    if(inr.length&&cursor!=null){var cur=inr.filter(function(l){return l.h<=cursor}).pop();if(cur){var u2=(bb[2]-bb[0])/150,c2=document.createElementNS(NS,'circle');c2.setAttribute('cx',cur.cx);c2.setAttribute('cy',cur.cy);c2.setAttribute('r',u2*3);c2.setAttribute('fill','#c5a448');c2.setAttribute('stroke','#0b0b0a');c2.setAttribute('stroke-width',u2*.8);g.appendChild(c2)}}
+    $('passread').textContent=cursor==null?'':'Pass '+p.n+' · '+pad(Math.round(cursor))+' of '+pad(p.hi);
+    $('passinfo').innerHTML='<h4 style="margin-top:0">Pass '+p.n+' · sections '+esc(p.secs)+'</h4><div class="out">'+pad(p.lo)+' to '+pad(p.hi)+'<br>'+fmt(p.hi-p.lo+1)+' positions<br>'+fmt(inr.length)+' have an outline on the map</div><p>'+esc(p.how)+'</p><p class="note"><span class="pgrad"></span>first lot to last lot. Lots outside the pass are gray.</p>';
   }
+  function stopSim(){sim=0;if(raf)cancelAnimationFrame(raf);raf=0;cursor=null;var b=$('passplay');b.classList.remove('on');b.textContent='Simulate the six passes'}
+  function runPass(i){sel=i;[].forEach.call(btns.children,function(x,j){x.classList.toggle('on',j===i)});var p=PASSES[i],t0=performance.now(),dur=Math.min(4200,1300+(p.hi-p.lo)*4);
+    function step(t){if(!sim)return;var f=Math.min(1,(t-t0)/dur);cursor=p.lo+f*(p.hi-p.lo);paint();if(f<1){raf=requestAnimationFrame(step)}else{setTimeout(function(){if(!sim)return;if(i<PASSES.length-1)runPass(i+1);else{stopSim();select(0)}},700)}}
+    raf=requestAnimationFrame(step)}
+  on($('passplay'),'click',function(){if(sim){stopSim();select(sel);return}sim=1;var b=$('passplay');b.classList.add('on');b.textContent='Stop';runPass(0)});
   paint();redraws.push(paint);
-  $('passes').innerHTML='<table class="t"><tr><th>Pass</th><th>Sections</th><th>H-numbers</th><th>Positions</th><th>Share of 3,185</th></tr>'+PASSES.map(function(p){var n=p.hi-p.lo+1;return '<tr><td><b>'+p.n+'</b></td><td>'+esc(p.secs)+'</td><td class="num">'+pad(p.lo)+' – '+pad(p.hi)+'</td><td class="num">'+fmt(n)+'</td><td><span style="display:block;height:10px;background:var(--fg);width:'+(n/3185*100)+'%;min-width:3px"></span></td></tr>'}).join('')+'</table><p class="note" style="margin-top:10px">Where two sections share a pass, their levels are woven: level 1 of the first section, level 1 of the second, then level 2 of each. That is why one section\'s H-numbers are not one block. Pass 4 holds three margin lists and the G/H rows; the margins are numbered before G and H.</p>';
+  $('passes').innerHTML='<table class="t"><tr><th>Pass</th><th>Sections</th><th>H-numbers</th><th>Positions</th><th>Share of 3,185</th></tr>'+PASSES.map(function(p){var n=p.hi-p.lo+1;return '<tr><td><b>'+p.n+'</b></td><td>'+esc(p.secs)+'</td><td class="num">'+pad(p.lo)+' – '+pad(p.hi)+'</td><td class="num">'+fmt(n)+'</td><td><span style="display:block;height:10px;border-radius:999px;background:hsl(40,62%,52%);width:'+(n/3185*100)+'%;min-width:4px"></span></td></tr>'}).join('')+'</table><p class="note" style="margin-top:10px">Where two sections share a pass, their levels are woven: level 1 of the first section, level 1 of the second, then level 2 of each. That is why one section\'s H-numbers are not one block. Pass 4 holds three margin lists and the G/H rows; the margins are numbered before G and H.</p>';
 })();
 
 /* address breakdown */
@@ -98,7 +94,7 @@ function demo(id,ctrls,extraDirty,extraReset,rerun){
     ['B','A'].forEach(function(s,si){for(var rr=1;rr<=R;rr++)for(var cc=1;cc<=N;cc++){var h=Hf(s,rr,cc,N),t=(h-1)/Math.max(1,tot-1);cx.fillStyle=ramp(t);cx.fillRect(40+(cc-1)*cw,10+(si*(R+1)+rr-1)*ch,cw-1.5,ch-1.5);
       if(rr===r&&cw>=24){cx.fillStyle=dk?(t<.45?'#f4f2ec':'#0b0b0a'):(t<.55?'#0b0b0a':'#f4f2ec');cx.font='500 '+Math.min(12,cw*.42)+'px "IBM Plex Mono",monospace';cx.textAlign='center';cx.fillText(h,40+(cc-1)*cw+cw/2,10+(si*(R+1)+rr-1)*ch+ch*.72)}}});
     cx.setLineDash([5,4]);cx.lineWidth=1.6;cx.strokeStyle=css('--fg');[0,1].forEach(function(si){cx.strokeRect(38,10+(si*(R+1)+r-1)*ch-2,N*cw+3,ch+2)});cx.setLineDash([]);
-    cx.fillStyle=css('--fg');cx.font='600 11px "IBM Plex Mono",monospace';cx.textAlign='left';cx.fillText('visit ▶',40,10+(2*R+1)*ch+16);
+    cx.fillStyle=css('--fg');cx.font='600 11px "IBM Plex Mono",monospace';cx.textAlign='left';cx.fillText('visit →',40,10+(2*R+1)*ch+16);
     var si=sec==='B'?0:1,sx=40+(c-1)*cw-1,sy=10+(si*(R+1)+r-1)*ch-1;cx.fillStyle='#c5a448';cx.fillRect(sx,sy,cw,ch);cx.lineWidth=2.5;cx.strokeStyle='#0b0b0a';cx.strokeRect(sx,sy,cw,ch);
     cx.fillStyle='#0b0b0a';cx.font='700 '+Math.min(12,Math.max(8,cw*.42))+'px "IBM Plex Mono",monospace';cx.textAlign='center';if(cw>=20)cx.fillText(Hs,sx+cw/2,sy+ch*.72);
     cx.fillStyle=css('--g5');cx.font='600 12px "IBM Plex Mono",monospace';cx.textAlign='left';cx.fillText('B',14,10+ch);cx.fillText('A',14,10+(R+1)*ch+ch);
@@ -123,7 +119,7 @@ function demo(id,ctrls,extraDirty,extraReset,rerun){
       for(var q=1;q<=st;q++){var n=st*(r-1)+q,c0=20-q,c=c0+tw.filter(function(t){return q<=t}).length;plain.push({l:String(n),c:c0});cells.push({c:c,c0:c0,l:String(n),h:44*(r-1)+22+c});if(tw.indexOf(q)>=0)cells.push({c:c-1,l:n+'H',h:44*(r-1)+22+c-1,hl:1})}
       cells.sort(function(x,y){return x.h-y.h});var seen={};
       out+='<div class="note" style="margin-top:8px">Row '+r+', without H-lots: label at column</div><div class="chips">'+plain.sort(function(x,y){return x.c-y.c}).map(function(x){return '<span class="chip static">'+x.l+'@c'+x.c+'</span>'}).join('')+'</div>';
-      out+='<div class="note" style="margin-top:8px">Row '+r+', with H-lots inserted (gold ◆), in H order. Blue ▲ marks a label pushed one column over.</div><div class="chips">'+cells.map(function(x){var dup=seen[x.h];seen[x.h]=1;if(dup)bad++;return '<span class="chip static '+(dup?'clash':x.hl?'h':x.c!==x.c0?'suffix':'')+'">'+x.l+'@c'+x.c+' → '+x.h+'</span>'}).join('')+'</div>'}
+      out+='<div class="note" style="margin-top:8px">Row '+r+', with H-lots inserted (gold dot), in H order. A ring marks a label pushed one column over.</div><div class="chips">'+cells.map(function(x){var dup=seen[x.h];seen[x.h]=1;if(dup)bad++;return '<span class="chip static '+(dup?'clash':x.hl?'h':x.c!==x.c0?'suffix':'')+'">'+x.l+'@c'+x.c+' → '+x.h+'</span>'}).join('')+'</div>'}
     out+=bad?'<p class="bad" style="margin-top:8px">'+bad+' clash(es): two lots got the same H-number. With the real rule (step 19, H-lots before places 13, 5 and 1) there are none.</p>':'<p class="good" style="margin-top:8px">No two lots share an H-number.</p>';
     $('p2out').innerHTML=out;d.upd();
   }
@@ -181,7 +177,7 @@ function demo(id,ctrls,extraDirty,extraReset,rerun){
     var row=Math.min(24,Math.max(1,+$('p4row').value||1)),trio=$('p4trio').value==='1';
     var tw=$('p4tw').value.split(',').map(function(s){s=s.trim();var m=/^(\d+)([ab]?)$/.exec(s);return m?[+m[1],m[2]==='a'?1:0]:null}).filter(Boolean);
     var L=calc(row,tw,trio),seen={},dup=0;
-    var h='<div class="note">Row '+row+' of C, top lot '+CT[row-1]+', in H order. Gold ◆ = H-lot, blue ▲ = trio lot.</div><div class="chips" style="margin-top:6px">'+L.map(function(x){var dd=seen[x[1]];seen[x[1]]=1;if(dd)dup++;return '<span class="chip static '+(dd?'clash':/H$/.test(x[0])?'h':/[ABC]$/.test(x[0])?'suffix':'')+'">'+x[0]+' → '+x[1]+'</span>'}).join('')+'</div>';
+    var h='<div class="note">Row '+row+' of C, top lot '+CT[row-1]+', in H order. Gold dot = H-lot, ring = trio lot.</div><div class="chips" style="margin-top:6px">'+L.map(function(x){var dd=seen[x[1]];seen[x[1]]=1;if(dd)dup++;return '<span class="chip static '+(dd?'clash':/H$/.test(x[0])?'h':/[ABC]$/.test(x[0])?'suffix':'')+'">'+x[0]+' → '+x[1]+'</span>'}).join('')+'</div>';
     var real=0,mis=0;L.forEach(function(x){var v=FW['C|'+x[0]];if(v!=null){real++;if(v!==x[1])mis++}});
     h+='<p class="note" style="margin-top:8px">'+(real?real+' of these labels exist in the decoder; '+(mis?'<span class="bad">'+mis+' differ from it</span>':'<span class="good">all agree with it</span>'):'None of these labels exist in the real section C, so this is a what-if.')+(dup?' <span class="bad">'+dup+' clash(es)</span>':'')+'</p>';
     $('p4out').innerHTML=h;
@@ -249,6 +245,36 @@ function copyText(t){
     else if(S==='G'||S==='H'){var e3=2413+pf2(W.WG,W.WH,r)+(S==='H'?(W.WG[r-1]||0):0);if(e3===off)note='2413 + '+pf2(W.WG,W.WH,r)+(S==='H'?' + '+W.WG[r-1]:'')+' (base, earlier levels'+(S==='H'?', this level of G':'')+')'}
     return {op:'Lots visited before this level (H minus place)'+(note?': '+note:''),val:off};
   }
+  /* formula hero: the four terms, live for the label in the calculator */
+  var TDEF={1:['O','the lots in all earlier passes, so where this pass starts'],2:['Σ','the lots on every earlier level of this pass'],3:['σ · W','for the second section of a pass, the width of the first section\'s level'],4:['κ','the lot\'s place on its level: the old label turned into a position']};
+  var fhSel=0;
+  function termVals(S,H,t){
+    if(!t||t[1]==null)return null;var r=t[0],k=t[1],o={};
+    var lev={A:1,B:1,C:1,D:1,E:1,F:1,G:1,H:1};
+    if(lev[S]&&r!=null&&!(S==='B'&&H>2331)&&!(S==='D'&&H>2372&&H<=2401)&&!(S==='F'&&H>2401)){
+      var sg=0,sw=0,base=0;
+      if(S==='A'||S==='B'){sg=44*(r-1);sw=S==='A'?22:0;base=0}
+      else if(S==='C'||S==='D'){sg=pf2(W.WD.concat([0]),W.WC,r);sw=S==='C'?(W.WD[r-1]||0):0;base=836}
+      else if(S==='E'||S==='F'){sg=pf2(W.WF,W.WE,r);sw=S==='E'?(W.WF[r-1]||0):0;base=1871}
+      else {sg=pf2(W.WG,W.WH,r);sw=S==='H'?(W.WG[r-1]||0):0;base=2413}
+      o={O:H-k-sg-sw,S:sg,W:sw,K:k,lv:true};if(o.O!==base)o.odd=true;return o}
+    var bs={J:2950,I:3082,L:3146,K:2835};var O=bs[S];
+    if(S==='M')O=(t[2]===2)?2586:2556;
+    if(S==='B'&&H>2331)O=2331;if(S==='D'&&H>2372&&H<=2401)O=2372;if(S==='F'&&H>2401)O=2401;
+    if(O==null)return null;return {O:O,S:0,W:0,K:H-O,lv:false};
+  }
+  function fhUpdate(S,L,v,t){
+    var el=$('fhlive');if(!el)return;
+    if(!(typeof v==='number'&&!isNaN(v))){el.innerHTML='Enter a valid lot below to see its four terms.';return}
+    var tv=termVals(S,v,t),h='<div class="eq">H('+S+', '+esc(L)+') = '+v+'</div>';
+    if(tv)h+='<div>= <span class="v1">O '+tv.O+'</span> + <span class="v2">Σ '+tv.S+'</span> + <span class="v3">σ·W '+tv.W+'</span> + <span class="v4">κ '+tv.K+'</span></div>'+(tv.lv?'':'<div class="note">This section is a straight run, so there are no levels: Σ and σ·W are 0, O is where the run starts and κ is the position in it.</div>');
+    else h+='<div class="note">This label has no place recorded in the decoder tables, so its terms are not shown.</div>';
+    if(fhSel){h+='<div style="margin-top:8px"><b class="v'+fhSel+'">'+TDEF[fhSel][0]+'</b> is '+TDEF[fhSel][1]+'.'+(tv?' For this lot it is <b class="v'+fhSel+'">'+({1:tv.O,2:tv.S,3:tv.W,4:tv.K})[fhSel]+'</b>.':'')+'</div>'}
+    el.innerHTML=h;
+  }
+  function fhSelect(n){fhSel=fhSel===n?0:n;[].forEach.call(document.querySelectorAll('.ft'),function(b){b.setAttribute('aria-pressed',+b.getAttribute('data-t')===fhSel)});[].forEach.call(document.querySelectorAll('.mt'),function(m){m.classList.toggle('on',+m.getAttribute('data-t')===fhSel)});run()}
+  [].forEach.call(document.querySelectorAll('.ft'),function(b){on(b,'click',function(){fhSelect(+b.getAttribute('data-t'))})});
+  [].forEach.call(document.querySelectorAll('.mt'),function(m){m.style.cursor='pointer';on(m,'click',function(){fhSelect(+m.getAttribute('data-t'))})});
   function run(){
     var S=gs.value,L=$('gl').value.trim(),m=/^([A-Z]?)([0-9]+)(.*)$/.exec(L.toUpperCase()),v=GH(S,L.toUpperCase()),exp=FW[S+'|'+L.toUpperCase()],ok=typeof v==='number'&&!isNaN(v),res;
     if(ok&&exp===v)res='<div class="big">'+pad(v)+'<small>'+v+' of 3,185</small></div><p><span class="tag ok">Accepted decoder label</span> The decoder lists '+S+'-'+esc(L.toUpperCase())+' and gives the same number.</p><p class="note">Graves: '+pad(v)+'1 to '+pad(v)+'9.</p>';
@@ -262,7 +288,7 @@ function copyText(t){
     tr+='<tr><td>4</td><td><b>Offset</b><div class="note">'+(oi?esc(oi.op):ok?'The label is not in the decoder table, so there is no stored place to show.':'—')+'</div></td><td class="v">'+(oi?oi.val:'—')+'</td></tr>';
     tr+='<tr><td>5</td><td><b>Add place to offset</b><div class="note">H = offset + place</div></td><td class="v">'+(ok?pad(v):'no H-number')+'</td></tr></table>';
     tr+='<details style="margin-top:8px"><summary>Show this section\'s raw expression</summary><pre class="code solo" style="white-space:pre-wrap;word-break:break-all;padding:10px 16px"><span class="ln" style="padding-left:0">'+esc(X.giant.parts[S]||'')+'</span></pre></details>';
-    $('gtrace').innerHTML=tr;
+    $('gtrace').innerHTML=tr;fhUpdate(S,L.toUpperCase(),v,t);
   }
   on(gs,'change',run);on($('gl'),'input',run);
   var ex=[['B','20H'],['A','1'],['C','417'],['D','1H'],['E','199BH'],['G','61'],['K','57'],['M','100'],['J','132'],['L','107'],['F','210'],['B','384HA'],['D','563']],ei=0;
@@ -292,10 +318,12 @@ function copyText(t){
   var pairs=[['overview','Whole map',1200/630,['Before: dark title blocks sit on top of the lots they name, and the legacy notes crowd the margins.','After: no title blocks over lots. Roads, buildings and lot outlines are kept in muted colors.','Outlines are thin, so the lot grid is readable at this scale.']],
     ['dense','Straight rows',1000/640,['Before: each number is drawn as an outlined shape, and the old and new numbers overlap (look at 2193 and 2033).','After: one number per lot, in a clean typeface, inside the lot outline.','Contrast improved: dark numerals on a plain lot face. Small lots get smaller numbers.']],
     ['curved','Curved rows and a section title',1000/640,['Before: the section title ("SECTION") runs across the numbers, and numbers cross lot edges.','After: the title is gone and each number sits inside its lot.','In the straight blocks the numbers read left to right. In curved rows they turn with the lot, so the reading direction follows the row.']]];
+  var MK={overview:[[42.4,34.9],[18,71],[63,65]],dense:[[30,28],[41,45],[5,83]],curved:[[63.6,30],[71,19],[74,68]]};
+  function mk(k){return MK[k].map(function(q,j){return '<span class="mk" style="left:'+q[0]+'%;top:'+q[1]+'%">'+(j+1)+'</span>'}).join('')}
   var h='';pairs.forEach(function(p,i){h+='<div class="cmp" id="cmp'+i+'"><h4 style="margin-top:0">'+p[1]+'</h4>'
     +'<div class="cc"><div><button class="btn seg sm on" data-m="slide" type="button">Slider</button><button class="btn seg sm" data-m="side" type="button">Side by side</button></div><label>Zoom <input id="zm'+i+'" type="range" min="1" max="4" step="0.25" value="1" aria-label="Zoom"><span id="zv'+i+'">1×</span></label><button class="btn sm" data-r="1" type="button">Reset view</button></div>'
-    +'<div class="cmpview" style="--ar:'+p[2]+';aspect-ratio:'+p[2]+'"><div class="pan"><img src="'+IMG['new_'+p[0]]+'" alt="After: '+p[1]+'"><div class="top"><img src="'+IMG['old_'+p[0]]+'" alt="Before: '+p[1]+'"></div></div><div class="dv" tabindex="0" role="slider" aria-label="Before and after divider" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50"><i>◂▸</i></div><span class="lab" style="left:8px">Before</span><span class="lab" style="right:8px">After</span></div>'
-    +'<div class="sidebox"><div><span class="tag">Before</span><img src="'+IMG['old_'+p[0]]+'" alt="Before: '+p[1]+'"></div><div><span class="tag">After</span><img src="'+IMG['new_'+p[0]]+'" alt="After: '+p[1]+'"></div></div>'
+    +'<div class="cmpview" style="--ar:'+p[2]+';aspect-ratio:'+p[2]+'"><div class="pan"><img src="'+IMG['new_'+p[0]]+'" alt="After: '+p[1]+'"><div class="top"><img src="'+IMG['old_'+p[0]]+'" alt="Before: '+p[1]+'"></div>'+mk(p[0])+'</div><div class="dv" tabindex="0" role="slider" aria-label="Before and after divider" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50"><i>↔</i></div><span class="lab" style="left:8px">Before</span><span class="lab" style="right:8px">After</span></div>'
+    +'<div class="sidebox"><div><span class="tag">Before</span><div class="rel"><img src="'+IMG['old_'+p[0]]+'" alt="Before: '+p[1]+'">'+mk(p[0])+'</div></div><div><span class="tag">After</span><div class="rel"><img src="'+IMG['new_'+p[0]]+'" alt="After: '+p[1]+'">'+mk(p[0])+'</div></div></div>'
     +'<ol class="calls" style="margin-top:10px">'+p[3].map(function(t,j){return '<li><i>'+(j+1)+'</i>'+esc(t)+'</li>'}).join('')+'</ol></div>'});
   $('cmps').innerHTML=h;
   pairs.forEach(function(p,i){var box=$('cmp'+i),view=box.querySelector('.cmpview'),pan=view.querySelector('.pan'),top=view.querySelector('.top'),dv=view.querySelector('.dv'),zm=$('zm'+i),v=50,z=1,tx=0,ty=0,drag=null,mode=null;
