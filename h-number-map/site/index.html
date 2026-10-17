@@ -98,6 +98,7 @@ textarea.field{height:auto;min-height:64px;padding:9px 12px;resize:vertical}
 #zoomctl button{display:flex;align-items:center;justify-content:center;gap:7px;min-width:48px;height:46px;border:0;border-bottom:1px solid var(--line);background:none;color:var(--navy);font-weight:600;font-size:13px;padding:0 12px}
 #zoomctl button:last-child{border-bottom:0} #zoomctl button:hover:not(:disabled){background:var(--surface-2)} #zoomctl button:disabled{opacity:.4;cursor:default}
 #zoomctl svg{width:17px;height:17px}
+#fsctl{z-index:9}.immersive header,.immersive aside#side{display:none}
 #layers{left:12px;top:12px;z-index:9}.lgrp{font:700 11px var(--sans);letter-spacing:.06em;text-transform:uppercase;color:var(--faint);padding:8px 8px 2px}
 .layers-btn{height:38px;display:inline-flex;align-items:center;gap:7px;padding:0 12px;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);font-weight:600;font-size:13px;color:var(--navy)}
 .layers-btn svg{width:15px;height:15px}
@@ -216,6 +217,7 @@ table.t td{padding:5px 6px;border-bottom:1px solid var(--line);overflow-wrap:any
         <label class="lrow"><input type="checkbox" id="ly-ann"><span>Original drawing annotations<small>Road names, building names and the mausoleum legend from the source drawing.</small></span></label>
       </div>
     </div>
+    <div class="ctl" id="fsctl" style="right:12px;top:12px"><button class="layers-btn" id="fs" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg><span id="fs-l">Full screen</span></button></div>
     <iframe id="v3d" title="3D model of Cedar Grove" hidden style="position:absolute;inset:0;width:100%;height:100%;border:0;background:var(--map);z-index:1"></iframe>
     <div class="ctl" id="zoomhint" hidden>Zoom in to read H-numbers</div>
     <div class="ctl" id="legend"><span>Numbers are H-numbers (H and leading zeros left off)</span><span><i class="rvk"></i>Needs review</span><span id="lg-rec" hidden><i class="rec"></i>Has grave records</span></div>
@@ -491,6 +493,17 @@ function fillAreaList(){var s=areaOpen,q=areaFilter.trim().toUpperCase().replace
 function showHint(s){var a=AREAS[s],hint=$('hint');if(a&&a.hull){hint.setAttribute('points',a.hull.map(function(p){return p.join(',')}).join(' '));vis(hint,true)}}
 function openArea(s){areaOpen=s;areaFilter='';showHint(s);pushHist();renderSide();measure();animateTo(targetFor(AREAS[s].b,.94,0,MAXS))}
 function markList(){}
+
+/* ---------- full screen (browser full screen where allowed, otherwise the map fills the window) ---------- */
+function fsEl(){return document.fullscreenElement||document.webkitFullscreenElement}
+function fsSync(){var on=!!fsEl()||document.body.classList.contains('immersive');$('fs-l').textContent=on?'Exit full screen':'Full screen';setTimeout(function(){measure();render()},60)}
+function setImm(on){document.body.classList.toggle('immersive',on);fsSync()}
+$('fs').onclick=function(){var d=document.documentElement,rq=d.requestFullscreen||d.webkitRequestFullscreen;
+  if(fsEl()){(document.exitFullscreen||document.webkitExitFullscreen).call(document);return}
+  if(document.body.classList.contains('immersive')){setImm(false);return}
+  if(rq){try{var r=rq.call(d);if(r&&r.catch)r.catch(function(){setImm(true)})}catch(e){setImm(true)}}else setImm(true)};
+['fullscreenchange','webkitfullscreenchange'].forEach(function(n){document.addEventListener(n,fsSync)});
+document.addEventListener('keydown',function(e){if(e.key==='Escape'&&document.body.classList.contains('immersive'))setImm(false)});
 
 /* ---------- layers ---------- */
 $('layers-btn').onclick=function(){var m=$('layers-menu');m.hidden=!m.hidden;this.setAttribute('aria-expanded',String(!m.hidden))};
