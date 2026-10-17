@@ -1,0 +1,204 @@
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Cedar Grove in 3D</title>
+<style>
+/*__FONTS__*/
+/* Layout: one full-height 3D stage under a sky gradient; a pill toolbar floats over it; a card names the lot under the pointer. */
+:root{color-scheme:light;--bg:#dcdad2;--fg:#0b0b0a;--g3:#b3b1a6;--g4:#8f8d82;--g5:#4b4a44;--surf:#efede7;--rule:#a7a59a;--acc:#c5a448;--acc-ink:#0b0b0a;
+  --sky:linear-gradient(180deg,#6f9ccd 0%,#b9d0e6 34%,#e6e3d8 50%,#e6e3d8 100%);--fog:#e6e3d8;
+  --sans:'Space Grotesk',ui-sans-serif,system-ui,-apple-system,'Segoe UI',sans-serif;--mono:'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){color-scheme:dark;--bg:#0b0b0a;--fg:#f4f2ec;--g3:#2b2b28;--g4:#45443f;--g5:#b9b7af;--surf:#181817;--rule:#45443f;--sky:linear-gradient(180deg,#0a1220 0%,#1c2c44 36%,#33465a 50%,#33465a 100%);--fog:#33465a}}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;background:var(--bg);color:var(--fg);font:400 16px/1.5 var(--sans);overflow:hidden}
+#stage{position:fixed;inset:0;background:var(--sky)}
+#stage canvas{display:block;width:100%;height:100%;outline:none;touch-action:none}
+#labels{position:fixed;inset:0;pointer-events:none;overflow:hidden}
+#labels div{position:absolute;transform:translate(-50%,-50%);font:600 12px/1.15 var(--mono);color:#fff;text-align:center;text-shadow:0 0 3px #000,0 0 3px #000,0 1px 2px #000;white-space:nowrap}
+#labels div small{display:block;font-weight:500;opacity:.92}
+.bar{position:fixed;left:50%;transform:translateX(-50%);bottom:max(14px,env(safe-area-inset-bottom,0px));display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;justify-content:center;max-width:calc(100vw - 24px);padding:10px 16px;background:var(--surf);border:1px solid var(--rule);border-radius:26px;box-shadow:0 10px 30px rgba(0,0,0,.25)}
+.bar label{font:500 11px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--g5);display:flex;align-items:center;gap:7px}
+.seg{display:inline-flex}
+.btn,select,input[type=number]{font:600 13px var(--sans);color:var(--fg);background:transparent;border:1.5px solid var(--g4);border-radius:12px;min-height:38px;padding:0 13px;cursor:pointer}
+input[type=number]{width:96px;cursor:text;background:var(--bg)}
+select{background:var(--bg)}
+.btn:hover{border-color:var(--fg)}
+.seg .btn{border-radius:0;margin-right:-1.5px}.seg .btn:first-child{border-radius:12px 0 0 12px}.seg .btn:last-child{border-radius:0 12px 12px 0;margin-right:0}
+.btn.on{background:var(--fg);color:var(--bg);border-color:var(--fg)}
+.btn.go{background:var(--acc);color:var(--acc-ink);border-color:var(--acc)}
+input[type=range]{accent-color:var(--fg);width:100px}
+.btn:focus-visible,select:focus-visible,input:focus-visible{outline:2px solid var(--fg);outline-offset:2px}
+.top{position:fixed;left:max(14px,env(safe-area-inset-left,0px));top:max(14px,env(safe-area-inset-top,0px));display:flex;flex-direction:column;gap:10px;max-width:min(380px,calc(100vw - 28px))}
+.card{background:var(--surf);border:1px solid var(--rule);border-radius:20px;padding:14px 18px;box-shadow:0 8px 24px rgba(0,0,0,.2)}
+.card h1{font:700 22px/1.1 var(--sans);letter-spacing:-.02em;margin:0 0 4px}
+.card p{margin:0;font-size:13.5px;color:var(--g5)}
+#info b{font:700 20px var(--mono)} #info .k{font:500 11px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--g5);display:block;margin-bottom:2px}
+#info .row2{display:flex;gap:18px;flex-wrap:wrap;margin-top:6px}
+#load{position:fixed;inset:0;display:grid;place-items:center;background:var(--bg);z-index:5;font:500 14px var(--mono);color:var(--g5);transition:opacity .4s}
+.legend{display:flex;align-items:center;gap:8px;font:500 11px var(--mono);color:var(--g5)}
+.legend i{display:inline-block;width:110px;height:10px;border-radius:99px;background:linear-gradient(90deg,hsl(40,62%,82%),hsl(40,62%,32%))}
+.credit{position:fixed;right:12px;top:max(12px,env(safe-area-inset-top,0px));font:500 10.5px var(--mono);color:#fff;text-shadow:0 0 3px #000;opacity:.85;text-align:right;max-width:260px}
+.hint{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(max(14px,env(safe-area-inset-bottom,0px)) + 120px);font:500 12px var(--mono);color:#fff;text-shadow:0 0 4px #000,0 0 4px #000;pointer-events:none;opacity:0;transition:opacity .5s;text-align:center}
+.hint.on{opacity:.95}
+@media (max-width:760px){.top .card:last-child{display:none}.bar{border-radius:20px;padding:8px 10px}.credit{display:none}}
+</style>
+<div id="stage"></div><div id="labels"></div>
+<div id="load">Building the cemetery…</div>
+<div class="top"><div class="card"><h1>Cedar Grove in 3D</h1><p>Every lot is a headstone standing on the aerial photo. Drag to orbit, scroll to zoom, right-drag to pan, or press Walk.</p></div>
+<div class="card" id="info" aria-live="polite"><span class="k">Lot under the pointer</span><span style="color:var(--g5);font-size:13.5px">Point at a headstone, or type an H-number below.</span></div></div>
+<div class="credit">Aerial imagery © Google Earth, used for this internal project</div>
+<div class="hint" id="hint"></div>
+<div class="bar" role="toolbar" aria-label="3D controls">
+<div class="seg" role="group" aria-label="View"><button class="btn on" data-view="over" type="button">Overview</button><button class="btn" data-view="top" type="button">From above</button><button class="btn" data-view="walk" type="button">Walk</button></div>
+<label>Camera <select id="wstyle" aria-label="Walk camera"><option value="eye">Eye level</option><option value="chase">Following</option></select></label>
+<label>Color <select id="cmode"><option value="h">H-number (gold)</option><option value="sec">Old section</option><option value="old">Old label</option><option value="none">Plain stone</option></select></label>
+<label>Pass <select id="pass"><option value="0">All six</option><option value="1">Pass 1 · B, A</option><option value="2">Pass 2 · D, C</option><option value="3">Pass 3 · F, E</option><option value="4">Pass 4 · margins, G, H</option><option value="5">Pass 5 · M</option><option value="6">Pass 6 · K, J, I, L</option></select></label>
+<label>Sun <input id="sun" type="range" min="0" max="100" value="38" aria-label="Sun position"></label>
+<label>Go to H <input id="gh" type="number" min="1" max="3185" placeholder="1698" aria-label="H-number"></label><button class="btn go" id="gob" type="button">Fly there</button>
+<span class="legend" id="leg"><i></i>first lot to last lot</span>
+<button class="btn" id="play" type="button">Walk the path</button><label>Speed <input id="speed" type="range" min="2" max="40" value="8" aria-label="Walking speed"></label>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+<script>
+var D = /*__DATA__*/null;
+(function(){
+"use strict";
+var $=function(i){return document.getElementById(i)};
+var pad=function(h){return 'H'+String(h).padStart(6,'0')};
+var PASS=[null,[1,836],[837,1871],[1872,2331],[2332,2586],[2587,2835],[2836,3185]];
+var X0=D.ext[0],Y0=D.ext[1],X1=D.ext[2],Y1=D.ext[3],CX=(X0+X1)/2,CZ=(Y0+Y1)/2;
+var SEC='ABCDEFGHIJKLM'.split(''),SCOL=['#e07a3f','#4f86c6','#3f9a63','#a45bb8','#d3a437','#d9534f','#3aa3b4','#8576c8','#e0952a','#6f9a3f','#a9694f','#4d86d6','#b58d78'];
+var lots=D.lots.map(function(r){var p=r[3],pts=[],cx=0,cy=0;for(var k=0;k<p.length;k+=2){pts.push([p[k]/10,p[k+1]/10]);cx+=p[k]/10;cy+=p[k+1]/10}cx/=pts.length;cy/=pts.length;
+  /* long axis of the lot: the longer of its first two edges */
+  var e1=[pts[1][0]-pts[0][0],pts[1][1]-pts[0][1]],e2=[pts[2][0]-pts[1][0],pts[2][1]-pts[1][1]],l1=Math.hypot(e1[0],e1[1]),l2=Math.hypot(e2[0],e2[1]),u=l1>=l2?e1:e2,L=Math.max(l1,l2),Wd=Math.min(l1,l2);
+  return {s:r[0],l:r[1],h:r[2],pts:pts,cx:cx,cy:cy,ux:u[0]/L,uy:u[1]/L,len:L,wid:Wd}});
+lots.sort(function(a,b){return a.h-b.h});lots.forEach(function(l,i){l.i=i});
+if(typeof THREE==='undefined'){$('load').textContent='The 3D library did not load. Check your connection and reload.';return}
+var dark=window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches&&document.documentElement.getAttribute('data-theme')!=='light';
+var FOG=getComputedStyle(document.documentElement).getPropertyValue('--fog').trim()||'#e6e3d8';
+var renderer=new THREE.WebGLRenderer({antialias:true,alpha:true,powerPreference:'high-performance'});renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,2));renderer.outputEncoding=THREE.sRGBEncoding;renderer.setClearColor(0x000000,0);
+renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;$('stage').appendChild(renderer.domElement);
+var scene=new THREE.Scene();scene.fog=new THREE.Fog(FOG,900,3600);
+var camera=new THREE.PerspectiveCamera(45,1,.5,9000);
+/* light: a hemisphere for the sky, one sun with shadows that follows the camera target */
+var hemi=new THREE.HemisphereLight(dark?0x9fb4d6:0xdbe8ff,dark?0x2b3322:0x5d6b45,dark?.55:.78);scene.add(hemi);
+var sun=new THREE.DirectionalLight(dark?0xcfd8ff:0xfff0d0,dark?.55:1.0);sun.castShadow=true;sun.shadow.mapSize.set(2048,2048);var sc=sun.shadow.camera;sc.left=-170;sc.right=170;sc.top=170;sc.bottom=-170;sc.near=10;sc.far=1400;sun.shadow.bias=-.0006;scene.add(sun);scene.add(sun.target);
+function sunDir(){var t=+$('sun').value/100,az=-0.9+t*2.6,el=.22+Math.sin(t*Math.PI)*.95;return new THREE.Vector3(Math.cos(az)*Math.cos(el),Math.sin(el),Math.sin(az)*Math.cos(el)).normalize()}
+/* ground: the aerial photo warped into lot-map coordinates, with a fine grain so it stays crisp up close */
+var tex=new THREE.TextureLoader().load(D.tex,function(){$('load').style.opacity=0;setTimeout(function(){$('load').style.display='none'},450)});
+tex.encoding=THREE.sRGBEncoding;tex.anisotropy=Math.min(8,renderer.capabilities.getMaxAnisotropy());
+var nc=document.createElement('canvas');nc.width=nc.height=256;var nx=nc.getContext('2d'),id=nx.createImageData(256,256);for(var q=0;q<256*256;q++){var v=150+Math.floor((Math.random()+Math.random()+Math.random()-1.5)*60);id.data[q*4]=id.data[q*4+1]=id.data[q*4+2]=Math.max(60,Math.min(255,v));id.data[q*4+3]=255}nx.putImageData(id,0,0);
+var grain=new THREE.CanvasTexture(nc);grain.wrapS=grain.wrapT=THREE.RepeatWrapping;
+var gg=new THREE.PlaneGeometry(X1-X0,Y1-Y0);var uv=gg.attributes.uv,uv2=new Float32Array(uv.count*2);for(var u_=0;u_<uv.count;u_++){uv2[u_*2]=uv.getX(u_)*((X1-X0)/6);uv2[u_*2+1]=uv.getY(u_)*((Y1-Y0)/6)}gg.setAttribute('uv2',new THREE.BufferAttribute(uv2,2));
+var ground=new THREE.Mesh(gg,new THREE.MeshBasicMaterial({map:tex,aoMap:grain,aoMapIntensity:.55}));ground.rotation.x=-Math.PI/2;ground.position.set(CX,0,CZ);scene.add(ground);
+var shade=new THREE.Mesh(new THREE.PlaneGeometry(X1-X0,Y1-Y0),new THREE.ShadowMaterial({opacity:.42}));shade.rotation.x=-Math.PI/2;shade.position.set(CX,.1,CZ);shade.receiveShadow=true;scene.add(shade);
+var apron=new THREE.Mesh(new THREE.PlaneGeometry(14000,14000),new THREE.MeshBasicMaterial({color:new THREE.Color(dark?'#2b3a2a':'#8b9a6e')}));apron.rotation.x=-Math.PI/2;apron.position.set(CX,-1.5,CZ);scene.add(apron);
+/* buildings from the drawing */
+var wallM=new THREE.MeshStandardMaterial({color:0xd8d0c0,roughness:.9}),roofM=new THREE.MeshStandardMaterial({color:0x6a5d55,roughness:.8});
+(D.bld||[]).forEach(function(b){var p=b[0],sh=new THREE.Shape();for(var k=0;k<p.length;k+=2){var x=p[k]/10,y=p[k+1]/10;if(k===0)sh.moveTo(x,-y);else sh.lineTo(x,-y)}
+  var geo=new THREE.ExtrudeGeometry(sh,{depth:b[1],bevelEnabled:false});geo.rotateX(-Math.PI/2);var m=new THREE.Mesh(geo,[roofM,wallM]);m.castShadow=true;m.receiveShadow=true;scene.add(m)});
+/* plots: a low tinted slab per lot, so the numbering colour still reads from far away */
+var HT=.18,pos=[],tri=[],range=[];
+lots.forEach(function(l){var start=pos.length/3,P=l.pts.slice(),A=0;for(var k=0;k<P.length;k++){var a=P[k],b=P[(k+1)%P.length];A+=a[0]*b[1]-b[0]*a[1]}if(A>0)P.reverse();
+  var T=THREE.ShapeUtils.triangulateShape(P.map(function(p){return new THREE.Vector2(p[0],p[1])}),[]);
+  T.forEach(function(t){var a=P[t[0]],b=P[t[1]],c=P[t[2]],uy=(b[1]-a[1])*(c[0]-a[0])-(b[0]-a[0])*(c[1]-a[1]);if(uy<0){var q=b;b=c;c=q}pos.push(a[0],HT,a[1],b[0],HT,b[1],c[0],HT,c[1]);tri.push(l.i)});
+  range.push([start,pos.length/3-start])});
+var g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(pos,3));var colA=new Float32Array(pos.length);g.setAttribute('color',new THREE.BufferAttribute(colA,3));g.computeVertexNormals();
+var plotMat=new THREE.MeshBasicMaterial({vertexColors:true,transparent:true,opacity:.42,side:THREE.DoubleSide,depthWrite:false});
+var plots=new THREE.Mesh(g,plotMat);plots.renderOrder=1;scene.add(plots);
+var ln=[];lots.forEach(function(l){var P=l.pts;for(var k=0;k<P.length;k++){var a=P[k],b=P[(k+1)%P.length];ln.push(a[0],HT+.05,a[1],b[0],HT+.05,b[1])}});
+var lg=new THREE.BufferGeometry();lg.setAttribute('position',new THREE.Float32BufferAttribute(ln,3));
+var lines=new THREE.LineSegments(lg,new THREE.LineBasicMaterial({color:0xffffff,transparent:true,opacity:.35}));scene.add(lines);
+/* headstones: one arch-topped stone per lot, instanced */
+var sh=new THREE.Shape();sh.moveTo(-.5,0);sh.lineTo(.5,0);sh.lineTo(.5,.62);sh.absarc(0,.62,.5,0,Math.PI,false);sh.lineTo(-.5,0);
+var sg=new THREE.ExtrudeGeometry(sh,{depth:1,bevelEnabled:true,bevelSize:.025,bevelThickness:.03,bevelSegments:1,curveSegments:10});sg.translate(0,0,-.5);
+var stoneMat=new THREE.MeshStandardMaterial({color:0xffffff,roughness:.72,metalness:0});
+var stones=new THREE.InstancedMesh(sg,stoneMat,lots.length);stones.castShadow=true;stones.receiveShadow=true;scene.add(stones);
+var M4=new THREE.Matrix4(),vx=new THREE.Vector3(),vy=new THREE.Vector3(0,1,0),vz=new THREE.Vector3(),pp=new THREE.Vector3(),SM=new THREE.Matrix4();
+function rnd(i,k){var x=Math.sin(i*127.1+k*311.7)*43758.5453;return x-Math.floor(x)}
+function placeStone(l,flat){var w=Math.min(l.wid*.62,6.2)*(.88+.24*rnd(l.i,1)),h=(flat?.45:1)*Math.min(l.len*.4,4.6)*(.82+.36*rnd(l.i,2)),th=.9+.3*rnd(l.i,3);
+  /* the stone stands at the north end of its lot, broad face across the lot */
+  var ux=l.ux,uy=l.uy;if(uy>0){ux=-ux;uy=-uy}
+  var ja=(rnd(l.i,4)-.5)*.14,cj=Math.cos(ja),sj=Math.sin(ja),tx=ux*cj-uy*sj;uy=ux*sj+uy*cj;ux=tx;
+  var px=l.cx+ux*l.len*.27,pz=l.cy+uy*l.len*.27;
+  vz.set(ux,0,uy);vx.set(-uy,0,ux);pp.set(px,.1,pz);M4.makeBasis(vx,vy,vz);M4.setPosition(pp);SM.makeScale(w,h/1.12,th);M4.multiply(SM);stones.setMatrixAt(l.i,M4)}
+var C=new THREE.Color();
+function lotColor(l,mode,pass){
+  if(pass&&(l.h<PASS[pass][0]||l.h>PASS[pass][1]))return C.set('#7d7c75');
+  if(mode==='none')return C.set('#e9e6dc');
+  if(mode==='sec')return C.set(SCOL[SEC.indexOf(l.s)]);
+  if(mode==='old'){var n=parseInt(l.l.replace(/[^0-9]/g,''),10)||0;return C.setHSL(((n*47)%360)/360,.6,.58)}
+  if(pass){var p=PASS[pass];return C.setHSL(40/360,.62,(84-50*(l.h-p[0])/Math.max(1,p[1]-p[0]))/100)}
+  return C.setHSL(40/360,.62,(84-50*(l.h-1)/3184)/100);}
+function recolor(){var mode=$('cmode').value,pass=+$('pass').value;
+  lots.forEach(function(l){var out=pass&&(l.h<PASS[pass][0]||l.h>PASS[pass][1]);placeStone(l,out);var c=lotColor(l,mode,pass);stones.setColorAt(l.i,c);var r=range[l.i];for(var v=r[0];v<r[0]+r[1];v++){colA[v*3]=c.r;colA[v*3+1]=c.g;colA[v*3+2]=c.b}});
+  stones.instanceMatrix.needsUpdate=true;stones.instanceColor.needsUpdate=true;g.attributes.color.needsUpdate=true;plotMat.opacity=mode==='none'?.1:.42;
+  $('leg').style.display=(mode==='h')?'flex':'none'}
+/* the walker: a gold pillar on the current lot (overview and following views) */
+var pillar=new THREE.Mesh(new THREE.CylinderGeometry(.8,.8,18,20),new THREE.MeshBasicMaterial({color:0xc5a448}));pillar.position.y=9;pillar.visible=false;scene.add(pillar);
+var ring=new THREE.Mesh(new THREE.TorusGeometry(5.5,.4,10,40),new THREE.MeshBasicMaterial({color:0xc5a448}));ring.rotation.x=Math.PI/2;ring.position.y=.5;ring.visible=false;scene.add(ring);
+var trail=new THREE.Line(new THREE.BufferGeometry(),new THREE.LineBasicMaterial({color:0xc5a448}));trail.visible=false;scene.add(trail);
+var controls=new THREE.OrbitControls(camera,renderer.domElement);controls.enableDamping=true;controls.dampingFactor=.08;controls.maxPolarAngle=Math.PI*.497;controls.minDistance=6;controls.maxDistance=2600;
+var view='over',tween=null,sel=null,f=0,playing=false,heading=new THREE.Vector3(1,0,0),camGoal=new THREE.Vector3(),lookGoal=new THREE.Vector3();
+function setSize(){var w=window.innerWidth,h=window.innerHeight;renderer.setSize(w,h,false);camera.aspect=w/h;camera.updateProjectionMatrix()}
+window.addEventListener('resize',setSize);setSize();
+function flyTo(p,t,ms){tween={t0:performance.now(),ms:ms||1000,p0:camera.position.clone(),t0v:controls.target.clone(),p1:p,t1:t}}
+function hint(s){var h=$('hint');h.textContent=s||'';h.classList.toggle('on',!!s);if(s)setTimeout(function(){h.classList.remove('on')},4200)}
+function setView(v){view=v;[].forEach.call(document.querySelectorAll('[data-view]'),function(b){b.classList.toggle('on',b.getAttribute('data-view')===v)});
+  controls.enabled=v!=='walk';camera.up.set(0,1,0);scene.fog.near=v==='walk'?90:900;scene.fog.far=v==='walk'?900:3600;trail.visible=false;
+  if(v==='over'){flyTo(new THREE.Vector3(CX,760,CZ+720),new THREE.Vector3(CX,0,CZ+20));pillar.visible=ring.visible=sel!=null}
+  else if(v==='top'){camera.up.set(0,0,-1);flyTo(new THREE.Vector3(CX,1250,CZ+1),new THREE.Vector3(CX,0,CZ));pillar.visible=ring.visible=sel!=null}
+  else{playing=false;$('play').textContent='Walk the path';if(sel!=null)f=sel;placeMarker(f);trail.visible=true;hint('Press "Walk the path". Move the Speed slider to walk faster.')}}
+function placeMarker(i){var l=lots[Math.max(0,Math.min(lots.length-1,Math.round(i)))];pillar.position.set(l.cx,9,l.cy);ring.position.set(l.cx,.5,l.cy);var eye=$('wstyle').value==='eye'&&view==='walk';pillar.visible=ring.visible=!eye}
+function dirAt(i){var a=lots[Math.floor(i)],x=0,z=0,n=0;for(var j=Math.floor(i)+1;j<=Math.floor(i)+5&&j<lots.length;j++){x+=lots[j].cx-a.cx;z+=lots[j].cy-a.cy;n++}if(!n||Math.hypot(x,z)<1)return null;var L=Math.hypot(x,z);return new THREE.Vector3(x/L,0,z/L)}
+function posAt(i){var a=lots[Math.floor(i)],b=lots[Math.min(lots.length-1,Math.floor(i)+1)],t=i-Math.floor(i);return new THREE.Vector3(a.cx+(b.cx-a.cx)*t,0,a.cy+(b.cy-a.cy)*t)}
+function updateTrail(i){var pts=[],s=Math.floor(i);for(var j=s;j<Math.min(lots.length,s+60);j++)pts.push(new THREE.Vector3(lots[j].cx,.45,lots[j].cy));trail.geometry.setFromPoints(pts)}
+/* picking: stones first, then the plot under them */
+var ray=new THREE.Raycaster(),mouse=new THREE.Vector2(),down=null,hoverI=null;
+function pick(e){var r=renderer.domElement.getBoundingClientRect();mouse.set(((e.clientX-r.left)/r.width)*2-1,-((e.clientY-r.top)/r.height)*2+1);ray.setFromCamera(mouse,camera);var h=ray.intersectObject(stones)[0];if(h)return h.instanceId;h=ray.intersectObject(plots)[0];return h?tri[h.faceIndex]:null}
+function show(i,pinned){var l=lots[i];if(!l)return;var pi=1;for(var p=1;p<=6;p++)if(l.h>=PASS[p][0]&&l.h<=PASS[p][1])pi=p;
+  $('info').innerHTML='<span class="k">'+(pinned?'Selected lot':'Lot under the pointer')+'</span><b>'+pad(l.h)+'</b><div class="row2"><div><span class="k">Old address</span>'+l.s+'-'+l.l+'</div><div><span class="k">Pass</span>'+pi+'</div><div><span class="k">Graves</span>'+pad(l.h)+'1 to '+pad(l.h)+'9</div></div>'}
+renderer.domElement.addEventListener('pointermove',function(e){if(e.buttons||view==='walk')return;var i=pick(e);if(i!==hoverI){hoverI=i;if(i!=null&&sel==null)show(i,false)}});
+renderer.domElement.addEventListener('pointerdown',function(e){down=[e.clientX,e.clientY]});
+renderer.domElement.addEventListener('pointerup',function(e){if(!down)return;var moved=Math.hypot(e.clientX-down[0],e.clientY-down[1])>5;down=null;if(moved||view==='walk')return;var i=pick(e);if(i!=null){sel=i;f=i;show(i,true);placeMarker(i);pillar.visible=ring.visible=true}else{sel=null;pillar.visible=ring.visible=false}});
+function goH(){var h=+$('gh').value;if(!(h>=1&&h<=3185))return;var best=null;lots.forEach(function(l){if(l.h===h)best=l});
+  if(!best){$('info').innerHTML='<span class="k">No outline</span>'+pad(h)+' has no lot outline on the map (see the unresolved list in the project folder).';return}
+  sel=best.i;f=best.i;show(best.i,true);placeMarker(best.i);if(view==='walk')return;pillar.visible=ring.visible=true;
+  camera.up.set(0,1,0);flyTo(new THREE.Vector3(best.cx+14,34,best.cy+44),new THREE.Vector3(best.cx,2,best.cy),1300)}
+$('gob').addEventListener('click',goH);$('gh').addEventListener('keydown',function(e){if(e.key==='Enter')goH()});
+[].forEach.call(document.querySelectorAll('[data-view]'),function(b){b.addEventListener('click',function(){setView(b.getAttribute('data-view'))})});
+$('cmode').addEventListener('change',recolor);$('wstyle').addEventListener('change',function(){if(view==='walk')placeMarker(f)});
+$('pass').addEventListener('change',function(){recolor();var p=+$('pass').value;if(p&&view==='walk'){f=lots.findIndex(function(l){return l.h>=PASS[p][0]});placeMarker(f)}});
+$('play').addEventListener('click',function(){if(view!=='walk')setView('walk');playing=!playing;$('play').textContent=playing?'Pause':'Walk the path';if(playing&&f>=lots.length-2)f=0;if(playing){var p=+$('pass').value;if(p&&(lots[Math.round(f)].h<PASS[p][0]||lots[Math.round(f)].h>PASS[p][1]))f=lots.findIndex(function(l){return l.h>=PASS[p][0]})}});
+/* labels for nearby lots */
+var host=$('labels'),pool=[];for(var k=0;k<60;k++){var d=document.createElement('div');d.style.display='none';host.appendChild(d);pool.push(d)}
+var tmp=new THREE.Vector3();
+function updateLabels(){var cp=camera.position,near=[],h=cp.y;
+  if(h>130){pool.forEach(function(d){d.style.display='none'});return}
+  var R=h*2.4+60,R2=R*R;
+  for(var i=0;i<lots.length;i++){var l=lots[i],dx=l.cx-cp.x,dz=l.cy-cp.z,d2=dx*dx+dz*dz;if(d2<R2)near.push([d2,l])}
+  near.sort(function(a,b){return a[0]-b[0]});var w=window.innerWidth,hh=window.innerHeight,n=0;
+  for(var q=0;q<near.length&&n<60;q++){var l=near[q][1];tmp.set(l.cx,5.6,l.cy).project(camera);if(tmp.z>1||tmp.x<-1.05||tmp.x>1.05||tmp.y<-1.05||tmp.y>1.05)continue;
+    var dist=Math.sqrt(near[q][0]+h*h),fs=Math.max(8,Math.min(18,560/dist*1.5));var el=pool[n++];el.style.display='block';el.style.left=((tmp.x+1)/2*w)+'px';el.style.top=((1-tmp.y)/2*hh)+'px';el.style.fontSize=fs+'px';el.innerHTML=l.s+'-'+l.l+'<small>'+pad(l.h)+'</small>'}
+  for(;n<60;n++)pool[n].style.display='none';}
+var last=performance.now(),ease=function(t){return t<.5?2*t*t:1-Math.pow(-2*t+2,2)/2},sunSnap=new THREE.Vector3();
+function loop(now){requestAnimationFrame(loop);var dt=Math.min(.1,(now-last)/1000);last=now;
+  if(tween){var t=Math.min(1,(now-tween.t0)/tween.ms),e=ease(t);camera.position.lerpVectors(tween.p0,tween.p1,e);controls.target.lerpVectors(tween.t0v,tween.t1,e);camera.lookAt(controls.target);if(t>=1)tween=null}
+  if(view==='walk'){
+    if(playing){f+=(+$('speed').value)*dt;var p=+$('pass').value,hi=lots.length-1;if(p){for(var z=0;z<lots.length;z++)if(lots[z].h>PASS[p][1]){hi=z-1;break}}
+      if(f>=hi){f=hi;playing=false;$('play').textContent='Walk the path'}placeMarker(f);if(Math.round(f)!==hoverI){hoverI=Math.round(f);show(hoverI,true)}}
+    var P=posAt(Math.min(f,lots.length-1.01)),d=dirAt(Math.min(f,lots.length-2));if(d)heading.lerp(d,1-Math.exp(-dt*3.5)).normalize();
+    updateTrail(f);var eye=$('wstyle').value==='eye';
+    if(eye){camGoal.set(P.x-heading.x*7,5.8,P.z-heading.z*7);lookGoal.set(P.x+heading.x*34,2.4,P.z+heading.z*34)}
+    else{camGoal.set(P.x-heading.x*30,19,P.z-heading.z*30);lookGoal.set(P.x+heading.x*30,0,P.z+heading.z*30)}
+    var k=tween?0:1-Math.exp(-dt*3);camera.position.lerp(camGoal,k);controls.target.lerp(lookGoal,k);camera.lookAt(controls.target)}
+  else if(!tween)controls.update();
+  /* the sun and its shadow window follow what you are looking at */
+  var tg=controls.target;sunSnap.set(Math.round(tg.x/20)*20,0,Math.round(tg.z/20)*20);sun.target.position.copy(sunSnap);sun.position.copy(sunSnap).addScaledVector(sunDir(),520);
+  if(pillar.visible){var s=1+.08*Math.sin(now/260);ring.scale.set(s,s,s)}
+  var nr=Math.max(.5,Math.min(40,camera.position.y*.035));if(Math.abs(nr-camera.near)>.25*camera.near){camera.near=nr;camera.updateProjectionMatrix()}
+  renderer.render(scene,camera);updateLabels()}
+recolor();setView('over');camera.position.set(CX,760,CZ+720);controls.target.set(CX,0,CZ+20);requestAnimationFrame(loop);
+window.__cg3d={ready:true,setView:setView,lots:lots.length};
+})();
+</script>

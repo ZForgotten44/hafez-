@@ -36,6 +36,7 @@ for o in L:
     if o.get('poly'):
         flat = [int(round(v * 10)) for p in o['poly'] for v in p]
         lots.append([o['s'], o['l'], o['hn'], flat])
-json.dump(dict(tex=tex, ext=[x0, y0, x1, y1], lots=lots), open('three/data3d.json', 'w'), separators=(',', ':'))
+bld = json.load(open('three/buildings.json')) if os.path.exists('three/buildings.json') else []
+json.dump(dict(tex=tex, ext=[x0, y0, x1, y1], lots=lots, bld=bld), open('three/data3d.json', 'w'), separators=(',', ':'))
 print(len(lots), 'lots; texture', len(buf) // 1024, 'KB', out.shape)
 cv2.imwrite('three/ground_preview.jpg', cv2.resize(out, (W // 2, Hh // 2)))
