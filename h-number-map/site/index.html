@@ -180,6 +180,7 @@ table.t td{padding:5px 6px;border-bottom:1px solid var(--line);overflow-wrap:any
   <span id="capnote"></span>
   <div class="hbtns">
     <button class="tbtn on" id="b-browse" type="button" aria-pressed="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h10"/></svg><span class="lbl">Browse map</span></button>
+    <a class="tbtn" id="b-3d" href="3d.html" style="text-decoration:none"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9L12 3zM12 12l8-4.5M12 12v9M12 12L4 7.5"/></svg><span class="lbl">3D view</span></a>
     <button class="tbtn" id="b-export" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m0 0l-4-4m4 4l4-4M5 21h14"/></svg><span class="lbl">Export</span></button>
     <button class="tbtn" id="b-import" type="button" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21V9m0 0l-4 4m4-4l4 4M5 3h14"/></svg><span class="lbl">Import records</span></button>
   </div>
@@ -334,7 +335,7 @@ function renderPanel(){var p=$('panel');p.hidden=false;measure();if(isMobile())d
      +'<dl class="kv"><dt>Legacy reference</dt><dd>Section '+esc(r[2])+' &middot; Lot '+esc(r[3])+'</dd><dt>Map position</dt><dd>'+(r[12]?'Label position only (outline not drawn in the source)':'Outline drawn in the source')+'</dd></dl>'
      +'<p class="note" style="margin:0 0 4px">'+evText(r[11])+'</p>'
      +'<div id="rec-box"></div>'
-     +'<div class="btns"><button class="btn" id="p-copy" type="button">Copy H-number</button><button class="btn" id="p-list" type="button">Add to list</button></div></div>'}
+     +'<div class="btns"><button class="btn" id="p-copy" type="button">Copy H-number</button><button class="btn" id="p-list" type="button">Add to list</button><a class="btn" id="p-3d" href="3d.html#h='+(parseInt(String(r[1]).replace(/\D/g,''),10)||'')+'" style="text-decoration:none;display:inline-flex;align-items:center">View in 3D</a></div></div>'}
   else if(sel.k==='review'){var v=REVIEW[sel.i];
     h='<div class="p-head"><div><div class="p-h" style="font-size:22px">Needs review</div><div style="margin-top:8px"><span class="chip rv">Not shown as an H-number</span></div></div><button class="p-x" id="p-x" aria-label="Close details">&#10005;</button></div><div class="p-body">'
      +'<div class="box rvbox"><h3>Why</h3><ul style="margin:0;padding-left:18px">'+v.r.map(function(i){return '<li>'+esc(REASONS[i])+'</li>'}).join('')+'</ul></div>'

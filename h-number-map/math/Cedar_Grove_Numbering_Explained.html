@@ -341,7 +341,7 @@ nav.rail .sec>a b{font-size:1.1em}
 @media print{
   :root,:root[data-theme],:root:not([data-theme="light"]){color-scheme:light;--bg:#fff;--fg:#000;--g2:#eee;--g3:#ccc;--g4:#999;--g5:#444;--g6:#222;--g7:#000;--surf:#fff;--panel:#fff;--code:#f4f4f4;--bar:#fff;--rule:#888;--acc:#d9c37a;--ok:#1f6b3f;--bad:#a3271a;--info:#1f4f8f;--fs:11.5px}
   body{background:#fff;color:#000;font-size:11.5px;line-height:1.5} body::before{display:none}
-  .bar,nav.rail,#lb,.toast,.nextprev,.sbtn,.imgwrap .hint,.btn,input[type=range],.ctl,.cmp .cc,#consts,.cmpview,.cw .fl,.cw .cpy,#walkctl,#walk .row,#wmapbox{display:none!important}
+  .bar,nav.rail,#lb,.toast,.nextprev,.sbtn,.imgwrap .hint,.btn,input[type=range],.ctl,.cmp .cc,#consts,.cmpview,.cw .fl,.cw .cpy,#walkctl,#walk .row,#wmapbox,#w3d{display:none!important}
   .wrap{display:block;padding:0;max-width:none} main{padding:0}
   header.hero{padding:0 0 6mm} h1{font-size:30px}
   section{padding-top:0;break-before:page}
@@ -471,6 +471,11 @@ nav.rail .sec>a b{font-size:1.1em}
 <div class="row" style="margin-top:12px"><div><label class="f" for="sawstart">Start at H-number: <span id="sawstartv"></span></label><input id="sawstart" type="range" min="1" max="3100" value="1"></div><div><label class="f" for="sawwidth">Number of lots in the walk: <span id="sawwidthv"></span></label><input id="sawwidth" type="range" min="20" max="900" value="60"></div><div><label class="f" for="walkpos">Position: <span id="walkposv"></span></label><input id="walkpos" type="range" min="0" max="59" value="0"></div></div>
 <div id="wmapbox" class="mapbox"><svg id="wmap" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Map from above with the walk highlighted"></svg><span class="orient" style="left:10px;top:10px">N ↑</span></div>
 <div class="out" id="wnow" aria-live="polite"></div><div class="wnow" id="wstrip" aria-label="Next lots"></div></div>
+
+<div class="panel" id="w3d"><h4 style="margin-top:0">Walk it inside the cemetery in 3D</h4>
+<p>The same path as a 3D model: headstones, trees, the office, the chapel and the mausoleums. The current lot glows gold as the camera glides along the numbering.</p>
+<div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center"><a class="btn fill" id="w3dgo" href="3d.html" style="text-decoration:none">Fly to the lot above in 3D</a><a class="btn" id="w3dall" href="3d.html#walk" style="text-decoration:none">Walk all six passes</a></div>
+<div id="w3dp" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px"></div></div>
 
 <h3><span class="tag bad">C</span> Data inconsistencies</h3>
 <p>Each finding is shown as finding, example, practical consequence, and resolution status.</p>
@@ -797,9 +802,12 @@ var emphStats;
   LOTS.forEach(function(l){var p=document.createElementNS(NS,'polygon');p.setAttribute('points',l.poly.map(function(q){return q.join(',')}).join(' '));p._l=l;base.appendChild(p);polys.push(p)});
   function num(l){return parseInt(l.replace(/[^0-9]/g,''),10)||0}
   function lotColor(l,st,wd,visited){if(cmode==='h')return 'hsl('+Math.round(240-240*(l.h-st)/Math.max(1,wd-1))+',68%,'+(visited?62:50)+'%)';var n=num(l.l);return 'hsl('+((n*47)%360)+',62%,'+(visited?(isDark()?42:66):(40+(n*13)%25))+'%)'}
+  var B3=location.pathname.indexOf('/math/')>=0?'../site/3d.html':'3d.html';
+  function set3d(st){$('w3dgo').href=B3+'#h='+st;$('w3dgo').textContent='Fly to H'+String(st).padStart(6,'0')+' in 3D';$('w3dall').href=B3+'#walk'}
+  $('w3dp').innerHTML=[1,2,3,4,5,6].map(function(n){return '<a class="btn" style="text-decoration:none" href="'+B3+'#walk='+n+'">Walk pass '+n+'</a>'}).join('');
   function rebuild(){
     var st=+$('sawstart').value,wd=+$('sawwidth').value;$('sawstartv').textContent=st;$('sawwidthv').textContent=wd;
-    seq=LOTS.filter(function(l){return l.h>=st&&l.h<st+wd});var mp=Math.max(0,seq.length-1);$('walkpos').max=mp;if(posF>mp)posF=mp;$('walkpos').value=Math.round(posF);
+    seq=LOTS.filter(function(l){return l.h>=st&&l.h<st+wd});set3d(st);var mp=Math.max(0,seq.length-1);$('walkpos').max=mp;if(posF>mp)posF=mp;$('walkpos').value=Math.round(posF);
     var x0=1e9,y0=1e9,x1=-1e9,y1=-1e9;(seq.length?seq:LOTS).forEach(function(l){l.poly.forEach(function(q){if(q[0]<x0)x0=q[0];if(q[0]>x1)x1=q[0];if(q[1]<y0)y0=q[1];if(q[1]>y1)y1=q[1]})});
     svg.style.cssText='display:block;width:100%;height:min(66vh,620px)';var asp=(svg.clientWidth||1000)/(svg.clientHeight||520),w=Math.max(x1-x0+30,90*asp),h=Math.max(y1-y0+30,90),mx=(x0+x1)/2,my=(y0+y1)/2;if(w/h<asp)w=h*asp;else h=w/asp;
     svg.setAttribute('viewBox',(mx-w/2)+' '+(my-h/2)+' '+w+' '+h);

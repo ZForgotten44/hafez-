@@ -172,9 +172,12 @@ var emphStats;
   LOTS.forEach(function(l){var p=document.createElementNS(NS,'polygon');p.setAttribute('points',l.poly.map(function(q){return q.join(',')}).join(' '));p._l=l;base.appendChild(p);polys.push(p)});
   function num(l){return parseInt(l.replace(/[^0-9]/g,''),10)||0}
   function lotColor(l,st,wd,visited){if(cmode==='h')return 'hsl('+Math.round(240-240*(l.h-st)/Math.max(1,wd-1))+',68%,'+(visited?62:50)+'%)';var n=num(l.l);return 'hsl('+((n*47)%360)+',62%,'+(visited?(isDark()?42:66):(40+(n*13)%25))+'%)'}
+  var B3=location.pathname.indexOf('/math/')>=0?'../site/3d.html':'3d.html';
+  function set3d(st){$('w3dgo').href=B3+'#h='+st;$('w3dgo').textContent='Fly to H'+String(st).padStart(6,'0')+' in 3D';$('w3dall').href=B3+'#walk'}
+  $('w3dp').innerHTML=[1,2,3,4,5,6].map(function(n){return '<a class="btn" style="text-decoration:none" href="'+B3+'#walk='+n+'">Walk pass '+n+'</a>'}).join('');
   function rebuild(){
     var st=+$('sawstart').value,wd=+$('sawwidth').value;$('sawstartv').textContent=st;$('sawwidthv').textContent=wd;
-    seq=LOTS.filter(function(l){return l.h>=st&&l.h<st+wd});var mp=Math.max(0,seq.length-1);$('walkpos').max=mp;if(posF>mp)posF=mp;$('walkpos').value=Math.round(posF);
+    seq=LOTS.filter(function(l){return l.h>=st&&l.h<st+wd});set3d(st);var mp=Math.max(0,seq.length-1);$('walkpos').max=mp;if(posF>mp)posF=mp;$('walkpos').value=Math.round(posF);
     var x0=1e9,y0=1e9,x1=-1e9,y1=-1e9;(seq.length?seq:LOTS).forEach(function(l){l.poly.forEach(function(q){if(q[0]<x0)x0=q[0];if(q[0]>x1)x1=q[0];if(q[1]<y0)y0=q[1];if(q[1]>y1)y1=q[1]})});
     svg.style.cssText='display:block;width:100%;height:min(66vh,620px)';var asp=(svg.clientWidth||1000)/(svg.clientHeight||520),w=Math.max(x1-x0+30,90*asp),h=Math.max(y1-y0+30,90),mx=(x0+x1)/2,my=(y0+y1)/2;if(w/h<asp)w=h*asp;else h=w/asp;
     svg.setAttribute('viewBox',(mx-w/2)+' '+(my-h/2)+' '+w+' '+h);
