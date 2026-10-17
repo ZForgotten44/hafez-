@@ -28,3 +28,28 @@ data = dict(fwd=D['fwd'], A=dict((k, v) for k, v in A.items()), chips=chips, map
             W=dict(WD=F.WD, WC=F.WC, WF=F.WF, WE=F.WE, WG=F.WG, WH=F.WH, CT=F.CT, TR=sorted(F.CTRIO), CTW=F.CTW))
 json.dump(data, open('explainer_data.json', 'w'), separators=(',', ':'))
 print('data bytes', os.path.getsize('explainer_data.json'))
+
+# ---- v2 additions: per-label trace (row, place, tier), missing H values, pass ranges
+data = json.load(open('explainer_data.json'))
+trace = {}
+grp = {'B': 'Bm', 'D': 'Dm', 'F': 'Fm'}
+for s, l, h in D['fwd']:
+    if l.endswith('dr'): continue
+    rk = pl = None
+    if s in ('A', 'B') and not (s == 'B' and h > 2331):
+        dd = dec.A_DECODER if s == 'A' else dec.B_DECODER
+        if l in dd: pl, rk = dd[l]
+    if rk is None:
+        for g in ([grp[s]] if s in grp and h > 2331 else []) + [s]:
+            R = D['rows'].get(g)
+            if not R: continue
+            for r, lst in R.items():
+                if l in lst: rk, pl = int(r), lst.index(l) + 1; break
+            if rk is not None: break
+    v, tier = F.H(s, l)
+    trace[s + '|' + l] = [rk, pl, {'closed': 0, 'rows': 1, 'list': 2, 'errata': 3}.get(tier, 3)]
+data['trace'] = trace
+hs = set(r[2] for r in D['fwd'])
+data['missingH'] = sorted(set(range(1, 3186)) - hs)
+json.dump(data, open('explainer_data.json', 'w'), separators=(',', ':'))
+print('trace', len(trace), 'none rows', sum(1 for v in trace.values() if v[0] is None), 'missing', len(data['missingH']))
