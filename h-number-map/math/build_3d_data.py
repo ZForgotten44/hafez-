@@ -35,50 +35,54 @@ for b in bld:
     if dx or dy:
         p = np.array(b['p'], float).reshape(-1, 2) + [dx * 10, dy * 10]; b['p'] = [int(round(v)) for v in p.ravel()]
         b['o'][0] = round(b['o'][0] + dx, 1); b['o'][1] = round(b['o'][1] + dy, 1)
+# hand corrections read off the photos: the garage and chapel footprints come from the drawing's loose "house" boxes, one of which is really the
+# footpath; sizes and centres below are measured on the aerial (roof centres), axis-aligned unless noted
+def near(b, x, y, r=12): return abs(b['o'][0] - x) < r and abs(b['o'][1] - y) < r
+def rect(cx, cy, L, W, a):
+    c, s_ = np.cos(a), np.sin(a); return [int(round(v * 10)) for dx, dy in [(-L/2, -W/2), (L/2, -W/2), (L/2, W/2), (-L/2, W/2)] for v in (cx + dx * c - dy * s_, cy + dx * s_ + dy * c)]
+bld = [b for b in bld if not near(b, 1328.2, 387.0)]
+for b in bld:
+    if near(b, 1287.3, 384.6): b['t'] = 'garage'; b['h'] = 9; b['o'] = [1262.0, 370.0, 25.0, 24.0, 0.0]; b['p'] = rect(1262, 370, 25, 24, 0)
+    if near(b, 1408.8, 536.3): b['t'] = 'chapel'; b['h'] = 14; b['o'] = [1392.0, 522.0, 44.0, 24.0, 0.0]; b['p'] = rect(1392, 522, 44, 24, 0)
+    if b['t'] == 'office': b['o'][0], b['o'][1] = 1341.0, 345.5
+bm = np.zeros((Hh, W), np.uint8)
+for b in bld: cv2.fillPoly(bm, [np.int32([P(x / 10, y / 10) for x, y in np.array(b['p']).reshape(-1, 2)])], 255)
+bm = cv2.dilate(bm, np.ones((9, 9), np.uint8))
 clean = raw
 out = clean.copy(); out[mask == 0] = (32, 38, 30)
 ok, buf = cv2.imencode('.jpg', out, [cv2.IMWRITE_JPEG_QUALITY, 74])
 tex = 'data:image/jpeg;base64,' + base64.b64encode(buf.tobytes()).decode()
-# tree crowns: dark, busy, round regions away from roads and buildings
-hsv = cv2.cvtColor(raw, cv2.COLOR_BGR2HSV).astype(np.float32); g = cv2.cvtColor(raw, cv2.COLOR_BGR2GRAY).astype(np.float32)
-Vb = cv2.GaussianBlur(hsv[..., 2], (0, 0), 3); Sb = cv2.GaussianBlur(hsv[..., 1], (0, 0), 3)
-busy = cv2.GaussianBlur(np.abs(cv2.Laplacian(cv2.GaussianBlur(g, (0, 0), 1.2), cv2.CV_32F)), (0, 0), 3.5)
-score = cv2.GaussianBlur(busy * (0.35 + (255 - Vb) / 255.), (0, 0), 4)
-road = cv2.dilate(((Vb > 150) & (Sb < 45)).astype(np.uint8), cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (19, 19)))
-road |= cv2.dilate((cv2.GaussianBlur(hsv[..., 2], (0, 0), 1) > 205).astype(np.uint8) & (cv2.GaussianBlur(hsv[..., 1], (0, 0), 1) < 40).astype(np.uint8), np.ones((13, 13), np.uint8))
-bad = (road > 0) | (bm > 0) | (mask == 0) | (Vb > 128)
-sc = np.where(bad, 0, score)
-# the crowns cannot be picked out one by one at this resolution, so trees are scattered with a density that follows how dark and
-# busy the photo is (woods get many, lawn few), keeping off roads, buildings and labels. Positions are approximate, not surveyed.
+# trees: the photo is early spring, so crowns show up as dark shadow/evergreen blobs. Blobs found with a distance transform give a position and
+# crown size for each large tree; the leafless stand west of the cemetery is too tangled to separate, so it is filled at a typical spacing.
+hsv = cv2.cvtColor(raw, cv2.COLOR_BGR2HSV).astype(np.float32)
+Vb = cv2.GaussianBlur(hsv[..., 2], (0, 0), 2.5); V0 = hsv[..., 2]; Sb = hsv[..., 1]
+white = cv2.dilate(((V0 > 195) & (Sb < 50)).astype(np.uint8), np.ones((9, 9), np.uint8))
+dark = (Vb < 92).astype(np.uint8); dark[white > 0] = 0; dark[bm > 0] = 0; dark[mask == 0] = 0
+dark = cv2.morphologyEx(dark, cv2.MORPH_OPEN, cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (7, 7)))
+dt = cv2.distanceTransform(dark, cv2.DIST_L2, 5)
+ys, xs = np.nonzero((dt == cv2.dilate(dt, np.ones((15, 15), np.uint8))) & (dt >= 10))
+cands = sorted([(float(dt[y, x]), int(x), int(y)) for y, x in zip(ys, xs)], reverse=True)
+trees = []
+for r, x, y in cands:
+    if any(np.hypot(x - t[0], y - t[1]) < 0.9 * max(r, t[2]) for t in trees): continue
+    yy, xx = np.ogrid[:Hh, :W]; m = (xx - x) ** 2 + (yy - y) ** 2 < (r * .8) ** 2
+    trees.append([x, y, r, 1 if float(Vb[m].mean()) < 58 else 0])
+trees = [[round(x / S + x0, 1), round(y / S + y0, 1), round(r / S * 1.25, 1), t] for x, y, r, t in trees]
+def in_bld(x, y, pad):
+    for b in bld:
+        cx, cy, L, Wd, ang = b['o']; c, s_ = np.cos(ang), np.sin(ang); dx, dy = x - cx, y - cy
+        if abs(dx * c + dy * s_) < L / 2 + pad and abs(-dx * s_ + dy * c) < Wd / 2 + pad: return True
+    return False
+trees = [t for t in trees if not in_bld(t[0], t[1], 8 + 0.8 * t[2])]   # dark blobs hugging a building are its shadow, not a tree
 rng = np.random.default_rng(7)
-WOODS = [(573, 600, 790, 880)]   # the dense stand west of the cemetery (read off the photo): trees go in at a high density
-wood = cv2.GaussianBlur(sc, (0, 0), 10)
-t0, t1 = np.percentile(wood[~bad], 62), np.percentile(wood[~bad], 97)
-prob = np.clip((wood - t0) / (t1 - t0), 0, 1) ** 1.25
-LT = json.load(open('../pipeline2/data/lots_fit.json'))
-lotmask = np.zeros((Hh, W), np.uint8)
-for o in LT:
-    if o.get('poly'): cv2.fillPoly(lotmask, [np.int32([P(x, y) for x, y in o['poly']])], 255)
-trees = []; grid = {}
-cand = rng.random((60000, 2)) * [W, Hh]
-for x, y in cand:
-    xi, yi = int(x), int(y)
-    if bad[yi, xi]: continue
-    p = prob[yi, xi] * (0.4 if lotmask[yi, xi] else 1.0)
-    if rng.random() > p * 0.36: continue
-    gx, gy = int(x // 24), int(y // 24)
-    if any((gx + a, gy + b) in grid and np.hypot(grid[(gx + a, gy + b)][0] - x, grid[(gx + a, gy + b)][1] - y) < 21 for a in (-1, 0, 1) for b in (-1, 0, 1)): continue
-    grid[(gx, gy)] = (x, y)
-    r = 5.0 + 6.5 * float(prob[yi, xi]) + 1.5 * rng.random()
-    trees.append([round(float(x) / S + x0, 1), round(float(y) / S + y0, 1), round(r, 1)])
-    if len(trees) >= 900: break
+WOODS = [(573, 600, 790, 880)]
+pts = [(t[0], t[1]) for t in trees]
 for (wx0, wy0, wx1, wy1) in WOODS:
-    for _ in range(4000):
-        mx_, my_ = rng.uniform(wx0, wx1), rng.uniform(wy0, wy1); x, y = (mx_ - x0) * S, (my_ - y0) * S
-        if not (0 <= int(x) < W and 0 <= int(y) < Hh) or bad[int(y), int(x)] or lotmask[int(y), int(x)]: continue
-        gx, gy = int(x // 24), int(y // 24)
-        if any((gx + a, gy + b) in grid and np.hypot(grid[(gx + a, gy + b)][0] - x, grid[(gx + a, gy + b)][1] - y) < 17 for a in (-1, 0, 1) for b in (-1, 0, 1)): continue
-        grid[(gx, gy)] = (x, y); trees.append([round(float(mx_), 1), round(float(my_), 1), round(float(5.5 + 4.5 * rng.random()), 1)])
+    for _ in range(6000):
+        mx_, my_ = rng.uniform(wx0, wx1), rng.uniform(wy0, wy1); x, y = int((mx_ - x0) * S), int((my_ - y0) * S)
+        if not (0 <= x < W and 0 <= y < Hh) or bm[y, x] or white[y, x] or mask[y, x] == 0: continue
+        if any(np.hypot(mx_ - a, my_ - b) < 19 for a, b in pts): continue
+        pts.append((mx_, my_)); trees.append([round(float(mx_), 1), round(float(my_), 1), round(float(6 + 4 * rng.random()), 1), 0])
 L = json.load(open('../pipeline2/data/lots_fit.json'))
 lots = []
 for o in L:
@@ -87,5 +91,5 @@ for o in L:
 json.dump(dict(tex=tex, ext=[x0, y0, x1, y1], lots=lots, bld=bld, trees=trees), open('three/data3d.json', 'w'), separators=(',', ':'))
 print(len(lots), 'lots;', len(trees), 'trees; texture', len(buf) // 1024, 'KB')
 vis = clean.copy()
-for x, y, r in trees: cv2.circle(vis, P(x, y), int(r * S), (0, 0, 255), 2)
+for x, y, r, t in trees: cv2.circle(vis, P(x, y), int(r * S), (0, 0, 255) if not t else (0, 255, 0), 2)
 cv2.imwrite('three/ground_preview.jpg', cv2.resize(vis, (W * 2 // 3, Hh * 2 // 3)))
