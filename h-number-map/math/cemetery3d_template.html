@@ -41,7 +41,7 @@ input[type=range]{accent-color:var(--fg);width:110px}
 </style>
 <div id="stage"></div><div id="labels"></div>
 <div id="load">Loading the cemetery…</div>
-<div class="top"><div class="card"><h1>Cedar Grove in 3D</h1><p>Lot outlines from the cemetery drawing, laid over the aerial photo. Drag to orbit, scroll to zoom, right-drag to pan.</p></div>
+<div class="top"><div class="card"><h1>Cedar Grove in 3D</h1><p>Lot outlines from the cemetery drawing, laid over the aerial photo, west sections included. Drag to orbit, scroll to zoom, right-drag to pan.</p></div>
 <div class="card" id="info" aria-live="polite"><span class="k">Lot under the pointer</span><span style="color:var(--g5);font-size:13.5px">Point at a lot, or type an H-number below.</span></div></div>
 <div class="credit">Aerial imagery © Google Earth, used for this internal project</div>
 <div class="bar" role="toolbar" aria-label="3D controls">
@@ -68,7 +68,7 @@ var lots=D.lots.map(function(r){var p=r[3],pts=[],cx=0,cy=0;for(var k=0;k<p.leng
 lots.sort(function(a,b){return a.h-b.h});lots.forEach(function(l,i){l.i=i});
 if(typeof THREE==='undefined'){$('load').textContent='The 3D library did not load. Check your connection and reload.';return}
 var renderer=new THREE.WebGLRenderer({antialias:true,powerPreference:'high-performance'});renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,2));renderer.outputEncoding=THREE.sRGBEncoding;$('stage').appendChild(renderer.domElement);
-var scene=new THREE.Scene();var camera=new THREE.PerspectiveCamera(45,1,1,6000);
+var scene=new THREE.Scene();var camera=new THREE.PerspectiveCamera(45,1,1,9000);
 var sky=getComputedStyle(document.documentElement).getPropertyValue('--bg').trim();scene.background=new THREE.Color(sky||'#0b0b0a');
 scene.add(new THREE.AmbientLight(0xffffff,.82));var sun=new THREE.DirectionalLight(0xfff2d8,.75);sun.position.set(-300,500,200);scene.add(sun);
 /* ground: the aerial photo, warped into the lot map's coordinates */
@@ -106,15 +106,15 @@ function recolor(){var mode=$('cmode').value,pass=+$('pass').value;
 /* the walker: a gold pillar on the current lot */
 var pillar=new THREE.Mesh(new THREE.CylinderGeometry(.9,.9,16,20),new THREE.MeshBasicMaterial({color:0xc5a448}));pillar.position.y=8;pillar.visible=false;scene.add(pillar);
 var ring=new THREE.Mesh(new THREE.TorusGeometry(5,.45,10,40),new THREE.MeshBasicMaterial({color:0xc5a448}));ring.rotation.x=Math.PI/2;ring.position.y=2;ring.visible=false;scene.add(ring);
-var controls=new THREE.OrbitControls(camera,renderer.domElement);controls.enableDamping=true;controls.dampingFactor=.08;controls.maxPolarAngle=Math.PI*.495;controls.minDistance=8;controls.maxDistance=1800;
+var controls=new THREE.OrbitControls(camera,renderer.domElement);controls.enableDamping=true;controls.dampingFactor=.08;controls.maxPolarAngle=Math.PI*.495;controls.minDistance=8;controls.maxDistance=2600;
 var view='over',tween=null,sel=null,f=0,playing=false,heading=new THREE.Vector3(1,0,0),camGoal=new THREE.Vector3(),lookGoal=new THREE.Vector3();
 function setSize(){var w=window.innerWidth,h=window.innerHeight;renderer.setSize(w,h,false);camera.aspect=w/h;camera.updateProjectionMatrix()}
 window.addEventListener('resize',setSize);setSize();
 function flyTo(pos,target,ms){tween={t0:performance.now(),ms:ms||1000,p0:camera.position.clone(),t0v:controls.target.clone(),p1:pos,t1:target}}
 function setView(v){view=v;[].forEach.call(document.querySelectorAll('[data-view]'),function(b){b.classList.toggle('on',b.getAttribute('data-view')===v)});
   controls.enabled=v!=='walk';camera.up.set(0,1,0);
-  if(v==='over')flyTo(new THREE.Vector3(CX,640,CZ+640),new THREE.Vector3(CX,0,CZ+20));
-  else if(v==='top'){camera.up.set(0,0,-1);flyTo(new THREE.Vector3(CX,980,CZ+1),new THREE.Vector3(CX,0,CZ))}
+  if(v==='over')flyTo(new THREE.Vector3(CX,780,CZ+740),new THREE.Vector3(CX,0,CZ+20));
+  else if(v==='top'){camera.up.set(0,0,-1);flyTo(new THREE.Vector3(CX,1250,CZ+1),new THREE.Vector3(CX,0,CZ))}
   else{playing=false;$('play').textContent='Walk the path';if(sel!=null)f=sel;pillar.visible=ring.visible=true;placeMarker(f)}}
 function placeMarker(i){var l=lots[Math.max(0,Math.min(lots.length-1,Math.round(i)))];pillar.position.set(l.cx,8,l.cy);ring.position.set(l.cx,2,l.cy);pillar.visible=ring.visible=true}
 function dirAt(i){var a=lots[Math.floor(i)],x=0,z=0,n=0;for(var j=Math.floor(i)+1;j<=Math.floor(i)+5&&j<lots.length;j++){x+=lots[j].cx-a.cx;z+=lots[j].cy-a.cy;n++}if(!n||Math.hypot(x,z)<1)return null;var L=Math.hypot(x,z);return new THREE.Vector3(x/L,0,z/L)}
@@ -158,7 +158,7 @@ function loop(now){requestAnimationFrame(loop);var dt=Math.min(.1,(now-last)/100
   else if(!tween)controls.update();
   if(pillar.visible){var s=1+.08*Math.sin(now/260);ring.scale.set(s,s,s)}
   renderer.render(scene,camera);updateLabels()}
-recolor();setView('over');camera.position.set(CX,640,CZ+640);controls.target.set(CX,0,CZ+20);requestAnimationFrame(loop);
+recolor();setView('over');camera.position.set(CX,780,CZ+740);controls.target.set(CX,0,CZ+20);requestAnimationFrame(loop);
 window.__cg3d={ready:true,setView:setView,lots:lots.length};
 })();
 </script>
