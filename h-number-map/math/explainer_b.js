@@ -9,40 +9,55 @@
     cx.clearRect(0,0,cv.width,cv.height);cx.font='500 15px "IBM Plex Mono",monospace';cx.textAlign='center';
     cx.fillStyle=css('--g5');cx.fillText('Section B',60+N*60-4,32);cx.fillText('Section A',60+N*120+70+N*60-4,32);
     for(var t=1;t<=2*N*R;t++){var i=info(t),g=geom(i.sec,i.r,i.k),seen=t<=s,now=t===s;
-      cx.fillStyle=seen?(now?css('--gold'):css('--surf')):css('--card');cx.strokeStyle=now?css('--fg'):css('--g4');cx.lineWidth=now?3:1.5;
+      cx.fillStyle=seen?(now?css('--acc'):css('--surf')):css('--bg');cx.strokeStyle=now?css('--fg'):css('--g4');cx.lineWidth=now?3:1.5;
       cx.beginPath();cx.roundRect?cx.roundRect(g.x,g.y,g.w,g.h,10):cx.rect(g.x,g.y,g.w,g.h);cx.fill();cx.stroke();
       cx.fillStyle=now?'#0b0b0a':seen?css('--fg'):css('--g4');cx.font='600 26px "IBM Plex Mono",monospace';cx.fillText(seen?String(t):'?',g.x+g.w/2,g.y+g.h/2+9)}
-    if(s>1){var a=info(s-1),b=info(s),ga=geom(a.sec,a.r,a.k),gb=geom(b.sec,b.r,b.k);cx.strokeStyle=css('--gold');cx.lineWidth=3;cx.beginPath();cx.moveTo(ga.x+ga.w/2,ga.y+ga.h/2);cx.lineTo(gb.x+gb.w/2,gb.y+gb.h/2);cx.stroke()}
+    if(s>1){var a=info(s-1),b=info(s),ga=geom(a.sec,a.r,a.k),gb=geom(b.sec,b.r,b.k);cx.strokeStyle=css('--acc');cx.lineWidth=3;cx.beginPath();cx.moveTo(ga.x+ga.w/2,ga.y+ga.h/2);cx.lineTo(gb.x+gb.w/2,gb.y+gb.h/2);cx.stroke()}
     cx.fillStyle=css('--g5');cx.font='500 13px "IBM Plex Mono",monospace';cx.fillText('level 1',30,56+48);cx.fillText('level 2',30,56+96+22+48);
     var o=$('anout');if(s===0)o.innerHTML='Press Play or Step. Two sections (B, A) of 3 columns, 2 levels: 12 lots.';
     else{var i2=info(s),before=2*N*(i2.r-1),sig=i2.sec==='A'?N:0;o.innerHTML='Lot '+s+': level '+i2.r+', section '+i2.sec+', place '+i2.k+'<br>H = '+before+' (lots on earlier levels) + '+sig+' (lots of B on this level, if A) + '+i2.k+' = <span class="hv">'+i2.H+'</span>'+(s===12?'<br>Done. Every lot has exactly one number, in path order.':'')}
   }
-  function stop(){if(timer){clearInterval(timer);timer=null}$('anplay').textContent='Play'}
+  function stop(){if(timer){clearInterval(timer);timer=null}$('anplay').textContent='Play';$('anplay').classList.remove('on')}
   function step(){s=s>=12?0:s+1;draw()}
   on($('anstep'),'click',function(){stop();step()});
-  on($('anplay'),'click',function(){if(timer){stop();return}if(s>=12)s=0;$('anplay').textContent='Pause';step();timer=setInterval(function(){if(s>=12){stop();return}step()},750)});
+  on($('anplay'),'click',function(){if(timer){stop();return}if(s>=12)s=0;$('anplay').textContent='Pause';$('anplay').classList.add('on');step();timer=setInterval(function(){if(s>=12){stop();return}step()},750)});
   on($('anreset'),'click',function(){stop();s=0;draw()});
   draw();redraws.push(draw);
 })();
 
 /* passes */
 (function(){
-  var bb=X.bbox,svg=$('passsvg'),NS='http://www.w3.org/2000/svg',polys=[],sel=0;
-  svg.setAttribute('viewBox',(bb[0]-6)+' '+(bb[1]-6)+' '+(bb[2]-bb[0]+12)+' '+(bb[3]-bb[1]+12));
-  X.maplots.forEach(function(l){if(!l[4])return;var p=document.createElementNS(NS,'polygon');p.setAttribute('points',l[4].map(function(q){return q.join(',')}).join(' '));p._l=l;svg.appendChild(p);polys.push(p)});
-  var g=document.createElementNS(NS,'g');svg.appendChild(g);
+  var bb=X.bbox,svg=$('passsvg'),mini=$('passmini'),NS='http://www.w3.org/2000/svg',polys=[],mpolys=[],sel=0;
+  var asp=(bb[2]-bb[0]+12)/(bb[3]-bb[1]+12);
+  mini.setAttribute('viewBox',(bb[0]-6)+' '+(bb[1]-6)+' '+(bb[2]-bb[0]+12)+' '+(bb[3]-bb[1]+12));
+  var gMain=document.createElementNS(NS,'g'),gTrace=document.createElementNS(NS,'g'),gMiniBox=document.createElementNS(NS,'g');
+  LOTS.forEach(function(l){var pts=l.poly.map(function(q){return q.join(',')}).join(' ');var p=document.createElementNS(NS,'polygon');p.setAttribute('points',pts);p._l=l;gMain.appendChild(p);polys.push(p);
+    var m=document.createElementNS(NS,'polygon');m.setAttribute('points',pts);mini.appendChild(m);mpolys.push(m)});
+  svg.appendChild(gMain);svg.appendChild(gTrace);mini.appendChild(gMiniBox);
   var btns=$('passbtns');
   PASSES.forEach(function(p,i){var b=document.createElement('button');b.type='button';b.className='btn seg'+(i===0?' on':'');b.textContent='Pass '+p.n;on(b,'click',function(){sel=i;[].forEach.call(btns.children,function(x,j){x.classList.toggle('on',j===i)});paint()});btns.appendChild(b)});
   function paint(){
-    var p=PASSES[sel],inr=[],drawn=0;
-    polys.forEach(function(q){var h=q._l[3];if(h>=p.lo&&h<=p.hi){inr.push(q);drawn++;q.setAttribute('fill','hsl(40,62%,'+(82-52*(h-p.lo)/Math.max(1,p.hi-p.lo))+'%)')}else q.setAttribute('fill',css('--g3'))});
-    g.innerHTML='';var lo=null,hi=null;inr.forEach(function(q){if(!lo||q._l[3]<lo._l[3])lo=q;if(!hi||q._l[3]>hi._l[3])hi=q});
-    [[lo,'first'],[hi,'last']].forEach(function(e){if(!e[0])return;var c=document.createElementNS(NS,'circle');c.setAttribute('cx',e[0]._l[5]);c.setAttribute('cy',e[0]._l[6]);c.setAttribute('r',7);c.setAttribute('fill','#c5a448');c.setAttribute('stroke','#0b0b0a');c.setAttribute('stroke-width',2);g.appendChild(c);
-      var t=document.createElementNS(NS,'text');t.setAttribute('x',e[0]._l[5]+10);t.setAttribute('y',e[0]._l[6]-10);t.setAttribute('style','font:700 22px var(--mono);fill:var(--fg);stroke:var(--bg);stroke-width:5px;paint-order:stroke');t.textContent=e[1]+' '+pad(e[0]._l[3]);g.appendChild(t)});
-    $('passinfo').innerHTML='<h4 style="margin-top:0">Pass '+p.n+' · sections '+esc(p.secs)+'</h4><div class="out">'+pad(p.lo)+' to '+pad(p.hi)+'<br>'+fmt(p.hi-p.lo+1)+' positions<br>'+fmt(drawn)+' have an outline on the map</div><p>'+esc(p.how)+'</p><p class="note">Direction: light is the first lot, dark is the last. Inside the pass the path runs level by level, so color changes in bands across the section rather than along one line.</p>';
+    var p=PASSES[sel],inr=LOTS.filter(function(l){return l.h>=p.lo&&l.h<=p.hi});
+    var x0=1e9,y0=1e9,x1=-1e9,y1=-1e9;inr.forEach(function(l){l.poly.forEach(function(q){if(q[0]<x0)x0=q[0];if(q[0]>x1)x1=q[0];if(q[1]<y0)y0=q[1];if(q[1]>y1)y1=q[1]})});
+    if(!inr.length){x0=bb[0];x1=bb[2];y0=bb[1];y1=bb[3]}
+    var w=x1-x0+30,h=y1-y0+30;if(w/h<asp)w=h*asp;else h=w/asp;var mx=(x0+x1)/2,my=(y0+y1)/2;
+    svg.setAttribute('viewBox',(mx-w/2)+' '+(my-h/2)+' '+w+' '+h);
+    polys.forEach(function(q){var l=q._l,on_=l.h>=p.lo&&l.h<=p.hi;q.setAttribute('fill',on_?ramp((l.h-p.lo)/Math.max(1,p.hi-p.lo)):css('--g3'));q.setAttribute('opacity',on_?'1':'.45')});
+    mpolys.forEach(function(q,i){var l=LOTS[i],on_=l.h>=p.lo&&l.h<=p.hi;q.setAttribute('fill',on_?css('--fg'):css('--g3'))});
+    gMiniBox.innerHTML='';var r=document.createElementNS(NS,'rect');r.setAttribute('x',mx-w/2);r.setAttribute('y',my-h/2);r.setAttribute('width',w);r.setAttribute('height',h);r.setAttribute('fill','none');r.setAttribute('stroke','#c5a448');r.setAttribute('stroke-width',(bb[2]-bb[0])/60);gMiniBox.appendChild(r);
+    gTrace.innerHTML='';
+    if(inr.length>1){
+      var u=w/100,pts=inr.map(function(l){return l.cx+','+l.cy}).join(' ');
+      var pl=document.createElementNS(NS,'polyline');pl.setAttribute('points',pts);pl.setAttribute('fill','none');pl.setAttribute('stroke',css('--fg'));pl.setAttribute('stroke-opacity','.55');pl.setAttribute('stroke-width',u*.22);pl.setAttribute('stroke-linejoin','round');gTrace.appendChild(pl);
+      var k=Math.max(1,Math.floor(inr.length/16));
+      for(var i=0;i+1<inr.length;i+=k){var a=inr[i],b=inr[i+1],dx=b.cx-a.cx,dy=b.cy-a.cy,L=Math.hypot(dx,dy);if(L<.5)continue;var ux=dx/L,uy=dy/L,mxp=(a.cx+b.cx)/2,myp=(a.cy+b.cy)/2,s=u*1.5;
+        var t=document.createElementNS(NS,'polygon');t.setAttribute('points',[[mxp+ux*s,myp+uy*s],[mxp-ux*s*.7-uy*s*.8,myp-uy*s*.7+ux*s*.8],[mxp-ux*s*.7+uy*s*.8,myp-uy*s*.7-ux*s*.8]].map(function(q){return q.join(',')}).join(' '));t.setAttribute('fill',css('--fg'));t.setAttribute('stroke',css('--bg'));t.setAttribute('stroke-width',u*.12);gTrace.appendChild(t)}
+      [[inr[0],'first'],[inr[inr.length-1],'last']].forEach(function(e){var c=document.createElementNS(NS,'circle');c.setAttribute('cx',e[0].cx);c.setAttribute('cy',e[0].cy);c.setAttribute('r',u*1.6);c.setAttribute('fill','#c5a448');c.setAttribute('stroke','#0b0b0a');c.setAttribute('stroke-width',u*.28);gTrace.appendChild(c);
+        var tx=document.createElementNS(NS,'text');tx.setAttribute('x',e[0].cx+u*2.4);tx.setAttribute('y',e[0].cy+u*5);tx.setAttribute('style','font:700 '+u*2.6+'px var(--mono);fill:var(--fg);stroke:var(--bg);stroke-width:'+u*.7+'px;paint-order:stroke');tx.textContent=e[1]+' '+pad(e[0].h);gTrace.appendChild(tx)})}
+    $('passinfo').innerHTML='<h4 style="margin-top:0">Pass '+p.n+' · sections '+esc(p.secs)+'</h4><div class="out">'+pad(p.lo)+' to '+pad(p.hi)+'<br>'+fmt(p.hi-p.lo+1)+' positions<br>'+fmt(inr.length)+' have an outline on the map</div><p>'+esc(p.how)+'</p><p class="note">The black line is the route in H order, and the arrowheads show which way it runs. Inside the pass the route goes level by level, so it sweeps across a section and steps over, rather than running down one line.</p>';
   }
   paint();redraws.push(paint);
-  $('passes').innerHTML=PASSES.map(function(p,i){var w=(p.hi-p.lo+1)/3185*100;return '<div style="display:flex;align-items:center;gap:12px;margin:7px 0;flex-wrap:wrap"><div style="flex:0 0 150px"><b>Pass '+p.n+'</b><br><span class="note">'+esc(p.secs)+'</span></div><div style="flex:1 1 200px;background:var(--surf);border-radius:6px;height:22px;position:relative;border:1px solid var(--g3)"><div style="position:absolute;left:'+((p.lo-1)/3185*100)+'%;width:'+w+'%;height:100%;border-radius:5px;background:var(--gold);opacity:'+(.45+.1*i)+'"></div></div><div class="note mono" style="flex:0 0 190px">'+pad(p.lo)+' – '+pad(p.hi)+'</div></div>'}).join('')+'<p class="note">Where two sections share a pass, their levels are woven: level 1 of the first section, level 1 of the second, then level 2 of each. That is why one section\'s H-numbers are not one block. Pass 4 holds three margin lists and the G/H rows; the margins are numbered before G and H.</p>';
+  $('passes').innerHTML='<table class="t"><tr><th>Pass</th><th>Sections</th><th>H-numbers</th><th>Positions</th><th>Share of 3,185</th></tr>'+PASSES.map(function(p){var n=p.hi-p.lo+1;return '<tr><td><b>'+p.n+'</b></td><td>'+esc(p.secs)+'</td><td class="num">'+pad(p.lo)+' – '+pad(p.hi)+'</td><td class="num">'+fmt(n)+'</td><td><span style="display:block;height:10px;background:var(--fg);width:'+(n/3185*100)+'%;min-width:3px"></span></td></tr>'}).join('')+'</table><p class="note" style="margin-top:10px">Where two sections share a pass, their levels are woven: level 1 of the first section, level 1 of the second, then level 2 of each. That is why one section\'s H-numbers are not one block. Pass 4 holds three margin lists and the G/H rows; the margins are numbered before G and H.</p>';
 })();
 
 /* address breakdown */
@@ -68,9 +83,8 @@ function demo(id,ctrls,extraDirty,extraReset,rerun){
 
 /* P1 */
 (function(){
-  var ord='blocks',R0=19;
+  var ord='blocks',d;
   function Hf(sec,r,c,N){var SW=2*N;return ord==='blocks'?SW*(r-1)+(sec==='B'?0:N)+c:SW*(r-1)+2*c-(sec==='B'?1:0)}
-  var d;
   function run(){
     var N=+$('p1n').value,R=+$('p1r').value;$('p1nv').textContent=N;$('p1rv').textContent=R;
     var sec=$('p1sec').value,r0=+$('p1lv').value||1,c0=+$('p1c').value||1,r=Math.min(Math.max(1,r0),R),c=Math.min(Math.max(1,c0),N),clamp=(r!==r0||c!==c0);
@@ -78,19 +92,24 @@ function demo(id,ctrls,extraDirty,extraReset,rerun){
     var SW=2*N,Hs=Hf(sec,r,c,N);
     $('p1eqn').innerHTML=ord==='blocks'?'<span class="lbl">SWEEP  = </span>N<sub>B</sub> + N<sub>A</sub> = '+SW+'<br><span class="lbl">OFFSET = </span>SWEEP × R = '+SW*R+'<br><span class="lbl">H(B, r, c) = </span>SWEEP × (r − 1) + c<br><span class="lbl">H(A, r, c) = </span>SWEEP × (r − 1) + N<sub>B</sub> + c'
       :'<span class="lbl">SWEEP  = </span>N<sub>B</sub> + N<sub>A</sub> = '+SW+'<br><span class="lbl">OFFSET = </span>SWEEP × R = '+SW*R+'<br><span class="lbl">H(B, r, c) = </span>SWEEP × (r − 1) + 2c − 1<br><span class="lbl">H(A, r, c) = </span>SWEEP × (r − 1) + 2c';
-    $('p1out').innerHTML='H('+sec+', level '+r+', column '+c+') = '+SW+' × '+(r-1)+(ord==='blocks'?(sec==='A'?' + '+N:''):'')+' + '+(ord==='blocks'?c:(sec==='B'?'2×'+c+'−1':'2×'+c))+' = <span class="hv">'+Hs+'</span> → '+pad(Hs)+'<br>Visited as lot '+Hs+' of '+SW*R+' in this pass.'+(clamp?'<br><span class="gold">Level and column were limited to 1–'+R+' and 1–'+N+'.</span>':'')+(ord==='blocks'&&N===22&&R===19&&!clamp?'':'');
+    $('p1out').innerHTML='H('+sec+', level '+r+', column '+c+') = '+SW+' × '+(r-1)+(ord==='blocks'?(sec==='A'?' + '+N:''):'')+' + '+(ord==='blocks'?c:(sec==='B'?'2×'+c+'−1':'2×'+c))+' = <span class="hv">'+Hs+'</span> → '+pad(Hs)+'<br>Visited as lot '+Hs+' of '+SW*R+' in this pass. On level '+r+' the sweep visits '+(ord==='blocks'?'B columns 1 to '+N+' (H '+Hf('B',r,1,N)+' to '+Hf('B',r,N,N)+'), then A columns 1 to '+N+' (H '+Hf('A',r,1,N)+' to '+Hf('A',r,N,N)+').':'B and A columns in turn: B1, A1, B2, A2 …')+(clamp?'<br>Level and column were limited to 1–'+R+' and 1–'+N+'.':'');
     var cv=$('p1cv'),cx=cv.getContext('2d');cx.clearRect(0,0,cv.width,cv.height);
-    var cw=(cv.width-60)/N,ch=Math.min(18,(cv.height-20)/(2*R+1));cv._g={cw:cw,ch:ch,N:N,R:R};
-    ['B','A'].forEach(function(s,si){for(var rr=1;rr<=R;rr++)for(var cc=1;cc<=N;cc++){var h=Hf(s,rr,cc,N);cx.fillStyle='hsl('+Math.round(240-240*(h-1)/(2*N*R))+',60%,'+(s==='B'?50:62)+'%)';cx.fillRect(40+(cc-1)*cw,10+(si*(R+1)+rr-1)*ch,cw-1.5,ch-1.5)}});
-    var si=sec==='B'?0:1;cx.strokeStyle=css('--fg');cx.lineWidth=4;cx.strokeRect(40+(c-1)*cw-1,10+(si*(R+1)+r-1)*ch-1,cw+1,ch+1);cx.strokeStyle='#c5a448';cx.lineWidth=2;cx.strokeRect(40+(c-1)*cw-1,10+(si*(R+1)+r-1)*ch-1,cw+1,ch+1);
+    var cw=(cv.width-60)/N,ch=Math.min(18,(cv.height-30)/(2*R+1)),tot=2*N*R,dk=isDark();cv._g={cw:cw,ch:ch,N:N,R:R};
+    ['B','A'].forEach(function(s,si){for(var rr=1;rr<=R;rr++)for(var cc=1;cc<=N;cc++){var h=Hf(s,rr,cc,N),t=(h-1)/Math.max(1,tot-1);cx.fillStyle=ramp(t);cx.fillRect(40+(cc-1)*cw,10+(si*(R+1)+rr-1)*ch,cw-1.5,ch-1.5);
+      if(rr===r&&cw>=24){cx.fillStyle=dk?(t<.45?'#f4f2ec':'#0b0b0a'):(t<.55?'#0b0b0a':'#f4f2ec');cx.font='500 '+Math.min(12,cw*.42)+'px "IBM Plex Mono",monospace';cx.textAlign='center';cx.fillText(h,40+(cc-1)*cw+cw/2,10+(si*(R+1)+rr-1)*ch+ch*.72)}}});
+    cx.setLineDash([5,4]);cx.lineWidth=1.6;cx.strokeStyle=css('--fg');[0,1].forEach(function(si){cx.strokeRect(38,10+(si*(R+1)+r-1)*ch-2,N*cw+3,ch+2)});cx.setLineDash([]);
+    cx.fillStyle=css('--fg');cx.font='600 11px "IBM Plex Mono",monospace';cx.textAlign='left';cx.fillText('visit ▶',40,10+(2*R+1)*ch+16);
+    var si=sec==='B'?0:1,sx=40+(c-1)*cw-1,sy=10+(si*(R+1)+r-1)*ch-1;cx.fillStyle='#c5a448';cx.fillRect(sx,sy,cw,ch);cx.lineWidth=2.5;cx.strokeStyle='#0b0b0a';cx.strokeRect(sx,sy,cw,ch);
+    cx.fillStyle='#0b0b0a';cx.font='700 '+Math.min(12,Math.max(8,cw*.42))+'px "IBM Plex Mono",monospace';cx.textAlign='center';if(cw>=20)cx.fillText(Hs,sx+cw/2,sy+ch*.72);
     cx.fillStyle=css('--g5');cx.font='600 12px "IBM Plex Mono",monospace';cx.textAlign='left';cx.fillText('B',14,10+ch);cx.fillText('A',14,10+(R+1)*ch+ch);
     d.upd();
   }
   d=demo('p1',['p1n','p1r','p1sec','p1lv','p1c'],function(){return ord!=='blocks'},function(){ord='blocks';[].forEach.call(document.querySelectorAll('button[data-ord]'),function(x){x.classList.toggle('on',x.getAttribute('data-ord')==='blocks')})},run);
   ['p1n','p1r','p1sec','p1lv','p1c'].forEach(function(i){on($(i),'input',run)});
   [].forEach.call(document.querySelectorAll('button[data-ord]'),function(b){on(b,'click',function(){ord=b.getAttribute('data-ord');[].forEach.call(document.querySelectorAll('button[data-ord]'),function(x){x.classList.toggle('on',x===b)});run()})});
-  on($('p1cv'),'mousemove',function(e){var cv=this,g=cv._g;if(!g)return;var r=cv.getBoundingClientRect(),x=(e.clientX-r.left)*cv.width/r.width-40,y=(e.clientY-r.top)*cv.height/r.height-10;var cc=Math.floor(x/g.cw)+1,row=Math.floor(y/g.ch),si=row>=g.R+1?1:0,rr=row-si*(g.R+1)+1;if(cc<1||cc>g.N||rr<1||rr>g.R){cv.title='';return}cv.title=(si?'A':'B')+' level '+rr+', column '+cc+' = '+Hf(si?'A':'B',rr,cc,g.N)});
-  on($('p1cv'),'click',function(e){var cv=this,g=cv._g;if(!g)return;var r=cv.getBoundingClientRect(),x=(e.clientX-r.left)*cv.width/r.width-40,y=(e.clientY-r.top)*cv.height/r.height-10;var cc=Math.floor(x/g.cw)+1,row=Math.floor(y/g.ch),si=row>=g.R+1?1:0,rr=row-si*(g.R+1)+1;if(cc<1||cc>g.N||rr<1||rr>g.R)return;$('p1sec').value=si?'A':'B';$('p1lv').value=rr;$('p1c').value=cc;run()});
+  function cell(e){var cv=$('p1cv'),g=cv._g;if(!g)return null;var r=cv.getBoundingClientRect(),x=(e.clientX-r.left)*cv.width/r.width-40,y=(e.clientY-r.top)*cv.height/r.height-10;var cc=Math.floor(x/g.cw)+1,row=Math.floor(y/g.ch),si=row>=g.R+1?1:0,rr=row-si*(g.R+1)+1;if(cc<1||cc>g.N||rr<1||rr>g.R)return null;return {si:si,rr:rr,cc:cc,N:g.N}}
+  on($('p1cv'),'mousemove',function(e){var q=cell(e);this.title=q?(q.si?'A':'B')+' level '+q.rr+', column '+q.cc+' = '+Hf(q.si?'A':'B',q.rr,q.cc,q.N):''});
+  on($('p1cv'),'click',function(e){var q=cell(e);if(!q)return;$('p1sec').value=q.si?'A':'B';$('p1lv').value=q.rr;$('p1c').value=q.cc;run()});
   run();redraws.push(run);
 })();
 
@@ -194,17 +213,21 @@ function demo(id,ctrls,extraDirty,extraReset,rerun){
   d=demo('p6',['p6h','p6g','p6s'],null,null,run);['p6h','p6g','p6s'].forEach(function(i){on($(i),'input',run)});run();
 })();
 
-/* ---------------- section 6: snippets ---------------- */
+/* ---------------- section 6: code workspace ---------------- */
 (function(){
   var inDoc;
   function hlLine(l){var e=esc(l);if(inDoc){if(/"""/.test(l))inDoc=false;return '<span class="c">'+e+'</span>'}
     if((l.match(/"""/g)||[]).length===1){inDoc=true;return e.replace(/("""[\s\S]*)/,'<span class="c">$1</span>')}
     return e.replace(/(#.*$)|(&quot;[^&]*?&quot;|"[^"]*"|'[^']*')|\b(def|return|if|elif|else|for|in|not|and|or|is|None|True|False|import|from|lambda|while|raise|class|continue|break)\b|\b(\d+)\b/g,function(m,cm,st,kw,nu){return cm?'<span class="c">'+cm+'</span>':st?'<span class="s">'+st+'</span>':kw?'<span class="k">'+kw+'</span>':'<span class="n">'+nu+'</span>'})}
-  var h='',all=[];
-  X.snips.forEach(function(g){h+='<h3><i class="tri"></i>'+esc(g.title)+'</h3><p class="note">'+esc(g.note)+'</p>';
-    g.items.forEach(function(s,i){var idx=all.push(s.src)-1;inDoc=false;var body=s.src.split('\n').map(function(l){return '<span class="ln">'+hlLine(l)+'</span>'}).join('');
-      h+='<div class="snip"><header><div><b>'+esc(s.name)+'</b> <span class="tag">'+esc(s.file)+'</span><p>'+esc(s.desc||'')+'</p>'+(s.demo?'<p class="note">Implements: <a href="'+esc(s.demo[1])+'">'+esc(s.demo[0])+'</a></p>':'')+'</div><button class="btn sm" type="button" data-cp="'+idx+'">Copy</button></header><details'+(i<1?' open':'')+' style="border:0;border-top:1px solid var(--g3);border-radius:0;margin:0;padding:0"><summary style="padding:8px 14px">'+(s.src.split('\n').length)+' lines</summary><pre class="code">'+body+'</pre></details></div>'})});
-  $('snips').innerHTML=h;
+  var all=[],nav='',panes='';
+  X.snips.forEach(function(g){nav+='<h6>'+esc(g.title)+'</h6>';
+    g.items.forEach(function(s){var idx=all.push(s.src)-1;inDoc=false;var body=s.src.split('\n').map(function(l){return '<span class="ln">'+hlLine(l)+'</span>'}).join('');
+      nav+='<button type="button" data-i="'+idx+'">'+esc(s.name)+'</button>';
+      panes+='<div class="pane" data-i="'+idx+'"'+(idx?' hidden':'')+'><div class="ph"><div><b>'+esc(s.name)+'</b><span class="file">'+esc(s.file)+' · '+s.src.split('\n').length+' lines · '+esc(g.title.toLowerCase())+'</span><p>'+esc(s.desc||'')+'</p>'+(s.demo?'<p>Implements: <a href="'+esc(s.demo[1])+'">'+esc(s.demo[0])+'</a></p>':'')+'</div><button class="cpy" type="button" data-cp="'+idx+'">Copy</button></div><pre class="code">'+body+'</pre></div>'})});
+  $('snips').innerHTML='<div class="cw"><div class="fl" role="tablist" aria-label="Functions">'+nav+'<p style="margin:14px;font:500 .7em var(--mono);color:#a8a69e">'+all.length+' functions</p></div><div class="panes" style="min-width:0">'+panes+'</div></div>';
+  var btns=[].slice.call($('snips').querySelectorAll('.fl button')),ps=[].slice.call($('snips').querySelectorAll('.pane'));
+  function show(i){btns.forEach(function(b){b.classList.toggle('on',+b.getAttribute('data-i')===i)});ps.forEach(function(p){p.hidden=+p.getAttribute('data-i')!==i})}
+  btns.forEach(function(b){on(b,'click',function(){show(+b.getAttribute('data-i'))})});show(0);
   [].forEach.call($('snips').querySelectorAll('[data-cp]'),function(b){on(b,'click',function(){copyText(all[+b.getAttribute('data-cp')])})});
 })();
 function copyText(t){
@@ -217,14 +240,14 @@ function copyText(t){
   var gs=$('gs');gs.innerHTML=SEC.map(function(s){return '<option>'+s+'</option>'}).join('');gs.value='B';
   var RULE={A:'Section A: 19 labels per row, counted right to left; H-lots before places 13, 5 and 1.',B:'Section B: body of 20 per row; last column steps by 19; margin labels come from a stored list.',C:'Section C: row tops, twins and trios from per-row tables.',D:'Section D: 20 per row, blocks in rows 16 to 23, letter labels in row 1, margin from a list.',E:'Section E: 19 per row with twins, plus lettered lots in rows 9 to 12.',F:'Section F: 18 per row; margin 199 to 210.',G:'Section G: 19 per row, plus lots 58 to 75.',H:'Section H: 23 per row.',I:'Section I: straight run 1 to 64.',J:'Section J: straight run 1 to 132.',K:'Section K: a stored list of 115 lots.',L:'Section L: straight run 69 to 107.',M:'Section M: first 51 lots from a list, then 82 to 279 straight.'};
   var BASE={A:'22 (the A half of each 44-lot level)',B:'0',C:'836',D:'836',E:'1871',F:'1871',G:'2413',H:'2413',I:'3082',J:'2950',K:'2835',L:'3078',M:'2556 or 2586'};
-  function offsetText(S,H,t){
-    var r=t&&t[0],k=t&&t[1];if(r==null||k==null)return 'H − place = '+(t&&t[1]!=null?H-t[1]:'—')+' lots visited before this lot (a straight run or a stored list, so no per-level table is involved).';
+  function offsetInfo(S,H,t){
+    var r=t&&t[0],k=t&&t[1];if(r==null||k==null)return {op:'A straight run or stored list: H minus place',val:(k!=null?H-k:'—')};
     var off=H-k,note='';
     if(S==='A'||(S==='B'&&H<=836))note='44 × '+(r-1)+' + '+(S==='A'?22:0);
-    else if(S==='D'||S==='C'){var e=836+pf2(W.WD.concat([0]),W.WC,r)+(S==='C'?(W.WD[r-1]||0):0);if(e===off)note='836 + '+pf2(W.WD.concat([0]),W.WC,r)+(S==='C'?' + '+W.WD[r-1]:'')+': base, earlier levels'+(S==='C'?', and this level of D':'')}
-    else if(S==='F'||S==='E'){var e2=1871+pf2(W.WF,W.WE,r)+(S==='E'?(W.WF[r-1]||0):0);if(e2===off)note='1871 + '+pf2(W.WF,W.WE,r)+(S==='E'?' + '+W.WF[r-1]:'')+': base, earlier levels'+(S==='E'?', and this level of F':'')}
-    else if(S==='G'||S==='H'){var e3=2413+pf2(W.WG,W.WH,r)+(S==='H'?(W.WG[r-1]||0):0);if(e3===off)note='2413 + '+pf2(W.WG,W.WH,r)+(S==='H'?' + '+W.WG[r-1]:'')+': base, earlier levels'+(S==='H'?', and this level of G':'')}
-    return 'Offset = H − place = <b>'+off+'</b> lots visited before this level'+(note?' ('+note+')':'')+'.';
+    else if(S==='D'||S==='C'){var e=836+pf2(W.WD.concat([0]),W.WC,r)+(S==='C'?(W.WD[r-1]||0):0);if(e===off)note='836 + '+pf2(W.WD.concat([0]),W.WC,r)+(S==='C'?' + '+W.WD[r-1]:'')+' (base, earlier levels'+(S==='C'?', this level of D':'')+')'}
+    else if(S==='F'||S==='E'){var e2=1871+pf2(W.WF,W.WE,r)+(S==='E'?(W.WF[r-1]||0):0);if(e2===off)note='1871 + '+pf2(W.WF,W.WE,r)+(S==='E'?' + '+W.WF[r-1]:'')+' (base, earlier levels'+(S==='E'?', this level of F':'')+')'}
+    else if(S==='G'||S==='H'){var e3=2413+pf2(W.WG,W.WH,r)+(S==='H'?(W.WG[r-1]||0):0);if(e3===off)note='2413 + '+pf2(W.WG,W.WH,r)+(S==='H'?' + '+W.WG[r-1]:'')+' (base, earlier levels'+(S==='H'?', this level of G':'')+')'}
+    return {op:'Lots visited before this level (H minus place)'+(note?': '+note:''),val:off};
   }
   function run(){
     var S=gs.value,L=$('gl').value.trim(),m=/^([A-Z]?)([0-9]+)(.*)$/.exec(L.toUpperCase()),v=GH(S,L.toUpperCase()),exp=FW[S+'|'+L.toUpperCase()],ok=typeof v==='number'&&!isNaN(v),res;
@@ -232,12 +255,13 @@ function copyText(t){
     else if(ok)res='<div class="big">'+pad(v)+'<small>'+v+'</small></div><p><span class="tag gold">In range only</span> The formula returns a number, but the decoder does not list '+S+'-'+esc(L.toUpperCase())+'. Treat this as a calculation, not as a confirmed lot.</p>';
     else res='<p><span class="tag bad">No result</span> No lot '+S+'-'+esc(L)+' exists in the formula\'s ranges'+(exp!=null?' (but the decoder lists it as '+exp+')':'')+'.</p>';
     $('gres').innerHTML=res;
-    var t=TR[S+'|'+L.toUpperCase()],tr='<details'+(ok?' open':'')+'><summary>Show the working</summary><ol class="trace">';
-    tr+='<li><div><b>Parse the label</b>prefix "'+(m?esc(m[1]):'')+'", number '+(m?+m[2]:'none')+', suffix "'+(m?esc(m[3]):'')+'"'+(m&&m[1]?' (a letter in front means the label borrows another section\'s letter)':'')+'</div></li>';
-    tr+='<li><div><b>Pick the section rule</b>'+esc(RULE[S])+(t?' This label is handled by '+TIERTXT[t[2]]+'.':'')+'</div></li>';
-    tr+='<li><div><b>Find the level and position</b>'+(t&&t[0]!=null?'level '+t[0]+', place '+t[1]+' (decoder indexing)':(t?'place '+t[1]+' along the run':(ok?'computed directly':'not found'))+'')+'</div></li>';
-    tr+='<li><div><b>Add the offset</b>'+(ok&&t?offsetText(S,v,t):ok?'The label is not in the decoder table, so there is no stored place to show.':'—')+'</div></li>';
-    tr+='<li><div><b>Result</b>'+(ok?'H = offset + place = <b>'+v+'</b>, written '+pad(v):'no H-number')+'</div></li></ol><details style="margin-top:8px"><summary>Show this section\'s raw expression</summary><pre class="code" style="white-space:pre-wrap;word-break:break-all"><span class="ln">'+esc(X.giant.parts[S]||'')+'</span></pre></details></details>';
+    var t=TR[S+'|'+L.toUpperCase()],oi=ok&&t?offsetInfo(S,v,t):null,tr='<table class="t" style="margin-top:14px"><tr><th>Step</th><th>Operation</th><th style="text-align:right">Value</th></tr>';
+    tr+='<tr><td>1</td><td><b>Parse the label</b><div class="note">prefix, number, suffix'+(m&&m[1]?'. A letter in front means the label borrows another section\'s letter.':'')+'</div></td><td class="v">'+(m?(m[1]?esc(m[1])+' · ':'')+(+m[2])+(m[3]?' · '+esc(m[3]):''):'—')+'</td></tr>';
+    tr+='<tr><td>2</td><td><b>Pick the section rule</b><div class="note">'+esc(RULE[S])+'</div></td><td class="v">'+S+(t?' · '+['arithmetic','row constants','list','errata'][t[2]]:'')+'</td></tr>';
+    tr+='<tr><td>3</td><td><b>Find the level and place</b><div class="note">decoder indexing, not always the rows on the ground</div></td><td class="v">'+(t&&t[0]!=null?'level '+t[0]+' · place '+t[1]:(t?'place '+t[1]:(ok?'computed directly':'not found')))+'</td></tr>';
+    tr+='<tr><td>4</td><td><b>Offset</b><div class="note">'+(oi?esc(oi.op):ok?'The label is not in the decoder table, so there is no stored place to show.':'—')+'</div></td><td class="v">'+(oi?oi.val:'—')+'</td></tr>';
+    tr+='<tr><td>5</td><td><b>Add place to offset</b><div class="note">H = offset + place</div></td><td class="v">'+(ok?pad(v):'no H-number')+'</td></tr></table>';
+    tr+='<details style="margin-top:8px"><summary>Show this section\'s raw expression</summary><pre class="code solo" style="white-space:pre-wrap;word-break:break-all;padding:10px 16px"><span class="ln" style="padding-left:0">'+esc(X.giant.parts[S]||'')+'</span></pre></details>';
     $('gtrace').innerHTML=tr;
   }
   on(gs,'change',run);on($('gl'),'input',run);
@@ -265,25 +289,26 @@ function copyText(t){
 
 /* ---------------- section 8 ---------------- */
 (function(){
-  var pairs=[['overview','Whole map','1200 / 630',['Before: dark title blocks sit on top of the lots they name, and the legacy notes crowd the margins.','After: no title blocks over lots. Roads, buildings and lot outlines are kept in muted colors.','Outlines are thin, so the lot grid is readable at this scale.']],
-    ['dense','Straight rows','1000 / 640',['Before: each number is drawn as an outlined shape, and the old and new numbers overlap (look at 2193 and 2033).','After: one number per lot, in a clean typeface, inside the lot outline.','Contrast improved: dark numerals on a plain lot face. Small lots get smaller numbers.']],
-    ['curved','Curved rows and a section title','1000 / 640',['Before: the section title ("SECTION") runs across the numbers, and numbers cross lot edges.','After: the title is gone and each number sits inside its lot.','In the straight blocks the numbers read left to right. In curved rows they turn with the lot, so the reading direction follows the row.']]];
-  var h='';pairs.forEach(function(p,i){h+='<div class="cmp" id="cmp'+i+'"><h3 style="margin-top:0"><i class="tri"></i>'+p[1]+'</h3>'
-    +'<div class="row" style="margin:0 0 10px"><div style="flex:0 0 auto"><button class="btn seg on" data-m="slide" type="button">Slider</button><button class="btn seg" data-m="side" type="button">Side by side</button></div><div class="slideonly"><label class="f" for="rv'+i+'">Divider: left is before, right is after</label><input id="rv'+i+'" type="range" min="0" max="100" value="50"></div><div class="slideonly"><label class="f" for="zm'+i+'">Zoom <span id="zv'+i+'">1×</span></label><input id="zm'+i+'" type="range" min="1" max="4" step="0.25" value="1"></div><div style="flex:0 0 auto"><button class="btn sm" data-r="1" type="button">Reset view</button></div></div>'
-    +'<div class="cmpview" style="aspect-ratio:'+p[2]+'"><div class="pan"><img src="'+IMG['new_'+p[0]]+'" alt="After: '+p[1]+'"><div class="top"><img src="'+IMG['old_'+p[0]]+'" alt="Before: '+p[1]+'"></div></div><div class="dv"></div><span class="lab" style="left:8px">Before</span><span class="lab" style="right:8px">After</span></div>'
-    +'<div class="sidebox"><div><span class="tag legacy">Before</span><img src="'+IMG['old_'+p[0]]+'" alt="Before: '+p[1]+'"></div><div><span class="tag gold">After</span><img src="'+IMG['new_'+p[0]]+'" alt="After: '+p[1]+'"></div></div>'
-    +'<ul class="calls" style="margin-top:10px">'+p[3].map(function(t,j){return '<li><i>'+(j+1)+'</i>'+esc(t)+'</li>'}).join('')+'</ul></div>'});
+  var pairs=[['overview','Whole map',1200/630,['Before: dark title blocks sit on top of the lots they name, and the legacy notes crowd the margins.','After: no title blocks over lots. Roads, buildings and lot outlines are kept in muted colors.','Outlines are thin, so the lot grid is readable at this scale.']],
+    ['dense','Straight rows',1000/640,['Before: each number is drawn as an outlined shape, and the old and new numbers overlap (look at 2193 and 2033).','After: one number per lot, in a clean typeface, inside the lot outline.','Contrast improved: dark numerals on a plain lot face. Small lots get smaller numbers.']],
+    ['curved','Curved rows and a section title',1000/640,['Before: the section title ("SECTION") runs across the numbers, and numbers cross lot edges.','After: the title is gone and each number sits inside its lot.','In the straight blocks the numbers read left to right. In curved rows they turn with the lot, so the reading direction follows the row.']]];
+  var h='';pairs.forEach(function(p,i){h+='<div class="cmp" id="cmp'+i+'"><h4 style="margin-top:0">'+p[1]+'</h4>'
+    +'<div class="cc"><div><button class="btn seg sm on" data-m="slide" type="button">Slider</button><button class="btn seg sm" data-m="side" type="button">Side by side</button></div><label>Zoom <input id="zm'+i+'" type="range" min="1" max="4" step="0.25" value="1" aria-label="Zoom"><span id="zv'+i+'">1×</span></label><button class="btn sm" data-r="1" type="button">Reset view</button></div>'
+    +'<div class="cmpview" style="--ar:'+p[2]+';aspect-ratio:'+p[2]+'"><div class="pan"><img src="'+IMG['new_'+p[0]]+'" alt="After: '+p[1]+'"><div class="top"><img src="'+IMG['old_'+p[0]]+'" alt="Before: '+p[1]+'"></div></div><div class="dv" tabindex="0" role="slider" aria-label="Before and after divider" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50"><i>◂▸</i></div><span class="lab" style="left:8px">Before</span><span class="lab" style="right:8px">After</span></div>'
+    +'<div class="sidebox"><div><span class="tag">Before</span><img src="'+IMG['old_'+p[0]]+'" alt="Before: '+p[1]+'"></div><div><span class="tag">After</span><img src="'+IMG['new_'+p[0]]+'" alt="After: '+p[1]+'"></div></div>'
+    +'<ol class="calls" style="margin-top:10px">'+p[3].map(function(t,j){return '<li><i>'+(j+1)+'</i>'+esc(t)+'</li>'}).join('')+'</ol></div>'});
   $('cmps').innerHTML=h;
-  pairs.forEach(function(p,i){var box=$('cmp'+i),view=box.querySelector('.cmpview'),pan=view.querySelector('.pan'),top=view.querySelector('.top'),dv=view.querySelector('.dv'),rv=$('rv'+i),zm=$('zm'+i),z=1,tx=0,ty=0,drag=null;
+  pairs.forEach(function(p,i){var box=$('cmp'+i),view=box.querySelector('.cmpview'),pan=view.querySelector('.pan'),top=view.querySelector('.top'),dv=view.querySelector('.dv'),zm=$('zm'+i),v=50,z=1,tx=0,ty=0,drag=null,mode=null;
     function clamp(){var w=view.clientWidth,hh=view.clientHeight;tx=Math.min(0,Math.max(w-w*z,tx));ty=Math.min(0,Math.max(hh-hh*z,ty))}
-    function apply(){clamp();pan.style.transform='translate('+tx+'px,'+ty+'px) scale('+z+')';$('zv'+i).textContent=z+'×';var v=+rv.value;top.style.clipPath='inset(0 '+(100-v)+'% 0 0)';dv.style.left=Math.max(0,Math.min(100,(tx+(v/100)*view.clientWidth*z)/view.clientWidth*100))+'%'}
-    on(rv,'input',apply);on(zm,'input',function(){var w=view.clientWidth,hh=view.clientHeight,cx=(w/2-tx)/z,cy=(hh/2-ty)/z;z=+zm.value;tx=w/2-cx*z;ty=hh/2-cy*z;apply()});
-    on(view,'pointerdown',function(e){drag={x:e.clientX,y:e.clientY,tx:tx,ty:ty,moved:false,rx:view.getBoundingClientRect()};view.setPointerCapture(e.pointerId);view.style.cursor='grabbing'});
-    on(view,'pointermove',function(e){if(!drag)return;var dx=e.clientX-drag.x,dy=e.clientY-drag.y;if(Math.abs(dx)+Math.abs(dy)>3)drag.moved=true;if(z>1){tx=drag.tx+dx;ty=drag.ty+dy;apply()}else{var r=view.getBoundingClientRect();rv.value=Math.max(0,Math.min(100,(e.clientX-r.left)/r.width*100));apply()}});
-    on(view,'pointerup',function(e){if(drag&&!drag.moved){var r=view.getBoundingClientRect(),vx=(e.clientX-r.left-tx)/z/r.width*100;rv.value=Math.max(0,Math.min(100,vx));apply()}drag=null;view.style.cursor='grab'});
-    on(view,'keydown',function(){});
+    function apply(){clamp();pan.style.transform='translate('+tx+'px,'+ty+'px) scale('+z+')';$('zv'+i).textContent=z+'×';top.style.clipPath='inset(0 '+(100-v)+'% 0 0)';var w=view.clientWidth;dv.style.left=Math.max(0,Math.min(100,(tx+(v/100)*w*z)/w*100))+'%';dv.setAttribute('aria-valuenow',Math.round(v))}
+    function setV(clientX){var r=view.getBoundingClientRect();v=Math.max(0,Math.min(100,((clientX-r.left-tx)/z)/r.width*100));apply()}
+    on(zm,'input',function(){var w=view.clientWidth,hh=view.clientHeight,cx=(w/2-tx)/z,cy=(hh/2-ty)/z;z=+zm.value;tx=w/2-cx*z;ty=hh/2-cy*z;apply()});
+    on(view,'pointerdown',function(e){mode=e.target.closest('.dv')?'div':(z>1?'pan':'div');drag={x:e.clientX,y:e.clientY,tx:tx,ty:ty,moved:false};view.setPointerCapture(e.pointerId);view.style.cursor='grabbing';if(mode==='div')setV(e.clientX)});
+    on(view,'pointermove',function(e){if(!drag)return;if(mode==='div'){setV(e.clientX)}else{tx=drag.tx+e.clientX-drag.x;ty=drag.ty+e.clientY-drag.y;apply()}});
+    on(view,'pointerup',function(){drag=null;view.style.cursor='grab'});
+    on(dv,'keydown',function(e){if(e.key==='ArrowLeft'){v=Math.max(0,v-2);apply();e.preventDefault()}if(e.key==='ArrowRight'){v=Math.min(100,v+2);apply();e.preventDefault()}});
     [].forEach.call(box.querySelectorAll('[data-m]'),function(b){on(b,'click',function(){box.classList.toggle('side',b.getAttribute('data-m')==='side');[].forEach.call(box.querySelectorAll('[data-m]'),function(x){x.classList.toggle('on',x===b)})})});
-    on(box.querySelector('[data-r]'),'click',function(){z=1;tx=ty=0;zm.value=1;rv.value=50;apply()});apply();window.addEventListener('resize',apply)});
+    on(box.querySelector('[data-r]'),'click',function(){z=1;tx=ty=0;zm.value=1;v=50;apply()});apply();window.addEventListener('resize',apply)});
   var rows=[['One name per lot','A section plus a label names a lot. The label alone does not: '+A.labels_in_2plus_sections+' of '+A.distinct_labels+' label strings are used by two or more sections.','One number from 1 to 3,185 names a position. Graves add one digit, and a double-row half adds A or B.'],
    ['Same rule everywhere','No. Each of the 13 sections counts in its own way (section 03).','One rule: position along the path.'],
    ['Order','Restarts in every section and jumps within one.','Rises by 1 along the path, by construction.'],
@@ -296,13 +321,19 @@ function copyText(t){
 
 /* ---------------- section 9 ---------------- */
 (function(){
-  var v=A.verify,t=v.tiers,ok=0,okAll;FWD.forEach(function(r){if(GH(r[0],r[1])===r[2])ok++});
-  $('verify').innerHTML='<div class="grid3"><div class="stat"><span class="tag">Stored result · Python</span><div class="n" style="margin-top:6px">'+fmt(v.matched)+' / '+fmt(v.total)+'</div><div class="l">entries where hformula.py equals the decoder. Counts both internal keys. Run by verify.py.</div></div><div class="stat"><span class="tag">Stored result · Node</span><div class="n" style="margin-top:6px">3,197 / 3,197</div><div class="l">real labels where the one-line JavaScript equals the decoder. The two internal keys are left out. Run by test_giant.js.</div></div><div class="stat"><span class="tag ok">Live · this page</span><div class="n" style="margin-top:6px" id="livechk">'+fmt(ok)+' / '+fmt(FWD.length)+'</div><div class="l">real labels checked in your browser just now with the formula above.</div></div></div><p class="note">Coverage by kind: '+t.closed+' arithmetic, '+t.rows+' row constants, '+t.list+' stored lists, '+t.errata+' errata (3,199 entries).</p><p>The two internal keys are <code>152dr</code> and <code>169dr</code> in Section E. They are bookkeeping entries, not lots.</p>';
-  var miss=X.missingH,p1=new Set(A.unlabeled_positions.pass1),extra=miss.filter(function(h){return !p1.has(h)}),mult=Object.keys(RV).filter(function(h){return RV[h].length>1}),tri=mult.filter(function(h){return RV[h].length===3}).length;
-  $('complete').innerHTML='<p>The decoder has <b>'+fmt(FWD.length)+'</b> real labels (3,199 entries with the two internal keys). They map to <b>'+fmt(Object.keys(RV).length)+'</b> distinct H-numbers, because '+mult.length+' H-numbers have more than one reference: '+tri+' double-row lots with three references each (n, nA, nB) and '+(mult.length-tri)+' with two. Out of 3,185 positions, <b>'+miss.length+'</b> have no legacy reference.</p><div class="grid2"><div class="card"><b>'+p1.size+'</b> are the unlabeled grid positions in the B/A sweep found by the analysis.<div class="chips" style="margin-top:8px">'+A.unlabeled_positions.pass1.map(function(h){return '<span class="chip static">'+h+'</span>'}).join('')+'</div></div><div class="card"><b>'+extra.length+'</b> more, so the 36 are only part of the total.<div class="chips" style="margin-top:8px">'+extra.map(function(h){return '<span class="chip static">'+h+'</span>'}).join('')+'</div><p class="note" style="margin-top:8px">H000793 and H000795 to H000801 sit at the end of pass 1. H001473 is in C and H002416 is in the G margin.</p></div></div>';
+  var v=A.verify,t=v.tiers,ok=0;FWD.forEach(function(r){if(GH(r[0],r[1])===r[2])ok++});
+  var miss=X.missingH,p1=new Set(A.unlabeled_positions.pass1),extra=miss.filter(function(h){return !p1.has(h)}),mult=Object.keys(RV).filter(function(h){return RV[h].length>1}),tri=mult.filter(function(h){return RV[h].length===3}).length,nd=Object.keys(RV).length;
+  $('ledger').innerHTML='<tr><th>Check</th><th>Result</th><th>Evidence</th><th>Unresolved</th></tr>'
+   +'<tr><td><b>Software agreement</b><br>Python formulas against the decoder</td><td class="num">'+fmt(v.matched)+' / '+fmt(v.total)+'</td><td>verify.py, stored result</td><td>None. Includes the two internal keys.</td></tr>'
+   +'<tr><td><b>Software agreement</b><br>one-line JavaScript against the decoder</td><td class="num">3,197 / 3,197</td><td>test_giant.js, stored result</td><td>Two internal keys left out.</td></tr>'
+   +'<tr><td><b>Software agreement</b><br>live in this page</td><td class="num" id="livechk">'+fmt(ok)+' / '+fmt(FWD.length)+'</td><td>Run in your browser when the page loaded</td><td>None.</td></tr>'
+   +'<tr><td><b>Mapping completeness</b></td><td class="num">'+fmt(nd)+' of 3,185</td><td>'+fmt(FWD.length)+' real labels map to '+fmt(nd)+' distinct H-numbers</td><td>'+miss.length+' positions have no legacy reference.</td></tr>'
+   +'<tr><td><b>Physical verification</b></td><td class="num">Not done</td><td>None yet</td><td>A field check of a sample from every pass.</td></tr>';
+  $('verify').innerHTML='<p>Coverage by kind across the 3,199 entries: '+t.closed+' arithmetic, '+t.rows+' row constants, '+t.list+' stored lists, '+t.errata+' errata. The two internal keys are <code>152dr</code> and <code>169dr</code> in Section E. They are bookkeeping entries, not lots.</p>';
+  $('complete').innerHTML='<p>'+fmt(FWD.length)+' real labels map to <b>'+fmt(nd)+'</b> distinct H-numbers, because '+mult.length+' H-numbers have more than one reference: '+tri+' double-row lots with three references each (n, nA, nB) and '+(mult.length-tri)+' with two. Of 3,185 positions, <b>'+miss.length+'</b> have no legacy reference.</p><div class="grid2"><div><b>'+p1.size+'</b> are unlabeled grid positions in the B/A sweep found by the analysis.<div class="chips" style="margin-top:8px">'+A.unlabeled_positions.pass1.map(function(h){return '<span class="chip static">'+h+'</span>'}).join('')+'</div></div><div><b>'+extra.length+'</b> more, so the 36 are only part of the total.<div class="chips" style="margin-top:8px">'+extra.map(function(h){return '<span class="chip static">'+h+'</span>'}).join('')+'</div><p class="note" style="margin-top:8px">H000793 and H000795 to H000801 sit at the end of pass 1. H001473 is in C and H002416 is in the G margin.</p></div></div>';
   var er=[['Duplicate keys','D-274, G-19','One of each pair is shadowed','Decoder keeps the later entry; formula follows it','Decide which lot each entry meant'],['Typo in a row table','C-124H (pattern says 142H)','A lookup for C-142H finds nothing','Formula maps 124H to the 142H position','Confirm on the map'],['Labels claimed twice','B-373 to B-379','Grid positions lose their own label','Later rule (the margin list) wins','Rule which lot each label means'],['Internal keys','E-152dr, E-169dr','Counted in 3,199, not real lots','Left out of the live check','Remove from the decoder or document them'],['Traversal order','B and A, pass 1','Document says alternate columns; code does whole levels','Code order used; every verified number follows it','Choose the authoritative order'],['Idealised grid','C, reference sheet','C-417 is H001672 on the sheet and H001871 in the decoder','Decoder uses the real rows','Retire or update the sheet'],['Pass boundary','H and M','Earlier summaries put M at H002586; it begins at H002587','This page computes pass ranges from the data','Check other documents that quote it']];
   $('errata').innerHTML='<table class="t"><tr><th>Issue</th><th>Affected references</th><th>Consequence</th><th>Current handling</th><th>Decision needed</th></tr>'+er.map(function(r){return '<tr>'+r.map(function(c,i){return '<td'+(i===0?' style="white-space:nowrap"><b>'+c+'</b>':'>'+c)+'</td>'}).join('')+'</tr>'}).join('')+'</table><p class="note" style="margin-top:10px">"Later entry wins" describes what the software does. It does not show that the underlying conflict is settled.</p>';
-  var dec=[['Which traversal order is authoritative?','Whole level of B then A (what the code does) or alternating columns (what the reference PDF says). Everything in pass 1 depends on this.'],['Which exceptions get reviewed first?','Suggested order: the 5 label conflicts in the errata table, then the 46 positions with no reference, then the double-row lots.'],['How will the numbers be verified on the ground?','Agreement with the decoder is done. Someone has to walk a sample of lots in each pass and confirm the H-number sits on the right lot.'],['What are the rules for future additions?','How a new lot or a re-cut lot gets a number without disturbing the order: append after H003185, insert and renumber, or reserve gaps.']];
-  $('decisions').innerHTML=dec.map(function(d,i){return '<div class="def"><span class="tag gold">Decision '+(i+1)+'</span> <b>'+d[0]+'</b><p style="margin:6px 0 0">'+d[1]+'</p></div>'}).join('');
+  var dec=[['Which traversal order is authoritative?','Whole level of B then A (what the code does) or alternating columns (what the reference PDF says).','Everything in pass 1 depends on it. Until it is decided, H-numbers in B and A are provisional.'],['Which exceptions get reviewed first?','Suggested order: the 5 label conflicts in the errata table, then the 46 positions with no reference, then the double-row lots.','Unreviewed conflicts keep some lots unreachable by their old label.'],['How will the numbers be verified on the ground?','Someone has to walk a sample of lots in each pass and confirm that the H-number sits on the right lot.','Without it, the numbers are checked against the decoder only.'],['What are the rules for future additions?','How a new lot or a re-cut lot gets a number without disturbing the order: append after H003185, insert and renumber, or reserve gaps.','Without a rule, the first addition forces an ad hoc choice.']];
+  $('decisions').innerHTML='<table class="t"><tr><th>#</th><th>Decision</th><th>Options and context</th><th>If left open</th></tr>'+dec.map(function(d,i){return '<tr><td class="num">'+(i+1)+'</td><td><b>'+d[0]+'</b></td><td>'+d[1]+'</td><td>'+d[2]+'</td></tr>'}).join('')+'</table>';
 })();
 })();

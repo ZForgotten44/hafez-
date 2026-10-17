@@ -49,7 +49,7 @@ X['snips'] = [
 X['img'] = {}
 for n in ('old_overview','new_overview','old_dense','new_dense','old_curved','new_curved'):
     X['img'][n] = 'data:image/jpeg;base64,' + base64.b64encode(open('img/%s.jpg' % n, 'rb').read()).decode()
-html = open('explainer_template.html').read()
+html = open('explainer_page.html').read()
 def img(m):
     p = 'img/' + m.group(1)
     for ext in ('.jpg', '.png'):
@@ -57,6 +57,15 @@ def img(m):
             return 'data:image/%s;base64,%s' % ('jpeg' if ext == '.jpg' else 'png', base64.b64encode(open(p + ext, 'rb').read()).decode())
     raise SystemExit('missing image ' + p)
 html = re.sub(r'__IMG_(\w+?)__', img, html)
+from PIL import Image
+def ar(m):
+    n = m.group(1); p = 'img/' + n + ('.jpg' if os.path.exists('img/' + n + '.jpg') else '.png'); i = Image.open(p); return '%.4f' % (i.width / i.height)
+html = re.sub(r'__AR_(\w+?)__', ar, html)
+def b64(p): return base64.b64encode(open(p, 'rb').read()).decode()
+FONTS = '@font-face{font-family:"Space Grotesk";font-style:normal;font-weight:300 700;font-display:swap;src:url(data:font/woff2;base64,%s) format("woff2")}' % b64('fonts/SpaceGrotesk-400.woff2')
+for w in (400, 500, 600):
+    FONTS += '@font-face{font-family:"IBM Plex Mono";font-style:normal;font-weight:%d;font-display:swap;src:url(data:font/woff2;base64,%s) format("woff2")}' % (w, b64('fonts/IBMPlexMono-%d.woff2' % w))
+html = html.replace('/*__FONTS__*/', FONTS)
 data = json.dumps(X, separators=(',', ':')).replace('</', '<\\/')
 html = html.replace('/*__DATA__*/null', data).replace('/*__SCRIPT__*/', (open('explainer_a.js').read() + open('explainer_b.js').read().replace('/* ---------------- section 4','var IMG=X.img;\n/* ---------------- section 4',1)).replace('</script', '<\\/script'))
 open('Cedar_Grove_Numbering_Explained.html', 'w').write(html)

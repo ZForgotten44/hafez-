@@ -1,0 +1,529 @@
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Cedar Grove Numbering Explained</title>
+<style>
+/*__FONTS__*/
+/* Layout: open, ruled columns (ZF Games language). Bordered panels only mark interactive workspaces. A collapsible contents
+   drawer sits on the left, an opaque bar holds navigation, one accent marks the selected lot or active step. */
+:root{
+  color-scheme:light;
+  --bg:#dcdad2; --fg:#0b0b0a; --g2:#c9c7be; --g3:#b3b1a6; --g4:#8f8d82; --g5:#4b4a44; --g6:#34332f; --g7:#1d1d1b;
+  --surf:#e6e4dd; --panel:#efede7; --code:#cfcdc4; --bar:#dcdad2; --rule:#8f8d82;
+  --acc:#c5a448; --acc-ink:#0b0b0a; --ok:#1f6b3f; --bad:#a3271a; --info:#1f4f8f;
+  --sans:'Space Grotesk',ui-sans-serif,system-ui,-apple-system,'Segoe UI',sans-serif;
+  --mono:'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  --fs:17px; --rp:3px; --rc:5px; --railw:56px;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  color-scheme:dark;
+  --bg:#0b0b0a; --fg:#f4f2ec; --g2:#1c1c1a; --g3:#2b2b28; --g4:#45443f; --g5:#b9b7af; --g6:#d0cec6; --g7:#e8e6de;
+  --surf:#141413; --panel:#181817; --code:#0f0f0e; --bar:#0b0b0a; --rule:#45443f;
+  --acc:#c5a448; --acc-ink:#0b0b0a; --ok:#78c595; --bad:#f08b7e; --info:#86b3e6}}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --bg:#0b0b0a; --fg:#f4f2ec; --g2:#1c1c1a; --g3:#2b2b28; --g4:#45443f; --g5:#b9b7af; --g6:#d0cec6; --g7:#e8e6de;
+  --surf:#141413; --panel:#181817; --code:#0f0f0e; --bar:#0b0b0a; --rule:#45443f;
+  --acc:#c5a448; --acc-ink:#0b0b0a; --ok:#78c595; --bad:#f08b7e; --info:#86b3e6}
+:root[data-size="lg"]{--fs:20px}
+:root[data-rail="open"]{--railw:290px}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:78px}
+body{margin:0;background:var(--bg);color:var(--fg);font:400 var(--fs)/1.6 var(--sans);-webkit-font-smoothing:antialiased}
+.mono,.secnum,code,kbd{font-family:var(--mono)}
+a{color:var(--fg);text-underline-offset:3px}
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:40;background:var(--bar);border-bottom:1px solid var(--rule);padding:0 max(16px,env(safe-area-inset-right,0px)) 0 max(16px,env(safe-area-inset-left,0px))}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:var(--bar);z-index:41}
+.bar .in{display:flex;flex-wrap:wrap;align-items:center;gap:2px 6px;max-width:1500px;margin:0 auto;min-height:52px}
+.brand{font:700 .92em var(--sans);letter-spacing:-.01em;margin-right:auto;white-space:nowrap}
+.brand small{font:500 .72em var(--mono);color:var(--g5);margin-left:10px;letter-spacing:.04em}
+.nav2{display:inline-flex;border:1px solid var(--fg);border-radius:var(--rc);overflow:hidden}
+.nav2 button{border:0;border-radius:0;min-width:40px;padding:0 12px;min-height:34px;background:transparent;color:var(--fg);font:600 .82em var(--mono);cursor:pointer}
+.nav2 button:hover{background:var(--fg);color:var(--bg)}
+.nav2 .pos{display:inline-flex;align-items:center;padding:0 10px;font:500 .74em var(--mono);border-left:1px solid var(--fg);border-right:1px solid var(--fg);color:var(--g6);min-width:64px;justify-content:center}
+.util{background:transparent;border:0;color:var(--g5);font:500 .76em var(--mono);padding:6px 8px;cursor:pointer;border-radius:var(--rc);min-height:34px;letter-spacing:.02em}
+.util:hover{color:var(--fg);text-decoration:underline;text-underline-offset:4px}
+#bmenu{border:1px solid var(--fg);border-radius:var(--rc);background:transparent;color:var(--fg);font:600 .8em var(--mono);min-height:34px;padding:0 12px;cursor:pointer;margin-right:6px}
+#bmenu:hover{background:var(--fg);color:var(--bg)}
+button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--fg);outline-offset:2px}
+.btn{font:600 .82em var(--sans);color:var(--fg);background:transparent;border:1.5px solid var(--fg);border-radius:var(--rc);min-height:38px;padding:0 14px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:8px;text-decoration:none;letter-spacing:.01em}
+.btn:hover{background:var(--fg);color:var(--bg)}
+.btn.fill{background:var(--fg);color:var(--bg)} .btn.fill:hover{opacity:.85}
+.btn.sm{min-height:32px;padding:0 10px;font-size:.78em}
+.btn.on{background:var(--fg);color:var(--bg)}
+.btn.seg{border-radius:0;margin-right:-1.5px} .btn.seg:first-child{border-radius:var(--rc) 0 0 var(--rc)} .btn.seg:last-child{border-radius:0 var(--rc) var(--rc) 0;margin-right:0}
+.btn.play::before{content:"";width:.7em;height:.8em;background:currentColor;clip-path:polygon(0 0,100% 50%,0 100%)}
+.btn.play.on::before{clip-path:polygon(0 0,35% 0,35% 100%,0 100%,0 0,65% 0,65% 100%,100% 100%,100% 0)}
+.wrap{display:grid;grid-template-columns:var(--railw) minmax(0,1fr);gap:0 40px;max-width:1500px;margin:0 auto;padding:0 max(16px,env(safe-area-inset-right,0px)) 90px max(16px,env(safe-area-inset-left,0px));transition:grid-template-columns .2s}
+nav.rail{position:sticky;top:calc(53px + env(safe-area-inset-top,0px));align-self:start;height:calc(100vh - 53px);overflow-y:auto;overflow-x:hidden;padding:18px 0;border-right:1px solid var(--rule);font-size:.84em}
+nav.rail ol{list-style:none;margin:0;padding:0}
+nav.rail .sec>a{display:grid;grid-template-columns:34px minmax(0,1fr) 26px;align-items:baseline;padding:8px 0;color:var(--g5);text-decoration:none;border-left:2px solid transparent;line-height:1.3}
+nav.rail .sec>a i{font:500 .86em var(--mono);font-style:normal;text-align:center;color:var(--g5)}
+nav.rail .sec>a span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:none}
+nav.rail .sec>a b{display:none;font:500 .9em var(--mono);color:var(--g5);text-align:center}
+nav.rail .sec>a:hover{color:var(--fg)}
+nav.rail .sec.on>a{color:var(--fg);font-weight:700;border-left-color:var(--fg)} nav.rail .sec.on>a i{color:var(--fg)}
+nav.rail ul{display:none;list-style:none;margin:0 0 6px 34px;padding:0 0 0 10px;border-left:1px solid var(--rule)}
+nav.rail ul a{display:block;padding:4px 6px;color:var(--g5);text-decoration:none;font-size:.92em;line-height:1.35}
+nav.rail ul a:hover,nav.rail ul a.on{color:var(--fg)} nav.rail ul a.on{font-weight:600}
+:root[data-rail="open"] nav.rail .sec>a span{display:block} :root[data-rail="open"] nav.rail .sec>a b{display:block}
+:root[data-rail="open"] nav.rail .sec.x ul{display:block}
+nav.rail .rt{display:flex;justify-content:center;padding:0 0 14px}
+nav.rail .rt button{background:transparent;border:1px solid var(--rule);border-radius:var(--rc);color:var(--g5);font:500 .74em var(--mono);cursor:pointer;min-height:30px;padding:0 10px}
+nav.rail .rt button:hover{color:var(--fg);border-color:var(--fg)}
+main{min-width:0}
+header.hero{padding:64px 0 10px;max-width:1100px}
+.kicker{font:500 .74em var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--g5)}
+h1{font:700 clamp(2.4em,6.4vw,4.6em)/.98 var(--sans);letter-spacing:-.04em;margin:16px 0 16px;text-wrap:balance}
+.sub{font-size:1.2em;color:var(--g6);max-width:34em;margin:0 0 20px;font-weight:500;line-height:1.45}
+section{padding-top:84px}
+.sechead{display:grid;grid-template-columns:3.6em minmax(0,1fr);gap:0 8px;align-items:baseline;margin-bottom:18px;border-top:2px solid var(--fg);padding-top:14px}
+.secnum{font-weight:500;font-size:1.1em;color:var(--g5);letter-spacing:-.04em}
+h2{font:700 clamp(1.9em,3.8vw,2.7em)/1.02 var(--sans);letter-spacing:-.035em;margin:0;text-wrap:balance}
+h3{font:700 1.2em/1.25 var(--sans);letter-spacing:-.015em;margin:40px 0 8px;display:flex;gap:.6em;align-items:baseline;flex-wrap:wrap}
+h4{font:600 1em var(--sans);margin:22px 0 6px}
+p{max-width:46em;margin:0 0 14px}
+.lede{font-size:1.07em;color:var(--g6);font-weight:500}
+.note{font-size:.86em;color:var(--g5);line-height:1.55}
+.note b{color:var(--g7)}
+.tag{display:inline-block;font:500 .66em var(--mono);letter-spacing:.07em;text-transform:uppercase;padding:2px 7px;border-radius:2px;border:1px solid var(--g5);color:var(--g6);vertical-align:middle;white-space:nowrap}
+.tag.bad{border-color:var(--bad);color:var(--bad)} .tag.ok{border-color:var(--ok);color:var(--ok)}
+.card{border-top:1px solid var(--rule);padding:14px 0;margin:14px 0}
+.panel{border:1px solid var(--fg);border-radius:var(--rp);padding:16px 18px;margin:16px 0;background:var(--panel)}
+.card>h3:first-child{margin-top:0}
+.aside{border-left:3px solid var(--fg);padding:2px 0 2px 14px;margin:16px 0;max-width:46em}
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px} .grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0}
+.terms{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);margin:8px 0 14px}
+.terms>div{padding:14px 18px 14px 0;margin-right:18px;border-right:1px solid var(--rule)} .terms>div:last-child{border-right:0;margin-right:0}
+.terms b{display:block;font-size:.98em} .terms .ex{font:600 1.05em var(--mono);margin:6px 0 4px;letter-spacing:-.02em} .terms p{font-size:.84em;color:var(--g5);margin:0}
+.abc>div{padding:6px 22px 8px 0;margin-right:22px;border-right:1px solid var(--rule)} .abc>div:last-child{border:0;margin:0}
+.abc .L{font:700 3.4em/1 var(--sans);letter-spacing:-.05em;display:block} .abc b{display:block;margin:4px 0} .abc p{font-size:.86em;color:var(--g5);margin:0}
+table.stats{border-collapse:collapse;width:100%;max-width:60em}
+table.stats td{padding:10px 14px 10px 0;border-bottom:1px solid var(--rule);vertical-align:baseline} table.stats td.n{font:700 1.9em/1.1 var(--sans);letter-spacing:-.04em;width:3.6em;text-align:right;padding-right:22px;font-variant-numeric:tabular-nums} table.stats td.l{color:var(--g6)}
+table.stats tr.em td.n{text-decoration:underline;text-decoration-color:var(--acc);text-decoration-thickness:4px;text-underline-offset:6px}
+figure{margin:0}
+.fig{display:grid;grid-template-columns:minmax(0,1.9fr) minmax(250px,1fr);gap:24px;align-items:start;margin:14px 0 30px;border-top:1px solid var(--rule);padding-top:14px}
+.fig .cap{position:sticky;top:76px}
+.fig .cap b.t{display:block;font:500 .7em var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--g5);margin-bottom:6px}
+.imgwrap{position:relative;display:block;border:1px solid var(--rule);overflow:hidden;background:var(--surf);cursor:zoom-in;width:min(100%,calc((100vh - 150px)*var(--ar,1.3)));border-radius:var(--rp)}
+.imgwrap img{display:block;width:100%;height:auto}
+.imgwrap .hint{position:absolute;right:8px;bottom:8px;font:500 .68em var(--mono);padding:3px 8px;background:var(--bg);color:var(--fg);border:1px solid var(--fg);border-radius:2px;pointer-events:none;opacity:.9}
+.mk{position:absolute;transform:translate(-50%,-50%);width:1.9em;height:1.9em;border-radius:50%;background:var(--fg);color:var(--bg);font:600 .78em var(--mono);display:grid;place-items:center;border:2px solid var(--bg);pointer-events:none}
+.crop{position:absolute;border:2px dashed var(--fg);background:rgba(128,128,128,.14);pointer-events:none}
+.crop b{position:absolute;left:-2px;top:-1.7em;font:600 .68em var(--mono);background:var(--fg);color:var(--bg);padding:1px 6px;white-space:nowrap}
+figcaption{font-size:.92em;color:var(--g6);line-height:1.5;margin-bottom:8px}
+.calls{margin:8px 0 0;padding:0;list-style:none;font-size:.9em;color:var(--g7)}
+.calls li{display:flex;gap:10px;margin:7px 0}
+.calls li i{flex:0 0 1.7em;height:1.7em;border-radius:50%;background:var(--fg);color:var(--bg);font:600 .78em/1.7em var(--mono);text-align:center;font-style:normal;margin-top:.1em}
+.seq{display:flex;gap:0 22px;flex-wrap:wrap;margin:10px 0 6px;padding:0;list-style:none;font:500 .8em var(--mono);color:var(--g6)}
+.seq li::before{content:attr(data-n);margin-right:8px;color:var(--fg);font-weight:600}
+label.f{display:block;font:500 .7em var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--g5);margin:0 0 5px}
+input[type=text],input[type=number],select,textarea{font:400 .95em var(--sans);color:var(--fg);background:var(--bg);border:1px solid var(--fg);border-radius:var(--rc);padding:8px 10px;width:100%;min-height:40px}
+input[type=range]{width:100%;accent-color:var(--fg);min-height:30px}
+textarea{font-family:var(--mono);font-size:.8em;line-height:1.55}
+.row{display:flex;flex-wrap:wrap;gap:14px;align-items:flex-end;margin:10px 0} .row>div{flex:1 1 150px;min-width:0}
+.out{font:500 .88em/1.65 var(--mono);background:var(--code);border:1px solid var(--rule);border-radius:var(--rp);padding:12px 14px;overflow-x:auto;color:var(--fg);margin:10px 0}
+.out b,.out .hv{color:var(--fg);font-weight:700;background:linear-gradient(transparent 62%,var(--acc) 62%)}
+.big{font:700 clamp(2.2em,7vw,3.6em)/1.05 var(--sans);letter-spacing:-.04em} .big small{font:500 .36em var(--mono);color:var(--g5);letter-spacing:0;margin-left:.8em}
+.bad{color:var(--bad)} .good{color:var(--ok)}
+canvas{display:block;width:100%;height:auto;border-radius:var(--rp);background:var(--surf);border:1px solid var(--rule)}
+.cw{display:grid;grid-template-columns:260px minmax(0,1fr);border:1px solid var(--fg);border-radius:var(--rp);overflow:hidden;background:#0b0b0a;color:#e8e6de;margin:16px 0}
+.cw .fl{border-right:1px solid #2b2b28;padding:12px 0;max-height:640px;overflow:auto;background:#101010}
+.cw .fl h6{margin:12px 14px 4px;font:500 .68em var(--mono);letter-spacing:.1em;text-transform:uppercase;color:#a8a69e}
+.cw .fl button{display:block;width:100%;text-align:left;background:transparent;border:0;border-left:2px solid transparent;color:#cfcdc5;font:500 .8em var(--mono);padding:6px 14px;cursor:pointer}
+.cw .fl button:hover{color:#fff} .cw .fl button.on{color:#fff;border-left-color:#c5a448;background:#181817}
+.cw .pane{min-width:0;display:flex;flex-direction:column} .cw .pane[hidden]{display:none}
+.cw .ph{padding:14px 18px;border-bottom:1px solid #2b2b28;display:flex;gap:12px;flex-wrap:wrap;align-items:flex-start}
+.cw .ph>div{flex:1 1 300px;min-width:0} .cw .ph b{font:600 1em var(--mono);color:#fff} .cw .ph p{margin:4px 0 0;font-size:.88em;color:#d0cec6} .cw .ph a{color:#e8e6de}
+.cw .ph .file{font:500 .72em var(--mono);color:#a8a69e;margin-left:8px}
+.cw .cpy{background:transparent;border:1px solid #5a5953;border-radius:var(--rc);color:#cfcdc5;font:500 .72em var(--mono);padding:4px 10px;cursor:pointer} .cw .cpy:hover{color:#fff;border-color:#fff}
+pre.code{margin:0;background:transparent;color:#e8e6de;padding:12px 0;overflow:auto;font:400 .8em/1.6 var(--mono);tab-size:4;counter-reset:l;max-height:640px}
+pre.code .ln{display:block;padding:0 18px 0 0;white-space:pre} pre.code .ln::before{counter-increment:l;content:counter(l);display:inline-block;width:3.4em;padding-right:1em;text-align:right;color:#a8a69e}
+pre.code .k{color:#86b3e6} pre.code .s{color:#8fd4a4} pre.code .n{color:#f0a574} pre.code .c{color:#a8a69e;font-style:italic}
+pre.code.solo{border:1px solid var(--fg);border-radius:var(--rp);background:#0b0b0a;margin:10px 0}
+table.t{border-collapse:collapse;width:100%;font-size:.9em}
+table.t th{text-align:left;font:500 .72em var(--mono);letter-spacing:.07em;text-transform:uppercase;color:var(--g5);padding:8px 12px 8px 0;border-bottom:2px solid var(--fg);white-space:nowrap}
+table.t td{padding:9px 12px 9px 0;border-bottom:1px solid var(--rule);vertical-align:top} table.t td.num{text-align:right;font-family:var(--mono);font-variant-numeric:tabular-nums;white-space:nowrap}
+table.t td.shift{background:var(--acc);color:var(--acc-ink)} table.t td.v{font-family:var(--mono);white-space:nowrap;text-align:right;font-weight:600}
+thead{display:table-header-group}
+.scroll,#passes,#decisions,#complete,#walk .out{overflow-x:auto;max-width:100%}
+.chips{display:flex;flex-wrap:wrap;gap:4px}
+.chip{font:500 .8em var(--mono);padding:4px 8px;border-radius:2px;background:transparent;border:1px solid var(--g4);color:var(--fg);white-space:nowrap;cursor:pointer;min-height:30px}
+.chip:hover{border-color:var(--fg)}
+.chip[aria-pressed="true"]{background:var(--acc);color:var(--acc-ink);border-color:var(--acc)}
+.chip.h{border-style:double;border-width:3px;padding:2px 6px} .chip.h::before{content:"◆ ";font-size:.75em}
+.chip.suffix{border-style:dashed;border-color:var(--fg)} .chip.suffix::before{content:"▲ ";font-size:.75em}
+.chip.odd,.chip.gap,.chip.clash{border-color:var(--bad);color:var(--bad)} .chip.odd::before,.chip.gap::before,.chip.clash::before{content:"! ";font-weight:700}
+.chip.static{cursor:default}
+.key{display:flex;flex-wrap:wrap;gap:6px 18px;font-size:.84em;color:var(--g6);margin:8px 0}
+.key span{display:inline-flex;gap:6px;align-items:center}
+.key i{display:inline-block;width:12px;height:12px;border:1px solid var(--g5);flex:0 0 auto}
+.detail{margin-top:10px;border-left:3px solid var(--fg);padding:4px 0 4px 14px;font-size:.92em;min-height:3.2em;max-width:52em}
+.rowsc .sc{overflow-x:auto;padding-bottom:6px}
+.rowsc .sc .line{display:flex;gap:4px;white-space:nowrap;width:max-content;margin:0 0 5px;align-items:center}
+.rowsc .sc .line .rl{flex:0 0 3.4em;font:500 .72em var(--mono);color:var(--g5)}
+.sbtn{display:flex;gap:4px;justify-content:flex-end;margin:0 0 4px}
+.sbtn button{background:transparent;border:1px solid var(--rule);border-radius:var(--rc);color:var(--g6);font:500 .8em var(--mono);min-height:28px;min-width:32px;cursor:pointer} .sbtn button:hover{border-color:var(--fg);color:var(--fg)}
+.anat>*{min-width:0} .anat{display:grid;grid-template-columns:130px minmax(0,1fr);gap:4px 18px;align-items:start;padding:12px 0;border-top:1px solid var(--rule)}
+.anat h5{margin:0;font:700 1em var(--sans)} .anat h5 small{display:block;font:400 .74em var(--sans);color:var(--g5)}
+.addrbig{display:grid;grid-template-columns:minmax(0,auto) minmax(0,1fr);gap:24px;align-items:start;margin:10px 0}
+.addr{display:flex;align-items:flex-start}
+.addr button,.addr .p{all:unset;box-sizing:border-box;display:block;text-align:center;padding:12px 20px 10px;border-right:1px solid var(--rule);min-width:5em;color:var(--fg)}
+.addr button{cursor:pointer} .addr>:last-child{border-right:0}
+.addr b{display:block;font:600 2.2em/1.1 var(--mono);letter-spacing:-.03em} .addr span{display:block;font:500 .66em var(--mono);letter-spacing:.07em;text-transform:uppercase;color:var(--g5);margin-top:6px}
+.addr button[aria-pressed="true"]{background:var(--acc);color:var(--acc-ink)} .addr button[aria-pressed="true"] span{color:var(--acc-ink)}
+.addr button:hover{background:var(--g2)} .addr button[aria-pressed="true"]:hover{background:var(--acc)}
+.addr .p{padding:8px 16px} .addr .p b{font-size:1.6em}
+.mapbox{position:relative;background:var(--surf);border:1px solid var(--rule);overflow:hidden;border-radius:var(--rp)}
+.mapbox svg{display:block;width:100%;height:auto}
+.mapbox polygon{stroke:var(--bg);stroke-width:.35}
+.mapbox .orient{position:absolute;font:500 .68em var(--mono);color:var(--g6);background:var(--bg);border:1px solid var(--rule);padding:2px 7px;pointer-events:none}
+.maptip{position:absolute;pointer-events:none;background:var(--fg);color:var(--bg);font:500 .78em var(--mono);padding:5px 9px;white-space:nowrap;display:none;z-index:2}
+.eqn{font:500 .88em/1.8 var(--mono);background:var(--code);border:1px solid var(--rule);border-radius:var(--rp);padding:12px 16px;margin:10px 0;overflow-x:auto}
+.eqn .lbl{color:var(--g5)}
+math{font-size:1.15em} .mathblock{overflow-x:auto;padding:10px 4px;margin:6px 0}
+.demo{border:1px solid var(--fg);border-radius:var(--rp);margin:22px 0;background:var(--panel)}
+.demo>header{display:flex;gap:12px;align-items:center;flex-wrap:wrap;padding:12px 18px;border-bottom:1px solid var(--rule)}
+.demo>header h3{margin:0;flex:1 1 260px}
+.demo .body{padding:14px 18px 18px;display:grid;grid-template-columns:minmax(0,1.55fr) minmax(0,1fr);gap:6px 28px}
+.demo .body>*{grid-column:1/-1;min-width:0}
+.demo .body>.dg{grid-column:1;grid-row:2} .demo .body>.ctl{grid-column:2;grid-row:2}
+.step{margin:8px 0}
+.step>b{display:block;font:500 .68em var(--mono);letter-spacing:.09em;text-transform:uppercase;color:var(--g5);margin-bottom:4px}
+.take{border-left:3px solid var(--fg);padding:2px 0 2px 12px;font-size:.93em;color:var(--g7);margin:10px 0 0;max-width:none}
+.mode{display:inline-block;font:500 .66em var(--mono);letter-spacing:.07em;text-transform:uppercase;padding:3px 8px;border-radius:2px;border:1px solid var(--g5);color:var(--g6);white-space:nowrap}
+.mode.exp{background:var(--fg);color:var(--bg);border-color:var(--fg)}
+details{border-top:1px solid var(--rule);padding:8px 0;margin:8px 0} details summary{cursor:pointer;font-weight:600;min-height:28px}
+.def{border-top:1px solid var(--rule);padding:14px 0}
+.def .f4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px 22px;margin-top:8px}
+.def .f4 div{font-size:.88em;color:var(--g7)} .def .f4 em{display:block;font:500 .66em var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--g5);font-style:normal;margin-bottom:2px}
+.nextprev{display:flex;gap:10px;justify-content:space-between;margin-top:50px;padding-top:16px;border-top:1px solid var(--rule);flex-wrap:wrap}
+.wnow{display:flex;gap:6px;flex-wrap:wrap;margin:10px 0 0}
+.wnow .c{border:1px solid var(--g4);padding:4px 8px;font:500 .78em var(--mono);min-width:5.4em;text-align:center;line-height:1.35}
+.wnow .c small{display:block;color:var(--g5);font-size:.9em} .wnow .c.cur{background:var(--acc);color:var(--acc-ink);border-color:var(--acc)} .wnow .c.cur small{color:var(--acc-ink)}
+#lb{position:fixed;inset:0;z-index:60;background:rgba(5,5,4,.94);display:none;flex-direction:column;align-items:center;padding:max(16px,env(safe-area-inset-top,0px)) 16px 16px;overflow:auto}
+#lb.on{display:flex}
+#lb .stage{position:relative;max-width:min(1500px,100%);width:100%;display:flex;justify-content:center}
+#lb .imgwrap{cursor:default;border-color:#45443f;width:min(100%,calc((100vh - 190px)*var(--ar,1.3)))}
+#lb .imgwrap .hint{display:none}
+#lb .cap{max-width:60em;color:#f4f2ec;font-size:1.05em;margin:14px 0;line-height:1.55}
+#lb .cap .calls{color:#f4f2ec} #lb .calls li i,#lb .mk{background:#f4f2ec;color:#0b0b0a;border-color:#0b0b0a}
+#lb .bar2{display:flex;gap:8px;align-self:flex-end;margin-bottom:10px}
+#lb .bar2 button{background:#f4f2ec;color:#141412;border-color:#f4f2ec}
+.cmp{border-top:1px solid var(--rule);padding:16px 0 10px;margin:8px 0 22px}
+.cmp .cc{display:flex;flex-wrap:wrap;gap:12px 18px;align-items:center;margin:0 0 10px}
+.cmp .cc label{font:500 .7em var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--g5);display:flex;gap:8px;align-items:center}
+.cmp .cc input[type=range]{width:130px}
+.cmpview{position:relative;overflow:hidden;border:1px solid var(--rule);background:var(--surf);touch-action:none;cursor:grab;user-select:none;max-width:min(100%,calc((100vh - 200px)*var(--ar)));border-radius:var(--rp)}
+.cmpview .pan{position:relative;transform-origin:0 0;width:100%;height:100%}
+.cmpview img{display:block;width:100%;height:100%;object-fit:cover;-webkit-user-drag:none;pointer-events:none}
+.cmpview .top{position:absolute;inset:0}
+.cmpview .dv{position:absolute;top:0;bottom:0;width:0;z-index:2;cursor:ew-resize;touch-action:none}
+.cmpview .dv::before{content:"";position:absolute;left:-1.5px;top:0;bottom:0;width:3px;background:var(--acc)}
+.cmpview .dv i{position:absolute;left:0;top:50%;transform:translate(-50%,-50%);width:38px;height:38px;border-radius:50%;background:var(--acc);color:var(--acc-ink);border:2px solid #0b0b0a;display:grid;place-items:center;font:700 .8em var(--mono);font-style:normal}
+.cmpview .lab{position:absolute;top:8px;font:600 .72em var(--mono);padding:3px 9px;background:var(--bg);color:var(--fg);border:1px solid var(--fg);z-index:3;pointer-events:none}
+.cmp .sidebox{display:none;grid-template-columns:1fr 1fr;gap:12px} .cmp.side .sidebox{display:grid} .cmp.side .cmpview{display:none}
+.sidebox img{display:block;width:100%;border:1px solid var(--rule)}
+.toast{position:fixed;left:50%;bottom:calc(22px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--fg);color:var(--bg);padding:9px 16px;border-radius:var(--rc);font-weight:600;font-size:.88em;opacity:0;pointer-events:none;transition:opacity .2s;z-index:70}
+.toast.show{opacity:1}
+@media (max-width:980px){
+  .wrap{grid-template-columns:minmax(0,1fr);gap:0}
+  nav.rail{position:fixed;left:0;top:calc(53px + env(safe-area-inset-top,0px));bottom:0;height:auto;width:min(310px,88vw);z-index:50;background:var(--bg);transform:translateX(-102%);transition:transform .2s;padding-left:max(10px,env(safe-area-inset-left,0px))}
+  :root[data-rail="open"] nav.rail{transform:none;box-shadow:0 0 0 100vmax rgba(0,0,0,.45)}
+  nav.rail .sec>a span,nav.rail .sec>a b{display:block} nav.rail .sec.x ul{display:block}
+  .grid2,.grid3,.terms,.def .f4,.anat,.fig,.cw,.addrbig{grid-template-columns:minmax(0,1fr)}
+  .fig .cap{position:static}
+  .terms>div,.abc>div{border-right:0;margin-right:0;border-bottom:1px solid var(--rule)}
+  .demo .body{grid-template-columns:1fr} .demo .body>.dg,.demo .body>.ctl{grid-column:1;grid-row:auto}
+  .brand small,.util.hide-s{display:none}
+  .cw .fl{max-height:none;border-right:0;border-bottom:1px solid #2b2b28;display:flex;overflow-x:auto;padding:0} .cw .fl h6{display:none} .cw .fl button{width:auto;white-space:nowrap;border-left:0;border-bottom:2px solid transparent} .cw .fl button.on{border-bottom-color:#c5a448}
+  .imgwrap{width:100%}
+}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important}}
+@page{size:letter;margin:14mm 13mm 16mm}
+@media print{
+  :root,:root[data-theme],:root:not([data-theme="light"]){color-scheme:light;--bg:#fff;--fg:#000;--g2:#eee;--g3:#ccc;--g4:#999;--g5:#444;--g6:#222;--g7:#000;--surf:#fff;--panel:#fff;--code:#f4f4f4;--bar:#fff;--rule:#888;--acc:#d9c37a;--ok:#1f6b3f;--bad:#a3271a;--info:#1f4f8f;--fs:11.5px}
+  body{background:#fff;color:#000;font-size:11.5px;line-height:1.5} body::before{display:none}
+  .bar,nav.rail,#lb,.toast,.nextprev,.sbtn,.imgwrap .hint,.btn,input[type=range],.ctl,.cmp .cc,#consts,.cmpview,.cw .fl,.cw .cpy,#walkctl,#walk .row,#wmapbox{display:none!important}
+  .wrap{display:block;padding:0;max-width:none} main{padding:0}
+  header.hero{padding:0 0 6mm} h1{font-size:30px}
+  section{padding-top:0;break-before:page}
+  .sechead{break-after:avoid}
+  h3,h4{break-after:avoid} figure,.fig,.def,.demo,.panel,.card,table,.terms,.cw .pane,.cmp,tr,.addrbig,.out{break-inside:avoid}
+  .fig{display:grid;grid-template-columns:1.35fr 1fr;gap:10px;border-top:1px solid #888;margin:6px 0 10px} .imgwrap{width:min(100%,calc(var(--ar,1.3)*118mm));max-width:100%;margin:0;cursor:auto} .fig .cap{position:static}
+  .terms{grid-template-columns:repeat(4,1fr)} .terms>div{border-right:1px solid #888;margin-right:8px;padding-right:8px;border-bottom:0} .terms>div:last-child{border-right:0}
+  .abc{grid-template-columns:repeat(3,1fr)} .abc>div{border-right:1px solid #888;margin-right:10px;border-bottom:0} .abc>div:last-child{border-right:0}
+  .grid2{grid-template-columns:1fr 1fr} .def .f4{grid-template-columns:repeat(2,1fr)} .addrbig{grid-template-columns:auto 1fr}
+  .demo .body{display:block} .demo .body>*{margin-bottom:6px}
+  .cmp .sidebox{display:grid!important}
+  .cw{display:block;border:1px solid #888;background:#fff;color:#000;break-inside:auto} .cw .pane{display:block;break-inside:auto} .cw .ph{border-color:#888} .cw .ph b,.cw .ph p,.cw .ph a{color:#000} .cw .file{color:#444}
+  .cw .pane+.pane{border-top:1px solid #888} .cw .pane[hidden],.cw .panes .pane[hidden]{display:block!important} .cw .panes{display:block}
+  pre.code,pre.code.solo{max-height:none!important;overflow:visible;background:#f6f6f6;color:#000;border:1px solid #bbb;white-space:pre-wrap;word-break:break-all;font-size:9.5px;padding:6px 0}
+  pre.code .ln{white-space:pre-wrap;word-break:break-all;padding-left:3.6em;text-indent:-3.6em} pre.code .ln::before{color:#666}
+  pre.code .k{color:#1f4f8f} pre.code .s{color:#1f6b3f} pre.code .n{color:#a8501f} pre.code .c{color:#666}
+  .scroll,.rowsc .sc,.out{overflow:visible!important} .rowsc .sc .line{white-space:normal;flex-wrap:wrap;width:auto}
+  canvas{max-width:100%} .tag,.mode{border-color:#444;color:#222} a{color:#000;text-decoration:none}
+  table.t th{border-bottom-color:#000}
+}
+</style>
+<div class="bar"><div class="in">
+<button id="bmenu" type="button" aria-expanded="false" aria-controls="rail">☰ Contents</button>
+<div class="brand">Cedar Grove Numbering<small>EXPLAINED</small></div>
+<div class="nav2"><button id="bprev" type="button" aria-label="Previous section" title="Previous section (Alt+←)">◂</button><span class="pos" id="bpos">00 / 09</span><button id="bnext" type="button" aria-label="Next section" title="Next section (Alt+→)">▸</button></div>
+<button class="util" id="bsize" type="button" aria-pressed="false" title="Larger text for projection">Aa</button>
+<button class="util hide-s" id="bfs" type="button" title="Full screen">Full screen</button>
+<button class="util" id="btheme" type="button" title="Switch light and dark">Theme: auto</button>
+</div></div>
+<div class="wrap">
+<nav class="rail" id="rail" aria-label="Sections"><div class="rt"><button id="rtoggle" type="button" aria-label="Expand or collapse the menu">»</button></div><ol id="railist"></ol></nav>
+<main>
+<header class="hero" id="top"><div class="kicker">Cedar Grove Cemetery · University of Notre Dame</div>
+<h1>Cedar Grove Numbering, Explained</h1>
+<p class="sub">How the old lot numbers worked, why they were hard to use, and the arithmetic behind the H-number system.</p>
+<p class="lede">By the end you will be able to read an old lot label and say what is ambiguous about it, follow how an H-number is counted along one path, type any old section and label into one formula to get its H-number, and see which results are confirmed and which still need a decision.</p>
+<div class="terms" role="list" aria-label="Four units">
+<div role="listitem"><b>Legacy label</b><div class="ex">19A</div><p>What is written on or beside a lot. Only unique inside its section.</p></div>
+<div role="listitem"><b>Physical lot</b><div class="ex">one plot of ground</div><p>The outline drawn on the map. The map has <span id="nPoly">3,103</span> lot outlines.</p></div>
+<div role="listitem"><b>H-number position</b><div class="ex">H001698</div><p>The lot's place along one fixed path, from H000001 to H003185.</p></div>
+<div role="listitem"><b>Grave</b><div class="ex">H0016983</div><p>One of nine places inside a lot. The lot's H-number gets one more digit.</p></div></div>
+<p class="note">These counts differ on purpose. Several legacy references can name one lot (the two halves of a double-row lot), and some map outlines are not matched to a reference yet (see the unresolved list in the project folder).</p>
+<div class="aside"><span class="tag ok">Agreement with the decoder</span>
+<p style="margin:8px 0 0">The formulas on this page reproduce the project decoder's H-number for all <b>3,197</b> real legacy labels (<b>3,199</b> entries when two internal bookkeeping keys are counted). This shows the formulas match the decoder. It does not show that the decoder matches the ground; section 09 separates those questions.</p></div>
+</header>
+
+<section id="raw"><div class="sechead"><span class="secnum">01</span><h2>The raw maps</h2></div>
+<p class="lede">These are the maps the cemetery worked from, in the order a person would use them. Click any image to enlarge it.</p>
+<ol class="seq"><li data-n="1">Overall map</li><li data-n="2">Section map</li><li data-n="3">Close-ups</li><li data-n="4">Working annotations</li></ol>
+
+<h3>1 · Overall map</h3>
+<figure class="fig"><div class="imgwrap" style="--ar:__AR_oldpdf_overall_s__" tabindex="0" role="button" data-cap="Overall map from the original PDF, with the crop used for the close-up marked.">
+<img src="__IMG_oldpdf_overall_s__" alt="Overall Cedar Grove map: rows of empty lot boxes with section names in red">
+<div class="crop" style="left:60.6%;top:49%;width:20.2%;height:16.4%"><b>close-up</b></div>
+<span class="mk" style="left:40%;top:45%">1</span><span class="mk" style="left:58%;top:36.6%">2</span><span class="mk" style="left:77.5%;top:47.6%">3</span><span class="mk" style="left:29%;top:46.5%">4</span>
+<span class="hint">Click to enlarge</span></div>
+<div class="cap"><b class="t">Overall map · original PDF</b><figcaption>Every lot is drawn, and none carries a number.</figcaption>
+<ol class="calls"><li><i>1</i>No lot has a number on this map. A lot can only be found by its section.</li><li><i>2</i>Section titles are drawn on top of lots, so they hide the lots they name.</li><li><i>3</i>Section borders are not drawn. The line between B and A has to be inferred.</li><li><i>4</i>Narrow sections such as G and H are named by long leader lines.</li></ol></div></figure>
+
+<h3>2 · Section map</h3>
+<figure class="fig"><div class="imgwrap" style="--ar:__AR_oldpdf_B__" tabindex="0" role="button" data-cap="Section B page from the original individual-section PDF, with the close-up crop marked.">
+<img src="__IMG_oldpdf_B__" alt="Section B page of the individual-section map">
+<div class="crop" style="left:16.3%;top:37.9%;width:37.6%;height:21.4%"><b>close-up</b></div>
+<span class="mk" style="left:5%;top:33%">1</span><span class="mk" style="left:16%;top:27%">2</span><span class="mk" style="left:79%;top:30.5%">3</span><span class="mk" style="left:22%;top:49%">4</span>
+<span class="hint">Click to enlarge</span></div>
+<div class="cap"><b class="t">Section B · "All Sections on Individual Pages"</b><figcaption>Numbers appear here, at a few points tall.</figcaption>
+<ol class="calls"><li><i>1</i>Numbers are written sideways, rotated a quarter turn from the page.</li><li><i>2</i>The section boundary is a dash-dot line that cuts through some lots.</li><li><i>3</i>Lots near the top carry an extra "H" stacked under the number.</li><li><i>4</i>A few labels begin with another section's letter. See the close-up.</li></ol></div></figure>
+
+<h3>3 · Close-ups</h3>
+<figure class="fig"><div class="imgwrap" style="--ar:__AR_oldpdf_B_zoom__" tabindex="0" role="button" data-cap="Close-up of the Section B page at 4 times, showing labels such as B362, C344, A362, C326 and B308."><img src="__IMG_oldpdf_B_zoom__" alt="Enlarged corner of Section B with labels like B362, C344, A362, C326 and B308">
+<span class="mk" style="left:9%;top:12%">1</span><span class="mk" style="left:11.4%;top:52.6%">2</span><span class="mk" style="left:29%;top:52.6%">2</span><span class="mk" style="left:33%;top:25%">3</span><span class="hint">Click to enlarge</span></div>
+<div class="cap"><b class="t">Section B close-up · 4×</b><figcaption>Cut from the section map above (dashed rectangle).</figcaption>
+<ol class="calls"><li><i>1</i>Digits are rotated and tightly packed.</li><li><i>2</i>B362, C344, A362, C326 and B308 are lots in Section B whose labels start with another section's letter.</li><li><i>3</i>Neighbouring columns count up separately: 404, 405, 406 next to 363, 364, 365 next to 345, 346.</li></ol></div></figure>
+<figure class="fig"><div class="imgwrap" style="--ar:__AR_oldpdf_overall_zoom__" tabindex="0" role="button" data-cap="Close-up of the overall map at 5 times: still no lot numbers."><img src="__IMG_oldpdf_overall_zoom__" alt="Enlarged overall map, rows of unlabeled boxes">
+<span class="mk" style="left:50%;top:40%">1</span><span class="hint">Click to enlarge</span></div>
+<div class="cap"><b class="t">Overall map close-up · 5×</b><figcaption>Cut from the overall map above (dashed rectangle).</figcaption>
+<ol class="calls"><li><i>1</i>Even enlarged, the boxes carry no numbers, so the overall map cannot be used to look up a lot.</li></ol></div></figure>
+
+<h3>4 · Working annotations</h3>
+<div class="grid2"><figure><div class="imgwrap" style="--ar:__AR_raw_aerial__" tabindex="0" role="button" data-cap="Working map: an aerial photo with the lot grid drawn on top (screenshot saved 2026-04-23)."><img src="__IMG_raw_aerial__" alt="Aerial view of Section B with a hairline grid of lots and tiny numbers"><span class="hint">Click to enlarge</span></div><figcaption style="margin-top:8px">Aerial photo with the lot grid drawn on top (screenshot saved 2026-04-23). Numbers are a few pixels tall.</figcaption></figure>
+<figure><div class="imgwrap" style="--ar:__AR_raw_zoom__" tabindex="0" role="button" data-cap="The same screenshot at native resolution, enlarged 3 times: numbers over grass and headstones."><img src="__IMG_raw_zoom__" alt="Native-resolution zoom of lot numbers over grass and headstones"><span class="hint">Click to enlarge</span></div><figcaption style="margin-top:8px">The same screenshot at native resolution, enlarged 3 times. Numbers sit over grass and headstones.</figcaption></figure>
+<figure><div class="imgwrap" style="--ar:__AR_raw_annotated__" tabindex="0" role="button" data-cap="Hand-marked working copy of Section B (SECTION B.pdf) with arrows, question marks and a circled corner lot labelled H-00001."><img src="__IMG_raw_annotated__" alt="Hand-annotated copy of the Section B map with arrows and a circled lot"><span class="hint">Click to enlarge</span></div><figcaption style="margin-top:8px">A hand-marked working copy of Section B (SECTION B.pdf): arrows, question marks, and a circled corner lot with a handwritten "H-00001".</figcaption></figure>
+<figure><div class="imgwrap" style="--ar:__AR_old_dense__" tabindex="0" role="button" data-cap="An earlier digital version of the map with new H-numbers drawn over the old number shapes."><img src="__IMG_old_dense__" alt="Close-up of the earlier digital map where old and new numbers overlap"><span class="hint">Click to enlarge</span></div><figcaption style="margin-top:8px">An earlier digital version of this project: H-numbers drawn over the old number shapes, so the two overlap.</figcaption></figure></div>
+<div class="nextprev"><span></span><a class="btn" href="#legacy">02 The old numbering ▸</a></div>
+</section>
+
+<section id="legacy"><div class="sechead"><span class="secnum">02</span><h2>The old numbering</h2></div>
+<p class="lede">A legacy lot is named by a <b>section letter</b> and a <b>label</b>. The full address is both together. The label alone is not enough.</p>
+<h3>Anatomy of an old address</h3>
+<div class="addrbig"><div class="addr" id="addr" role="group" aria-label="Parts of the address A-13H"></div><div class="detail" id="addrdetail" aria-live="polite"></div></div>
+<h3>Real labels the decoder accepts</h3>
+<div class="chips" id="sampleChips"></div><div class="detail" id="sampledetail" aria-live="polite">Click a label to see its address and H-number.</div>
+<h3>The first two rows of every section</h3>
+<p>Each section is shown in the order a person would walk its first rows. A row never wraps, because wrapping would change how its spatial order looks. Scroll a section sideways with its arrows. Click any label for details.</p>
+<div class="key" aria-label="Legend"><span><i></i>plain number</span><span><i style="border:3px double var(--fg)"></i>◆ legacy H-lot (label ends in H)</span><span><i style="border:1px dashed var(--fg)"></i>▲ letter suffix (A, B, C)</span><span><i style="border-color:var(--bad)"></i>! unusual label</span></div>
+<div id="anatomy"></div><div class="detail" id="anatdetail" aria-live="polite">Click a label above.</div>
+<div class="nextprev"><a class="btn" href="#raw">◂ 01 The raw maps</a><a class="btn" href="#why">03 Why it confuses ▸</a></div>
+</section>
+
+<section id="why"><div class="sechead"><span class="secnum">03</span><h2>Why it confuses</h2></div>
+<p class="lede">Three different kinds of problem are mixed together here. They need different fixes, so this section keeps them apart.</p>
+<div class="grid3 abc"><div><span class="L">A</span><b>Reading problems</b><p>The number is hard to see or place. Fixed by redrawing the map.</p></div><div><span class="L">B</span><b>Section rules</b><p>Each section counts in its own way. Fixed by numbering everything the same way.</p></div><div><span class="L">C</span><b>Data inconsistencies</b><p>Typos, duplicates and conflicts. Fixed only by a person deciding what is right.</p></div></div>
+
+<h3><span class="tag">A</span> Reading problems</h3>
+<ul style="max-width:46em"><li>The overall map has no lot numbers at all (section 01, image 1).</li><li>Where numbers exist they are a few points tall and rotated (section 01, images 2 and 3).</li><li>Section titles and notes cover lots, and section borders are not drawn.</li></ul>
+
+<h3><span class="tag">B</span> Section-specific rules</h3>
+<table class="stats" id="stats"></table>
+<div class="aside"><b>A repeated label is not a duplicate address.</b> "B-19" and "C-19" are different complete addresses. The cost is that a label alone never says where a lot is. Every lookup needs the section too, and each section has its own counting rule.</div>
+<div class="panel"><h4 style="margin-top:0">Try it: one label, many places</h4>
+<div class="row"><div style="max-width:240px"><label class="f" for="lbl">Legacy label</label><input id="lbl" type="text" value="19" autocomplete="off"></div><div style="flex:0 0 auto"><button class="btn" id="lblr" type="button">Show another repeated label</button></div></div>
+<div id="lblout"></div></div>
+<h4>How each section counts</h4>
+<div class="key"><span><i style="background:#2f8f5a"></i><b>Arithmetic</b>: one formula covers every lot</span><span><i style="background:#c9a227"></i><b>Row constants</b>: a formula plus a small table of numbers for each row</span><span><i style="background:#c0392b"></i><b>Explicit list</b>: no formula, the order is stored lot by lot</span><span><i style="background:#9b59b6"></i><b>Errata</b>: a known typo or duplicate</span></div>
+<div class="scroll" id="rules"></div>
+
+<h4>The whole cemetery, colored</h4>
+<p>Each lot is colored by its old label number, its old section, or its H-number.</p>
+<div class="panel"><div class="row"><div style="flex:0 0 auto"><button class="btn seg on" data-mode="n" type="button">Old label number</button><button class="btn seg" data-mode="s" type="button">Old section</button><button class="btn seg" data-mode="h" type="button">H-number</button></div><div class="note" id="mapnote" style="flex:1 1 260px"></div></div>
+<div class="mapbox" id="mapbox"><svg id="mapsvg" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Map of all lots colored by the selected number"></svg><div class="maptip" id="maptip"></div>
+<span class="orient" style="left:8px;top:8px">N ↑ · outlines traced from the drawing, not to scale</span><span class="orient" style="right:8px;bottom:8px">east edge: Notre Dame Ave</span></div>
+<div class="key" id="maplegend"></div>
+<p class="note">Geometry: lot outlines traced from the cemetery drawing (about 3,100 outlines). Positions follow the drawing, which is marked "not to scale".</p></div>
+
+<h4>Walk the path: old number against H-number</h4>
+<p>Follow the path lot by lot. See it on the map from above, from inside the cemetery in a 3D walk, or as a chart. The old number you read on the lot jumps. The H-number counts up by one.</p>
+<div class="panel" id="walk">
+<div class="wtabs" id="walkctl" style="display:flex;gap:18px;flex-wrap:wrap;align-items:flex-end"></div>
+<div class="row" style="margin-top:12px"><div><label class="f" for="sawstart">Start at H-number: <span id="sawstartv"></span></label><input id="sawstart" type="range" min="1" max="3100" value="1"></div><div><label class="f" for="sawwidth">Number of lots in the walk: <span id="sawwidthv"></span></label><input id="sawwidth" type="range" min="20" max="900" value="120"></div><div><label class="f" for="walkpos">Position: <span id="walkposv"></span></label><input id="walkpos" type="range" min="0" max="119" value="0"></div></div>
+<div id="wmapbox" class="mapbox"><svg id="wmap" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Map from above with the walk highlighted"></svg><span class="orient" style="left:8px;top:8px">N ↑</span></div>
+<div id="w3box" hidden><canvas id="wcv" width="1000" height="540" role="img" aria-label="Walk through the cemetery in 3D"></canvas><p class="note" style="margin:6px 0 0">You are walking along the path and the camera looks the way you are heading. Each lot shows its old label above its H-number. Lots outside the walk are gray.</p></div>
+<div id="wchart" hidden><canvas id="saw" width="1000" height="380" role="img" aria-label="Old label number plotted against H-number"></canvas><div class="key" id="sawlegend"></div>
+<p class="note">Horizontal: H-number (position along the path). Vertical: the old label number of the lot at that position. H climbs steadily by construction, because H is defined as the order of the sweep. The old numbers drop and restart. This shows the labels do not follow one order. It does not by itself show that H is easier to walk on the ground.</p></div>
+<div class="out" id="wnow" aria-live="polite"></div><div class="wnow" id="wstrip" aria-label="Next lots"></div></div>
+
+<h3><span class="tag bad">C</span> Data inconsistencies</h3>
+<p>Each finding is shown as finding, example, practical consequence, and resolution status.</p>
+<div id="defects"></div>
+<div class="nextprev"><a class="btn" href="#legacy">◂ 02 The old numbering</a><a class="btn" href="#h">04 The H-number idea ▸</a></div>
+</section>
+
+<section id="h"><div class="sechead"><span class="secnum">04</span><h2>The H-number idea</h2></div>
+<p class="lede">Number lots by <b>where they fall along one fixed path</b> through the cemetery. The first lot on the path is H000001, the next is H000002, and so on to H003185.</p>
+<div class="demo"><header><h3>See the path before the equation</h3><span class="mode">Illustration · 12 lots</span><button class="btn sm" id="anreset" type="button">Reset this example</button></header>
+<div class="body"><div class="step"><b>Question</b><div>How can twelve lots in two sections get one running number?</div></div>
+<div class="step dg"><b>Diagram</b><div><canvas id="ancv" width="1000" height="330" role="img" aria-label="Animated numbering of twelve lots"></canvas></div></div>
+<div class="step ctl"><b>Controls</b><div class="row" style="margin:0"><div style="flex:0 0 auto"><button class="btn fill play" id="anplay" type="button">Play</button> <button class="btn" id="anstep" type="button">Step ▸</button></div></div></div>
+<div class="step"><b>Working</b><div class="out" id="anout" aria-live="polite"></div></div>
+<p class="take">Takeaway: a lot's H-number is how many lots the path has already visited, plus one.</p></div></div>
+
+<div class="grid2"><div class="card"><h3 style="margin-top:0">The three rules</h3><ol><li>The path covers the cemetery in six stretches, called <b>passes</b>, one after another.</li><li>Inside a pass it goes <b>level</b> by level, and along each level it visits the lots in a fixed order.</li><li>A lot's H-number is the number of lots already visited, plus one.</li></ol>
+<div class="mathblock"><math display="block"><mrow><msub><mi>H</mi><mrow><mi>lot</mi></mrow></msub><mo>=</mo><mi>O</mi><mo>+</mo><munder><mo>∑</mo><mrow><mi>j</mi><mo>&lt;</mo><mi>r</mi></mrow></munder><msub><mi>W</mi><mi>j</mi></msub><mo>+</mo><mi>k</mi></mrow></math></div>
+<p class="note"><b>O</b> lots in earlier passes. <b>W<sub>j</sub></b> lots on level j of this pass. <b>r</b> the level of this lot. <b>k</b> its place on that level.</p></div>
+<div class="card"><h3 style="margin-top:0">Words used on this page</h3><ul style="padding-left:1.1em;font-size:.94em;margin:0"><li><b>Pass</b>: one of six stretches of the path.</li><li><b>Level</b> (also called row): one step of a pass. A level lists lots from one or two sections.</li><li><b>Column</b> and <b>place</b>: a lot's position on its level.</li></ul><p class="note" style="margin-top:8px">Level, row and column are <b>decoder indexing</b>. They count positions in the decoder's tables. They are not always the compass rows and columns on the ground, and some sections are drawn rotated.</p></div></div>
+
+<h3>The six passes on the map</h3>
+<p>Select a pass. The map zooms to it and draws the route, with arrowheads showing direction. Shading runs from light (first lot) to dark (last lot). The small map shows where you are.</p>
+<div class="panel"><div class="row" style="margin-top:0"><div style="flex:1 1 100%"><div id="passbtns" style="display:flex;flex-wrap:wrap"></div></div></div>
+<div class="grid2" style="grid-template-columns:minmax(0,2fr) minmax(220px,1fr);align-items:start;gap:22px"><div class="mapbox"><svg id="passsvg" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Map zoomed to the selected pass"></svg><span class="orient" style="left:8px;top:8px">N ↑</span><div style="position:absolute;right:8px;bottom:8px;width:24%;border:1px solid var(--fg);background:var(--bg)"><svg id="passmini" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Overview"></svg></div></div><div id="passinfo"></div></div></div>
+<div id="passes"></div>
+
+<h3>Reading a full address</h3>
+<div class="panel"><div class="row"><div style="max-width:280px"><label class="f" for="addrin">Try an address</label><input id="addrin" type="text" value="H001698A3" autocomplete="off" spellcheck="false"></div><div style="flex:0 0 auto"><button class="btn sm" id="addrreset" type="button">Reset this example</button></div></div><div id="addrparts"></div>
+<div class="mathblock"><math display="block"><mrow><msub><mi>H</mi><mi>grave</mi></msub><mo>=</mo><mn>10</mn><mo>×</mo><msub><mi>H</mi><mi>lot</mi></msub><mo>+</mo><mi>g</mi></mrow></math></div>
+<p class="note">The numeric form holds only for lots without an A or B. A double-row lot keeps its letter between the lot number and the grave digit (H001698A3), and the numeric form cannot carry that letter. Lot H000001 has graves H0000011 to H0000019.</p></div>
+<div class="nextprev"><a class="btn" href="#why">◂ 03 Why it confuses</a><a class="btn" href="#math">05 The math ▸</a></div>
+</section>
+
+<section id="math"><div class="sechead"><span class="secnum">05</span><h2>The math, step by step</h2></div>
+<p class="lede">Six demonstrations, each laid out the same way: question, then diagram beside its controls, then the working, then the takeaway. Each starts on the <span class="mode">Actual system</span> settings. Move a control and it becomes an <span class="mode exp">Experiment</span>. It does not change the real numbers. Press Reset this example to return.</p>
+
+<div class="demo" id="p1"><header><h3>Step 1 · The two-section sweep (B and A)</h3><span class="mode" id="p1mode">Actual system</span><button class="btn sm" id="p1reset" type="button">Reset this example</button></header><div class="body">
+<div class="step"><b>Question</b><div>Sections B and A share levels. In what order does the sweep visit them, and where does a chosen lot fall?</div></div>
+<div class="step dg"><b>Diagram</b><div><canvas id="p1cv" width="1000" height="440" role="img" aria-label="Grid of B and A lots shaded by sweep position"></canvas><p class="note" style="margin-top:6px">Top block B, bottom block A. Shading runs light to dark with H. The dashed outline marks the selected level, with its visit order. The accent marks the selected lot.</p></div></div>
+<div class="step ctl"><b>Controls</b><div>
+<div class="row"><div><label class="f" for="p1n">Columns per section N: <span id="p1nv"></span></label><input id="p1n" type="range" min="2" max="22" value="22"></div><div><label class="f" for="p1r">Levels R: <span id="p1rv"></span></label><input id="p1r" type="range" min="2" max="19" value="19"></div></div>
+<div class="row"><div style="flex:0 0 auto"><label class="f">Visit order inside a level</label><button class="btn seg on" data-ord="blocks" type="button">B then A</button><button class="btn seg" data-ord="alt" type="button">alternate B, A</button></div></div>
+<div class="row"><div><label class="f" for="p1sec">Section</label><select id="p1sec"><option>B</option><option>A</option></select></div><div><label class="f" for="p1lv">Level r</label><input id="p1lv" type="number" min="1" value="1"></div><div><label class="f" for="p1c">Column c</label><input id="p1c" type="number" min="1" value="1"></div></div></div></div>
+<div class="step"><b>Working</b><div><div class="eqn" id="p1eqn"></div><div class="out" id="p1out" aria-live="polite"></div></div></div>
+<p class="take">Takeaway: the reference PDF and decoder docstring describe the order as alternating columns, but the code and every verified number use a whole level of B first, then the same level of A. Switch the order to see how that one choice moves every H-number after the first lot.</p></div></div>
+
+<div class="demo" id="p2"><header><h3>Step 2 · H-lots push labels along</h3><span class="mode" id="p2mode">Actual system</span><button class="btn sm" id="p2reset" type="button">Reset this example</button></header><div class="body">
+<div class="step"><b>Question</b><div>In Section A, how do three H-lots per row change which column each label lands in?</div></div>
+<div class="step dg"><b>Diagram</b><div><div id="p2out"></div></div></div>
+<div class="step ctl"><b>Controls</b><div><div class="row"><div><label class="f" for="p2inc">Labels per row: <span id="p2incv"></span></label><input id="p2inc" type="range" min="10" max="25" value="19"></div></div><div class="row"><div><label class="f" for="p2tw">H-lots sit before these places (comma list)</label><input id="p2tw" type="text" value="13,5,1"></div><div><label class="f" for="p2rows">Rows shown (1 to 4)</label><input id="p2rows" type="number" min="1" max="4" value="2"></div></div></div></div>
+<div class="step"><b>Working</b><div><div class="eqn"><span class="lbl">row r = </span>⌈ n / step ⌉   <span class="lbl">place q = </span>n − step × (r − 1)<br><span class="lbl">column c = </span>(N − 2 − q) + [q ≤ t₁] + [q ≤ t₂] + …   <span class="lbl">an H-lot sits one column earlier</span><br><span class="lbl">H(A, n) = </span>SWEEP × (r − 1) + N<sub>B</sub> + c</div></div></div>
+<p class="take">Takeaway: every H-lot slipped in before a place shifts all later labels one column. That shift is why an old label cannot be turned into H without knowing where the H-lots sit.</p>
+<h4>Section B, where the column rules disagree</h4>
+<p class="note">B's reference formulas give column 2 the label 19 + 20(r − 1), and column 3 (the first body column) also gets 19 + 20(r − 1). The body steps by 20 per row and the last column by 19. The decoder lets the later rule overwrite the earlier one.</p>
+<div class="row"><div><label class="f" for="p2b1">Body step: <span id="p2b1v"></span></label><input id="p2b1" type="range" min="15" max="25" value="20"></div><div><label class="f" for="p2b2">Last-column step: <span id="p2b2v"></span></label><input id="p2b2" type="range" min="15" max="25" value="19"></div><div><label class="f" for="p2b3">Last-column first label: <span id="p2b3v"></span></label><input id="p2b3" type="range" min="1" max="30" value="12"></div></div>
+<div class="out" id="p2bout"></div></div></div>
+
+<div class="demo" id="p3"><header><h3>Step 3 · Rows of different widths (D and C)</h3><span class="mode" id="p3mode">Actual system</span><button class="btn sm" id="p3reset" type="button">Reset this example</button></header><div class="body">
+<div class="step"><b>Question</b><div>When rows differ in length, what happens to every lot after a row that gains or loses one lot?</div></div>
+<div class="step dg"><b>Diagram</b><div><div class="scroll" style="max-height:360px;overflow:auto"><table class="t" id="p3tab"></table></div><p class="note" style="margin-top:6px">Shaded cells show rows whose starting H-number shifts compared with the real system after your edit.</p></div></div>
+<div class="step ctl"><b>Controls</b><div><div class="row" style="margin-top:0"><div style="flex:0 0 auto"><button class="btn seg on" data-w="real" type="button">Real row widths</button><button class="btn seg" data-w="ideal" type="button">Idealised 22 × 19</button></div></div>
+<div class="row"><div><label class="f" for="p3sec">Section</label><select id="p3sec"><option>D</option><option>C</option></select></div><div><label class="f" for="p3r">Row r</label><input id="p3r" type="number" min="1" max="24" value="5"></div><div><label class="f" for="p3k">Place k <span id="p3kmax"></span></label><input id="p3k" type="number" min="1" value="3"></div></div></div></div>
+<div class="step"><b>Working</b><div><div class="eqn"><span class="lbl">H(D, row r, place k) = </span>836 + Σ<sub>j&lt;r</sub> (W<sub>D</sub>(j) + W<sub>C</sub>(j)) + k<br><span class="lbl">H(C, row r, place k) = </span>836 + Σ<sub>j&lt;r</sub> (W<sub>D</sub>(j) + W<sub>C</sub>(j)) + W<sub>D</sub>(r) + k</div><div class="out" id="p3out" aria-live="polite"></div></div></div>
+<p class="take">Takeaway: a row's offset is the running total of every earlier row, so one extra lot in row 5 moves every later lot by one. The older sheet assumed 22 lots in every row and ended C-417 at H001672. The real rows are uneven, so the decoder ends it at H001871.</p></div></div>
+
+<div class="demo" id="p4"><header><h3>Step 4 · Twins and trios inside a row (C)</h3><span class="mode" id="p4mode">Actual system</span><button class="btn sm" id="p4reset" type="button">Reset this example</button></header><div class="body">
+<div class="step"><b>Question</b><div>How do an H-lot beside a plain lot, or an A, B, C trio at a row's start, change the places of the lots after it?</div></div>
+<div class="step dg"><b>Diagram</b><div id="p4out"></div></div>
+<div class="step ctl"><b>Controls</b><div><div class="row" style="margin-top:0"><div><label class="f" for="p4row">C row (1 to 24)</label><input id="p4row" type="number" min="1" max="24" value="3"></div><div><label class="f" for="p4trio">Trio at the start</label><select id="p4trio"><option value="0">no</option><option value="1">yes (top, C, B, A)</option></select></div></div><div class="row"><div><label class="f" for="p4tw">Twins (number + b = H-lot first, a = H-lot after)</label><input id="p4tw" type="text" value=""></div></div><p class="note">Changing the row loads that row's real twins and trio. Editing them afterwards is an experiment.</p></div></div>
+<div class="step"><b>Working</b><div class="eqn"><span class="lbl">k(plain lot n) = </span>(top − n) + 1 + 3·[trio row] + #{ twins t : t &gt; n, or t = n with its H-lot first }<br><span class="lbl">k(H-lot t)     = </span>k(plain t) − 1 (H-lot first)  or  k(plain t) + 1 (H-lot after)</div></div>
+<p class="take">Takeaway: each twin or trio lot pushes everything after it one place along, in the same way H-lots did in step 2.</p></div></div>
+
+<div class="demo" id="p5"><header><h3>Step 5 · Straight-line sections (M, J, I, L, F)</h3><span class="mode" id="p5mode">Actual system</span><button class="btn sm" id="p5reset" type="button">Reset this example</button></header><div class="body">
+<div class="step"><b>Question</b><div>Where a section was numbered straight through, what is H?</div></div>
+<div class="step dg"><b>Diagram</b><div class="eqn"><span class="lbl">H(J, n) = </span>2950 + n   (n = 1 … 132)<br><span class="lbl">H(I, n) = </span>3082 + n   (n = 1 … 64)<br><span class="lbl">H(L, n) = </span>3146 + (n − 68)   (n = 69 … 107)<br><span class="lbl">H(M, n) = </span>n + 2556   (n = 82 … 279; the first 51 lots of M come from a list)<br><span class="lbl">H(F, n) = </span>n + 2203 for the margin lots 199 … 210</div></div>
+<div class="step ctl"><b>Controls</b><div class="row" style="margin-top:0"><div><label class="f" for="p5sec">Section</label><select id="p5sec"><option>J</option><option>I</option><option>L</option><option>M</option><option>F</option></select></div><div><label class="f" for="p5n">Lot n <span id="p5range"></span></label><input id="p5n" type="number" value="57"></div></div></div>
+<div class="step"><b>Working</b><div class="out" id="p5out" aria-live="polite"></div></div>
+<p class="take">Takeaway: for these sections H is the lot number plus a constant. The constants are where the section's pass starts.</p></div></div>
+
+<div class="demo" id="p6"><header><h3>Step 6 · Graves</h3><span class="mode" id="p6mode">Actual system</span><button class="btn sm" id="p6reset" type="button">Reset this example</button></header><div class="body">
+<div class="step"><b>Question</b><div>How does a lot's H-number become a grave address?</div></div>
+<div class="step dg"><b>Diagram</b><div id="p6parts"></div></div>
+<div class="step ctl"><b>Controls</b><div class="row" style="margin-top:0"><div><label class="f" for="p6h">Lot H-number</label><input id="p6h" type="number" min="1" max="3185" value="1698"></div><div><label class="f" for="p6g">Grave g (1 to 9)</label><input id="p6g" type="number" min="1" max="9" value="3"></div><div><label class="f" for="p6s">Double-row suffix</label><select id="p6s"><option value="">none</option><option selected>A</option><option>B</option></select></div></div></div>
+<div class="step"><b>Working</b><div class="out" id="p6out" aria-live="polite"></div></div>
+<p class="take">Takeaway: the address is lot, then optional A or B, then grave digit. The numeric shortcut 10 × lot + g drops the letter, so use it only when there is no suffix.</p></div></div>
+<div class="nextprev"><a class="btn" href="#h">◂ 04 The H-number idea</a><a class="btn" href="#code">06 The code ▸</a></div>
+</section>
+
+<section id="code"><div class="sechead"><span class="secnum">06</span><h2>The code</h2></div>
+<p class="lede">These are the real functions. Choose one from the list. Each starts with a sentence on what it does and which demonstration it implements. Code from the existing decoder and code from the arithmetic rebuild are in separate groups.</p>
+<div class="aside"><b>One expression does not remove the complexity.</b> The formula still carries constants, ordered lookup lists and exceptions. Section 07 shows how much of the rule set lives in those tables.</div>
+<div id="snips"></div>
+<div class="nextprev"><a class="btn" href="#math">◂ 05 The math</a><a class="btn" href="#giant">07 The giant formula ▸</a></div>
+</section>
+
+<section id="giant"><div class="sechead"><span class="secnum">07</span><h2>The giant formula</h2></div>
+<p class="lede">Enter an old section letter and lot label. The formula returns the H-number. It is one JavaScript expression with every constant written into it.</p>
+<div class="panel"><h4 style="margin-top:0">Old address to H-number</h4>
+<div class="row"><div style="max-width:140px"><label class="f" for="gs">Section</label><select id="gs"></select></div><div style="max-width:260px"><label class="f" for="gl">Lot label</label><input id="gl" type="text" value="20H" autocomplete="off"></div><div style="flex:0 0 auto"><button class="btn" id="gex" type="button">Try an example</button> <button class="btn" id="greset" type="button">Reset</button></div></div>
+<div id="gres" aria-live="polite"></div><div id="gtrace"></div></div>
+<div class="panel"><h4 style="margin-top:0">H-number to old label</h4><div class="row"><div style="max-width:200px"><label class="f" for="gh">H-number</label><input id="gh" type="number" min="1" max="3185" value="1690"></div></div><div id="grev" aria-live="polite"></div></div>
+
+<h3>The formula, typeset</h3>
+<div class="card"><div class="mathblock"><math display="block"><mrow><mi>H</mi><mo>(</mo><mi>S</mi><mo>,</mo><mi>ℓ</mi><mo>)</mo><mo>=</mo><msub><mi>O</mi><mrow><mi>p</mi><mo>(</mo><mi>S</mi><mo>)</mo></mrow></msub><mo>+</mo><munder><mo>∑</mo><mrow><mi>j</mi><mo>&lt;</mo><mi>r</mi></mrow></munder><mrow><mo>(</mo><msubsup><mi>W</mi><mi>j</mi><mn>1</mn></msubsup><mo>+</mo><msubsup><mi>W</mi><mi>j</mi><mn>2</mn></msubsup><mo>)</mo></mrow><mo>+</mo><msub><mi>σ</mi><mi>S</mi></msub><mo>⋅</mo><msubsup><mi>W</mi><mi>r</mi><mn>1</mn></msubsup><mo>+</mo><msub><mi>κ</mi><mi>S</mi></msub><mo>(</mo><mi>ℓ</mi><mo>)</mo></mrow></math></div>
+<p class="note">S is the section, ℓ the label. <b>O<sub>p</sub></b>: lots in all earlier passes (0, 836, 1871, 2331, 2586, 2835). <b>W¹, W²</b>: level widths of the first and second section of the pass. <b>σ<sub>S</sub></b>: 1 for the second section of a pass, else 0. <b>κ<sub>S</sub>(ℓ)</b>: the lot's place on its level, given in the table.</p></div>
+<div class="scroll"><table class="t" id="kappa"></table></div>
+
+<h3>The one-line version</h3>
+<p class="note">This is the exact text the calculator runs. Paste it into a JavaScript console and call <code>H("B","20H")</code>.</p>
+<div class="cw" style="grid-template-columns:1fr"><div class="pane"><div class="ph"><div><b>giant_formula.js</b><span class="file">constants first, then one return expression</span></div><button class="cpy" id="cpg" type="button">Copy</button></div><pre class="code" id="giantsrc" style="white-space:pre-wrap;word-break:break-all;max-height:380px;padding:12px 18px"></pre></div></div>
+
+<h3>Change the constants and re-check <span class="tag">Experimental constants</span></h3>
+<p>These are the formula's constants: row widths, twin lists, blocks and base offsets. Edit them and press Apply. The page re-runs every label and reports how many H-numbers move. The edits affect this demonstration only.</p>
+<div class="panel"><textarea id="consts" rows="12" spellcheck="false" aria-label="Experimental constants"></textarea><div class="row"><div style="flex:0 0 auto"><button class="btn fill" id="capply" type="button">Apply and re-check</button> <button class="btn" id="creset" type="button">Reset constants</button></div><div class="out" id="cres" style="flex:1 1 300px;margin:0"></div></div></div>
+<div class="nextprev"><a class="btn" href="#code">◂ 06 The code</a><a class="btn" href="#compare">08 Old and new ▸</a></div>
+</section>
+
+<section id="compare"><div class="sechead"><span class="secnum">08</span><h2>Old and new, side by side</h2></div>
+<p class="lede">Each pair uses the same crop, scale and orientation. Drag the handle to compare, zoom to look closer (both images zoom together), or switch to side by side.</p>
+<div id="cmps"></div>
+<h3>What changed, in short</h3>
+<div class="scroll"><table class="t" id="cmpt"></table></div>
+<p class="note" style="margin-top:10px">Faster lookup and fewer mistakes are expected benefits of this change. They have not been measured.</p>
+<div class="nextprev"><a class="btn" href="#giant">◂ 07 The giant formula</a><a class="btn" href="#appendix">09 Checks and errata ▸</a></div>
+</section>
+
+<section id="appendix"><div class="sechead"><span class="secnum">09</span><h2>Checks and errata</h2></div>
+<p class="lede">Three different questions need three different kinds of evidence. Only the first has been done.</p>
+<h3>Verification ledger</h3>
+<div class="scroll"><table class="t led" id="ledger"></table></div>
+<h3>Software agreement, in detail</h3>
+<div id="verify"></div>
+<h3>Mapping completeness</h3>
+<div id="complete"></div>
+<h3>Errata</h3>
+<div class="scroll" id="errata"></div>
+<h3>Decisions needed</h3>
+<div id="decisions"></div>
+<h3>Reproduce it</h3>
+<pre class="code solo"><span class="ln"><span class="c"># from the repository root</span></span><span class="ln">python3 h-number-map/math/extract_decoder.py   <span class="c"># dump every H-number and label the decoder knows</span></span><span class="ln">python3 h-number-map/math/verify.py            <span class="c"># compare hformula.py with the decoder: 3,199 of 3,199</span></span><span class="ln">python3 h-number-map/math/gen_giant.py         <span class="c"># compile the one-line expression</span></span><span class="ln">node h-number-map/math/test_giant.js           <span class="c"># check the one-line expression: 3,197 of 3,197 real labels</span></span></pre>
+<div class="nextprev"><a class="btn" href="#compare">◂ 08 Old and new</a><a class="btn" href="#top">Back to the top ▴</a></div>
+</section>
+</main></div>
+<div id="lb" role="dialog" aria-modal="true" aria-label="Enlarged image"><div class="bar2"><button class="btn" id="lbclose" type="button">Close ✕</button></div><div class="stage" id="lbstage"></div><div class="cap" id="lbcap"></div></div>
+<div class="toast" id="toast" role="status"></div>
+<script>
+var X = /*__DATA__*/null;
+/*__SCRIPT__*/
+</script>
