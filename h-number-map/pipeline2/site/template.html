@@ -90,6 +90,9 @@ textarea.field{height:auto;min-height:64px;padding:9px 12px;resize:vertical}
 .no-review #review{display:none}
 #labels text{font-family:var(--mono);font-weight:700;fill:var(--label);text-anchor:middle;pointer-events:none}
 #labels g{display:none} #labels g.show{display:block}
+#seclabels text{font-family:var(--sans);font-weight:700;fill:var(--navy);text-anchor:middle;cursor:pointer;paint-order:stroke;stroke:#fbfaf6;stroke-width:5px;stroke-linejoin:round;vector-effect:non-scaling-stroke}
+#seclabels text.sub{font-family:var(--mono);font-weight:600;fill:var(--navy-2);stroke-width:4px}
+#seclabels text:hover{fill:var(--gold)}
 #sel{fill:var(--gold);fill-opacity:.28;stroke:var(--navy);stroke-width:2.2;vector-effect:non-scaling-stroke;pointer-events:none}
 #hint{fill:var(--gold);fill-opacity:.07;stroke:var(--gold);stroke-width:1.6;stroke-dasharray:6 4;vector-effect:non-scaling-stroke;pointer-events:none}
 #ann text{font-family:var(--sans);fill:#8a6f4a;opacity:.85;pointer-events:none}
@@ -173,8 +176,8 @@ table.t td{padding:5px 6px;border-bottom:1px solid var(--line);overflow-wrap:any
   <div class="brand"><div class="mark">CG</div><div class="nm">Cedar Grove Cemetery</div></div>
   <div class="search">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
-    <label class="sr" for="q">Search H-number, legacy lot, or name</label>
-    <input id="q" type="search" autocomplete="off" spellcheck="false" placeholder="Search H-number, legacy lot (B 20H), or name">
+    <label class="sr" for="q">Search H-number, lot, or name</label>
+    <input id="q" type="search" autocomplete="off" spellcheck="false" placeholder="Search H-number, lot (B 20H), or name">
     <button id="qx" type="button" aria-label="Clear search" hidden>&#10005;</button>
     <div id="results" role="listbox" hidden></div>
   </div>
@@ -204,6 +207,7 @@ table.t td{padding:5px 6px;border-bottom:1px solid var(--line);overflow-wrap:any
       <g id="lots">__LOTS__</g>
       <polygon id="sel" points="" hidden=""/>
       <g id="labels">__LABELS__</g>
+      <g id="seclabels"></g>
     </svg>
     <div class="ctl" id="layers">
       <button class="layers-btn" id="layers-btn" type="button" aria-expanded="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3l9 5-9 5-9-5 9-5zM3 13l9 5 9-5"/></svg>Layers</button>
@@ -219,7 +223,7 @@ table.t td{padding:5px 6px;border-bottom:1px solid var(--line);overflow-wrap:any
     </div>
     <div class="ctl" id="fsctl" style="right:12px;top:12px"><button class="layers-btn" id="fs" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg><span id="fs-l">Full screen</span></button></div>
     <iframe id="v3d" title="3D model of Cedar Grove" hidden style="position:absolute;inset:0;width:100%;height:100%;border:0;background:var(--map);z-index:1"></iframe>
-    <div class="ctl" id="zoomhint" hidden>Zoom in to read H-numbers</div>
+    <div class="ctl" id="zoomhint" hidden>Zoom in to read every lot number</div>
     <div class="ctl" id="legend"><span>Numbers are H-numbers (H and leading zeros left off)</span><span><i class="rvk"></i>Needs review</span><span id="lg-rec" hidden><i class="rec"></i>Has grave records</span></div>
     <div class="ctl" id="zoomctl">
       <button id="z-in" type="button" aria-label="Zoom in"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></button>
@@ -266,7 +270,9 @@ function render(){var vw=W/cam.s,vh=H/cam.s;svg.setAttribute('viewBox',(cam.x-vw
 function queue(){if(raf)return;raf=requestAnimationFrame(function(){raf=null;render()})}
 var bins=[['b1',4.0],['b2',3.0],['b3',2.2]],gl={};
 Array.prototype.forEach.call(document.querySelectorAll('#labels g'),function(g){gl[g.getAttribute('data-bin')]=g});
-function lod(){var any=false;bins.forEach(function(b){var on=cam.s*b[1]>=6.4;if(gl[b[0]])gl[b[0]].classList.toggle('show',on);if(on)any=true});
+var LBLS=1.55;/* every section's numbers switch on at the same zoom, so no section is left bare while its neighbour has numbers */
+function lod(){var on=cam.s>=LBLS,any=on;bins.forEach(function(b){if(gl[b[0]])gl[b[0]].classList.toggle('show',on)});
+  $('seclabels').style.display=cam.s<LBLS?'':'none';
   $('zoomhint').hidden=any;$('z-in').disabled=cam.s>=MAXS-.01;$('z-out').disabled=cam.s<=minScale()+.001}
 function insets(){var i={l:0,r:0,t:0,b:0};if(isMobile()){var p=$('panel');if(!p.hidden)i.b=p.getBoundingClientRect().height}return i}
 function targetFor(box,fill,minS,maxS){var ins=insets(),aw=W-ins.l-ins.r,ah=H-ins.t-ins.b,w=box[2]-box[0],h=box[3]-box[1];
@@ -335,13 +341,13 @@ function clearSel(noHist){sel=null;vis($('sel'),false);vis($('hint'),false);$('p
   requestAnimationFrame(function(){measure();render();sheetPx()});markList()}
 
 /* ---------- panel ---------- */
-function evText(ev){return ev===0?'The label on the drawing matches this lot, and its legacy section was confirmed by a second, independent reading of the drawing.':'The label on the drawing matches this lot. Its legacy section follows from the surrounding lots, so the section is inferred, not read directly.'}
+function evText(ev){return ev===0?'The label on the drawing matches this lot, and its section was confirmed by a second, independent reading of the drawing.':'The label on the drawing matches this lot. Its section follows from the surrounding lots, so the section is inferred, not read directly.'}
 function areaOfSel(){return sel.k==='lot'?LOTS[sel.i][2]:sel.k==='unplaced'?UNPL[sel.i].s:(REVIEW[sel.i].r0||null)}
 function renderPanel(){var p=$('panel');p.hidden=false;measure();if(isMobile())document.documentElement.style.setProperty('--sheet-h','48%');
   var h='';
   if(sel.k==='lot'){var r=LOTS[sel.i];
     h='<div class="p-head"><div><div class="p-h" id="p-h">'+esc(r[1])+'</div><div style="margin-top:8px"><span class="chip '+(r[11]===0?'ok':'gen')+'">'+(r[11]===0?'Verified lot':'Placed lot, section inferred')+'</span></div></div><button class="p-x" id="p-x" aria-label="Close details">&#10005;</button></div><div class="p-body">'
-     +'<dl class="kv"><dt>Legacy reference</dt><dd>Section '+esc(r[2])+' &middot; Lot '+esc(r[3])+'</dd><dt>Map position</dt><dd>'+(r[12]?'Label position only (outline not drawn in the source)':'Outline drawn in the source')+'</dd></dl>'
+     +'<dl class="kv"><dt>Old reference</dt><dd>Section '+esc(r[2])+' &middot; Lot '+esc(r[3])+'</dd><dt>Map position</dt><dd>'+(r[12]?'Label position only (outline not drawn in the source)':'Outline drawn in the source')+'</dd></dl>'
      +'<p class="note" style="margin:0 0 4px">'+evText(r[11])+'</p>'
      +'<div id="rec-box"></div>'
      +'<div class="btns"><button class="btn" id="p-copy" type="button">Copy H-number</button><button class="btn" id="p-list" type="button">Add to list</button><button class="btn" id="p-3d" type="button">View in 3D</button></div></div>'}
@@ -354,8 +360,8 @@ function renderPanel(){var p=$('panel');p.hidden=false;measure();if(isMobile())d
      +'<p class="note">Position on the map is exact: this is the outlined lot (or label) the drawing shows. Its identity is what is unresolved.</p></div>'}
   else {var u=UNPL[sel.i],a=AREAS[u.s];
     h='<div class="p-head"><div><div class="p-h">'+esc(u.h)+'</div><div style="margin-top:8px"><span class="chip gen">Map position not resolved</span></div></div><button class="p-x" id="p-x" aria-label="Close details">&#10005;</button></div><div class="p-body">'
-     +'<dl class="kv"><dt>Legacy reference</dt><dd>Section '+esc(u.s)+' &middot; Lot '+esc(u.l)+'</dd><dt>General area</dt><dd>Legacy section '+esc(u.s)+'</dd></dl>'
-     +'<div class="box rvbox"><h3>Not an exact location</h3><p class="note" style="margin:0">The decoder knows this lot, but no label on the drawing could be tied to it. The dashed outline on the map only shows the general area of legacy section '+esc(u.s)+'.'+(u.n?' '+esc(u.n)+'.':'')+'</p></div>'
+     +'<dl class="kv"><dt>Old reference</dt><dd>Section '+esc(u.s)+' &middot; Lot '+esc(u.l)+'</dd><dt>General area</dt><dd>Section '+esc(u.s)+'</dd></dl>'
+     +'<div class="box rvbox"><h3>Not an exact location</h3><p class="note" style="margin:0">The decoder knows this lot, but no label on the drawing could be tied to it. The dashed outline on the map only shows the general area of section '+esc(u.s)+'.'+(u.n?' '+esc(u.n)+'.':'')+'</p></div>'
      +'<div id="rec-box"></div><div class="btns"><button class="btn" id="p-copy" type="button">Copy H-number</button></div></div>'}
   p.innerHTML=h;sheetPx();$('p-x').onclick=function(){clearSel()};
   var cp=$('p-copy');if(cp)cp.onclick=function(){copy(sel.k==='lot'?LOTS[sel.i][1]:UNPL[sel.i].h,'H-number copied')};
@@ -441,11 +447,11 @@ function search(raw){var q=raw.trim();if(!q)return[];var out=[],seen={};
 var resEl=$('results'),qEl=$('q'),active=-1,curRes=[];
 function renderResults(list){curRes=list;active=-1;
   if(!qEl.value.trim()){resEl.hidden=true;return}
-  if(!list.length){resEl.innerHTML='<div class="res-empty"><b>No match.</b> Try an H-number (<span class="mono">H000023</span> or <span class="mono">23</span>), a legacy lot (<span class="mono">B 20H</span>) or part of a recorded name.</div>';resEl.hidden=false;return}
+  if(!list.length){resEl.innerHTML='<div class="res-empty"><b>No match.</b> Try an H-number (<span class="mono">H000023</span> or <span class="mono">23</span>), a lot label (<span class="mono">B 20H</span>) or part of a recorded name.</div>';resEl.hidden=false;return}
   resEl.innerHTML=list.map(function(o,n){var h,sub,tag;
-    if(o.k==='lot'){var r=LOTS[o.i];h=r[1];sub='Legacy: Section '+r[2]+' lot '+r[3];tag=o.name?'<span class="tag nm">'+esc(o.name)+'</span>':'<span class="tag ok">On map</span>'}
-    else if(o.k==='unplaced'){var u=UNPL[o.i];h=u.h;sub='Legacy: Section '+u.s+' lot '+u.l;tag='<span class="tag rv">Not placed</span>'}
-    else{var v=REVIEW[o.i];h=v.h||('Label '+(v.t||'?'));sub=v.h?'Legacy: Section '+v.s+' lot '+v.l:'Unresolved label on drawing';tag='<span class="tag rv">To review</span>'}
+    if(o.k==='lot'){var r=LOTS[o.i];h=r[1];sub='Section '+r[2]+' lot '+r[3];tag=o.name?'<span class="tag nm">'+esc(o.name)+'</span>':'<span class="tag ok">On map</span>'}
+    else if(o.k==='unplaced'){var u=UNPL[o.i];h=u.h;sub='Section '+u.s+' lot '+u.l;tag='<span class="tag rv">Not placed</span>'}
+    else{var v=REVIEW[o.i];h=v.h||('Label '+(v.t||'?'));sub=v.h?'Section '+v.s+' lot '+v.l:'Unresolved label on drawing';tag='<span class="tag rv">To review</span>'}
     return '<button type="button" class="res" role="option" data-n="'+n+'"><span><span class="h">'+esc(h)+'</span><br><span class="sub">'+esc(sub)+(o.grave?' &middot; grave position '+esc(o.grave)+' (lot shown)':'')+'</span></span>'+tag+'</button>'}).join('');resEl.hidden=false}
 function pick(n){var o=curRes[n];if(!o)return;resEl.hidden=true;qEl.blur();if(o.k==='lot')selectLot(o.i);else if(o.k==='unplaced')selectUnplaced(o.i);else selectReview(o.i)}
 qEl.addEventListener('input',function(){$('qx').hidden=!qEl.value;renderResults(search(qEl.value))});
@@ -463,15 +469,15 @@ function setTab(t){tab=t;areaOpen=null;$('t-areas').classList.toggle('on',t==='a
 $('t-areas').onclick=function(){setTab('areas')};$('t-review').onclick=function(){setTab('review')};
 function fmtH(n){return 'H'+('000000'+n).slice(-6)}
 function renderSide(){var b=$('side-body'),h='';
-  if(tab==='areas'&&!areaOpen){h='<p class="eyebrow">Browse by area</p><p class="note" style="margin:0 0 12px">Areas follow the legacy section letters used for cross-reference. Pick one to zoom to it, or search above for an H-number.</p>';
+  if(tab==='areas'&&!areaOpen){h='<p class="eyebrow">Browse by area</p><p class="note" style="margin:0 0 12px">The cemetery is split into sections A to M. Pick one to zoom to it, or search above for an H-number.</p>';
     Object.keys(AREAS).sort(function(a,c){return AREAS[a].hmin-AREAS[c].hmin}).forEach(function(s){var a=AREAS[s];
-      h+='<button type="button" class="area" data-area="'+s+'"><span><b>Legacy section '+s+'</b><small>'+a.n+' lots'+(a.nr+a.nu?' &middot; '+(a.nr+a.nu)+' to review':'')+'</small></span><span class="rng">'+fmtH(a.hmin)+'<br>'+fmtH(a.hmax)+'</span></button>'});
+      h+='<button type="button" class="area" data-area="'+s+'"><span><b>Section '+s+'</b><small>'+a.n+' lots'+(a.nr+a.nu?' &middot; '+(a.nr+a.nu)+' to review':'')+'</small></span><span class="rng">'+fmtH(a.hmin)+'<br>'+fmtH(a.hmax)+'</span></button>'});
     b.innerHTML=h;Array.prototype.forEach.call(b.querySelectorAll('[data-area]'),function(x){x.onclick=function(){openArea(x.getAttribute('data-area'))};
       x.onmouseenter=function(){showHint(x.getAttribute('data-area'))};x.onmouseleave=function(){if(!(sel&&sel.k==='unplaced'))vis($('hint'),false)}})}
   else if(tab==='areas'){var s=areaOpen,a=AREAS[s],rows=[];
-    h='<button type="button" class="lnk" id="a-back">&larr; All areas</button><h2 style="margin:6px 0 2px;font-size:18px;color:var(--navy)">Legacy section '+s+'</h2><p class="note" style="margin:0 0 10px">'+a.n+' lots &middot; '+fmtH(a.hmin)+' to '+fmtH(a.hmax)+'</p>'
+    h='<button type="button" class="lnk" id="a-back">&larr; All areas</button><h2 style="margin:6px 0 2px;font-size:18px;color:var(--navy)">Section '+s+'</h2><p class="note" style="margin:0 0 10px">'+a.n+' lots &middot; '+fmtH(a.hmin)+' to '+fmtH(a.hmax)+'</p>'
      +'<div class="btns" style="margin:0 0 12px"><button type="button" class="btn pri" id="a-pdf">Download this area (PDF)</button></div>'
-     +'<label class="sr" for="a-q">Filter lots</label><input class="field" id="a-q" placeholder="Filter by H-number or legacy lot" value="'+esc(areaFilter)+'"><div class="lotlist" id="a-list"></div>';
+     +'<label class="sr" for="a-q">Filter lots</label><input class="field" id="a-q" placeholder="Filter by H-number or lot" value="'+esc(areaFilter)+'"><div class="lotlist" id="a-list"></div>';
     b.innerHTML=h;$('a-back').onclick=function(){areaOpen=null;areaFilter='';vis($('hint'),false);renderSide()};$('a-pdf').onclick=function(){exportPdf('area_'+s)};
     $('a-q').oninput=function(){areaFilter=this.value;fillAreaList()};fillAreaList()}
   else{h='<p class="eyebrow">Needs review</p><p class="note" style="margin:0 0 6px">Nothing here is drawn as an H-number. Positions are exact where an outline exists; identity is what is unresolved.</p>'
@@ -491,8 +497,19 @@ function fillAreaList(){var s=areaOpen,q=areaFilter.trim().toUpperCase().replace
   $('a-list').innerHTML=rows.slice(0,200).map(function(i){var r=LOTS[i];return '<button type="button" class="li" data-lot="'+i+'"><span class="h">'+r[1]+'</span><span class="l">Lot '+esc(r[3])+'</span></button>'}).join('')+(rows.length>200?'<div class="note" style="padding:8px 12px">Showing 200 of '+rows.length+'. Type to narrow.</div>':'')+(rows.length?'':'<div class="note" style="padding:12px">No lots match.</div>');
   Array.prototype.forEach.call($('a-list').querySelectorAll('[data-lot]'),function(x){x.onclick=function(){selectLot(+x.getAttribute('data-lot'))}})}
 function showHint(s){var a=AREAS[s],hint=$('hint');if(a&&a.hull){hint.setAttribute('points',a.hull.map(function(p){return p.join(',')}).join(' '));vis(hint,true)}}
-function openArea(s){areaOpen=s;areaFilter='';showHint(s);pushHist();renderSide();measure();animateTo(targetFor(AREAS[s].b,.94,0,MAXS))}
+function openArea(s){areaOpen=s;areaFilter='';showHint(s);pushHist();renderSide();measure();animateTo(targetFor(AREAS[s].b,.94,LBLS+.05,MAXS))}
 function markList(){}
+/* section names on the map: visible while zoomed out, clicking one opens that section */
+(function(){var g=$('seclabels'),NS='http://www.w3.org/2000/svg',items=[];
+  Object.keys(AREAS).forEach(function(s){var a=AREAS[s],b=a.b,w=b[2]-b[0],h=b[3]-b[1],fs=Math.max(14,Math.min(30,Math.min(w,h)*.2+8)),cx=a.c?a.c[0]:(b[0]+b[2])/2,cy=a.c?a.c[1]:(b[1]+b[3])/2;
+    if(h<w*.35){cx=(b[0]+b[2])/2;cy=b[1]-fs*.5}   /* long thin sections: the name sits just above, not on the numbers */
+    items.push({s:s,a:a,fs:fs,cx:cx,cy:cy,hw:fs*4.1,hh:fs*2.2,area:w*h})});
+  items.sort(function(p,q){return q.area-p.area});
+  items.forEach(function(it,k){for(var n=0;n<14;n++){var hit=false;for(var m=0;m<k;m++){var o=items[m];if(Math.abs(it.cx-o.cx)<it.hw/2+o.hw/2&&Math.abs(it.cy-o.cy)<it.hh/2+o.hh/2){hit=true;break}}
+    if(!hit)break;it.cy+=(n%2?-1:1)*it.hh*(1+(n>>1)*.3)*1.05}});
+  items.forEach(function(it){var t=document.createElementNS(NS,'text');t.setAttribute('x',it.cx);t.setAttribute('y',it.cy);t.setAttribute('font-size',it.fs);t.textContent='Section '+it.s;
+    var u=document.createElementNS(NS,'text');u.setAttribute('class','sub');u.setAttribute('x',it.cx);u.setAttribute('y',it.cy+it.fs*.95);u.setAttribute('font-size',it.fs*.5);u.textContent=fmtH(it.a.hmin)+' to '+fmtH(it.a.hmax);
+    [t,u].forEach(function(e){e.addEventListener('click',function(ev){ev.stopPropagation();openArea(it.s)});g.appendChild(e)})})})();
 
 /* ---------- full screen (browser full screen where allowed, otherwise the map fills the window) ---------- */
 function fsEl(){return document.fullscreenElement||document.webkitFullscreenElement}
@@ -535,19 +552,19 @@ function saveFile(name,data,type){return Promise.resolve(window.claude&&window.c
 function exportPdf(key){var p=PDFS[key];if(!p){toast('That PDF is not available');return}toast('Preparing '+p.name+'…');
   fetch(p.file).then(function(r){if(!r.ok)throw 0;return r.blob()}).then(function(b){return saveFile(p.name,b)}).catch(function(){toast('The PDF could not be loaded in this view')})}
 function csv(rows){return rows.map(function(r){return r.map(function(c){c=String(c==null?'':c);return /[",\n]/.test(c)?'"'+c.replace(/"/g,'""')+'"':c}).join(',')}).join('\r\n')}
-function exportReviewCsv(){var rows=[['status','reason','h_number_candidate','legacy_section','legacy_lot','label_on_drawing','map_x','map_y']];
+function exportReviewCsv(){var rows=[['status','reason','h_number_candidate','section','lot','label_on_drawing','map_x','map_y']];
   REVIEW.forEach(function(v){rows.push(['needs_review',v.r.map(function(i){return REASONS[i]}).join(' | '),v.h||'',v.s||'',v.l||'',v.t||'',v.x,v.y])});
   UNPL.forEach(function(u){rows.push(['known_h_no_map_position',u.n||'Decoder lot with no matching label on the drawing',u.h,u.s,u.l,'','',''])});
   saveFile('Cedar_Grove_unresolved_locations.csv',new Blob([csv(rows)],{type:'text/csv'}))}
-function exportLotsCsv(){var rows=[['h_number','legacy_section','legacy_lot','section_evidence']];LOTS.forEach(function(r){rows.push([r[1],r[2],r[3],r[11]===0?'two independent readings':'inferred from surrounding lots'])});
+function exportLotsCsv(){var rows=[['h_number','section','lot','section_evidence']];LOTS.forEach(function(r){rows.push([r[1],r[2],r[3],r[11]===0?'two independent readings':'inferred from surrounding lots'])});
   saveFile('Cedar_Grove_lots_with_H-numbers.csv',new Blob([csv(rows)],{type:'text/csv'}))}
 function exportXlsx(){toast('Preparing the workbook\u2026');loadScript(XLSX_URL).then(function(){
   var ok=LOTS.filter(function(r){return r[11]===0}).length,wb=XLSX.utils.book_new();
   function sh(name,rows,w){var ws=XLSX.utils.aoa_to_sheet(rows);ws['!cols']=w.map(function(x){return{wch:x}});XLSX.utils.book_append_sheet(wb,ws,name)}
-  sh('Read me',[['Cedar Grove Cemetery - H-map lot lists'],[],['Lots with H-numbers',LOTS.length,'Outline (or label position) and a decoded H-number. Section corroborated by two independent readings ('+ok+') or inferred from surrounding lots ('+(LOTS.length-ok)+').'],['Lots to review',REVIEW.length,'Visible on the drawing; identity could not be tied to one H-number. Not drawn as H-numbers.'],['No map position',UNPL.length,'Known to the decoder; no label on the drawing resolves to them. Some match a drawn lot in the review list.'],[],['Legacy section and lot are cross-reference only. Burial records are not part of this workbook.']],[22,10,110]);
-  sh('Lots with H-numbers',[['H-number','Legacy section','Legacy lot','Section evidence','Outline']].concat(LOTS.slice().sort(function(a,b){return a[4]-b[4]||(a[1]<b[1]?-1:1)}).map(function(r){return[r[1],r[2],r[3],r[11]===0?'two independent readings':'inferred from surrounding lots',r[12]?'label only':'drawn']})),[12,14,11,32,12]);
-  sh('Lots to review',[['Reason','H-number candidate','Legacy section','Legacy lot','Label on drawing','Map x','Map y']].concat(REVIEW.map(function(v){return[v.r.map(function(i){return REASONS[i]}).join(' | '),v.h||'',v.s||'',v.l||'',v.t||'',v.x,v.y]})),[70,16,14,11,16,9,9]);
-  sh('No map position',[['H-number','Legacy section','Legacy lot','Note']].concat(UNPL.map(function(u){return[u.h,u.s,u.l,u.n||'No label on the drawing resolves to this decoder lot']})),[12,14,11,80]);
+  sh('Read me',[['Cedar Grove Cemetery - H-map lot lists'],[],['Lots with H-numbers',LOTS.length,'Outline (or label position) and a decoded H-number. Section corroborated by two independent readings ('+ok+') or inferred from surrounding lots ('+(LOTS.length-ok)+').'],['Lots to review',REVIEW.length,'Visible on the drawing; identity could not be tied to one H-number. Not drawn as H-numbers.'],['No map position',UNPL.length,'Known to the decoder; no label on the drawing resolves to them. Some match a drawn lot in the review list.'],[],['Section and lot are cross-reference only. Burial records are not part of this workbook.']],[22,10,110]);
+  sh('Lots with H-numbers',[['H-number','Section','Lot','Section evidence','Outline']].concat(LOTS.slice().sort(function(a,b){return a[4]-b[4]||(a[1]<b[1]?-1:1)}).map(function(r){return[r[1],r[2],r[3],r[11]===0?'two independent readings':'inferred from surrounding lots',r[12]?'label only':'drawn']})),[12,14,11,32,12]);
+  sh('Lots to review',[['Reason','H-number candidate','Section','Lot','Label on drawing','Map x','Map y']].concat(REVIEW.map(function(v){return[v.r.map(function(i){return REASONS[i]}).join(' | '),v.h||'',v.s||'',v.l||'',v.t||'',v.x,v.y]})),[70,16,14,11,16,9,9]);
+  sh('No map position',[['H-number','Section','Lot','Note']].concat(UNPL.map(function(u){return[u.h,u.s,u.l,u.n||'No label on the drawing resolves to this decoder lot']})),[12,14,11,80]);
   var buf=XLSX.write(wb,{type:'array',bookType:'xlsx'});
   return saveFile('Cedar_Grove_H-Map_lots.xlsx',new Blob([buf],{type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'}))},function(){toast('The Excel writer could not be loaded in this view')})}
 function exportListCsv(){if(!LIST.length){toast('Your list is empty. Open a lot and choose Add to list.');return}
@@ -560,9 +577,9 @@ $('b-export').onclick=function(){var areas=Object.keys(AREAS).sort();
    +'<div class="xopt"><span><b>Overview sheet only</b><small>One large sheet; numbers appear where they are readable</small></span><button class="btn" data-pdf="overview">Download</button></div>'
    +'<div class="xopt"><span><b>Excel workbook (.xlsx)</b><small>Lots with H-numbers, lots to review, and decoder lots with no map position, one sheet each, plus a read-me sheet</small></span><button class="btn pri" data-act="xlsx">Download</button></div>'
    +'<div class="xopt"><span><b>Unresolved locations (CSV)</b><small>'+REVIEW.length+' lots to review, '+UNPL.length+' known H-numbers without a position</small></span><button class="btn" data-act="rvcsv">Download</button></div>'
-   +'<div class="xopt"><span><b>Lots with H-numbers (CSV)</b><small>'+LOTS.length+' lots: H-number, legacy reference, how the section was confirmed</small></span><button class="btn" data-act="lotcsv">Download</button></div>'
+   +'<div class="xopt"><span><b>Lots with H-numbers (CSV)</b><small>'+LOTS.length+' lots: H-number, section and lot, how the section was confirmed</small></span><button class="btn" data-act="lotcsv">Download</button></div>'
    +'<div class="xopt"><span><b>My list ('+LIST.length+')</b><small>Lots you added with Add to list</small></span><button class="btn" data-act="listcsv">Download</button></div>'
-   +'<div style="margin-top:14px"><b style="font-size:14px">By area</b><div class="xgrid">'+areas.map(function(s){return '<button class="btn" data-pdf="area_'+s+'">Legacy section '+s+'</button>'}).join('')+'</div></div>'
+   +'<div style="margin-top:14px"><b style="font-size:14px">By area</b><div class="xgrid">'+areas.map(function(s){return '<button class="btn" data-pdf="area_'+s+'">Section '+s+'</button>'}).join('')+'</div></div>'
    +'<div class="btns" style="justify-content:flex-end"><button class="btn" data-close>Close</button></div>');
   Array.prototype.forEach.call(modalRoot.querySelectorAll('[data-pdf]'),function(b){b.onclick=function(){exportPdf(b.getAttribute('data-pdf'))}});
   Array.prototype.forEach.call(modalRoot.querySelectorAll('[data-act]'),function(b){b.onclick=function(){var a=b.getAttribute('data-act');if(a==='xlsx')exportXlsx();if(a==='rvcsv')exportReviewCsv();if(a==='lotcsv')exportLotsCsv();if(a==='listcsv')exportListCsv()}})};

@@ -43,7 +43,7 @@ def run(pdfs=None):
         xs = [p[0] for p in pts]; ys = [p[1] for p in pts]
         hn = [o['hn'] for o in os_]
         areas[s] = dict(b=[round(min(xs) - 4, 1), round(min(ys) - 4, 1), round(max(xs) + 4, 1), round(max(ys) + 4, 1)], hull=[[round(x, 1), round(y, 1)] for x, y in hull.exterior.coords][:-1],
-                        n=len(os_), hmin=min(hn), hmax=max(hn), nr=0, nu=0)
+                        n=len(os_), hmin=min(hn), hmax=max(hn), nr=0, nu=0, c=[round(sum(o['cx'] for o in os_) / len(os_), 1), round(sum(o['cy'] for o in os_) / len(os_), 1)])
     for r in reg['review']:
         s = r.get('section') or r.get('region')
         if s in areas: areas[s]['nr'] += 1

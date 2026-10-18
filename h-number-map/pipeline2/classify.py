@@ -13,9 +13,9 @@ from identify import load_decoder, SECTIONS
 DEV_LIMIT = 100         # an H-number this far from the median of its 6 neighbours is treated as a numbering conflict
 REASONS = {
  'label_not_in_decoder': 'The label on the drawing is not a lot the decoder knows.',
- 'label_not_in_region_section': 'The label does not exist in the legacy section this part of the map belongs to.',
+ 'label_not_in_region_section': 'The label does not exist in the section this part of the map belongs to.',
  'section_undetermined': 'No region evidence: this label exists in many sections, so it cannot be tied to one lot.',
- 'duplicate_label_in_section': 'Two places on the drawing carry the same legacy label for the same section.',
+ 'duplicate_label_in_section': 'Two places on the drawing carry the same lot label for the same section.',
  'inconsistent_with_neighbours': 'The decoded H-number is far from the H-numbers of the lots around it (numbering conflict).',
  'old_ocr_disagrees': 'An independent earlier reading of the drawing placed this label in a different section.',
  'outline_without_label': 'An outlined lot on the drawing has no label text inside it.',

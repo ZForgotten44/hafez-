@@ -1,4 +1,4 @@
-h_number,legacy_section,legacy_lot,map_x,map_y,outline,section_evidence
+h_number,section,lot,map_x,map_y,outline,section_evidence
 H000001,B,20H,1654.18,424.5,drawn,two independent readings
 H000002,B,19A,1654.72,440.38,drawn,two independent readings
 H000003,B,19,1654.98,447.97,drawn,two independent readings
