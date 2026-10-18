@@ -86,6 +86,18 @@ textarea.field{height:auto;min-height:64px;padding:9px 12px;resize:vertical}
 .lot.hasrec:hover{fill-opacity:.32}
 .rv{fill:#f1dcc0;fill-opacity:.5;stroke:#c9892f;stroke-opacity:.85;stroke-width:1;stroke-dasharray:3 2;vector-effect:non-scaling-stroke;cursor:pointer}
 .rv:hover{fill-opacity:.8}
+.rv.pv{fill:#cfe4ee;fill-opacity:.75;stroke:#2c7da0;stroke-opacity:.95;stroke-dasharray:none}.rv.pv:hover{fill-opacity:.95}
+.rv-dot.pv{fill:#cfe4ee;stroke:#2c7da0}
+.ex{fill:#fff;fill-opacity:.55;stroke:#2c7da0;stroke-width:1.5;stroke-dasharray:2 1.6;vector-effect:non-scaling-stroke;cursor:pointer}.ex:hover{fill-opacity:.9}
+#provl{display:none}#provl.show{display:block}
+#provl text{font-family:var(--mono);font-weight:700;font-style:italic;fill:#1d5f7d;text-anchor:middle;pointer-events:none;lengthAdjust:spacingAndGlyphs}
+.no-prov .rv.pv,.no-prov .rv-dot.pv,.no-prov #provl,.no-prov #exg{display:none}
+#legend .pvk{background:#cfe4ee;border:1px solid #2c7da0}#legend .exk{background:#fff;border:1px dashed #2c7da0;border-radius:50%}
+.chip.pv{background:#d6e9f2;color:#1d5f7d}.tag.pvt{background:#d6e9f2;color:#1d5f7d}
+.box.pvbox{background:#eef6fa;border-color:#b9d8e7}
+.blk{display:block;width:100%;text-align:left;padding:10px 12px;border:1px solid var(--line);border-radius:var(--r);background:var(--surface);margin:0 0 8px}
+.blk:hover{border-color:var(--gold)} .blk b{color:var(--navy)} .blk small{display:block;color:var(--mid);font-size:12.5px;margin-top:2px}
+
 .rv-dot{fill:#f1dcc0;fill-opacity:.8;stroke:#c9892f;stroke-width:1.2;vector-effect:non-scaling-stroke;cursor:pointer}
 .no-review #review{display:none}
 #labels text{font-family:var(--mono);font-weight:700;fill:var(--label);text-anchor:middle;pointer-events:none}
@@ -207,6 +219,8 @@ table.t td{padding:5px 6px;border-bottom:1px solid var(--line);overflow-wrap:any
       <g id="lots">__LOTS__</g>
       <polygon id="sel" points="" hidden=""/>
       <g id="labels">__LABELS__</g>
+      <g id="provl">__PROVL__</g>
+      <g id="exg">__EXP__</g>
       <g id="seclabels"></g>
     </svg>
     <div class="ctl" id="layers">
@@ -217,6 +231,7 @@ table.t td{padding:5px 6px;border-bottom:1px solid var(--line);overflow-wrap:any
         <label class="lrow"><input type="radio" name="ly-view" id="ly-3d"><span>3D model<small>Headstones, trees and buildings. Click a stone to open its lot.</small></span></label>
         <div class="lgrp">Layers</div>
         <label class="lrow"><input type="checkbox" id="ly-photo" disabled><span>Ground photo<small id="ly-photo-s">Checking for the aerial photo…</small></span></label>
+        <label class="lrow"><input type="checkbox" id="ly-prov" checked><span>Inferred lots<small>Lots and spots whose number is worked out from the path. Please confirm them.</small></span></label>
         <label class="lrow"><input type="checkbox" id="ly-review" checked><span>Lots to review<small>Outlined lots that could not be tied to one H-number.</small></span></label>
         <label class="lrow"><input type="checkbox" id="ly-ann"><span>Original drawing annotations<small>Road names, building names and the mausoleum legend from the source drawing.</small></span></label>
       </div>
@@ -224,7 +239,7 @@ table.t td{padding:5px 6px;border-bottom:1px solid var(--line);overflow-wrap:any
     <div class="ctl" id="fsctl" style="right:12px;top:12px"><button class="layers-btn" id="fs" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg><span id="fs-l">Full screen</span></button></div>
     <iframe id="v3d" title="3D model of Cedar Grove" hidden style="position:absolute;inset:0;width:100%;height:100%;border:0;background:var(--map);z-index:1"></iframe>
     <div class="ctl" id="zoomhint" hidden>Zoom in to read every lot number</div>
-    <div class="ctl" id="legend"><span>Numbers are H-numbers (H and leading zeros left off)</span><span><i class="rvk"></i>Needs review</span><span id="lg-rec" hidden><i class="rec"></i>Has grave records</span></div>
+    <div class="ctl" id="legend"><span>Numbers are H-numbers (H and leading zeros left off)</span><span><i class="rvk"></i>Needs review</span><span><i class="pvk"></i>Inferred from the path, please confirm</span><span><i class="exk"></i>Expected spot, no outline drawn</span><span id="lg-rec" hidden><i class="rec"></i>Has grave records</span></div>
     <div class="ctl" id="zoomctl">
       <button id="z-in" type="button" aria-label="Zoom in"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></button>
       <button id="z-out" type="button" aria-label="Zoom out"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14"/></svg></button>
@@ -242,7 +257,7 @@ table.t td{padding:5px 6px;border-bottom:1px solid var(--line);overflow-wrap:any
 var DATA = /*__DATA__*/null;
 (function(){
 'use strict';
-var LOTS=DATA.lots, REVIEW=DATA.review, UNPL=DATA.unplaced, AREAS=DATA.areas, REASONS=DATA.reasons, ANN=DATA.ann, CB=DATA.bbox, PDFS=DATA.pdfs;
+var BLOCKS=DATA.blocks||[], LOTS=DATA.lots, REVIEW=DATA.review, UNPL=DATA.unplaced, AREAS=DATA.areas, REASONS=DATA.reasons, ANN=DATA.ann, CB=DATA.bbox, PDFS=DATA.pdfs;
 // lot row: [d,h,s,l,hn,cx,cy,x0,y0,x1,y1,ev,labelOnly]
 var $=function(id){return document.getElementById(id)};
 function esc(s){var d=document.createElement('div');d.textContent=String(s==null?'':s);return d.innerHTML}
@@ -272,7 +287,7 @@ var bins=[['b1',4.0],['b2',3.0],['b3',2.2]],gl={};
 Array.prototype.forEach.call(document.querySelectorAll('#labels g'),function(g){gl[g.getAttribute('data-bin')]=g});
 var LBLS=1.55;/* every section's numbers switch on at the same zoom, so no section is left bare while its neighbour has numbers */
 function lod(){var on=cam.s>=LBLS,any=on;bins.forEach(function(b){if(gl[b[0]])gl[b[0]].classList.toggle('show',on)});
-  $('seclabels').style.display=cam.s<LBLS?'':'none';
+  $('seclabels').style.display=cam.s<LBLS?'':'none';$('provl').classList.toggle('show',on);
   $('zoomhint').hidden=any;$('z-in').disabled=cam.s>=MAXS-.01;$('z-out').disabled=cam.s<=minScale()+.001}
 function insets(){var i={l:0,r:0,t:0,b:0};if(isMobile()){var p=$('panel');if(!p.hidden)i.b=p.getBoundingClientRect().height}return i}
 function targetFor(box,fill,minS,maxS){var ins=insets(),aw=W-ins.l-ins.r,ah=H-ins.t-ins.b,w=box[2]-box[0],h=box[3]-box[1];
@@ -308,6 +323,7 @@ wrap.addEventListener('wheel',function(e){e.preventDefault();var dy=e.deltaMode=
 svg.addEventListener('click',function(e){if(moved){moved=false;return}
   var l=e.target.closest('#lots [data-i]');if(l){selectLot(+l.getAttribute('data-i'));return}
   var r=e.target.closest('#review [data-r]');if(r){selectReview(+r.getAttribute('data-r'));return}
+  var ex=e.target.closest('#exg [data-u]');if(ex){selectUnplaced(+ex.getAttribute('data-u'));return}
   if(sel&&!isMobile())clearSel()});
 $('z-in').onclick=function(){var r=wrap.getBoundingClientRect();zoomAt(r.left+W/2,r.top+H/2,1.6)};
 $('z-out').onclick=function(){var r=wrap.getBoundingClientRect();zoomAt(r.left+W/2,r.top+H/2,1/1.6)};
@@ -326,14 +342,15 @@ function setSelShape(k,i){var s=$('sel'),p=null;
   if(k==='review'){var e2=elRv[i];if(e2&&e2.tagName==='polygon')p=e2.getAttribute('points');else{var rv=REVIEW[i],r2=2.6;p=[[rv.x-r2,rv.y-r2],[rv.x+r2,rv.y-r2],[rv.x+r2,rv.y+r2],[rv.x-r2,rv.y+r2]].join(' ')}}
   if(p){s.setAttribute('points',p);vis(s,true)}else vis(s,false)}
 function boxOf(k,i){if(k==='lot'){var r=LOTS[i];return[r[7],r[8],r[9],r[10]]}
+  if(k==='unplaced'&&UNPL[i].x!=null){var u=UNPL[i];return[u.x-6,u.y-6,u.x+6,u.y+6]}
   if(k==='review'){var v=REVIEW[i];return v.b||[v.x-4,v.y-4,v.x+4,v.y+4]}
   var a=AREAS[UNPL[i].s];return a?a.b:CB}
 function sheetPx(){var p=$('panel');document.documentElement.style.setProperty('--sheet-px',(isMobile()&&!p.hidden?Math.round(p.getBoundingClientRect().height):0)+'px')}
 function applySel(k,i,noMove){if(isMobile()){$('side').hidden=true;$('b-browse').classList.remove('on');$('b-browse').setAttribute('aria-pressed','false')}sel={k:k,i:i};setSelShape(k,i);var hint=$('hint');vis(hint,false);
-  if(k==='unplaced'){var a=AREAS[UNPL[i].s];if(a&&a.hull){hint.setAttribute('points',a.hull.map(function(p){return p.join(',')}).join(' '));vis(hint,true)}vis($('sel'),false)}
+  if(k==='unplaced'){var u0=UNPL[i];if(u0.x!=null){var q=3;$('sel').setAttribute('points',[[u0.x-q,u0.y-q],[u0.x+q,u0.y-q],[u0.x+q,u0.y+q],[u0.x-q,u0.y+q]].join(' '));vis($('sel'),true)}else{var a=AREAS[u0.s];if(a&&a.hull){hint.setAttribute('points',a.hull.map(function(p){return p.join(',')}).join(' '));vis(hint,true)}vis($('sel'),false)}}
   renderPanel();if(!noMove)requestAnimationFrame(function(){requestAnimationFrame(function(){flyToSel()})});markList()}
 function flyToSel(){if(!sel)return;measure();var b=boxOf(sel.k,sel.i);
-  if(sel.k==='unplaced')animateTo(targetFor(b,.9,0,MAXS));else animateTo(targetFor(b,.2,8,22))}
+  if(sel.k==='unplaced'&&UNPL[sel.i].x==null)animateTo(targetFor(b,.9,0,MAXS));else animateTo(targetFor(b,.2,8,22))}
 function selectLot(i){if(sel&&sel.k==='lot'&&sel.i===i&&!$('panel').hidden){return}pushHist();applySel('lot',i)}
 function selectReview(i){pushHist();applySel('review',i)}
 function selectUnplaced(i){pushHist();applySel('unplaced',i)}
@@ -351,17 +368,25 @@ function renderPanel(){var p=$('panel');p.hidden=false;measure();if(isMobile())d
      +'<p class="note" style="margin:0 0 4px">'+evText(r[11])+'</p>'
      +'<div id="rec-box"></div>'
      +'<div class="btns"><button class="btn" id="p-copy" type="button">Copy H-number</button><button class="btn" id="p-list" type="button">Add to list</button><button class="btn" id="p-3d" type="button">View in 3D</button></div></div>'}
-  else if(sel.k==='review'){var v=REVIEW[sel.i];
-    h='<div class="p-head"><div><div class="p-h" style="font-size:22px">Needs review</div><div style="margin-top:8px"><span class="chip rv">Not shown as an H-number</span></div></div><button class="p-x" id="p-x" aria-label="Close details">&#10005;</button></div><div class="p-body">'
+  else if(sel.k==='review'){var v=REVIEW[sel.i],X='<button class="p-x" id="p-x" aria-label="Close details">&#10005;</button>';
+    if(v.p){h='<div class="p-head"><div><div class="p-h">'+esc(v.h)+'</div><div style="margin-top:8px"><span class="chip pv">Inferred from the path &middot; '+esc(v.p[0])+' confidence</span></div></div>'+X+'</div><div class="p-body">'
+      +'<div class="box pvbox"><h3>Please confirm</h3><p class="note" style="margin:0">'+esc(v.p[2])+'</p></div>'
+      +'<dl class="kv"><dt>Proposed</dt><dd>Section '+esc(v.s)+' &middot; Lot '+esc(v.l)+'</dd><dt>Label on drawing</dt><dd class="mono">'+(v.t?esc(v.t):'(none)')+'</dd></dl>'
+      +'<div class="box"><h3>Why we think so</h3><p class="note" style="margin:0">'+esc(v.p[1])+'</p></div>'
+      +'<p class="note">Not counted as verified. The outline is exactly where the drawing puts it; only its number is inferred, from where the lots before and after it on the path stand.</p></div>'}
+    else if(v.o){h='<div class="p-head"><div><div class="p-h" style="font-size:22px">Needs review</div><div style="margin-top:8px"><span class="chip rv">Not shown as an H-number</span></div></div>'+X+'</div><div class="p-body">'
+      +'<div class="box rvbox"><h3>Why</h3><p class="note" style="margin:0">'+esc(v.o[0])+'</p></div>'
+      +'<div class="box"><h3>We need to know</h3><p class="note" style="margin:0">'+esc(v.o[1])+'</p></div>'
+      +'<dl class="kv"><dt>Label on drawing</dt><dd class="mono">'+(v.t?esc(v.t):'(none)')+'</dd></dl>'+(v.o[2]?'<p class="note">'+esc(v.o[2])+'</p>':'')+'</div>'}
+    else{h='<div class="p-head"><div><div class="p-h" style="font-size:22px">Needs review</div><div style="margin-top:8px"><span class="chip rv">Not shown as an H-number</span></div></div>'+X+'</div><div class="p-body">'
      +'<div class="box rvbox"><h3>Why</h3><ul style="margin:0;padding-left:18px">'+v.r.map(function(i){return '<li>'+esc(REASONS[i])+'</li>'}).join('')+'</ul></div>'
      +'<dl class="kv"><dt>Label on drawing</dt><dd class="mono">'+(v.t?esc(v.t):'(none)')+'</dd>'
-     +(v.h?'<dt>Decoder candidate</dt><dd><span class="mono">'+esc(v.h)+'</span> &middot; Section '+esc(v.s)+' &middot; Lot '+esc(v.l)+'<br><span class="note">A candidate only. It is not drawn on the map until the conflict is settled.</span></dd>':'')
-     +(v.c&&v.c.length&&!v.h?'<dt>Exists in sections</dt><dd>'+esc(v.c.slice(0,12).join(', '))+(v.c.length>12?' &hellip;':'')+'</dd>':'')+'</dl>'
-     +'<p class="note">Position on the map is exact: this is the outlined lot (or label) the drawing shows. Its identity is what is unresolved.</p></div>'}
-  else {var u=UNPL[sel.i],a=AREAS[u.s];
-    h='<div class="p-head"><div><div class="p-h">'+esc(u.h)+'</div><div style="margin-top:8px"><span class="chip gen">Map position not resolved</span></div></div><button class="p-x" id="p-x" aria-label="Close details">&#10005;</button></div><div class="p-body">'
-     +'<dl class="kv"><dt>Old reference</dt><dd>Section '+esc(u.s)+' &middot; Lot '+esc(u.l)+'</dd><dt>General area</dt><dd>Section '+esc(u.s)+'</dd></dl>'
-     +'<div class="box rvbox"><h3>Not an exact location</h3><p class="note" style="margin:0">The decoder knows this lot, but no label on the drawing could be tied to it. The dashed outline on the map only shows the general area of section '+esc(u.s)+'.'+(u.n?' '+esc(u.n)+'.':'')+'</p></div>'
+     +(v.h?'<dt>Decoder candidate</dt><dd><span class="mono">'+esc(v.h)+'</span> &middot; Section '+esc(v.s)+' &middot; Lot '+esc(v.l)+'</dd>':'')+'</dl></div>'}}
+  else {var u=UNPL[sel.i],a=AREAS[u.s],X2='<button class="p-x" id="p-x" aria-label="Close details">&#10005;</button>';
+    h='<div class="p-head"><div><div class="p-h">'+esc(u.h)+'</div><div style="margin-top:8px"><span class="chip '+(u.x!=null?'pv':'gen')+'">'+(u.x!=null?'Expected spot &middot; '+esc(u.c)+' confidence':'Map position not resolved')+'</span></div></div>'+X2+'</div><div class="p-body">'
+     +'<dl class="kv"><dt>Old reference</dt><dd>Section '+esc(u.s)+' &middot; Lot '+esc(u.l)+'</dd>'+(u.x==null?'<dt>General area</dt><dd>Section '+esc(u.s)+'</dd>':'')+'</dl>'
+     +(u.x!=null?'<div class="box pvbox"><h3>Where it should be</h3><p class="note" style="margin:0">'+esc(u.w)+' No lot outline is drawn there, so the dashed ring marks where it should stand.</p></div><div class="box"><h3>Please check</h3><p class="note" style="margin:0">'+esc(u.k)+'</p></div>'
+       :'<div class="box rvbox"><h3>Not an exact location</h3><p class="note" style="margin:0">The decoder knows this lot, but no label on the drawing could be tied to it'+(u.w?' ('+esc(u.w)+')':'')+'. The dashed outline on the map only shows the general area of section '+esc(u.s)+'.'+(u.n?' '+esc(u.n)+'.':'')+'</p></div>')
      +'<div id="rec-box"></div><div class="btns"><button class="btn" id="p-copy" type="button">Copy H-number</button></div></div>'}
   p.innerHTML=h;sheetPx();$('p-x').onclick=function(){clearSel()};
   var cp=$('p-copy');if(cp)cp.onclick=function(){copy(sel.k==='lot'?LOTS[sel.i][1]:UNPL[sel.i].h,'H-number copied')};
@@ -451,7 +476,7 @@ function renderResults(list){curRes=list;active=-1;
   resEl.innerHTML=list.map(function(o,n){var h,sub,tag;
     if(o.k==='lot'){var r=LOTS[o.i];h=r[1];sub='Section '+r[2]+' lot '+r[3];tag=o.name?'<span class="tag nm">'+esc(o.name)+'</span>':'<span class="tag ok">On map</span>'}
     else if(o.k==='unplaced'){var u=UNPL[o.i];h=u.h;sub='Section '+u.s+' lot '+u.l;tag='<span class="tag rv">Not placed</span>'}
-    else{var v=REVIEW[o.i];h=v.h||('Label '+(v.t||'?'));sub=v.h?'Section '+v.s+' lot '+v.l:'Unresolved label on drawing';tag='<span class="tag rv">To review</span>'}
+    else{var v=REVIEW[o.i];h=v.h||('Label '+(v.t||'?'));sub=v.h?'Section '+v.s+' lot '+v.l:'Unresolved label on drawing';tag=v.p?'<span class="tag pvt">Inferred</span>':'<span class="tag rv">To review</span>'}
     return '<button type="button" class="res" role="option" data-n="'+n+'"><span><span class="h">'+esc(h)+'</span><br><span class="sub">'+esc(sub)+(o.grave?' &middot; grave position '+esc(o.grave)+' (lot shown)':'')+'</span></span>'+tag+'</button>'}).join('');resEl.hidden=false}
 function pick(n){var o=curRes[n];if(!o)return;resEl.hidden=true;qEl.blur();if(o.k==='lot')selectLot(o.i);else if(o.k==='unplaced')selectUnplaced(o.i);else selectReview(o.i)}
 qEl.addEventListener('input',function(){$('qx').hidden=!qEl.value;renderResults(search(qEl.value))});
@@ -471,7 +496,7 @@ function fmtH(n){return 'H'+('000000'+n).slice(-6)}
 function renderSide(){var b=$('side-body'),h='';
   if(tab==='areas'&&!areaOpen){h='<p class="eyebrow">Browse by area</p><p class="note" style="margin:0 0 12px">The cemetery is split into sections A to M. Pick one to zoom to it, or search above for an H-number.</p>';
     Object.keys(AREAS).sort(function(a,c){return AREAS[a].hmin-AREAS[c].hmin}).forEach(function(s){var a=AREAS[s];
-      h+='<button type="button" class="area" data-area="'+s+'"><span><b>Section '+s+'</b><small>'+a.n+' lots'+(a.nr+a.nu?' &middot; '+(a.nr+a.nu)+' to review':'')+'</small></span><span class="rng">'+fmtH(a.hmin)+'<br>'+fmtH(a.hmax)+'</span></button>'});
+      h+='<button type="button" class="area" data-area="'+s+'"><span><b>Section '+s+'</b><small>'+a.n+' lots'+(a.nr+a.nu?' &middot; '+(a.nr+a.nu)+' to review':'')+(a.np?' &middot; '+a.np+' inferred':'')+'</small></span><span class="rng">'+fmtH(a.hmin)+'<br>'+fmtH(a.hmax)+'</span></button>'});
     b.innerHTML=h;Array.prototype.forEach.call(b.querySelectorAll('[data-area]'),function(x){x.onclick=function(){openArea(x.getAttribute('data-area'))};
       x.onmouseenter=function(){showHint(x.getAttribute('data-area'))};x.onmouseleave=function(){if(!(sel&&sel.k==='unplaced'))vis($('hint'),false)}})}
   else if(tab==='areas'){var s=areaOpen,a=AREAS[s],rows=[];
@@ -480,15 +505,20 @@ function renderSide(){var b=$('side-body'),h='';
      +'<label class="sr" for="a-q">Filter lots</label><input class="field" id="a-q" placeholder="Filter by H-number or lot" value="'+esc(areaFilter)+'"><div class="lotlist" id="a-list"></div>';
     b.innerHTML=h;$('a-back').onclick=function(){areaOpen=null;areaFilter='';vis($('hint'),false);renderSide()};$('a-pdf').onclick=function(){exportPdf('area_'+s)};
     $('a-q').oninput=function(){areaFilter=this.value;fillAreaList()};fillAreaList()}
-  else{h='<p class="eyebrow">Needs review</p><p class="note" style="margin:0 0 6px">Nothing here is drawn as an H-number. Positions are exact where an outline exists; identity is what is unresolved.</p>'
+  else{var inf=[],opn=[];REVIEW.forEach(function(v,i){(v.p?inf:opn).push(i)});
+    h='<p class="eyebrow">To review</p><p class="note" style="margin:0 0 6px"><b>'+inf.length+'</b> lots are inferred from the path and only need a yes or no. <b>'+opn.filter(function(i){return !REVIEW[i].o||!REVIEW[i].o[4]}).length+'</b> single lots and <b>'+BLOCKS.length+'</b> blocks are still open. <b>'+UNPL.length+'</b> H-numbers have no lot yet. Nothing here counts as verified.</p>'
      +'<div class="btns" style="margin:0 0 6px"><button class="btn" id="rv-csv" type="button">Download list (CSV)</button></div>';
-    var groups={};REVIEW.forEach(function(v,i){var k=v.r[0];(groups[k]=groups[k]||[]).push(i)});
+    ['high','medium','low'].forEach(function(c){var ids=inf.filter(function(i){return REVIEW[i].p[0]===c});if(!ids.length)return;
+      h+='<div class="reason-h">Inferred from the path, '+c+' confidence ('+ids.length+')</div><div class="lotlist">'+ids.map(function(i){var v=REVIEW[i];return '<button type="button" class="li" data-rv="'+i+'"><span class="h">'+esc(v.h)+'</span><span class="l">Sec '+esc(v.s)+' lot '+esc(v.l)+'</span></button>'}).join('')+'</div>'});
+    if(BLOCKS.length){h+='<div class="reason-h">Blocks to decide ('+BLOCKS.length+')</div>'+BLOCKS.map(function(b,i){return '<button type="button" class="blk" data-blk="'+i+'"><b>'+b.n+' lots near ('+Math.round(b.x)+', '+Math.round(b.y)+')</b><small>'+esc(b.text)+'</small><small>'+esc(b.question)+'</small></button>'}).join('')}
+    var groups={};opn.forEach(function(i){var v=REVIEW[i];if(v.o&&v.o[4])return;var k=v.r[0];(groups[k]=groups[k]||[]).push(i)});
     Object.keys(groups).sort(function(a,c){return groups[c].length-groups[a].length}).forEach(function(k){h+='<div class="reason-h">'+esc(REASONS[k])+' ('+groups[k].length+')</div><div class="lotlist">'
       +groups[k].slice(0,60).map(function(i){var v=REVIEW[i];return '<button type="button" class="li" data-rv="'+i+'"><span class="h">'+esc(v.h||v.t||'(no label)')+'</span><span class="l">'+(v.s?'Sec '+esc(v.s)+' lot '+esc(v.l):'')+'</span></button>'}).join('')
       +(groups[k].length>60?'<div class="note" style="padding:8px 12px">+ '+(groups[k].length-60)+' more in the CSV</div>':'')+'</div>'});
-    h+='<div class="reason-h">Known H-numbers with no position on the map ('+UNPL.length+')</div><div class="lotlist">'+UNPL.map(function(u,i){return '<button type="button" class="li" data-un="'+i+'"><span class="h">'+esc(u.h)+'</span><span class="l">Sec '+esc(u.s)+' lot '+esc(u.l)+'</span></button>'}).join('')+'</div>';
+    h+='<div class="reason-h">Known H-numbers with no lot yet ('+UNPL.length+')</div><div class="lotlist">'+UNPL.map(function(u,i){return '<button type="button" class="li" data-un="'+i+'"><span class="h">'+esc(u.h)+(u.x!=null?' &middot; expected spot':'')+'</span><span class="l">Sec '+esc(u.s)+' lot '+esc(u.l)+'</span></button>'}).join('')+'</div>';
     b.innerHTML=h;$('rv-csv').onclick=exportReviewCsv;
     Array.prototype.forEach.call(b.querySelectorAll('[data-rv]'),function(x){x.onclick=function(){selectReview(+x.getAttribute('data-rv'))}});
+    Array.prototype.forEach.call(b.querySelectorAll('[data-blk]'),function(x){x.onclick=function(){var bl=BLOCKS[+x.getAttribute('data-blk')],xs=[],ys=[];REVIEW.forEach(function(v){if(v.o&&v.o[4]===bl.id){xs.push(v.x);ys.push(v.y)}});measure();animateTo(targetFor([Math.min.apply(null,xs)-8,Math.min.apply(null,ys)-8,Math.max.apply(null,xs)+8,Math.max.apply(null,ys)+8],.8,1,MAXS))}});
     Array.prototype.forEach.call(b.querySelectorAll('[data-un]'),function(x){x.onclick=function(){selectUnplaced(+x.getAttribute('data-un'))}})}
   markList()}
 function fillAreaList(){var s=areaOpen,q=areaFilter.trim().toUpperCase().replace(/^H0*/,''),rows=[];
@@ -538,6 +568,7 @@ function go3(on){$('ly-3d').checked=on;$('ly-2d').checked=!on;$('b-3d').classLis
 $('b-3d').onclick=function(){go3(!in3d)};
 $('ly-2d').onchange=function(){if(this.checked)go3(false)};$('ly-3d').onchange=function(){if(this.checked)go3(true)};
 window.addEventListener('message',function(e){var d=e.data||{};if(d.cg==='lot'){for(var i=0;i<LOTS.length;i++)if((parseInt(String(LOTS[i][1]).replace(/\D/g,''),10)||0)===d.h){if(!(sel&&sel.k==='lot'&&sel.i===i)){pushHist();applySel('lot',i,true)}break}}});
+$('ly-prov').onchange=function(){wrap.classList.toggle('no-prov',!this.checked)};
 $('ly-review').onchange=function(){wrap.classList.toggle('no-review',!this.checked)};
 function buildAnn(){var g=$('ann');g.innerHTML=ANN.map(function(a){return '<text transform="translate('+a[1]+' '+a[2]+') rotate('+a[4]+')" font-size="'+Math.max(2.4,a[3]*.9)+'">'+esc(a[0])+'</text>'}).join('')}
 buildAnn();$('ly-ann').onchange=function(){vis($('ann'),this.checked)};
@@ -552,9 +583,9 @@ function saveFile(name,data,type){return Promise.resolve(window.claude&&window.c
 function exportPdf(key){var p=PDFS[key];if(!p){toast('That PDF is not available');return}toast('Preparing '+p.name+'…');
   fetch(p.file).then(function(r){if(!r.ok)throw 0;return r.blob()}).then(function(b){return saveFile(p.name,b)}).catch(function(){toast('The PDF could not be loaded in this view')})}
 function csv(rows){return rows.map(function(r){return r.map(function(c){c=String(c==null?'':c);return /[",\n]/.test(c)?'"'+c.replace(/"/g,'""')+'"':c}).join(',')}).join('\r\n')}
-function exportReviewCsv(){var rows=[['status','reason','h_number_candidate','section','lot','label_on_drawing','map_x','map_y']];
-  REVIEW.forEach(function(v){rows.push(['needs_review',v.r.map(function(i){return REASONS[i]}).join(' | '),v.h||'',v.s||'',v.l||'',v.t||'',v.x,v.y])});
-  UNPL.forEach(function(u){rows.push(['known_h_no_map_position',u.n||'Decoder lot with no matching label on the drawing',u.h,u.s,u.l,'','',''])});
+function exportReviewCsv(){var rows=[['status','confidence','reason','what_to_check','h_number','section','lot','label_on_drawing','map_x','map_y']];
+  REVIEW.forEach(function(v){rows.push([v.p?'inferred_please_confirm':'needs_review',v.p?v.p[0]:'',v.p?v.p[1]:(v.o?v.o[0]:v.r.map(function(i){return REASONS[i]}).join(' | ')),v.p?v.p[2]:(v.o?v.o[1]:''),v.h||'',v.s||'',v.l||'',v.t||'',v.x,v.y])});
+  UNPL.forEach(function(u){rows.push([u.x!=null?'expected_spot':'known_h_no_map_position',u.c||'',u.w||u.n||'Decoder lot with no matching label on the drawing',u.k||'',u.h,u.s,u.l,'',u.x==null?'':u.x,u.y==null?'':u.y])});
   saveFile('Cedar_Grove_unresolved_locations.csv',new Blob([csv(rows)],{type:'text/csv'}))}
 function exportLotsCsv(){var rows=[['h_number','section','lot','section_evidence']];LOTS.forEach(function(r){rows.push([r[1],r[2],r[3],r[11]===0?'two independent readings':'inferred from surrounding lots'])});
   saveFile('Cedar_Grove_lots_with_H-numbers.csv',new Blob([csv(rows)],{type:'text/csv'}))}
@@ -563,8 +594,8 @@ function exportXlsx(){toast('Preparing the workbook\u2026');loadScript(XLSX_URL)
   function sh(name,rows,w){var ws=XLSX.utils.aoa_to_sheet(rows);ws['!cols']=w.map(function(x){return{wch:x}});XLSX.utils.book_append_sheet(wb,ws,name)}
   sh('Read me',[['Cedar Grove Cemetery - H-map lot lists'],[],['Lots with H-numbers',LOTS.length,'Outline (or label position) and a decoded H-number. Section corroborated by two independent readings ('+ok+') or inferred from surrounding lots ('+(LOTS.length-ok)+').'],['Lots to review',REVIEW.length,'Visible on the drawing; identity could not be tied to one H-number. Not drawn as H-numbers.'],['No map position',UNPL.length,'Known to the decoder; no label on the drawing resolves to them. Some match a drawn lot in the review list.'],[],['Section and lot are cross-reference only. Burial records are not part of this workbook.']],[22,10,110]);
   sh('Lots with H-numbers',[['H-number','Section','Lot','Section evidence','Outline']].concat(LOTS.slice().sort(function(a,b){return a[4]-b[4]||(a[1]<b[1]?-1:1)}).map(function(r){return[r[1],r[2],r[3],r[11]===0?'two independent readings':'inferred from surrounding lots',r[12]?'label only':'drawn']})),[12,14,11,32,12]);
-  sh('Lots to review',[['Reason','H-number candidate','Section','Lot','Label on drawing','Map x','Map y']].concat(REVIEW.map(function(v){return[v.r.map(function(i){return REASONS[i]}).join(' | '),v.h||'',v.s||'',v.l||'',v.t||'',v.x,v.y]})),[70,16,14,11,16,9,9]);
-  sh('No map position',[['H-number','Section','Lot','Note']].concat(UNPL.map(function(u){return[u.h,u.s,u.l,u.n||'No label on the drawing resolves to this decoder lot']})),[12,14,11,80]);
+  sh('Lots to review',[['Status','Confidence','Reason','What to check','H-number','Section','Lot','Label on drawing','Map x','Map y']].concat(REVIEW.map(function(v){return[v.p?'Inferred, please confirm':'Needs review',v.p?v.p[0]:'',v.p?v.p[1]:(v.o?v.o[0]:v.r.map(function(i){return REASONS[i]}).join(' | ')),v.p?v.p[2]:(v.o?v.o[1]:''),v.h||'',v.s||'',v.l||'',v.t||'',v.x,v.y]})),[22,12,70,50,12,10,8,14,9,9]);
+  sh('No map position',[['H-number','Section','Lot','Expected x','Expected y','Confidence','Note']].concat(UNPL.map(function(u){return[u.h,u.s,u.l,u.x==null?'':u.x,u.y==null?'':u.y,u.c||'',u.w||u.n||'No label on the drawing resolves to this decoder lot']})),[12,10,8,10,10,11,80]);
   var buf=XLSX.write(wb,{type:'array',bookType:'xlsx'});
   return saveFile('Cedar_Grove_H-Map_lots.xlsx',new Blob([buf],{type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'}))},function(){toast('The Excel writer could not be loaded in this view')})}
 function exportListCsv(){if(!LIST.length){toast('Your list is empty. Open a lot and choose Add to list.');return}

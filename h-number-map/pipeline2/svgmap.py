@@ -7,8 +7,11 @@ from fit import ADV, CAPH, INK_MID
 def pts(poly): return ' '.join('%.2f,%.2f' % (x, y) for x, y in poly)
 
 def load():
+    import os
+    pv = json.load(open(f'{DATA}/provisional.json')) if os.path.exists(f'{DATA}/provisional.json') else dict(items=[], expected=[], blocks=[])
     return dict(base=json.load(open(f'{DATA}/base.json')), lots=json.load(open(f'{DATA}/lots_fit.json')),
-                reg=json.load(open(f'{DATA}/registry.json')), cells=json.load(open(f'{DATA}/cells.json')))
+                reg=json.load(open(f'{DATA}/registry.json')), cells=json.load(open(f'{DATA}/cells.json')), pv=pv,
+                pvmap={i['ri']: i for i in pv['items']})
 
 def base_svg(base):
     out = []
@@ -18,13 +21,15 @@ def base_svg(base):
         out.append('<path class="b-%s"%s vector-effect="non-scaling-stroke" d="%s"/>' % (l['role'], a, l['d']))
     return ''.join(out)
 
+def is_pv(D, i): return D['pvmap'].get(i, {}).get('status') == 'provisional'
+
 def review_svg(D):
     cells = {c['id']: c for c in D['cells']}; out = []
     for i, r in enumerate(D['reg']['review']):
         if r['geom'] == 'outlined' and r['cell'] is not None:
-            out.append('<polygon class="rv" data-r="%d" points="%s"/>' % (i, pts(cells[r['cell']]['poly'])))
+            out.append('<polygon class="rv%s" data-r="%d" points="%s"/>' % (' pv' if is_pv(D, i) else '', i, pts(cells[r['cell']]['poly'])))
         else:
-            out.append('<circle class="rv-dot" data-r="%d" cx="%.2f" cy="%.2f" r="1.5"/>' % (i, r['pt'][0], r['pt'][1]))
+            out.append('<circle class="rv-dot%s" data-r="%d" cx="%.2f" cy="%.2f" r="1.5"/>' % (' pv' if is_pv(D, i) else '', i, r['pt'][0], r['pt'][1]))
     return ''.join(out)
 
 def lots_svg(lots):
@@ -65,3 +70,21 @@ def static_svg(D, view=None, labels=True):
     return ('<svg xmlns="http://www.w3.org/2000/svg" viewBox="%.2f %.2f %.2f %.2f" width="%d" height="%d"><style>%s</style>'
             '<rect x="%.2f" y="%.2f" width="%.2f" height="%.2f" fill="#fbfaf6"/><g id="base">%s</g><g id="review">%s</g><g id="labels">%s</g></svg>'
             % (bb[0], bb[1], w, h, int(w * 6), int(h * 6), STYLE, bb[0], bb[1], w, h, base_svg(D['base']), review_svg(D), ''.join(L.values()) if labels else ''))
+
+
+def prov_labels_svg(D):
+    """text for the provisional lots: their proposed H-number, in the same face as the verified numbers but slanted and teal"""
+    from shapely.geometry import Polygon
+    cells = {c['id']: c for c in D['cells']}; out = []
+    for i, r in enumerate(D['reg']['review']):
+        it = D['pvmap'].get(i)
+        if not it or it['status'] != 'provisional' or r['cell'] is None: continue
+        poly = Polygon(cells[r['cell']]['poly']).buffer(0); x0, y0, x1, y1 = poly.bounds; d = it['prop']['htext'][1:].lstrip('0') or '0'
+        c = poly.representative_point(); fs = min(4.0, 0.8 * (x1 - x0) / (ADV * len(d)), 0.7 * (y1 - y0))
+        if fs < 1.6: continue
+        out.append('<text data-r="%d" x="%.2f" y="%.2f" font-size="%.2f" textLength="%.2f" dy="%.3fem">%s</text>' % (i, c.x, c.y, fs, ADV * len(d) * fs, INK_MID, d))
+    return ''.join(out)
+
+def expected_svg(unpl):
+    """dashed ring where a numbered lot should stand but no outline is drawn"""
+    return ''.join('<circle class="ex" data-u="%d" cx="%.2f" cy="%.2f" r="2.4"/>' % (i, u['x'], u['y']) for i, u in enumerate(unpl) if u.get('x') is not None)

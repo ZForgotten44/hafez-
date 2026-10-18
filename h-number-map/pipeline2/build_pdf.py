@@ -58,23 +58,37 @@ def put_label(sh, o):
     # fitz.Matrix(a) turns clockwise by a degrees on the (y-down) page; the SVG's rotate(ang) is clockwise too
     pg.insert_text(p0, o['d'], fontsize=fs, fontname='dvsmb', fontfile=FONT, color=NAVY, morph=(c, fitz.Matrix(o['ang'])) if abs(o['ang']) > .05 else None)
 
+TEAL = (44 / 255, 125 / 255, 160 / 255); TEAL_FILL = (207 / 255, 228 / 255, 238 / 255); TEAL_INK = (29 / 255, 95 / 255, 125 / 255)
+
 def draw_review(sh, D, cells, only=None):
-    pg = sh.page; shp = pg.new_shape(); v = sh.view
-    for r in D['reg']['review']:
-        if only and (r.get('section') or r.get('region')) != only: continue
+    """open lots in amber dashes; lots whose number is inferred from the path in teal, with their proposed number written inside"""
+    pg = sh.page; v = sh.view; amber = pg.new_shape(); teal = pg.new_shape(); texts = []
+    for i, r in enumerate(D['reg']['review']):
+        pv = D['pvmap'].get(i); prov = bool(pv and pv['status'] == 'provisional')
+        sec = pv['prop']['section'] if prov else (r.get('section') or r.get('region'))
+        if only and sec != only: continue
+        shp = teal if prov else amber
         if r['geom'] == 'outlined' and r['cell'] is not None:
             poly = cells[r['cell']]['poly']
             if max(p[0] for p in poly) < v[0] or min(p[0] for p in poly) > v[2] or max(p[1] for p in poly) < v[1] or min(p[1] for p in poly) > v[3]: continue
             shp.draw_polyline([sh.P(x, y) for x, y in poly] + [sh.P(*poly[0])])
+            if prov:
+                xs = [p[0] for p in poly]; ys = [p[1] for p in poly]; d = pv['prop']['htext'][1:].lstrip('0') or '0'
+                fs = min(4.0, 0.8 * (max(xs) - min(xs)) / (ADV * len(d)), 0.7 * (max(ys) - min(ys)))
+                if fs >= 1.6: texts.append((d, (sum(xs) / len(xs), sum(ys) / len(ys)), fs))
         else:
             if v[0] <= r['pt'][0] <= v[2] and v[1] <= r['pt'][1] <= v[3]: shp.draw_circle(sh.P(*r['pt']), 1.5 * sh.s)
-    shp.finish(color=(201 / 255, 137 / 255, 47 / 255), fill=(244 / 255, 231 / 255, 208 / 255), width=0.5, dashes='[2 1.5] 0', closePath=True); shp.commit()
+    amber.finish(color=(201 / 255, 137 / 255, 47 / 255), fill=(244 / 255, 231 / 255, 208 / 255), width=0.5, dashes='[2 1.5] 0', closePath=True); amber.commit()
+    teal.finish(color=TEAL, fill=TEAL_FILL, width=0.6, closePath=True); teal.commit()
+    for d, (cx, cy), fs in texts:
+        f = fs * sh.s; c = sh.P(cx, cy); w = ADV * len(d) * f
+        pg.insert_text(fitz.Point(c.x - w / 2, c.y + INK_MID * f), d, fontsize=f, fontname='dvsmb', fontfile=FONT, color=TEAL_INK)
 
 def frame(sh, title, sub, pageno, total, D, win=None):
     pg = sh.page; W, H = pg.rect.width, pg.rect.height; u = min(W, 1224) / 1224.0
     pg.insert_text((sh.mx, sh.top - 18 * u), title, fontsize=15 * u, fontname='uib', fontfile=UIB, color=NAVY)
     pg.insert_text((sh.mx, sh.top - 5 * u), sub, fontsize=8 * u, fontname='ui', fontfile=UI, color=(.34, .38, .45))
-    foot = 'Numbers are H-numbers (H and leading zeros left off; A / B = the two rows of a double-row lot). Amber dashed lots could not be tied to one H-number. Amber dashed outline / dot = to review.'
+    foot = 'Numbers are H-numbers (H and leading zeros left off; A / B = the two rows of a double-row lot). Amber dashed = could not be tied to one H-number. Blue = number inferred from the path, please confirm.'
     pg.insert_text((sh.mx, H - 14 * u), foot, fontsize=7 * u, fontname='ui', fontfile=UI, color=(.34, .38, .45))
     pg.insert_text((W - sh.mx - 70 * u, H - 14 * u), 'Page %d of %d' % (pageno, total), fontsize=7.5 * u, fontname='ui', fontfile=UI, color=(.34, .38, .45))
     if win:     # index map
@@ -168,15 +182,21 @@ def build_doc(D, raw, cells, area=None, parts=('base', 'review', 'labels'), with
 
 def appendix_pages(doc, D, page_of):
     reg = D['reg']; W, H = 792, 612; rows = []
-    for r in reg['review']:
-        rows.append(('To review', ''.join(r['tokens']) or '(no label)', r.get('htext', ''), (r.get('section', '') + ' ' + r.get('legacy', '')).strip(), '; '.join(r.get('reasons', [])[:1]), '(%d, %d)' % tuple(r['pt'])))
+    taken = {i['prop']['hnum'] for i in D['pv']['items'] if i['status'] == 'provisional'}
+    for ri, r in enumerate(reg['review']):
+        pv = D['pvmap'].get(ri)
+        if pv and pv['status'] == 'provisional':
+            rows.append(('Inferred (confirm)', ''.join(r['tokens']) or '(no label)', pv['prop']['htext'], '%s %s' % (pv['prop']['section'], pv['prop']['label']), '%s confidence. %s' % (pv['conf'], pv['reason']), '(%d, %d)' % tuple(r['pt'])))
+        else:
+            rows.append(('To review', ''.join(r['tokens']) or '(no label)', r.get('htext', ''), (r.get('section', '') + ' ' + r.get('legacy', '')).strip(), (pv['reason'] if pv else '; '.join(r.get('reasons', [])[:1])), '(%d, %d)' % tuple(r['pt'])))
     for u in reg['known_unplaced']:
+        if u['hnum'] in taken: continue
         rows.append(('No map position', '', u['htext'], '%s %s' % (u['section'], u['legacy']), u['note'] or 'No label on the drawing resolves to this decoder lot', ''))
     per = 38; n = 0
     for st in range(0, len(rows), per):
         pg = doc.new_page(width=W, height=H); n += 1
         pg.insert_text((36, 40), 'Unresolved locations (%d to %d of %d)' % (st + 1, min(len(rows), st + per), len(rows)), fontsize=14, fontname='uib', fontfile=UIB, color=NAVY)
-        pg.insert_text((36, 54), 'Nothing here is drawn as an H-number. Candidates are decoder results only. Map position (x, y) is in drawing units.', fontsize=7.5, fontname='ui', fontfile=UI, color=(.34, .38, .45))
+        pg.insert_text((36, 54), 'Nothing here is verified. Inferred rows come from the path and need a yes or no. Map position (x, y) is in drawing units.', fontsize=7.5, fontname='ui', fontfile=UI, color=(.34, .38, .45))
         y = 76; cols = [36, 120, 220, 300, 380, 700]
         for c, t in zip(cols, ['Kind', 'Label on drawing', 'H-number candidate', 'Section / lot', 'Reason', 'Position']): pg.insert_text((c, y), t, fontsize=7.5, fontname='uib', fontfile=UIB, color=NAVY)
         y += 8
@@ -241,7 +261,9 @@ def build_area_pdf(D, raw, cells, area, st):
     page.insert_text((x, ky + 3.5), '12', fontsize=9, fontname='dvsmb', fontfile=FONT, color=NAVY); x += 18
     page.insert_text((x, ky + 3.5), '= H-number, H and leading zeros left off (A / B = the two rows of a double-row lot)', fontsize=7.5, fontname='ui', fontfile=UI, color=(.34, .38, .45)); x += 330
     shp = page.new_shape(); shp.draw_rect(fitz.Rect(x, ky - 3, x + 13, ky + 6)); shp.finish(color=(201 / 255, 137 / 255, 47 / 255), fill=(244 / 255, 231 / 255, 208 / 255), width=.6, dashes='[2 1.5] 0'); shp.commit()
-    page.insert_text((x + 18, ky + 3.5), '= to review: could not be tied to one H-number', fontsize=7.5, fontname='ui', fontfile=UI, color=(.34, .38, .45))
+    page.insert_text((x + 18, ky + 3.5), '= to review: could not be tied to one H-number', fontsize=7.5, fontname='ui', fontfile=UI, color=(.34, .38, .45)); x += 250
+    shp = page.new_shape(); shp.draw_rect(fitz.Rect(x, ky - 3, x + 13, ky + 6)); shp.finish(color=TEAL, fill=TEAL_FILL, width=.6); shp.commit()
+    page.insert_text((x + 18, ky + 3.5), '= number inferred from the path, please confirm', fontsize=7.5, fontname='ui', fontfile=UI, color=(.34, .38, .45))
     page.insert_text((M, H - 8), 'Source: Cedar Grove Ground Maps drawing. Positions follow the drawing, which is marked "not to scale".', fontsize=6.5, fontname='ui', fontfile=UI, color=(.5, .52, .56))
     bb = svgmap.content_bbox(D); iw = 110; ih = iw * (bb[3] - bb[1]) / (bb[2] - bb[0]); ix, iy = W - M - iw, 14
     k = iw / (bb[2] - bb[0]); shp = page.new_shape(); shp.draw_rect(fitz.Rect(ix, iy, ix + iw, iy + ih)); shp.finish(color=(.8, .8, .8), fill=(.97, .97, .95), width=.4); shp.commit()

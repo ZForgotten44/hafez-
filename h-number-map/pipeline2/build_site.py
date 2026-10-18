@@ -32,7 +32,13 @@ def run(pdfs=None):
         b = None
         if r['geom'] == 'outlined' and r['cell'] is not None:
             xs = [p[0] for p in cells[r['cell']]['poly']]; ys = [p[1] for p in cells[r['cell']]['poly']]; b = [round(min(xs), 2), round(min(ys), 2), round(max(xs), 2), round(max(ys), 2)]
-        rv.append(dict(x=r['pt'][0], y=r['pt'][1], b=b, t=''.join(r['tokens']), r=idx, s=r.get('section', ''), l=r.get('legacy', ''), h=r.get('htext', ''), c=r.get('cands', [])))
+        e = dict(x=r['pt'][0], y=r['pt'][1], b=b, t=''.join(r['tokens']), r=idx, s=r.get('section', ''), l=r.get('legacy', ''), h=r.get('htext', ''), c=r.get('cands', []))
+        pv = D['pvmap'].get(len(rv))
+        if pv and pv['status'] == 'provisional':
+            q = pv['prop']; e.update(s=q['section'], l=q['label'], h=q['htext'], p=[pv['conf'], pv['reason'], pv['check'], pv['group']])
+        elif pv:
+            e.update(s='', l='', h='', o=[pv['reason'], pv['check'], pv.get('block_text', ''), pv['group'], pv.get('block')])
+        rv.append(e)
     # --- areas (legacy sections): bbox + hull of verified lots
     areas = {}
     by = collections.defaultdict(list)
@@ -44,22 +50,35 @@ def run(pdfs=None):
         hn = [o['hn'] for o in os_]
         areas[s] = dict(b=[round(min(xs) - 4, 1), round(min(ys) - 4, 1), round(max(xs) + 4, 1), round(max(ys) + 4, 1)], hull=[[round(x, 1), round(y, 1)] for x, y in hull.exterior.coords][:-1],
                         n=len(os_), hmin=min(hn), hmax=max(hn), nr=0, nu=0, c=[round(sum(o['cx'] for o in os_) / len(os_), 1), round(sum(o['cy'] for o in os_) / len(os_), 1)])
-    for r in reg['review']:
+    for i, r in enumerate(reg['review']):
+        pv = D['pvmap'].get(i)
+        if pv and pv['status'] == 'provisional':
+            s = pv['prop']['section']
+            if s in areas: areas[s]['np'] = areas[s].get('np', 0) + 1
+            continue
         s = r.get('section') or r.get('region')
         if s in areas: areas[s]['nr'] += 1
-    unpl = [dict(h=u['htext'], s=u['section'], l=u['legacy'], n=u['note']) for u in reg['known_unplaced']]
+    taken = {pv['prop']['hnum'] for pv in D['pv']['items'] if pv['status'] == 'provisional'}
+    expd = {(e['section'], e['label']): e for e in D['pv']['expected']}
+    unpl = []
+    for u in reg['known_unplaced']:
+        if u['hnum'] in taken: continue
+        e = expd.get((u['section'], u['legacy'])); d = dict(h=u['htext'], s=u['section'], l=u['legacy'], n=u['note'])
+        if e and e['x'] is not None and e['conf']: d.update(x=e['x'], y=e['y'], c=e['conf'], w=e['reason'], k=e['check'])
+        elif e: d.update(w=e['reason'])
+        unpl.append(d)
     for u in unpl:
         if u['s'] in areas: areas[u['s']]['nu'] += 1
     ann = [[a['t'], a['x'], a['y'], a['fs'], a['a']] for a in D['base']['annotations']]
     bbox = svgmap.content_bbox(D)
-    data = dict(lots=rows, review=rv, unplaced=unpl, areas=areas, reasons=reasons, ann=ann, bbox=bbox, pdfs=pdfs or {})
+    data = dict(lots=rows, review=rv, unplaced=unpl, areas=areas, reasons=reasons, ann=ann, bbox=bbox, pdfs=pdfs or {}, blocks=D['pv'].get('blocks', []))
     # --- svg fragments
     lab = svgmap.label_svg(lots)
     labels = ''.join('<g data-bin="%s">%s</g>' % (b, v) for b, v in lab.items())
     tpl = open(os.path.join(HERE, 'site', 'template.html')).read()
     html = (tpl.replace('__BASE__', svgmap.base_svg(D['base'])).replace('__REVIEW__', svgmap.review_svg(D)).replace('__LOTS__', svgmap.lots_svg(lots))
-               .replace('__LABELS__', labels).replace('/*__DATA__*/null', json.dumps(data, separators=(',', ':'))))
+               .replace('__LABELS__', labels).replace('__PROVL__', svgmap.prov_labels_svg(D)).replace('__EXP__', svgmap.expected_svg(unpl)).replace('/*__DATA__*/null', json.dumps(data, separators=(',', ':'))))
     dest = os.path.join(REPO, 'h-number-map', 'site', 'index.html')
     open(dest, 'w').write(html)
-    print('site', dest, '%.2f MB' % (len(html) / 1e6), 'areas', len(areas), 'review', len(rv), 'unplaced', len(unpl))
+    print('site', dest, '%.2f MB' % (len(html) / 1e6), 'areas', len(areas), 'review', len(rv), 'unplaced', len(unpl), 'inferred', sum(1 for e in rv if 'p' in e))
 if __name__ == '__main__': run()

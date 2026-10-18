@@ -10,6 +10,7 @@
 | 3 | `identify.py` | groups text pieces per cell (`335` + `H`), finds the legacy section (region from an independent earlier reading), decodes with `s4decoder1.h_lot` |
 | 4 | `classify.py` | verified / review / known-but-unplaced; flags duplicates and numbers far from their neighbours |
 | 5 | `fit.py` | places each number: centre, orientation (horizontal preferred), largest font whose measured box fits inside the inset outline |
+| 5b | `resolve.py` | proposes (never verifies) a number for held-back lots and an expected spot for missing H-numbers, from path continuity: lot h must stand next to the lots with h-1 and h+1. Writes `data/provisional.json`, `out/proposed_fixes.csv`, `out/decisions_needed.md`. Proposals are drawn in blue and marked PROVISIONAL everywhere |
 | 6 | `basemap.py` | clean base: every drawing except text and the legend frame; text goes to the optional annotations layer |
 | 7 | `svgmap.py` | SVG fragments shared by the site and the QA renders |
 | 8 | `qa.py` | model, outline, browser-pixel and PDF-pixel checks (`out/qa_report.json`) |
