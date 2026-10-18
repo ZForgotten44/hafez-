@@ -44,7 +44,7 @@ bld = [b for b in bld if not near(b, 1328.2, 387.0)]
 for b in bld:
     if near(b, 1287.3, 384.6): b['t'] = 'garage'; b['h'] = 9; b['o'] = [1262.0, 370.0, 25.0, 24.0, 0.0]; b['p'] = rect(1262, 370, 25, 24, 0)
     if near(b, 1408.8, 536.3): b['t'] = 'chapel'; b['h'] = 14; b['o'] = [1392.0, 522.0, 44.0, 24.0, 0.0]; b['p'] = rect(1392, 522, 44, 24, 0)
-    if b['t'] == 'office': b['o'][0], b['o'][1] = 1341.0, 345.5
+    if b['t'] == 'office': b['o'][0], b['o'][1], b['o'][2], b['o'][3] = 1341.0, 346.0, 34.0, 22.0   # roof as seen in the photo, a little inside it so the walk beside the wall stays clear
 bm = np.zeros((Hh, W), np.uint8)
 for b in bld: cv2.fillPoly(bm, [np.int32([P(x / 10, y / 10) for x, y in np.array(b['p']).reshape(-1, 2)])], 255)
 bm = cv2.dilate(bm, np.ones((9, 9), np.uint8))
@@ -88,6 +88,12 @@ lots = []
 for o in L:
     if o.get('poly'):
         lots.append([o['s'], o['l'], o['hn'], [int(round(v * 10)) for p in o['poly'] for v in p]])
+import place_stones as PS
+R = PS.Road(PS.road_mask(raw))
+n0 = len(trees); trees = [t for t in trees if not R.at(t[0], t[1])]       # no trunk on a road or path
+pl, pst = PS.place(lots, R)
+for row, q in zip(lots, pl): row.append(q)
+print('stones placed', pst, '; trees dropped from paths', n0 - len(trees))
 json.dump(dict(tex=tex, ext=[x0, y0, x1, y1], lots=lots, bld=bld, trees=trees), open('three/data3d.json', 'w'), separators=(',', ':'))
 print(len(lots), 'lots;', len(trees), 'trees; texture', len(buf) // 1024, 'KB')
 vis = clean.copy()

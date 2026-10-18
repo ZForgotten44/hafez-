@@ -14,7 +14,9 @@ function on(el,ev,fn){if(el)el.addEventListener(ev,fn)}
 var css=function(v){return getComputedStyle(document.documentElement).getPropertyValue(v).trim()||'#888'};
 var isDark=function(){return getComputedStyle(document.documentElement).colorScheme.indexOf('dark')===0};
 var ramp=function(t){t=Math.max(0,Math.min(1,t));var l=isDark()?(16+t*70):(90-t*62);return 'hsl(40,'+(isDark()?'6%':'7%')+','+l.toFixed(1)+'%)'};
-var redraws=[];function redrawAll(){redraws.forEach(function(f){try{f()}catch(e){}})}
+var redraws=[],rdT=0;function redrawAll(){redraws.forEach(function(f){try{f()}catch(e){}})}
+/* a theme change repaints the pictures one after another, after the new colours are on screen, so the switch itself never stalls */
+function scheduleRedraw(){clearTimeout(rdT);rdT=setTimeout(function(){var q=redraws.slice();(function next(){var f=q.shift();if(!f)return;try{f()}catch(e){}setTimeout(next,0)})()},60)}
 function compile(decl){return new Function('S','L','var m,p,n,f,r,q,c,k,i,j,g,b,'+decl.replace(/;/g,',')+';return '+X.giant.expr+';')}
 var GH=compile(X.giant.decl);
 var RV=(function(){var m={};FWD.forEach(function(r){(m[r[2]]=m[r[2]]||[]).push(r[0]+'-'+r[1])});return m})();
@@ -30,11 +32,11 @@ var LOTS=X.maplots.filter(function(l){return l[4]}).map(function(l){return {s:l[
 
 /* ---------------- presentation controls ---------------- */
 (function(){
-  var root=document.documentElement,TH=['auto','light','dark'],ti=0;
-  try{var s=localStorage.getItem('cg-theme');if(s&&TH.indexOf(s)>=0)ti=TH.indexOf(s)}catch(e){}
-  function applyTheme(){var v=TH[ti];if(v==='auto')root.removeAttribute('data-theme');else root.setAttribute('data-theme',v);$('btheme').textContent='Theme: '+v;try{localStorage.setItem('cg-theme',v)}catch(e){}setTimeout(redrawAll,30)}
-  on($('btheme'),'click',function(){ti=(ti+1)%3;applyTheme()});applyTheme();
-  if(window.matchMedia)window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change',function(){setTimeout(redrawAll,30)});
+  var root=document.documentElement,mq=window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)'),curT=null;
+  try{var s=localStorage.getItem('cg-theme');if(s==='light'||s==='dark')curT=s}catch(e){}
+  if(!curT)curT=mq&&mq.matches?'dark':'light';
+  function applyTheme(skip){root.setAttribute('data-theme',curT);var b=$('btheme');b.setAttribute('aria-pressed',curT==='dark');b.setAttribute('aria-label',curT==='dark'?'Switch to light theme':'Switch to dark theme');if(skip!==true)scheduleRedraw()}
+  on($('btheme'),'click',function(){curT=curT==='dark'?'light':'dark';try{localStorage.setItem('cg-theme',curT)}catch(e){}applyTheme()});applyTheme(true);
   window.addEventListener('beforeprint',function(){root.setAttribute('data-theme','light');redrawAll()});
   window.addEventListener('afterprint',function(){applyTheme()});
   var lg=false;try{lg=localStorage.getItem('cg-size')==='lg'}catch(e){}
@@ -160,91 +162,136 @@ var emphStats;
   on(svg,'mouseleave',function(){tip.style.display='none'});paint();
 })();
 
-/* ---------------- walk the path, on the map from above ---------------- */
+/* ---------------- walk both numbering systems on the map ---------------- */
 (function(){
-  var NS='http://www.w3.org/2000/svg',cmode='n',playing=false,posF=0,seq=[],raf=0,lastT=0,speed=6;
-  var ctl=$('walkctl');
-  ctl.innerHTML='<div><label class="f">Color lots by</label><button class="btn seg on" data-c="n" type="button">Old label number</button><button class="btn seg" data-c="h" type="button">H-number</button></div>'
-   +'<div><label class="f" for="wspeed">Walking speed</label><select id="wspeed" style="width:auto"><option value="3">Slow (3 lots/s)</option><option value="6" selected>Normal (6 lots/s)</option><option value="14">Fast (14 lots/s)</option></select></div>'
-   +'<div><button class="btn fill" id="wplay" type="button">Walk the path</button> <button class="btn" id="wreset" type="button">Reset</button></div>';
-  var svg=$('wmap'),polys=[],gW=document.createElementNS(NS,'g'),gT=document.createElementNS(NS,'g');
-  var base=document.createElementNS(NS,'g');svg.appendChild(base);svg.appendChild(gW);svg.appendChild(gT);
-  LOTS.forEach(function(l){var p=document.createElementNS(NS,'polygon');p.setAttribute('points',l.poly.map(function(q){return q.join(',')}).join(' '));p._l=l;base.appendChild(p);polys.push(p)});
-  function num(l){return parseInt(l.replace(/[^0-9]/g,''),10)||0}
-  function lotColor(l,st,wd,visited){if(cmode==='h')return 'hsl('+Math.round(240-240*(l.h-st)/Math.max(1,wd-1))+',68%,'+(visited?62:50)+'%)';var n=num(l.l);return 'hsl('+((n*47)%360)+',62%,'+(visited?(isDark()?42:66):(40+(n*13)%25))+'%)'}
+  var cv=$('wcv');if(!cv)return;var cx=cv.getContext('2d');
+  var bb=X.bbox,bw=bb[2]-bb[0]+14,bh=bb[3]-bb[1]+14,W0=1100,H0=Math.round(W0*bh/bw),ox=bb[0]-7,oy=bb[1]-7,sc=W0/bw;cv.width=W0;cv.height=H0;
+  var mode='old',focus='',f=0,playing=false,raf=0,t0=0,f0=0,dur=15000;
+  function trace(c,l){c.beginPath();l.poly.forEach(function(q,i){var x=(q[0]-ox)*sc,y=(q[1]-oy)*sc;if(i)c.lineTo(x,y);else c.moveTo(x,y)});c.closePath()}
+  function numOf(l){var m=/\d+/.exec(l);return m?+m[0]:0}
+  function sufOf(l){return l.replace(/^[A-Z]?\d+/,'')}
+  /* the old order inside one section: label number ascending, a suffix after its plain lot (13, 13A, 13B, 13H) */
+  var ORD={};SEC.forEach(function(s){ORD[s]=LOTS.filter(function(l){return l.s===s}).sort(function(a,b){return numOf(a.l)-numOf(b.l)||sufOf(a.l).localeCompare(sufOf(b.l))})});
+  var SECS=SEC.filter(function(s){return ORD[s].length});
+  var HUE={A:28,B:210,C:140,D:300,E:48,F:0,G:185,H:255,I:88,J:12,K:330,L:165,M:230};
+  function scol2(s,t){return 'hsl('+HUE[s]+',62%,'+(isDark()?(34+t*30):(74-t*38)).toFixed(0)+'%)'}
+  function hcol(t){return 'hsl('+(50-34*t).toFixed(0)+',82%,'+(isDark()?58:46)+'%)'}
+  var base=document.createElement('canvas'),lay=document.createElement('canvas');base.width=lay.width=W0;base.height=lay.height=H0;
+  var ptr={},hptr=0;
+  function drawBase(){var c=base.getContext('2d');c.clearRect(0,0,W0,H0);c.fillStyle=css('--g3');LOTS.forEach(function(l){trace(c,l);c.fill()})}
+  function reset(){lay.getContext('2d').clearRect(0,0,W0,H0);ptr={};hptr=0;SECS.forEach(function(s){ptr[s]=0})}
+  function targetIdx(s){var n=ORD[s].length;return Math.max(0,Math.min(n,Math.ceil(f*n)))}
+  function paintTo(){
+    var c=lay.getContext('2d');
+    if(mode==='old'){var back=false;SECS.forEach(function(s){if(targetIdx(s)<ptr[s])back=true});if(back)reset();
+      SECS.forEach(function(s){var n=ORD[s].length,tg=targetIdx(s);if(focus&&s!==focus)return;for(;ptr[s]<tg;ptr[s]++){c.fillStyle=scol2(s,ptr[s]/Math.max(1,n-1));trace(c,ORD[s][ptr[s]]);c.fill()}})}
+    else{var tg=Math.max(0,Math.min(LOTS.length,Math.ceil(f*LOTS.length)));if(tg<hptr)reset();for(;hptr<tg;hptr++){c.fillStyle=hcol(hptr/(LOTS.length-1));trace(c,LOTS[hptr]);c.fill()}}
+  }
+  function head(c,l,col,r){var x=(l.cx-ox)*sc,y=(l.cy-oy)*sc;c.fillStyle=col;c.strokeStyle=isDark()?'#f4f2ec':'#0b0b0a';c.lineWidth=3;c.beginPath();c.arc(x,y,r,0,7);c.fill();c.stroke()}
+  function tail(c,arr,i,col){var a=Math.max(0,i-45);c.strokeStyle=col;c.lineWidth=2.6;c.lineJoin='round';c.lineCap='round';c.beginPath();for(var k=a;k<=i;k++){var l=arr[k],x=(l.cx-ox)*sc,y=(l.cy-oy)*sc;if(k===a)c.moveTo(x,y);else c.lineTo(x,y)}c.stroke()}
+  var side=$('wside');
+  function draw(){
+    paintTo();cx.clearRect(0,0,W0,H0);cx.drawImage(base,0,0);cx.drawImage(lay,0,0);
+    if(mode==='old'){
+      var h='';SECS.forEach(function(s){if(focus&&s!==focus)return;var arr=ORD[s],n=arr.length,i=Math.max(0,Math.min(n-1,targetIdx(s)-1)),l=arr[i];
+        tail(cx,arr,i,'rgba('+(isDark()?'244,242,236':'11,11,10')+',.45)');head(cx,l,'hsl('+HUE[s]+',70%,52%)',9);
+        cx.font='700 17px "IBM Plex Mono",monospace';cx.textAlign='center';cx.fillStyle=isDark()?'#f4f2ec':'#0b0b0a';cx.strokeStyle=isDark()?'#0b0b0a':'#fff';cx.lineWidth=4;cx.strokeText(s,(l.cx-ox)*sc,(l.cy-oy)*sc-16);cx.fillText(s,(l.cx-ox)*sc,(l.cy-oy)*sc-16)});
+      SECS.forEach(function(s){var arr=ORD[s],n=arr.length,k=targetIdx(s),i=Math.max(0,Math.min(n-1,k-1)),l=arr[i];
+        h+='<div class="wrow'+(focus&&s!==focus?' dim':'')+'"><b style="background:hsl('+HUE[s]+',55%,42%)">'+s+'</b><div><div class="bar2"><i style="width:'+(100*k/n).toFixed(1)+'%;background:hsl('+HUE[s]+',62%,50%)"></i></div><span class="lbl" title="first lot '+esc(arr[0].l)+', last lot '+esc(arr[n-1].l)+'">at <b>'+s+'-'+esc(l.l)+'</b></span></div><span class="pos">'+k+' / '+n+'</span></div>'});
+      side.innerHTML='<div class="whs"><b>'+(focus?'Section '+focus:'All 13 sections at once')+'.</b> Each section counts from its own first label, so they walk in different directions at the same time. Dark means near the end.</div>'+h;
+    }else{
+      var i2=Math.max(0,Math.min(LOTS.length-1,Math.ceil(f*LOTS.length)-1)),l2=LOTS[i2];tail(cx,LOTS,i2,'rgba('+(isDark()?'244,242,236':'11,11,10')+',.5)');head(cx,l2,'#c5a448',11);
+      var pp=PASSES.filter(function(q){return l2.h>=q.lo&&l2.h<=q.hi})[0];
+      side.innerHTML='<div class="whs">One walker. One direction. Every step adds one.</div><div class="whb">'+pad(l2.h)+'</div><div class="whs">Pass <b>'+(pp?pp.n:'')+'</b> of 6 · sections '+(pp?esc(pp.secs):'')+'</div><div class="wpass">'+PASSES.map(function(q){return '<i'+(q.n===(pp&&pp.n)?' class="on"':'')+'></i>'}).join('')+'</div><div class="whs" style="margin-top:14px">The old label on this lot is <b>'+l2.s+'-'+esc(l2.l)+'</b>. Along the path it jumps around; the H-number never does.</div>';
+      set3d(l2.h);
+    }
+    $('wscrub').value=Math.round(f*1000);
+  }
+  function setMode(m){mode=m;focus='';reset();[].forEach.call(document.querySelectorAll('[data-wm]'),function(b){b.classList.toggle('on',b.getAttribute('data-wm')===m)});
+    $('wcap').textContent=m==='old'?'The old way. A is numbered on its own, B on its own, and so on. Every section starts again at its own first lot, so the walkers run side by side and never agree.':'The H-number way. One path through every lot, in one fixed order. The first lot is H000001, the next is H000002, all the way to H003185.';
+    $('wfocus').style.display=m==='old'?'flex':'none';
+    $('wkey').innerHTML=m==='old'?'<span><i style="background:linear-gradient(90deg,hsl(210,62%,74%),hsl(210,62%,36%))"></i>start → end of one section (each section has its own colour)</span>':'<span><i style="background:linear-gradient(90deg,'+hcol(0)+','+hcol(.5)+','+hcol(1)+')"></i>H000001 → H003185</span>';
+    buildFocus();draw()}
+  function buildFocus(){var w=$('wfocus');w.innerHTML='<span class="note" style="align-self:center;margin:0 6px 0 0">Show only</span>'+['All'].concat(SECS).map(function(s){return '<button class="chip" type="button" data-f="'+(s==='All'?'':s)+'" aria-pressed="'+((s==='All'?'':s)===focus)+'">'+(s==='All'?'All sections':s)+'</button>'}).join('');
+    [].forEach.call(w.querySelectorAll('[data-f]'),function(b){on(b,'click',function(){focus=b.getAttribute('data-f');reset();buildFocus();draw()})})}
   var B3=location.pathname.indexOf('/math/')>=0?'../site/3d.html':'3d.html';
-  function set3d(st){$('w3dgo').href=B3+'#h='+st;$('w3dgo').textContent='Fly to H'+String(st).padStart(6,'0')+' in 3D';$('w3dall').href=B3+'#walk'}
-  $('w3dp').innerHTML=[1,2,3,4,5,6].map(function(n){return '<a class="btn" style="text-decoration:none" href="'+B3+'#walk='+n+'">Walk pass '+n+'</a>'}).join('');
-  function rebuild(){
-    var st=+$('sawstart').value,wd=+$('sawwidth').value;$('sawstartv').textContent=st;$('sawwidthv').textContent=wd;
-    seq=LOTS.filter(function(l){return l.h>=st&&l.h<st+wd});set3d(st);var mp=Math.max(0,seq.length-1);$('walkpos').max=mp;if(posF>mp)posF=mp;$('walkpos').value=Math.round(posF);
-    var x0=1e9,y0=1e9,x1=-1e9,y1=-1e9;(seq.length?seq:LOTS).forEach(function(l){l.poly.forEach(function(q){if(q[0]<x0)x0=q[0];if(q[0]>x1)x1=q[0];if(q[1]<y0)y0=q[1];if(q[1]>y1)y1=q[1]})});
-    svg.style.cssText='display:block;width:100%;height:min(66vh,620px)';var asp=(svg.clientWidth||1000)/(svg.clientHeight||520),w=Math.max(x1-x0+30,90*asp),h=Math.max(y1-y0+30,90),mx=(x0+x1)/2,my=(y0+y1)/2;if(w/h<asp)w=h*asp;else h=w/asp;
-    svg.setAttribute('viewBox',(mx-w/2)+' '+(my-h/2)+' '+w+' '+h);
-    var inW={};seq.forEach(function(l,i){inW[l.h]=i});
-    polys.forEach(function(p){var l=p._l,i=inW[l.h];p._i=i;p.setAttribute('fill',i==null?css('--g3'):lotColor(l,st,wd,false));p.setAttribute('opacity',i==null?'.5':'1')});
-    gW.innerHTML='';
-    if(seq.length&&seq.length<=160){var fs=Math.max(2.2,Math.min(5,w/60));seq.forEach(function(l){var t=document.createElementNS(NS,'text');t.setAttribute('x',l.cx);t.setAttribute('y',l.cy);t.setAttribute('text-anchor','middle');t.setAttribute('style','font:600 '+fs+'px var(--mono);fill:#0b0b0a;pointer-events:none;paint-order:stroke;stroke:#fff;stroke-width:'+fs*0.28+'px');t.innerHTML='<tspan x="'+l.cx+'" dy="-0.15em">'+esc(l.l)+'</tspan><tspan x="'+l.cx+'" dy="1.05em" style="font-size:'+fs*0.78+'px;font-weight:500">'+l.h+'</tspan>';gW.appendChild(t)})}
-    update();
-  }
-  function cpos(f){var i=Math.floor(f),a=seq[i],b=seq[Math.min(i+1,seq.length-1)];if(!a)return null;var t=f-i;return {x:a.cx+(b.cx-a.cx)*t,y:a.cy+(b.cy-a.cy)*t}}
-  function update(){
-    var st=+$('sawstart').value,wd=+$('sawwidth').value,i=Math.floor(posF),cur=seq[i];$('walkposv').textContent=(seq.length?Math.round(posF)+1:0)+' of '+seq.length;
-    gT.innerHTML='';var cp=cpos(posF);
-    if(cp){var vb=svg.getAttribute('viewBox').split(' '),u=+vb[2]/560,pts=[];for(var k=0;k<=i;k++)pts.push(seq[k].cx+','+seq[k].cy);pts.push(cp.x+','+cp.y);var pl=document.createElementNS(NS,'polyline');pl.setAttribute('points',pts.join(' '));pl.setAttribute('fill','none');pl.setAttribute('stroke','#0b0b0a');pl.setAttribute('stroke-width',u*.9);pl.setAttribute('stroke-opacity','.75');pl.setAttribute('stroke-linejoin','round');pl.setAttribute('stroke-linecap','round');gT.appendChild(pl);
-      var c=document.createElementNS(NS,'circle');c.setAttribute('cx',cp.x);c.setAttribute('cy',cp.y);c.setAttribute('r',u*3.2);c.setAttribute('fill','#c5a448');c.setAttribute('stroke','#0b0b0a');c.setAttribute('stroke-width',u*.9);gT.appendChild(c)}
-    polys.forEach(function(p){if(p._i!=null)p.setAttribute('fill',lotColor(p._l,st,wd,p._i<i))});
-    var o=$('wnow');
-    if(!cur){o.innerHTML='No lots with outlines in this range. Move the start.';$('wstrip').innerHTML=''}
-    else{o.innerHTML='You are at <b>'+cur.s+'-'+esc(cur.l)+'</b>, which is <b>'+pad(cur.h)+'</b>. Lot '+(i+1)+' of '+seq.length+' in this walk. The old label on the lot jumps around. The H-number goes up by one each step.';
-      var s='';for(var j=i;j<Math.min(seq.length,i+9);j++)s+='<div class="c'+(j===i?' cur':'')+'">'+seq[j].s+'-'+esc(seq[j].l)+'<small>'+pad(seq[j].h)+'</small></div>';$('wstrip').innerHTML=s}
-  }
-  [].forEach.call(ctl.querySelectorAll('[data-c]'),function(b){on(b,'click',function(){cmode=b.getAttribute('data-c');[].forEach.call(ctl.querySelectorAll('[data-c]'),function(x){x.classList.toggle('on',x===b)});update()})});
-  function stop(){playing=false;if(raf)cancelAnimationFrame(raf);raf=0;var b=$('wplay');b.classList.remove('on');b.textContent='Walk the path'}
-  function tick(t){if(!playing)return;var dt=Math.min(.1,(t-lastT)/1000);lastT=t;posF+=speed*dt;if(posF>=seq.length-1){posF=seq.length-1;stop();$('walkpos').value=Math.round(posF);update();return}$('walkpos').value=Math.round(posF);update();raf=requestAnimationFrame(tick)}
-  on($('wplay'),'click',function(){if(playing){stop();return}if(posF>=seq.length-1)posF=0;playing=true;var b=$('wplay');b.classList.add('on');b.textContent='Pause';lastT=performance.now();raf=requestAnimationFrame(tick)});
-  on($('wreset'),'click',function(){stop();$('sawstart').value=1;$('sawwidth').value=60;posF=0;rebuild();toast('Walk reset')});
-  on($('wspeed'),'input',function(){speed=+$('wspeed').value});
-  on($('walkpos'),'input',function(){posF=+$('walkpos').value;update()});
-  on($('sawstart'),'input',function(){stop();rebuild()});on($('sawwidth'),'input',function(){stop();rebuild()});
-  redraws.push(function(){rebuild()});
-  rebuild();
+  function set3d(h){var g=$('w3dgo');if(!g)return;g.href=B3+'#h='+h;g.textContent='Fly to H'+String(h).padStart(6,'0')+' in 3D'}
+  $('w3dall').href=B3+'#walk';$('w3dp').innerHTML=[1,2,3,4,5,6].map(function(n){return '<a class="btn" style="text-decoration:none" href="'+B3+'#walk='+n+'">Walk pass '+n+'</a>'}).join('');
+  function tick(now){var e=f0+(now-t0)/dur;if(e>=1){f=1;stop();draw();return}f=e;draw();raf=requestAnimationFrame(tick)}
+  function stop(){playing=false;if(raf)cancelAnimationFrame(raf);raf=0;$('wplay').textContent=f>=1?'Replay':'Play'}
+  function play(){if(f>=1){f=0;reset()}playing=true;f0=f;t0=performance.now();$('wplay').textContent='Pause';raf=requestAnimationFrame(tick)}
+  on($('wplay'),'click',function(){if(playing){stop()}else play()});
+  on($('wscrub'),'input',function(){if(playing)stop();f=+$('wscrub').value/1000;draw()});
+  on($('wspeed'),'input',function(){dur=+$('wspeed').value;if(playing){f0=f;t0=performance.now()}});
+  [].forEach.call(document.querySelectorAll('[data-wm]'),function(b){on(b,'click',function(){if(playing)stop();f=0;setMode(b.getAttribute('data-wm'))})});
+  drawBase();reset();redraws.push(function(){drawBase();reset();draw()});
+  window.addEventListener('beforeprint',function(){if(playing)stop();f=1;drawBase();reset();draw()});
+  var started=false;if('IntersectionObserver' in window){new IntersectionObserver(function(es){if(es[0].isIntersecting&&!started){started=true;if(!(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches))play()}},{threshold:.35}).observe(cv)}
+  setMode('old');f=.0;draw();
 })();
 
-/* ---------------- hero illustration: a path that numbers twelve stones ---------------- */
+/* ---------------- hero: the same cemetery twice, once by old number and once by H-number ---------------- */
 (function(){
-  var host=$('heroart');if(!host)return;var NS='http://www.w3.org/2000/svg',Wd=1000,Hh=330;
-  var st=[],N=3,R=2,cw=84,ch=88;
-  for(var r=0;r<R;r++)['B','A'].forEach(function(s){for(var c=0;c<N;c++){var x0=s==='B'?130:560;st.push({x:x0+c*cw,y:96+r*(ch+28)})}});
-  var pts=st.map(function(p){return [p.x+27,p.y+56]});
-  function smooth(p){var d='M'+p[0][0]+' '+p[0][1];for(var i=0;i<p.length-1;i++){var a=p[i-1]||p[i],b=p[i],c=p[i+1],e=p[i+2]||c;d+=' C'+(b[0]+(c[0]-a[0])/6)+' '+(b[1]+(c[1]-a[1])/6)+' '+(c[0]-(e[0]-b[0])/6)+' '+(c[1]-(e[1]-b[1])/6)+' '+c[0]+' '+c[1]}return d}
-  var h='<svg viewBox="0 0 '+Wd+' '+Hh+'" xmlns="http://www.w3.org/2000/svg">'
-   +'<circle class="hart-sun" cx="880" cy="70" r="38"/>'
-   +'<path class="hart-hill2" d="M0 262 C150 204 300 232 460 247 S780 212 1000 237 V330 H0Z"/>'
-   +'<path class="hart-hill1" d="M0 292 C170 246 330 288 520 276 S850 256 1000 282 V330 H0Z"/>';
-  [[70,226,30,70],[960,224,26,62],[470,246,22,48]].forEach(function(t){h+='<ellipse class="hart-tree" cx="'+t[0]+'" cy="'+t[1]+'" rx="'+t[2]+'" ry="'+t[3]+'"/>'});
-  h+='<text class="hart-label" x="'+(130+cw)+'" y="84">Section B</text><text class="hart-label" x="'+(560+cw)+'" y="84">Section A</text>';
-  st.forEach(function(p){h+='<path class="hart-stone" d="M'+p.x+' '+(p.y+62)+' V'+(p.y+24)+' a27 24 0 0 1 54 0 V'+(p.y+62)+' Z"/>'});
-  h+='<path class="hart-path" id="hartpath" d="'+smooth(pts)+'"/>';
-  st.forEach(function(p,i){h+='<text class="hart-num" x="'+(p.x+27)+'" y="'+(p.y+46)+'" style="animation-delay:'+(0.25+i*0.42).toFixed(2)+'s">'+(i+1)+'</text>'});
-  h+='</svg><button class="btn sm replay" type="button" id="hartreplay">Replay</button>';
-  host.innerHTML=h;
-  var path=$('hartpath');try{var L=path.getTotalLength();host.style.setProperty('--len',Math.ceil(L)+2);path.style.strokeDasharray=Math.ceil(L)+2;path.style.strokeDashoffset=Math.ceil(L)+2}catch(e){}
-  function go(){host.classList.remove('go','static');void host.offsetWidth;host.classList.add('go')}
-  var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if(reduce)host.classList.add('static');else go();
-  on($('hartreplay'),'click',function(){host.classList.remove('static');go()});
+  var cvO=$('h2old'),cvN=$('h2new');if(!cvO||!cvN)return;
+  var bb=X.bbox,bw=bb[2]-bb[0]+14,bh=bb[3]-bb[1]+14,W0=900,H0=Math.round(W0*bh/bw),ox=bb[0]-7,oy=bb[1]-7,sc=W0/bw,N=LOTS.length;
+  [cvO,cvN].forEach(function(c){c.width=W0;c.height=H0});
+  function trace(cx,l){cx.beginPath();l.poly.forEach(function(q,i){var x=(q[0]-ox)*sc,y=(q[1]-oy)*sc;if(i)cx.lineTo(x,y);else cx.moveTo(x,y)});cx.closePath()}
+  function numOf(l){return parseInt(l.l.replace(/[^0-9]/g,''),10)||0}
+  function drawOld(){var cx=cvO.getContext('2d');cx.clearRect(0,0,W0,H0);LOTS.forEach(function(l){var n=numOf(l);cx.fillStyle='hsl('+((n*47)%360)+',56%,'+(isDark()?44+(n*13)%12:52+(n*13)%16)+'%)';trace(cx,l);cx.fill()})}
+  var base=document.createElement('canvas'),paint=document.createElement('canvas');base.width=paint.width=W0;base.height=paint.height=H0;
+  function drawBase(){var cx=base.getContext('2d');cx.clearRect(0,0,W0,H0);cx.fillStyle=css('--g3');LOTS.forEach(function(l){trace(cx,l);cx.fill()})}
+  function ramp(t){return 'hsl('+(50-34*t).toFixed(0)+',82%,'+(isDark()?58:46)+'%)'}
+  var pi=0,t0=0,raf=0,fr=0,DUR=12000,reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function advance(to){var cx=paint.getContext('2d');for(;pi<to;pi++){cx.fillStyle=ramp(pi/(N-1));trace(cx,LOTS[pi]);cx.fill()}}
+  function repaint(){var keep=pi;paint.getContext('2d').clearRect(0,0,W0,H0);pi=0;advance(keep)}
+  function show(){var cx=cvN.getContext('2d');cx.clearRect(0,0,W0,H0);cx.drawImage(base,0,0);cx.drawImage(paint,0,0);
+    var i=Math.max(0,Math.min(N-1,pi-1)),l=LOTS[i];
+    cx.lineJoin='round';cx.lineCap='round';cx.strokeStyle=isDark()?'#f4f2ec':'#0b0b0a';cx.lineWidth=2.4;cx.globalAlpha=.55;cx.beginPath();for(var k=Math.max(0,i-60);k<=i;k++){var q=LOTS[k],x=(q.cx-ox)*sc,y=(q.cy-oy)*sc;if(k===Math.max(0,i-60))cx.moveTo(x,y);else cx.lineTo(x,y)}cx.stroke();cx.globalAlpha=1;
+    var hx=(l.cx-ox)*sc,hy=(l.cy-oy)*sc;cx.fillStyle='#c5a448';cx.strokeStyle='#0b0b0a';cx.lineWidth=3;cx.beginPath();cx.arc(hx,hy,11,0,7);cx.fill();cx.stroke();
+    $('h2big').innerHTML=pad(l.h)+'<small>of 3,185</small>';var p=PASSES.filter(function(q){return l.h>=q.lo&&l.h<=q.hi})[0];$('h2pass').textContent=p?'Pass '+p.n+' of 6 · sections '+p.secs.replace(/ margins;?/,'')+'':'';
+    if(fr++%5===0||pi>=N){var h='';for(var k2=Math.max(0,i-5);k2<=i;k2++)h+='<span>'+LOTS[k2].s+'-'+esc(LOTS[k2].l)+'</span>';$('h2oldlab').innerHTML=h}}
+  function tick(now){var f=Math.min(1,(now-t0)/DUR),e=f<.5?2*f*f:1-Math.pow(-2*f+2,2)/2;advance(Math.max(pi,Math.floor(e*N)));if(f>=1)advance(N);show();if(f<1)raf=requestAnimationFrame(tick);else raf=0;$('h2play').textContent='Replay'}
+  function play(){if(raf)cancelAnimationFrame(raf);paint.getContext('2d').clearRect(0,0,W0,H0);pi=0;fr=0;if(reduce){advance(N);show();return}t0=performance.now();$('h2play').textContent='Restart';raf=requestAnimationFrame(tick)}
+  drawOld();drawBase();on($('h2play'),'click',play);
+  window.addEventListener('beforeprint',function(){if(raf)cancelAnimationFrame(raf);advance(N);drawOld();drawBase();repaint();show()});
+  redraws.push(function(){drawOld();drawBase();repaint();show()});
+  var started=false;function maybe(){if(started)return;var r=cvN.getBoundingClientRect();if(r.top<innerHeight&&r.bottom>0){started=true;play()}}
+  if('IntersectionObserver' in window){new IntersectionObserver(function(es){if(es[0].isIntersecting)maybe()},{threshold:.2}).observe(cvN)}else play();
+  advance(0);show();
 })();
 
-/* defects */
+/* data inconsistencies: seven problems, each with a picture of what goes wrong */
 (function(){
   var oth=A.B_grid_labels_shadowed_by_margin||[],hmax=Math.max.apply(null,FWD.filter(function(r){return r[0]==='H'}).map(function(r){return r[2]}));
-  var d=[['B','Labels claimed twice','Section B\'s grid rule and its margin list both use the labels '+oth[0]+' to '+oth[oth.length-1]+'.','B-373 resolves to the margin position '+pad(FW['B|373'])+'.','The grid places that would carry these '+oth.length+' numbers have no label of their own.','The decoder lets the later rule win. Open: someone has to say which lot each label means.'],
-   ['B, A','Positions with no old label','In the first sweep, 44 H-numbers have no legacy reference.','H000010, H000046 and H000055 are the first three.','These lots can only be found by H-number or by counting on the ground.','Listed in section 09. Open: a field check to see whether a physical lot sits at each position.'],
-   ['D, G','Duplicate keys in the decoder tables','Section D lists 274 twice and Section G lists 19 twice in its first row.','G row 1 reads 19, 19 where one should be 19H.','One of each pair is shadowed, so one lot cannot be reached by its label.','The decoder keeps the later entry and the formula follows it. Open: decide which lot each entry meant.'],
-   ['C','A typo in a row table','Row 8 of C lists "124H" where the pattern requires "142H".','C-142H '+(FW['C|142H']!=null?'is':'is not')+' in the decoder; C-124H is.','A lookup for the lot the pattern calls 142H fails. A lookup for 124H lands on that position.','The formula maps the typo to the intended position. Open: confirm on the map.'],
-   ['B, A','The documents and the code disagree on the order','The reference PDF and decoder docstring say the sweep alternates B column 1, A column 1, and so on. The code visits a whole level of B, then the same level of A.','Under the document\'s order, A column 1 of level 1 would be H000002, not H000023.','Every H-number in B and A after the first lot would change (step 1 shows this).','All checks here follow the code. Open: choose the authoritative traversal order.'],
-   ['C','The idealised grid is not the real grid','The reference sheet assumes 22 lots in every row.','It ends C-417 at H001672. The real rows give H001871.','Anyone using the sheet gets wrong numbers after the first uneven row.','Resolved in the decoder. The sheet should be retired or updated.'],
-   ['H, M','Where H ends and M begins','Section H ends at '+pad(hmax)+' and M begins at '+pad(FW['M|11'])+'. Earlier summaries put M at H002586.','Pass 5 runs H002587 to H002835.','Quoting the older boundary puts the last lot of H and the first lot of M in the wrong passes.','Corrected on this page, which computes pass ranges from the data. Open: check any other document that quotes the boundary.']];
-  $('defects').innerHTML=d.map(function(x){return '<div class="def"><span class="tag bad">Section '+x[0]+'</span> <b>'+x[1]+'</b><div class="f4"><div><em>Finding</em>'+x[2]+'</div><div><em>Example</em>'+x[3]+'</div><div><em>Consequence</em>'+x[4]+'</div><div><em>Status</em>'+x[5]+'</div></div></div>'}).join('');
+  var cell=function(t,c){return '<span class="dc '+(c||'')+'">'+t+'</span>'};
+  /* 1 labels claimed twice */
+  function v1(){var lo=oth[0]||373,hi=oth[oth.length-1]||379,a=372,b=395,pc=function(n){return ((n-a)/(b-a)*100).toFixed(2)+'%'};
+    function bar(x0,x1,cls,txt){return '<div class="rb '+cls+'" style="left:'+pc(x0)+';width:calc('+pc(x1+1)+' - '+pc(x0)+')"><span>'+txt+'</span></div>'}
+    return '<div class="rng"><b>Grid rule</b><div class="rt">'+bar(lo,hi,'g','labels '+lo+' to '+hi)+'</div><b>Margin list</b><div class="rt">'+bar(373,394,'m','labels 373 to 394')+'</div><div class="rt ov"><div class="rb clash" style="left:'+pc(lo)+';width:calc('+pc(hi+1)+' - '+pc(lo)+')"><span>claimed twice</span></div></div></div><p class="dcap"><i class="sw clash"></i>'+oth.length+' labels ('+lo+' to '+hi+') appear in both lists</p>'}
+  /* 2 positions without a label */
+  function v2(){var n=3185,w=1000,t='';X.missingH.forEach(function(h){t+='<rect x="'+(h/n*w).toFixed(1)+'" y="8" width="3" height="34" rx="1.5" fill="var(--bad)"/>'});
+    PASSES.forEach(function(p){t+='<rect x="'+(p.lo/n*w).toFixed(1)+'" y="46" width="'+((p.hi-p.lo+1)/n*w-2).toFixed(1)+'" height="10" rx="5" fill="var(--g3)"/><text x="'+((p.lo+p.hi)/2/n*w).toFixed(1)+'" y="78" text-anchor="middle" font-size="22" fill="var(--g5)" font-family="IBM Plex Mono,monospace">'+p.n+'</text>'});
+    return '<svg viewBox="0 0 1000 86" class="dsvg" role="img" aria-label="Positions along the path with no old label">'+t+'</svg><p class="dcap"><i class="sw bad"></i>each red mark is a position on the path (H000001 to H003185) with no old label, '+X.missingH.length+' in all</p>'}
+  /* 3 duplicate keys */
+  function v3(){return '<div class="dl"><b>Section G, row 1</b><div class="dr">'+cell('17')+cell('18')+cell('19','clash on')+cell('19','clash on')+cell('20')+cell('19H?','ghost')+'</div></div><div class="dl"><b>Section D table</b><div class="dr">'+cell('273')+cell('274','clash on')+cell('274','clash on')+cell('275')+'</div></div><p class="dcap"><i class="sw clash"></i>two lots answer to one label, so the software can only reach one of them</p>'}
+  /* 4 typo */
+  function v4(){return '<div class="dl"><b>Pattern says</b><div class="dr">'+cell('143')+cell('142')+cell('142H','on g')+cell('141')+'</div></div><div class="dl"><b>Table says</b><div class="dr">'+cell('143')+cell('142')+cell('124H','clash on')+cell('141')+'</div></div><p class="dcap"><i class="sw clash"></i>two digits swapped in row 8 of Section C</p>'}
+  /* 5 documents vs code */
+  function grid(order){var b='',a='';order.B.forEach(function(n,i){b+=cell(n,'g on'+(n!==i+1?' clash':''))});order.A.forEach(function(n,i){a+=cell(n,'m on'+(n!==i+4?' clash':''))});return '<div class="dr"><span class="dsec">B</span>'+b+'</div><div class="dr"><span class="dsec">A</span>'+a+'</div>'}
+  function v5(){return '<div class="dtwo"><div><b>The document says: alternate</b>'+grid({B:[1,3,5],A:[2,4,6]})+'</div><div><b>The code does: all of B, then all of A</b>'+grid({B:[1,2,3],A:[4,5,6]})+'</div></div><p class="dcap"><i class="sw clash"></i>the numbers in red land on different lots depending on which order is right</p>'}
+  /* 6 idealised grid */
+  function v6(){return '<div class="dl"><b>Reference sheet</b><div class="dbar"><i style="width:'+(1672/1871*100)+'%"></i><span>C-417 = H001672</span></div></div><div class="dl"><b>Real decoder</b><div class="dbar real"><i style="width:100%"></i><span>C-417 = H001871</span></div></div><p class="dcap"><i class="sw clash"></i>the sheet is 199 lots short, because it assumes every row has 22 lots</p>'}
+  /* 7 H / M boundary */
+  function v7(){var m=FW['M|11']||2587;return '<div class="dl"><b>What the data says</b><div class="dr"><span class="dsec">H</span>'+cell('ends '+pad(hmax),'g on')+cell('M starts '+pad(m),'m on')+'</div></div><div class="dl"><b>What older notes said</b><div class="dr">'+cell('M starts '+pad(m-1),'clash on')+'</div></div><p class="dcap"><i class="sw clash"></i>one position off, so the last lot of H lands in the wrong pass</p>'}
+  var d=[
+   {sec:'B',open:1,t:'Two lists use the same labels',v:v1(),w:'Section B counts its grid and its margin with overlapping numbers. B-373 means a lot in the margin, not the grid.',n:'Which lot does each of these '+oth.length+' labels belong to?'},
+   {sec:'B, A',open:1,t:'Positions with no old label',v:v2(),w:X.missingH.length+' places on the path have no old label. They can only be found by H-number or by counting on the ground.',n:'Does a real lot stand at each of these positions?'},
+   {sec:'D, G',open:1,t:'One label, two lots',v:v3(),w:'Two entries in the old tables share a label, so one lot can never be looked up.',n:'Which lot did each entry mean?'},
+   {sec:'C',open:1,t:'A typo in a row table',v:v4(),w:'Row 8 lists 124H where the pattern needs 142H. A search for 142H finds nothing.',n:'Is the lot on the map really 142H?'},
+   {sec:'B, A',open:1,t:'The paper and the code disagree',v:v5(),w:'The reference PDF alternates B and A column by column. The code does a whole level of B first. Every H-number after the first lot depends on this.',n:'Which order is the official one?'},
+   {sec:'C',open:0,t:'The idealised grid is wrong',v:v6(),w:'The reference sheet assumes 22 lots in every row. Real rows vary. The decoder already uses the real rows.',n:'Retire or correct the old sheet.'},
+   {sec:'H, M',open:0,t:'Where H ends and M begins',v:v7(),w:'Section H ends at '+pad(hmax)+' and M starts at '+pad(FW['M|11'])+'. Earlier summaries quoted M at H002586.',n:'Check any document that quotes the old boundary.'}];
+  var no=d.filter(function(x){return x.open}).length;
+  $('defects').innerHTML='<div class="dsum"><span><b>'+d.length+'</b> problems found</span><span class="o"><b>'+no+'</b> need a decision</span><span class="r"><b>'+(d.length-no)+'</b> handled</span><span class="dfil"><button class="chip" data-df="" aria-pressed="true" type="button">All</button><button class="chip" data-df="1" aria-pressed="false" type="button">Need a decision</button><button class="chip" data-df="0" aria-pressed="false" type="button">Handled</button></span></div><div class="defgrid">'+d.map(function(x){return '<article class="defc" data-o="'+x.open+'"><div class="dh"><span class="pill '+(x.open?'open':'done')+'">'+(x.open?'Needs a decision':'Handled')+'</span><span class="tag bad">Section '+x.sec+'</span></div><h4>'+x.t+'</h4><div class="defv">'+x.v+'</div><p class="dw">'+x.w+'</p><p class="dn"><b>'+(x.open?'We need to know:':'Still to do:')+'</b> '+x.n+'</p></article>'}).join('')+'</div>';
+  [].forEach.call($('defects').querySelectorAll('[data-df]'),function(b){on(b,'click',function(){var v=b.getAttribute('data-df');[].forEach.call($('defects').querySelectorAll('[data-df]'),function(x){x.setAttribute('aria-pressed',x===b)});[].forEach.call($('defects').querySelectorAll('.defc'),function(c){c.style.display=(v===''||c.getAttribute('data-o')===v)?'':'none'})})});
 })();

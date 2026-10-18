@@ -337,11 +337,133 @@ nav.rail .sec>a b{font-size:1.1em}
   .imgwrap{width:100%}
 }
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important}}
+
+/* v5: readable at a glance. Bigger type, no tiny mono captions, real keys, a proper theme switch. */
+:root{--fs:18px}
+:root[data-size="lg"]{--fs:21px}
+.kicker,.tag,.mode,label.f,.step>b,.terms p,table.t th,.addr span,.def .f4 em,.fh-k,.fig .cap b.t,.mapbox .orient,.imgwrap .hint,.cmpview .lab,.cw .fl h6,.cw .cpy,.wnow .c small{font-size:max(.8em,12.5px)}
+.note,.key,.detail,.terms p,.abc p,.calls,.fh-terms small,.fh-proof span,.sbtn button,.chip,.psim,.pread{font-size:max(.92em,15px)}
+.chip{font-size:max(.9em,15px);min-height:36px}
+nav.rail{font-size:max(.9em,15px)}
+.util,#bmenu,.nav2 button{font-size:max(.84em,14px)}
+p,li{max-width:44em}
+.note,.lede,.sub{line-height:1.6}
+.lede{font-size:1.14em;color:var(--fg)}
+h3{font-size:1.38em;margin-top:52px}
+h4{font-size:1.12em}
+.mapbox polygon{stroke-width:.25}
+/* theme switch */
+.themebtn{all:unset;box-sizing:border-box;cursor:pointer;display:inline-flex;align-items:center;position:relative;width:62px;height:34px;border-radius:999px;border:1.5px solid var(--fg);background:var(--surf);margin-left:6px}
+.themebtn svg{position:absolute;top:50%;width:16px;height:16px;transform:translateY(-50%);stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;color:var(--g5)}
+.themebtn .ic-sun{left:9px}.themebtn .ic-moon{right:9px}
+.themebtn::after{content:"";position:absolute;top:3px;left:3px;width:26px;height:26px;border-radius:50%;background:var(--acc);transition:transform .18s ease;box-shadow:0 1px 3px rgba(0,0,0,.25)}
+.themebtn[aria-pressed="true"]::after{transform:translateX(28px)}
+.themebtn:hover{border-color:var(--acc)}
+.themebtn:focus-visible{outline:2px solid var(--fg);outline-offset:2px}
+.themebtn[aria-pressed="false"] .ic-sun,.themebtn[aria-pressed="true"] .ic-moon{color:var(--acc-ink)}
+/* hero: two maps, one of the old numbers, one of the H-numbers */
+.hero2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;margin:10px 0 6px}
+.h2card{background:var(--surf);border-radius:var(--rp);padding:16px 16px 14px;position:relative;overflow:hidden}
+.h2card h3{margin:0 0 2px;font-size:1.2em;display:block}
+.h2card .h2sub{font-size:max(.92em,15px);color:var(--g5);margin:0 0 10px;max-width:none}
+.h2card canvas{border-radius:var(--rcard);background:var(--bg);border:0}
+.h2big{font:700 clamp(1.5em,3.4vw,2.2em)/1 var(--mono);letter-spacing:-.03em;margin:10px 0 0;font-variant-numeric:tabular-nums}
+.h2big small{font:500 .42em var(--mono);color:var(--g5);margin-left:.6em;letter-spacing:0}
+.h2lab{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px;min-height:2.3em}
+.h2lab span{font:600 .86em var(--mono);padding:3px 10px;border-radius:999px;background:var(--bg);border:1px solid var(--g3)}
+.h2ctl{display:flex;gap:10px;align-items:center;margin:10px 0 0;flex-wrap:wrap}
+.h2ctl .note{margin:0}
+@media (max-width:760px){.hero2{grid-template-columns:minmax(0,1fr)}}
+
+.keycards{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;margin:12px 0 18px}
+.keycards>div{background:var(--surf);border-radius:var(--rcard);padding:14px 14px 12px}
+.keycards b{display:block;margin:10px 0 2px}
+.keycards p{font-size:max(.9em,15px);color:var(--g5);margin:0;line-height:1.4}
+@media (max-width:980px){.keycards{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.rowsc .sc .line .rl{font-size:max(.85em,14px);flex-basis:4.6em}
+.anat h5 small{font-size:max(.9em,15px)}
+.wtabs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0;margin-bottom:6px;max-width:520px}
+.wtabs .btn.seg{flex-direction:column;align-items:flex-start;padding:8px 14px;min-height:58px;gap:0;text-align:left;margin:0;min-width:0}.wtabs .btn.seg:first-child{margin-right:-1.5px}
+.wtabs .btn small{font:500 .78em var(--sans);opacity:.8}
+.wcap{font-size:1.04em;margin:10px 0 12px;max-width:50em}
+.wgrid{display:grid;grid-template-columns:minmax(0,1.9fr) minmax(250px,1fr);gap:18px;align-items:start}
+.wgrid canvas{border:0;border-radius:var(--rcard);background:var(--bg)}
+.wside{background:var(--surf);border-radius:var(--rcard);padding:14px 16px;min-height:200px}
+.wrow{display:grid;grid-template-columns:2.2em minmax(0,1fr) 4.6em;gap:6px 10px;align-items:center;padding:3px 0;font:500 .92em var(--mono)}
+.wrow b{display:grid;place-items:center;width:1.9em;height:1.9em;border-radius:50%;color:#fff;font:700 .9em var(--mono)}
+.wrow .bar2{height:8px;border-radius:99px;background:var(--g3);overflow:hidden;position:relative}
+.wrow .bar2 i{position:absolute;left:0;top:0;bottom:0;border-radius:99px}
+.wrow .lbl{display:block;font-size:.86em;color:var(--g5);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.wrow .pos{text-align:right;font-size:.86em;color:var(--g6)}
+.wrow.dim{opacity:.35}
+.whb{font:700 clamp(2em,4.4vw,3em)/1 var(--mono);letter-spacing:-.03em}
+.whs{font-size:max(.95em,15px);color:var(--g6);margin:8px 0}
+.wpass{display:flex;gap:4px;margin:12px 0 4px}.wpass i{flex:1;height:10px;border-radius:99px;background:var(--g3)}.wpass i.on{background:var(--acc)}
+.wctl{display:flex;gap:14px;align-items:center;flex-wrap:wrap;margin:14px 0 6px}.wctl input[type=range]{flex:1 1 260px;width:auto}
+.wfocus{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0}
+.wfocus .chip[aria-pressed="true"]{background:var(--acc);color:var(--acc-ink);border-color:var(--acc)}
+.wkey{display:flex;flex-wrap:wrap;gap:6px 20px;margin-top:6px;font-size:max(.9em,15px);color:var(--g6)}
+.wkey span{display:inline-flex;align-items:center;gap:8px}.wkey i{display:inline-block;width:46px;height:12px;border-radius:99px}
+@media (max-width:980px){.wgrid{grid-template-columns:minmax(0,1fr)}}
+
+.dsum{display:flex;flex-wrap:wrap;gap:8px 22px;align-items:center;margin:8px 0 18px;font-size:1.05em}
+.dsum b{font:700 1.5em var(--sans);margin-right:.25em}.dsum .o b{color:var(--bad)}.dsum .r b{color:var(--ok)}.dfil{margin-left:auto;display:flex;gap:6px;flex-wrap:wrap}
+.dfil .chip[aria-pressed="true"]{background:var(--fg);color:var(--bg);border-color:var(--fg)}
+.defgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.defc{background:var(--surf);border-radius:var(--rp);padding:18px 20px 16px;display:flex;flex-direction:column;gap:0}
+.defc h4{font-size:1.28em;margin:10px 0 10px;letter-spacing:-.01em}
+.dh{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.pill{font:600 .82em var(--sans);padding:4px 12px;border-radius:999px}
+.pill.open{background:color-mix(in srgb,var(--bad) 16%,transparent);color:var(--bad)}.pill.done{background:color-mix(in srgb,var(--ok) 16%,transparent);color:var(--ok)}
+.defv{background:var(--bg);border-radius:var(--rcard);padding:14px 14px 10px;margin:0 0 12px;overflow:hidden}
+.dl{margin:0 0 8px}.dl b,.dtwo b{display:block;font:500 max(.82em,13px) var(--mono);color:var(--g5);margin-bottom:4px}
+.dr{display:flex;gap:4px;align-items:center;flex-wrap:nowrap;overflow:hidden}
+.dc{flex:1 1 0;min-width:0;max-width:3.4em;text-align:center;font:600 max(.8em,13px) var(--mono);padding:6px 0;border-radius:8px;background:var(--g2);color:var(--g5);min-height:2.1em}
+.dc.on{background:var(--g3);color:var(--fg)}.dc.g.on{background:color-mix(in srgb,var(--t2) 30%,var(--bg));color:var(--fg)}.dc.m.on{background:color-mix(in srgb,var(--t1) 40%,var(--bg));color:var(--fg)}
+.dc.clash{outline:2px solid var(--bad);color:var(--bad);background:color-mix(in srgb,var(--bad) 14%,var(--bg))}.dc.ghost{background:transparent;border:1.5px dashed var(--g4);color:var(--g5)}
+.dsec{flex:0 0 2em;font:700 .95em var(--mono);color:var(--g6);text-align:center}
+.dtwo{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.dtwo .dr{margin-bottom:5px}.dtwo .dc{max-width:none}
+.dsvg{display:block;width:100%;height:auto}
+.dcap{font-size:max(.9em,14.5px);color:var(--g6);margin:8px 0 0;display:flex;gap:8px;align-items:center;max-width:none}
+.sw{display:inline-block;flex:0 0 14px;width:14px;height:14px;border-radius:4px;background:var(--g4)}.sw.clash,.sw.bad{background:var(--bad)}
+.dbar{position:relative;height:30px;border-radius:999px;background:var(--g2);overflow:hidden}.dbar i{position:absolute;left:0;top:0;bottom:0;border-radius:999px;background:var(--g4)}.dbar.real i{background:var(--acc)}.dbar span{position:absolute;left:14px;top:0;bottom:0;display:flex;align-items:center;font:600 max(.85em,13px) var(--mono);color:var(--fg)}
+.dw{margin:0 0 8px}.dn{margin:auto 0 0;padding:10px 14px;border-radius:var(--rcard);background:var(--bg);font-size:max(.95em,15px)}
+@media (max-width:980px){.defgrid{grid-template-columns:minmax(0,1fr)}.dtwo{grid-template-columns:minmax(0,1fr)}}
+
+.rng{position:relative}.rng b{display:block;font:500 max(.82em,13px) var(--mono);color:var(--g5);margin:0 0 4px}
+.rt{position:relative;height:34px;border-radius:999px;background:var(--g2);margin:0 0 10px}.rt.ov{height:34px;margin:-44px 0 10px;background:transparent}
+.rb{position:absolute;top:0;bottom:0;border-radius:999px;display:flex;align-items:center;justify-content:center;font:600 max(.82em,13px) var(--mono);white-space:nowrap;overflow:hidden}
+.rb.g{background:color-mix(in srgb,var(--t2) 38%,var(--bg))}.rb.m{background:color-mix(in srgb,var(--t1) 48%,var(--bg))}.rb.clash{outline:2.5px solid var(--bad);outline-offset:-2px;color:var(--bad);background:color-mix(in srgb,var(--bad) 10%,transparent)}
+.dc{max-width:none;padding:6px 10px;flex:0 1 auto}
+
+.fhq{margin:22px 0 10px;font-size:1.1em}
+.fh-terms{gap:12px}
+.ft{display:flex;flex-direction:column;gap:6px;padding:16px 16px 14px;text-align:left}
+.ft svg{width:100%;height:44px;margin:4px 0}
+.ft .fts{font:700 2.1em/1 var(--mono);color:var(--tc,var(--fg))}
+.ft.t1{--tc:var(--t1)}.ft.t2{--tc:var(--t2)}.ft.t3{--tc:var(--t3)}.ft.t4{--tc:var(--t4)}
+.ft .ftn{font:700 1.08em var(--sans)}
+.ft .ftd{font-size:max(.93em,15px);color:var(--g6);line-height:1.4}
+.ft .fta{font-size:max(.88em,14px);color:var(--g5)}.ft .fta i{font:500 .88em var(--mono);font-style:normal;text-transform:uppercase;letter-spacing:.06em;margin-right:6px;color:var(--g5)}
+.ft .ftv{margin-top:auto;font:700 1.7em var(--mono);color:var(--tc,var(--fg));padding-top:6px;border-top:2px solid var(--g3)}
+.ft b{display:none}
+.fh-stack{display:flex;gap:3px;margin:12px 0 4px;height:46px;border-radius:999px;overflow:hidden}
+.fh-stack span{display:flex;align-items:center;justify-content:center;min-width:0;font:700 max(.9em,14px) var(--mono);color:#fff;padding:0 10px;white-space:nowrap;overflow:hidden}
+.fh-stack .s1{background:var(--t1);color:#0b0b0a}.fh-stack .s2{background:var(--t2)}.fh-stack .s3{background:var(--t3)}.fh-stack .s4{background:var(--t4)}
+.fh-live .eq{font-size:1.4em}
+.fhd{margin-top:18px;border:0;background:var(--bg);border-radius:var(--rcard);padding:12px 16px}.fhd summary{font-weight:700}
+.fhd .fh-how{margin-top:12px}
+
+.fnmap{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin:14px 0 18px}
+.fnmap button{all:unset;box-sizing:border-box;cursor:pointer;background:var(--surf);border-radius:var(--rcard);padding:12px 14px;border:2px solid transparent}
+.fnmap button:hover{border-color:var(--g4)}.fnmap button[aria-pressed="true"]{border-color:var(--fg);background:var(--acc-soft)}
+.fnmap b{display:block;font:700 1.7em/1 var(--sans)}.fnmap code{display:block;font-size:max(.85em,14px);margin-top:6px;color:var(--g6)}.fnmap small{display:block;font-size:max(.85em,14px);color:var(--g5);margin-top:2px}
+.fnmap button:focus-visible{outline:2px solid var(--fg);outline-offset:2px}
 @page{size:letter;margin:14mm 13mm 16mm}
 @media print{
   :root,:root[data-theme],:root:not([data-theme="light"]){color-scheme:light;--bg:#fff;--fg:#000;--g2:#eee;--g3:#ccc;--g4:#999;--g5:#444;--g6:#222;--g7:#000;--surf:#fff;--panel:#fff;--code:#f4f4f4;--bar:#fff;--rule:#888;--acc:#d9c37a;--ok:#1f6b3f;--bad:#a3271a;--info:#1f4f8f;--fs:11.5px}
   body{background:#fff;color:#000;font-size:11.5px;line-height:1.5} body::before{display:none}
-  .bar,nav.rail,#lb,.toast,.nextprev,.sbtn,.imgwrap .hint,.btn,input[type=range],.ctl,.cmp .cc,#consts,.cmpview,.cw .fl,.cw .cpy,#walkctl,#walk .row,#wmapbox,#w3d{display:none!important}
+  .bar,nav.rail,#lb,.toast,.nextprev,.sbtn,.imgwrap .hint,.btn,input[type=range],.ctl,.cmp .cc,#consts,.cmpview,.cw .fl,.cw .cpy,#walkctl,#walk .row,#w3d,.wctl,.wfocus,.h2ctl,.dfil{display:none!important}
   .wrap{display:block;padding:0;max-width:none} main{padding:0}
   header.hero{padding:0 0 6mm} h1{font-size:30px}
   section{padding-top:0;break-before:page}
@@ -368,7 +490,7 @@ nav.rail .sec>a b{font-size:1.1em}
 <div class="brand">Cedar Grove H-Numbering<small>EXPLAINED</small></div>
 <button class="util" id="bsize" type="button" aria-pressed="false" title="Larger text for projection">Aa</button>
 <button class="util hide-s" id="bfs" type="button" title="Full screen">Full screen</button>
-<button class="util" id="btheme" type="button" title="Switch light and dark">Theme: auto</button>
+<button class="themebtn" id="btheme" type="button" aria-pressed="false" aria-label="Dark theme" title="Light or dark theme"><svg class="ic-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg><svg class="ic-moon" viewBox="0 0 24 24"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg></button>
 </div></div>
 <div class="wrap">
 <nav class="rail" id="rail" aria-label="Sections"><ol id="railist"></ol></nav>
@@ -376,8 +498,11 @@ nav.rail .sec>a b{font-size:1.1em}
 <header class="hero" id="top"><div class="kicker">Cedar Grove Cemetery · University of Notre Dame</div>
 <h1>Cedar Grove <span style="white-space:nowrap">H-Numbering,</span> Explained</h1>
 <p class="sub">How the old lot numbers worked, why they were hard to use, and the arithmetic behind the H-number system.</p>
-<p class="lede">By the end you will be able to read an old lot label and say what is ambiguous about it, follow how an H-number is counted along one path, type any old section and label into one formula to get its H-number, and see which results are confirmed and which still need a decision.</p>
-<div class="heroart" id="heroart" aria-hidden="true"></div>
+<p class="lede">The old numbers restart in every section. The H-numbers count one lot at a time along a single path. Here is how, and why it works.</p>
+<div class="hero2" id="hero2">
+<div class="h2card"><h3>Old numbers</h3><p class="h2sub">Each lot coloured by the number written on it. Every section starts again, so colours repeat and jump.</p><canvas id="h2old" aria-label="Map of the cemetery coloured by old lot numbers"></canvas><div class="h2lab" id="h2oldlab"></div></div>
+<div class="h2card"><h3>H-numbers</h3><p class="h2sub">One path through every lot. Watch the number climb by one at each step.</p><canvas id="h2new" aria-label="Map of the cemetery coloured by H-number as the path is walked"></canvas><div class="h2big" id="h2big">H000001<small>of 3,185</small></div><div class="h2ctl"><button class="btn sm" id="h2play" type="button">Replay</button><span class="note" id="h2pass"></span></div></div>
+</div>
 <div class="terms" role="list" aria-label="Four units">
 <div role="listitem"><b>Legacy label</b><div class="ex">19A</div><p>What is written on or beside a lot. Only unique inside its section.</p></div>
 <div role="listitem"><b>Physical lot</b><div class="ex">one plot of ground</div><p>The outline drawn on the map. The map has <span id="nPoly">3,103</span> lot outlines.</p></div>
@@ -434,8 +559,13 @@ nav.rail .sec>a b{font-size:1.1em}
 <h3>Real labels the decoder accepts</h3>
 <div class="chips" id="sampleChips"></div><div class="detail" id="sampledetail" aria-live="polite">Click a label to see its address and H-number.</div>
 <h3>The first two rows of every section</h3>
-<p>Each section is shown in the order a person would walk its first rows. A row never wraps, because wrapping would change how its spatial order looks. Scroll a section sideways with its arrows. Click any label for details.</p>
-<div class="key" aria-label="Legend"><span><i class="kd"></i>plain number</span><span><i class="kd h"></i>legacy H-lot (label ends in H)</span><span><i class="kd s"></i>letter suffix (A, B, C)</span><span><i class="kd o"></i>unusual label</span></div>
+<p>Labels are shown in the order a person would walk them. Each row runs left to right. Click any label for its address and H-number.</p>
+<div class="keycards" aria-label="What the label shapes mean">
+<div><span class="chip static">19</span><b>Plain number</b><p>Just a number.</p></div>
+<div><span class="chip static h">13H</span><b>H-lot</b><p>An extra lot squeezed in beside lot 13. This old "H" has nothing to do with the new H-numbers.</p></div>
+<div><span class="chip static suffix">19A</span><b>Letter suffix</b><p>A or B marks one half of a double-row lot.</p></div>
+<div><span class="chip static odd">D-F1</span><b>Unusual label</b><p>Starts with a letter or follows no pattern.</p></div>
+<div><span class="chip static gap">gap</span><b>Gap</b><p>A place in the row with no label in the old records.</p></div></div>
 <div id="anatomy"></div><div class="detail" id="anatdetail" aria-live="polite">Click a label above.</div>
 </section>
 
@@ -464,13 +594,16 @@ nav.rail .sec>a b{font-size:1.1em}
 <div class="key" id="maplegend"></div>
 <p class="note">Geometry: lot outlines traced from the cemetery drawing (about 3,100 outlines). Positions follow the drawing, which is marked "not to scale".</p></div>
 
-<h4>Walk the path: old number against H-number</h4>
-<p>Follow the path lot by lot. See it on the map from above, from inside the cemetery in a 3D walk, or as a chart. The old number you read on the lot jumps. The H-number counts up by one.</p>
+<h4 id="walkh">Walk both numbering systems</h4>
+<p>The same cemetery, counted two ways. Press play and compare.</p>
 <div class="panel" id="walk">
-<div id="walkctl" style="display:flex;gap:18px;flex-wrap:wrap;align-items:flex-end"></div>
-<div class="row" style="margin-top:12px"><div><label class="f" for="sawstart">Start at H-number: <span id="sawstartv"></span></label><input id="sawstart" type="range" min="1" max="3100" value="1"></div><div><label class="f" for="sawwidth">Number of lots in the walk: <span id="sawwidthv"></span></label><input id="sawwidth" type="range" min="20" max="900" value="60"></div><div><label class="f" for="walkpos">Position: <span id="walkposv"></span></label><input id="walkpos" type="range" min="0" max="59" value="0"></div></div>
-<div id="wmapbox" class="mapbox"><svg id="wmap" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Map from above with the walk highlighted"></svg><span class="orient" style="left:10px;top:10px">N ↑</span></div>
-<div class="out" id="wnow" aria-live="polite"></div><div class="wnow" id="wstrip" aria-label="Next lots"></div></div>
+<div class="wtabs" role="tablist" aria-label="Numbering system"><button class="btn seg on" role="tab" data-wm="old" type="button">Old numbering<small>every section counts by itself</small></button><button class="btn seg" role="tab" data-wm="h" type="button">H-numbers<small>one path through everything</small></button></div>
+<p class="wcap" id="wcap"></p>
+<div class="wgrid"><div class="mapbox" id="wmapbox"><canvas id="wcv" aria-label="Map of the cemetery with the walk drawn on it"></canvas><span class="orient" style="left:10px;top:10px">N ↑</span></div>
+<div class="wside" id="wside" aria-live="polite"></div></div>
+<div class="wctl"><button class="btn fill" id="wplay" type="button">Play</button><input id="wscrub" type="range" min="0" max="1000" value="0" aria-label="Position in the walk"><label class="f" for="wspeed" style="margin:0">Speed</label><select id="wspeed" style="width:auto"><option value="26000">Slow</option><option value="15000" selected>Normal</option><option value="8000">Fast</option></select></div>
+<div class="wfocus" id="wfocus" role="group" aria-label="Show one old section"></div>
+<div class="wkey" id="wkey"></div></div>
 
 <div class="panel" id="w3d"><h4 style="margin-top:0">Walk it inside the cemetery in 3D</h4>
 <p>The same path as a 3D model: headstones, trees, the office, the chapel and the mausoleums. The current lot glows gold as the camera glides along the numbering.</p>
@@ -478,7 +611,7 @@ nav.rail .sec>a b{font-size:1.1em}
 <div id="w3dp" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px"></div></div>
 
 <h3><span class="tag bad">C</span> Data inconsistencies</h3>
-<p>Each finding is shown as finding, example, practical consequence, and resolution status.</p>
+<p>Seven places where the old records contradict themselves. Each card shows the problem, then the one thing we need to know.</p>
 <div id="defects"></div>
 </section>
 
@@ -512,8 +645,8 @@ nav.rail .sec>a b{font-size:1.1em}
 <p class="lede">Six demonstrations, each laid out the same way: question, then diagram beside its controls, then the working, then the takeaway. Each starts on the <span class="mode">Actual system</span> settings. Move a control and it becomes an <span class="mode exp">Experiment</span>. It does not change the real numbers. Press Reset this example to return.</p>
 
 <div class="demo" id="p1"><header><h3>Step 1 · The two-section sweep (B and A)</h3><span class="mode" id="p1mode">Actual system</span><button class="btn sm" id="p1reset" type="button">Reset this example</button></header><div class="body">
-<div class="step"><b>Question</b><div>Sections B and A share levels. In what order does the sweep visit them, and where does a chosen lot fall?</div></div>
-<div class="step dg"><b>Diagram</b><div><canvas id="p1cv" width="1000" height="440" role="img" aria-label="Grid of B and A lots shaded by sweep position"></canvas><p class="note" style="margin-top:6px">Top block B, bottom block A. Shading runs light to dark with H. The dashed outline marks the selected level, with its visit order. The accent marks the selected lot.</p></div></div>
+<div class="step"><b>Question</b><div>Sections B and A are walked together. Which lot comes first, and what is the H-number of any lot you pick?</div></div>
+<div class="step dg"><b>Diagram</b><div><canvas id="p1cv" width="1000" height="440" role="img" aria-label="Grid of B and A lots shaded by sweep position"></canvas><p class="note" style="margin-top:8px"><b>How to read it.</b> Each box is one lot and the number inside is its H-number. The path runs along the B row, jumps to the A row (dotted line), runs along it, then drops to the next level. Click any box to pick it.</p></div></div>
 <div class="step ctl"><b>Controls</b><div>
 <div class="row"><div><label class="f" for="p1n">Columns per section N: <span id="p1nv"></span></label><input id="p1n" type="range" min="2" max="22" value="22"></div><div><label class="f" for="p1r">Levels R: <span id="p1rv"></span></label><input id="p1r" type="range" min="2" max="19" value="19"></div></div>
 <div class="row"><div style="flex:0 0 auto"><label class="f">Visit order inside a level</label><button class="btn seg on" data-ord="blocks" type="button">B then A</button><button class="btn seg" data-ord="alt" type="button">alternate B, A</button></div></div>
@@ -563,8 +696,8 @@ nav.rail .sec>a b{font-size:1.1em}
 </section>
 
 <section id="code"><div class="sechead"><span class="secnum">06</span><h2>The code</h2></div>
-<p class="lede">These are the real functions. Choose one from the list. Each starts with a sentence on what it does and which demonstration it implements. Code from the existing decoder and code from the arithmetic rebuild are in separate groups.</p>
-<div class="aside"><b>One expression does not remove the complexity.</b> The formula still carries constants, ordered lookup lists and exceptions. Section 07 shows how much of the rule set lives in those tables.</div>
+<p class="lede">The real functions that turn an old address into an H-number. Tap a section to read its code.</p>
+<div class="fnmap" id="fnmap" role="group" aria-label="Section to function"></div>
 <div id="snips"></div>
 </section>
 
@@ -572,18 +705,13 @@ nav.rail .sec>a b{font-size:1.1em}
 <p class="lede">This is the formula the whole system rests on. Every old section letter and lot label goes in, and one H-number comes out. It reproduces the decoder for every real label.</p>
 <div class="fh" id="fh"><div class="fh-k">The H-number formula</div>
 <div class="fh-math" role="img" aria-label="H of S and ell equals O sub p of S, plus the sum over j less than r of W one j plus W two j, plus sigma S times W one r, plus kappa S of ell"><math display="block"><mrow><mi>H</mi><mo>(</mo><mi>S</mi><mo>,</mo><mi>ℓ</mi><mo>)</mo><mo>=</mo><mrow class="mt t1" data-t="1"><msub><mi>O</mi><mrow><mi>p</mi><mo>(</mo><mi>S</mi><mo>)</mo></mrow></msub></mrow><mo>+</mo><mrow class="mt t2" data-t="2"><munder><mo>∑</mo><mrow><mi>j</mi><mo>&lt;</mo><mi>r</mi></mrow></munder><mrow><mo>(</mo><msubsup><mi>W</mi><mi>j</mi><mn>1</mn></msubsup><mo>+</mo><msubsup><mi>W</mi><mi>j</mi><mn>2</mn></msubsup><mo>)</mo></mrow></mrow><mo>+</mo><mrow class="mt t3" data-t="3"><msub><mi>σ</mi><mi>S</mi></msub><mo>⋅</mo><msubsup><mi>W</mi><mi>r</mi><mn>1</mn></msubsup></mrow><mo>+</mo><mrow class="mt t4" data-t="4"><msub><mi>κ</mi><mi>S</mi></msub><mo>(</mo><mi>ℓ</mi><mo>)</mo></mrow></mrow></math></div>
-<div class="fh-terms" role="group" aria-label="Terms of the formula">
-<button class="ft t1" type="button" data-t="1" aria-pressed="false"><b>O</b>lots in earlier passes<small>0, 836, 1,871, 2,331, 2,586, 2,835</small></button>
-<button class="ft t2" type="button" data-t="2" aria-pressed="false"><b>Σ</b>lots on earlier levels of this pass<small>W¹, W² are the level widths of the pass's two sections</small></button>
-<button class="ft t3" type="button" data-t="3" aria-pressed="false"><b>σ · W</b>the first section's level<small>σ is 1 for the second section of a pass, else 0</small></button>
-<button class="ft t4" type="button" data-t="4" aria-pressed="false"><b>κ</b>the lot's place on its level<small>this is where the old label is turned into a position</small></button></div>
-<div class="fh-live" id="fhlive" aria-live="polite"></div>
+<h4 class="fhq">Tap a term to see what it does for the lot below</h4><div class="fh-terms" role="group" aria-label="Terms of the formula"><button class="ft t1" type="button" data-t="1" aria-pressed="false"><span class="fts">O</span><span class="ftn">Where the pass starts</span><svg viewBox="0 0 220 44" aria-hidden="true"><rect x="2" y="6" width="26" height="30" rx="8" fill="var(--t1)" opacity=".55"/><rect x="32" y="6" width="58" height="30" rx="8" fill="var(--t1)" opacity=".55"/><rect x="94" y="6" width="44" height="30" rx="8" fill="none" stroke="var(--t1)" stroke-width="2.5" stroke-dasharray="4 4"/><rect x="142" y="6" width="22" height="30" rx="8" fill="var(--g3)"/><rect x="168" y="6" width="22" height="30" rx="8" fill="var(--g3)"/><rect x="194" y="6" width="24" height="30" rx="8" fill="var(--g3)"/></svg><span class="ftd">The lots in every earlier pass. It only depends on which pass the section belongs to.</span><span class="fta"><i>Applies to</i> every section</span><span class="ftv" id="ftv1"></span></button><button class="ft t2" type="button" data-t="2" aria-pressed="false"><span class="fts">Σ</span><span class="ftn">Levels already walked</span><svg viewBox="0 0 220 44" aria-hidden="true"><rect x="2" y="3" width="150" height="8" rx="4" fill="var(--t2)" opacity=".6"/><rect x="2" y="14" width="150" height="8" rx="4" fill="var(--t2)" opacity=".6"/><rect x="2" y="25" width="150" height="8" rx="4" fill="none" stroke="var(--t2)" stroke-width="2.2" stroke-dasharray="4 4"/><rect x="2" y="36" width="150" height="6" rx="3" fill="var(--g3)"/><path d="M164 6v22" stroke="var(--t2)" stroke-width="2.5" stroke-linecap="round"/><text x="172" y="22" font-size="14" fill="var(--t2)" font-family="IBM Plex Mono,monospace" font-weight="700">r&#8722;1</text></svg><span class="ftd">The lots on all the earlier levels of this pass. Straight runs have no levels, so Σ is 0.</span><span class="fta"><i>Applies to</i> A to H</span><span class="ftv" id="ftv2"></span></button><button class="ft t3" type="button" data-t="3" aria-pressed="false"><span class="fts">σ · W</span><span class="ftn">Waiting for the first section</span><svg viewBox="0 0 220 44" aria-hidden="true"><rect x="2" y="6" width="84" height="14" rx="7" fill="var(--g4)"/><rect x="90" y="24" width="124" height="14" rx="7" fill="var(--t3)" opacity=".7"/><path d="M2 32h84" stroke="var(--t3)" stroke-width="3" stroke-linecap="round" stroke-dasharray="1 6"/><text x="214" y="17" text-anchor="end" font-size="14" fill="var(--t3)" font-family="IBM Plex Mono,monospace" font-weight="700">W</text></svg><span class="ftd">On a level, the second section starts after the first one. σ is 1 for the second section of a pass, 0 for the first.</span><span class="fta"><i>Applies to</i> A, C, E, H</span><span class="ftv" id="ftv3"></span></button><button class="ft t4" type="button" data-t="4" aria-pressed="false"><span class="fts">κ</span><span class="ftn">Place on the level</span><svg viewBox="0 0 220 44" aria-hidden="true"><g fill="var(--g3)"><rect x="2" y="8" width="30" height="28" rx="8"/><rect x="38" y="8" width="30" height="28" rx="8"/><rect x="74" y="8" width="30" height="28" rx="8"/></g><rect x="110" y="8" width="30" height="28" rx="8" fill="var(--t4)"/><g fill="var(--g3)"><rect x="146" y="8" width="30" height="28" rx="8"/><rect x="182" y="8" width="30" height="28" rx="8"/></g><text x="125" y="28" text-anchor="middle" font-size="15" fill="#fff" font-weight="700" font-family="IBM Plex Mono,monospace">&#954;</text></svg><span class="ftd">Turns the old label into a position on its level. Every section has its own recipe, listed below.</span><span class="fta"><i>Applies to</i> every section</span><span class="ftv" id="ftv4"></span></button></div><div class="fh-live" id="fhlive" aria-live="polite"></div>
 <div class="fh-proof"><div><b id="fp1">3,197</b><span>real labels where the formula equals the decoder</span></div><div><b>3,139</b><span>distinct H-numbers they land on, out of 3,185 positions</span></div><div><b>13</b><span>old sections, one formula</span></div><div><b>6</b><span>passes along the path</span></div></div>
-<h4 style="margin:22px 0 0">How we got here</h4>
-<ol class="fh-how"><li>Count the lots along one path. A lot's number is the lots already visited, plus one.</li><li>Cut the path into six passes. Each pass starts after the last one, which gives O.</li><li>Inside a pass, walk level by level. The lots on earlier levels add up to Σ.</li><li>When two sections share a pass, the second one starts after the first one's level. That is σ · W.</li><li>Write each section's old labelling rule as a place on the level. That is κ, and the table below lists it for every section.</li><li>Compile everything into one expression and check it against the decoder, label by label.</li></ol></div>
+<details class="fhd"><summary>How the formula was built, in six steps</summary>
+<ol class="fh-how"><li>Count the lots along one path. A lot's number is the lots already visited, plus one.</li><li>Cut the path into six passes. Each pass starts after the last one, which gives O.</li><li>Inside a pass, walk level by level. The lots on earlier levels add up to Σ.</li><li>When two sections share a pass, the second one starts after the first one's level. That is σ · W.</li><li>Write each section's old labelling rule as a place on the level. That is κ, and the table below lists it for every section.</li><li>Compile everything into one expression and check it against the decoder, label by label.</li></ol></details></div>
 
 <div class="panel"><h4 style="margin-top:0">Old address to H-number</h4>
-<div class="row"><div style="max-width:140px"><label class="f" for="gs">Section</label><select id="gs"></select></div><div style="max-width:260px"><label class="f" for="gl">Lot label</label><input id="gl" type="text" value="20H" autocomplete="off"></div><div style="flex:0 0 auto"><button class="btn" id="gex" type="button">Try an example</button> <button class="btn" id="greset" type="button">Reset</button></div></div>
+<div class="row"><div style="max-width:140px"><label class="f" for="gs">Section</label><select id="gs"></select></div><div style="max-width:260px"><label class="f" for="gl">Lot label</label><input id="gl" type="text" value="89" autocomplete="off"></div><div style="flex:0 0 auto"><button class="btn" id="gex" type="button">Try an example</button> <button class="btn" id="greset" type="button">Reset</button></div></div>
 <div id="gres" aria-live="polite"></div><div id="gtrace"></div></div>
 <div class="panel"><h4 style="margin-top:0">H-number to old label</h4><div class="row"><div style="max-width:200px"><label class="f" for="gh">H-number</label><input id="gh" type="number" min="1" max="3185" value="1690"></div></div><div id="grev" aria-live="polite"></div></div>
 
@@ -644,7 +772,9 @@ function on(el,ev,fn){if(el)el.addEventListener(ev,fn)}
 var css=function(v){return getComputedStyle(document.documentElement).getPropertyValue(v).trim()||'#888'};
 var isDark=function(){return getComputedStyle(document.documentElement).colorScheme.indexOf('dark')===0};
 var ramp=function(t){t=Math.max(0,Math.min(1,t));var l=isDark()?(16+t*70):(90-t*62);return 'hsl(40,'+(isDark()?'6%':'7%')+','+l.toFixed(1)+'%)'};
-var redraws=[];function redrawAll(){redraws.forEach(function(f){try{f()}catch(e){}})}
+var redraws=[],rdT=0;function redrawAll(){redraws.forEach(function(f){try{f()}catch(e){}})}
+/* a theme change repaints the pictures one after another, after the new colours are on screen, so the switch itself never stalls */
+function scheduleRedraw(){clearTimeout(rdT);rdT=setTimeout(function(){var q=redraws.slice();(function next(){var f=q.shift();if(!f)return;try{f()}catch(e){}setTimeout(next,0)})()},60)}
 function compile(decl){return new Function('S','L','var m,p,n,f,r,q,c,k,i,j,g,b,'+decl.replace(/;/g,',')+';return '+X.giant.expr+';')}
 var GH=compile(X.giant.decl);
 var RV=(function(){var m={};FWD.forEach(function(r){(m[r[2]]=m[r[2]]||[]).push(r[0]+'-'+r[1])});return m})();
@@ -660,11 +790,11 @@ var LOTS=X.maplots.filter(function(l){return l[4]}).map(function(l){return {s:l[
 
 /* ---------------- presentation controls ---------------- */
 (function(){
-  var root=document.documentElement,TH=['auto','light','dark'],ti=0;
-  try{var s=localStorage.getItem('cg-theme');if(s&&TH.indexOf(s)>=0)ti=TH.indexOf(s)}catch(e){}
-  function applyTheme(){var v=TH[ti];if(v==='auto')root.removeAttribute('data-theme');else root.setAttribute('data-theme',v);$('btheme').textContent='Theme: '+v;try{localStorage.setItem('cg-theme',v)}catch(e){}setTimeout(redrawAll,30)}
-  on($('btheme'),'click',function(){ti=(ti+1)%3;applyTheme()});applyTheme();
-  if(window.matchMedia)window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change',function(){setTimeout(redrawAll,30)});
+  var root=document.documentElement,mq=window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)'),curT=null;
+  try{var s=localStorage.getItem('cg-theme');if(s==='light'||s==='dark')curT=s}catch(e){}
+  if(!curT)curT=mq&&mq.matches?'dark':'light';
+  function applyTheme(skip){root.setAttribute('data-theme',curT);var b=$('btheme');b.setAttribute('aria-pressed',curT==='dark');b.setAttribute('aria-label',curT==='dark'?'Switch to light theme':'Switch to dark theme');if(skip!==true)scheduleRedraw()}
+  on($('btheme'),'click',function(){curT=curT==='dark'?'light':'dark';try{localStorage.setItem('cg-theme',curT)}catch(e){}applyTheme()});applyTheme(true);
   window.addEventListener('beforeprint',function(){root.setAttribute('data-theme','light');redrawAll()});
   window.addEventListener('afterprint',function(){applyTheme()});
   var lg=false;try{lg=localStorage.getItem('cg-size')==='lg'}catch(e){}
@@ -790,93 +920,138 @@ var emphStats;
   on(svg,'mouseleave',function(){tip.style.display='none'});paint();
 })();
 
-/* ---------------- walk the path, on the map from above ---------------- */
+/* ---------------- walk both numbering systems on the map ---------------- */
 (function(){
-  var NS='http://www.w3.org/2000/svg',cmode='n',playing=false,posF=0,seq=[],raf=0,lastT=0,speed=6;
-  var ctl=$('walkctl');
-  ctl.innerHTML='<div><label class="f">Color lots by</label><button class="btn seg on" data-c="n" type="button">Old label number</button><button class="btn seg" data-c="h" type="button">H-number</button></div>'
-   +'<div><label class="f" for="wspeed">Walking speed</label><select id="wspeed" style="width:auto"><option value="3">Slow (3 lots/s)</option><option value="6" selected>Normal (6 lots/s)</option><option value="14">Fast (14 lots/s)</option></select></div>'
-   +'<div><button class="btn fill" id="wplay" type="button">Walk the path</button> <button class="btn" id="wreset" type="button">Reset</button></div>';
-  var svg=$('wmap'),polys=[],gW=document.createElementNS(NS,'g'),gT=document.createElementNS(NS,'g');
-  var base=document.createElementNS(NS,'g');svg.appendChild(base);svg.appendChild(gW);svg.appendChild(gT);
-  LOTS.forEach(function(l){var p=document.createElementNS(NS,'polygon');p.setAttribute('points',l.poly.map(function(q){return q.join(',')}).join(' '));p._l=l;base.appendChild(p);polys.push(p)});
-  function num(l){return parseInt(l.replace(/[^0-9]/g,''),10)||0}
-  function lotColor(l,st,wd,visited){if(cmode==='h')return 'hsl('+Math.round(240-240*(l.h-st)/Math.max(1,wd-1))+',68%,'+(visited?62:50)+'%)';var n=num(l.l);return 'hsl('+((n*47)%360)+',62%,'+(visited?(isDark()?42:66):(40+(n*13)%25))+'%)'}
+  var cv=$('wcv');if(!cv)return;var cx=cv.getContext('2d');
+  var bb=X.bbox,bw=bb[2]-bb[0]+14,bh=bb[3]-bb[1]+14,W0=1100,H0=Math.round(W0*bh/bw),ox=bb[0]-7,oy=bb[1]-7,sc=W0/bw;cv.width=W0;cv.height=H0;
+  var mode='old',focus='',f=0,playing=false,raf=0,t0=0,f0=0,dur=15000;
+  function trace(c,l){c.beginPath();l.poly.forEach(function(q,i){var x=(q[0]-ox)*sc,y=(q[1]-oy)*sc;if(i)c.lineTo(x,y);else c.moveTo(x,y)});c.closePath()}
+  function numOf(l){var m=/\d+/.exec(l);return m?+m[0]:0}
+  function sufOf(l){return l.replace(/^[A-Z]?\d+/,'')}
+  /* the old order inside one section: label number ascending, a suffix after its plain lot (13, 13A, 13B, 13H) */
+  var ORD={};SEC.forEach(function(s){ORD[s]=LOTS.filter(function(l){return l.s===s}).sort(function(a,b){return numOf(a.l)-numOf(b.l)||sufOf(a.l).localeCompare(sufOf(b.l))})});
+  var SECS=SEC.filter(function(s){return ORD[s].length});
+  var HUE={A:28,B:210,C:140,D:300,E:48,F:0,G:185,H:255,I:88,J:12,K:330,L:165,M:230};
+  function scol2(s,t){return 'hsl('+HUE[s]+',62%,'+(isDark()?(34+t*30):(74-t*38)).toFixed(0)+'%)'}
+  function hcol(t){return 'hsl('+(50-34*t).toFixed(0)+',82%,'+(isDark()?58:46)+'%)'}
+  var base=document.createElement('canvas'),lay=document.createElement('canvas');base.width=lay.width=W0;base.height=lay.height=H0;
+  var ptr={},hptr=0;
+  function drawBase(){var c=base.getContext('2d');c.clearRect(0,0,W0,H0);c.fillStyle=css('--g3');LOTS.forEach(function(l){trace(c,l);c.fill()})}
+  function reset(){lay.getContext('2d').clearRect(0,0,W0,H0);ptr={};hptr=0;SECS.forEach(function(s){ptr[s]=0})}
+  function targetIdx(s){var n=ORD[s].length;return Math.max(0,Math.min(n,Math.ceil(f*n)))}
+  function paintTo(){
+    var c=lay.getContext('2d');
+    if(mode==='old'){var back=false;SECS.forEach(function(s){if(targetIdx(s)<ptr[s])back=true});if(back)reset();
+      SECS.forEach(function(s){var n=ORD[s].length,tg=targetIdx(s);if(focus&&s!==focus)return;for(;ptr[s]<tg;ptr[s]++){c.fillStyle=scol2(s,ptr[s]/Math.max(1,n-1));trace(c,ORD[s][ptr[s]]);c.fill()}})}
+    else{var tg=Math.max(0,Math.min(LOTS.length,Math.ceil(f*LOTS.length)));if(tg<hptr)reset();for(;hptr<tg;hptr++){c.fillStyle=hcol(hptr/(LOTS.length-1));trace(c,LOTS[hptr]);c.fill()}}
+  }
+  function head(c,l,col,r){var x=(l.cx-ox)*sc,y=(l.cy-oy)*sc;c.fillStyle=col;c.strokeStyle=isDark()?'#f4f2ec':'#0b0b0a';c.lineWidth=3;c.beginPath();c.arc(x,y,r,0,7);c.fill();c.stroke()}
+  function tail(c,arr,i,col){var a=Math.max(0,i-45);c.strokeStyle=col;c.lineWidth=2.6;c.lineJoin='round';c.lineCap='round';c.beginPath();for(var k=a;k<=i;k++){var l=arr[k],x=(l.cx-ox)*sc,y=(l.cy-oy)*sc;if(k===a)c.moveTo(x,y);else c.lineTo(x,y)}c.stroke()}
+  var side=$('wside');
+  function draw(){
+    paintTo();cx.clearRect(0,0,W0,H0);cx.drawImage(base,0,0);cx.drawImage(lay,0,0);
+    if(mode==='old'){
+      var h='';SECS.forEach(function(s){if(focus&&s!==focus)return;var arr=ORD[s],n=arr.length,i=Math.max(0,Math.min(n-1,targetIdx(s)-1)),l=arr[i];
+        tail(cx,arr,i,'rgba('+(isDark()?'244,242,236':'11,11,10')+',.45)');head(cx,l,'hsl('+HUE[s]+',70%,52%)',9);
+        cx.font='700 17px "IBM Plex Mono",monospace';cx.textAlign='center';cx.fillStyle=isDark()?'#f4f2ec':'#0b0b0a';cx.strokeStyle=isDark()?'#0b0b0a':'#fff';cx.lineWidth=4;cx.strokeText(s,(l.cx-ox)*sc,(l.cy-oy)*sc-16);cx.fillText(s,(l.cx-ox)*sc,(l.cy-oy)*sc-16)});
+      SECS.forEach(function(s){var arr=ORD[s],n=arr.length,k=targetIdx(s),i=Math.max(0,Math.min(n-1,k-1)),l=arr[i];
+        h+='<div class="wrow'+(focus&&s!==focus?' dim':'')+'"><b style="background:hsl('+HUE[s]+',55%,42%)">'+s+'</b><div><div class="bar2"><i style="width:'+(100*k/n).toFixed(1)+'%;background:hsl('+HUE[s]+',62%,50%)"></i></div><span class="lbl" title="first lot '+esc(arr[0].l)+', last lot '+esc(arr[n-1].l)+'">at <b>'+s+'-'+esc(l.l)+'</b></span></div><span class="pos">'+k+' / '+n+'</span></div>'});
+      side.innerHTML='<div class="whs"><b>'+(focus?'Section '+focus:'All 13 sections at once')+'.</b> Each section counts from its own first label, so they walk in different directions at the same time. Dark means near the end.</div>'+h;
+    }else{
+      var i2=Math.max(0,Math.min(LOTS.length-1,Math.ceil(f*LOTS.length)-1)),l2=LOTS[i2];tail(cx,LOTS,i2,'rgba('+(isDark()?'244,242,236':'11,11,10')+',.5)');head(cx,l2,'#c5a448',11);
+      var pp=PASSES.filter(function(q){return l2.h>=q.lo&&l2.h<=q.hi})[0];
+      side.innerHTML='<div class="whs">One walker. One direction. Every step adds one.</div><div class="whb">'+pad(l2.h)+'</div><div class="whs">Pass <b>'+(pp?pp.n:'')+'</b> of 6 · sections '+(pp?esc(pp.secs):'')+'</div><div class="wpass">'+PASSES.map(function(q){return '<i'+(q.n===(pp&&pp.n)?' class="on"':'')+'></i>'}).join('')+'</div><div class="whs" style="margin-top:14px">The old label on this lot is <b>'+l2.s+'-'+esc(l2.l)+'</b>. Along the path it jumps around; the H-number never does.</div>';
+      set3d(l2.h);
+    }
+    $('wscrub').value=Math.round(f*1000);
+  }
+  function setMode(m){mode=m;focus='';reset();[].forEach.call(document.querySelectorAll('[data-wm]'),function(b){b.classList.toggle('on',b.getAttribute('data-wm')===m)});
+    $('wcap').textContent=m==='old'?'The old way. A is numbered on its own, B on its own, and so on. Every section starts again at its own first lot, so the walkers run side by side and never agree.':'The H-number way. One path through every lot, in one fixed order. The first lot is H000001, the next is H000002, all the way to H003185.';
+    $('wfocus').style.display=m==='old'?'flex':'none';
+    $('wkey').innerHTML=m==='old'?'<span><i style="background:linear-gradient(90deg,hsl(210,62%,74%),hsl(210,62%,36%))"></i>start → end of one section (each section has its own colour)</span>':'<span><i style="background:linear-gradient(90deg,'+hcol(0)+','+hcol(.5)+','+hcol(1)+')"></i>H000001 → H003185</span>';
+    buildFocus();draw()}
+  function buildFocus(){var w=$('wfocus');w.innerHTML='<span class="note" style="align-self:center;margin:0 6px 0 0">Show only</span>'+['All'].concat(SECS).map(function(s){return '<button class="chip" type="button" data-f="'+(s==='All'?'':s)+'" aria-pressed="'+((s==='All'?'':s)===focus)+'">'+(s==='All'?'All sections':s)+'</button>'}).join('');
+    [].forEach.call(w.querySelectorAll('[data-f]'),function(b){on(b,'click',function(){focus=b.getAttribute('data-f');reset();buildFocus();draw()})})}
   var B3=location.pathname.indexOf('/math/')>=0?'../site/3d.html':'3d.html';
-  function set3d(st){$('w3dgo').href=B3+'#h='+st;$('w3dgo').textContent='Fly to H'+String(st).padStart(6,'0')+' in 3D';$('w3dall').href=B3+'#walk'}
-  $('w3dp').innerHTML=[1,2,3,4,5,6].map(function(n){return '<a class="btn" style="text-decoration:none" href="'+B3+'#walk='+n+'">Walk pass '+n+'</a>'}).join('');
-  function rebuild(){
-    var st=+$('sawstart').value,wd=+$('sawwidth').value;$('sawstartv').textContent=st;$('sawwidthv').textContent=wd;
-    seq=LOTS.filter(function(l){return l.h>=st&&l.h<st+wd});set3d(st);var mp=Math.max(0,seq.length-1);$('walkpos').max=mp;if(posF>mp)posF=mp;$('walkpos').value=Math.round(posF);
-    var x0=1e9,y0=1e9,x1=-1e9,y1=-1e9;(seq.length?seq:LOTS).forEach(function(l){l.poly.forEach(function(q){if(q[0]<x0)x0=q[0];if(q[0]>x1)x1=q[0];if(q[1]<y0)y0=q[1];if(q[1]>y1)y1=q[1]})});
-    svg.style.cssText='display:block;width:100%;height:min(66vh,620px)';var asp=(svg.clientWidth||1000)/(svg.clientHeight||520),w=Math.max(x1-x0+30,90*asp),h=Math.max(y1-y0+30,90),mx=(x0+x1)/2,my=(y0+y1)/2;if(w/h<asp)w=h*asp;else h=w/asp;
-    svg.setAttribute('viewBox',(mx-w/2)+' '+(my-h/2)+' '+w+' '+h);
-    var inW={};seq.forEach(function(l,i){inW[l.h]=i});
-    polys.forEach(function(p){var l=p._l,i=inW[l.h];p._i=i;p.setAttribute('fill',i==null?css('--g3'):lotColor(l,st,wd,false));p.setAttribute('opacity',i==null?'.5':'1')});
-    gW.innerHTML='';
-    if(seq.length&&seq.length<=160){var fs=Math.max(2.2,Math.min(5,w/60));seq.forEach(function(l){var t=document.createElementNS(NS,'text');t.setAttribute('x',l.cx);t.setAttribute('y',l.cy);t.setAttribute('text-anchor','middle');t.setAttribute('style','font:600 '+fs+'px var(--mono);fill:#0b0b0a;pointer-events:none;paint-order:stroke;stroke:#fff;stroke-width:'+fs*0.28+'px');t.innerHTML='<tspan x="'+l.cx+'" dy="-0.15em">'+esc(l.l)+'</tspan><tspan x="'+l.cx+'" dy="1.05em" style="font-size:'+fs*0.78+'px;font-weight:500">'+l.h+'</tspan>';gW.appendChild(t)})}
-    update();
-  }
-  function cpos(f){var i=Math.floor(f),a=seq[i],b=seq[Math.min(i+1,seq.length-1)];if(!a)return null;var t=f-i;return {x:a.cx+(b.cx-a.cx)*t,y:a.cy+(b.cy-a.cy)*t}}
-  function update(){
-    var st=+$('sawstart').value,wd=+$('sawwidth').value,i=Math.floor(posF),cur=seq[i];$('walkposv').textContent=(seq.length?Math.round(posF)+1:0)+' of '+seq.length;
-    gT.innerHTML='';var cp=cpos(posF);
-    if(cp){var vb=svg.getAttribute('viewBox').split(' '),u=+vb[2]/560,pts=[];for(var k=0;k<=i;k++)pts.push(seq[k].cx+','+seq[k].cy);pts.push(cp.x+','+cp.y);var pl=document.createElementNS(NS,'polyline');pl.setAttribute('points',pts.join(' '));pl.setAttribute('fill','none');pl.setAttribute('stroke','#0b0b0a');pl.setAttribute('stroke-width',u*.9);pl.setAttribute('stroke-opacity','.75');pl.setAttribute('stroke-linejoin','round');pl.setAttribute('stroke-linecap','round');gT.appendChild(pl);
-      var c=document.createElementNS(NS,'circle');c.setAttribute('cx',cp.x);c.setAttribute('cy',cp.y);c.setAttribute('r',u*3.2);c.setAttribute('fill','#c5a448');c.setAttribute('stroke','#0b0b0a');c.setAttribute('stroke-width',u*.9);gT.appendChild(c)}
-    polys.forEach(function(p){if(p._i!=null)p.setAttribute('fill',lotColor(p._l,st,wd,p._i<i))});
-    var o=$('wnow');
-    if(!cur){o.innerHTML='No lots with outlines in this range. Move the start.';$('wstrip').innerHTML=''}
-    else{o.innerHTML='You are at <b>'+cur.s+'-'+esc(cur.l)+'</b>, which is <b>'+pad(cur.h)+'</b>. Lot '+(i+1)+' of '+seq.length+' in this walk. The old label on the lot jumps around. The H-number goes up by one each step.';
-      var s='';for(var j=i;j<Math.min(seq.length,i+9);j++)s+='<div class="c'+(j===i?' cur':'')+'">'+seq[j].s+'-'+esc(seq[j].l)+'<small>'+pad(seq[j].h)+'</small></div>';$('wstrip').innerHTML=s}
-  }
-  [].forEach.call(ctl.querySelectorAll('[data-c]'),function(b){on(b,'click',function(){cmode=b.getAttribute('data-c');[].forEach.call(ctl.querySelectorAll('[data-c]'),function(x){x.classList.toggle('on',x===b)});update()})});
-  function stop(){playing=false;if(raf)cancelAnimationFrame(raf);raf=0;var b=$('wplay');b.classList.remove('on');b.textContent='Walk the path'}
-  function tick(t){if(!playing)return;var dt=Math.min(.1,(t-lastT)/1000);lastT=t;posF+=speed*dt;if(posF>=seq.length-1){posF=seq.length-1;stop();$('walkpos').value=Math.round(posF);update();return}$('walkpos').value=Math.round(posF);update();raf=requestAnimationFrame(tick)}
-  on($('wplay'),'click',function(){if(playing){stop();return}if(posF>=seq.length-1)posF=0;playing=true;var b=$('wplay');b.classList.add('on');b.textContent='Pause';lastT=performance.now();raf=requestAnimationFrame(tick)});
-  on($('wreset'),'click',function(){stop();$('sawstart').value=1;$('sawwidth').value=60;posF=0;rebuild();toast('Walk reset')});
-  on($('wspeed'),'input',function(){speed=+$('wspeed').value});
-  on($('walkpos'),'input',function(){posF=+$('walkpos').value;update()});
-  on($('sawstart'),'input',function(){stop();rebuild()});on($('sawwidth'),'input',function(){stop();rebuild()});
-  redraws.push(function(){rebuild()});
-  rebuild();
+  function set3d(h){var g=$('w3dgo');if(!g)return;g.href=B3+'#h='+h;g.textContent='Fly to H'+String(h).padStart(6,'0')+' in 3D'}
+  $('w3dall').href=B3+'#walk';$('w3dp').innerHTML=[1,2,3,4,5,6].map(function(n){return '<a class="btn" style="text-decoration:none" href="'+B3+'#walk='+n+'">Walk pass '+n+'</a>'}).join('');
+  function tick(now){var e=f0+(now-t0)/dur;if(e>=1){f=1;stop();draw();return}f=e;draw();raf=requestAnimationFrame(tick)}
+  function stop(){playing=false;if(raf)cancelAnimationFrame(raf);raf=0;$('wplay').textContent=f>=1?'Replay':'Play'}
+  function play(){if(f>=1){f=0;reset()}playing=true;f0=f;t0=performance.now();$('wplay').textContent='Pause';raf=requestAnimationFrame(tick)}
+  on($('wplay'),'click',function(){if(playing){stop()}else play()});
+  on($('wscrub'),'input',function(){if(playing)stop();f=+$('wscrub').value/1000;draw()});
+  on($('wspeed'),'input',function(){dur=+$('wspeed').value;if(playing){f0=f;t0=performance.now()}});
+  [].forEach.call(document.querySelectorAll('[data-wm]'),function(b){on(b,'click',function(){if(playing)stop();f=0;setMode(b.getAttribute('data-wm'))})});
+  drawBase();reset();redraws.push(function(){drawBase();reset();draw()});
+  window.addEventListener('beforeprint',function(){if(playing)stop();f=1;drawBase();reset();draw()});
+  var started=false;if('IntersectionObserver' in window){new IntersectionObserver(function(es){if(es[0].isIntersecting&&!started){started=true;if(!(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches))play()}},{threshold:.35}).observe(cv)}
+  setMode('old');f=.0;draw();
 })();
 
-/* ---------------- hero illustration: a path that numbers twelve stones ---------------- */
+/* ---------------- hero: the same cemetery twice, once by old number and once by H-number ---------------- */
 (function(){
-  var host=$('heroart');if(!host)return;var NS='http://www.w3.org/2000/svg',Wd=1000,Hh=330;
-  var st=[],N=3,R=2,cw=84,ch=88;
-  for(var r=0;r<R;r++)['B','A'].forEach(function(s){for(var c=0;c<N;c++){var x0=s==='B'?130:560;st.push({x:x0+c*cw,y:96+r*(ch+28)})}});
-  var pts=st.map(function(p){return [p.x+27,p.y+56]});
-  function smooth(p){var d='M'+p[0][0]+' '+p[0][1];for(var i=0;i<p.length-1;i++){var a=p[i-1]||p[i],b=p[i],c=p[i+1],e=p[i+2]||c;d+=' C'+(b[0]+(c[0]-a[0])/6)+' '+(b[1]+(c[1]-a[1])/6)+' '+(c[0]-(e[0]-b[0])/6)+' '+(c[1]-(e[1]-b[1])/6)+' '+c[0]+' '+c[1]}return d}
-  var h='<svg viewBox="0 0 '+Wd+' '+Hh+'" xmlns="http://www.w3.org/2000/svg">'
-   +'<circle class="hart-sun" cx="880" cy="70" r="38"/>'
-   +'<path class="hart-hill2" d="M0 262 C150 204 300 232 460 247 S780 212 1000 237 V330 H0Z"/>'
-   +'<path class="hart-hill1" d="M0 292 C170 246 330 288 520 276 S850 256 1000 282 V330 H0Z"/>';
-  [[70,226,30,70],[960,224,26,62],[470,246,22,48]].forEach(function(t){h+='<ellipse class="hart-tree" cx="'+t[0]+'" cy="'+t[1]+'" rx="'+t[2]+'" ry="'+t[3]+'"/>'});
-  h+='<text class="hart-label" x="'+(130+cw)+'" y="84">Section B</text><text class="hart-label" x="'+(560+cw)+'" y="84">Section A</text>';
-  st.forEach(function(p){h+='<path class="hart-stone" d="M'+p.x+' '+(p.y+62)+' V'+(p.y+24)+' a27 24 0 0 1 54 0 V'+(p.y+62)+' Z"/>'});
-  h+='<path class="hart-path" id="hartpath" d="'+smooth(pts)+'"/>';
-  st.forEach(function(p,i){h+='<text class="hart-num" x="'+(p.x+27)+'" y="'+(p.y+46)+'" style="animation-delay:'+(0.25+i*0.42).toFixed(2)+'s">'+(i+1)+'</text>'});
-  h+='</svg><button class="btn sm replay" type="button" id="hartreplay">Replay</button>';
-  host.innerHTML=h;
-  var path=$('hartpath');try{var L=path.getTotalLength();host.style.setProperty('--len',Math.ceil(L)+2);path.style.strokeDasharray=Math.ceil(L)+2;path.style.strokeDashoffset=Math.ceil(L)+2}catch(e){}
-  function go(){host.classList.remove('go','static');void host.offsetWidth;host.classList.add('go')}
-  var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if(reduce)host.classList.add('static');else go();
-  on($('hartreplay'),'click',function(){host.classList.remove('static');go()});
+  var cvO=$('h2old'),cvN=$('h2new');if(!cvO||!cvN)return;
+  var bb=X.bbox,bw=bb[2]-bb[0]+14,bh=bb[3]-bb[1]+14,W0=900,H0=Math.round(W0*bh/bw),ox=bb[0]-7,oy=bb[1]-7,sc=W0/bw,N=LOTS.length;
+  [cvO,cvN].forEach(function(c){c.width=W0;c.height=H0});
+  function trace(cx,l){cx.beginPath();l.poly.forEach(function(q,i){var x=(q[0]-ox)*sc,y=(q[1]-oy)*sc;if(i)cx.lineTo(x,y);else cx.moveTo(x,y)});cx.closePath()}
+  function numOf(l){return parseInt(l.l.replace(/[^0-9]/g,''),10)||0}
+  function drawOld(){var cx=cvO.getContext('2d');cx.clearRect(0,0,W0,H0);LOTS.forEach(function(l){var n=numOf(l);cx.fillStyle='hsl('+((n*47)%360)+',56%,'+(isDark()?44+(n*13)%12:52+(n*13)%16)+'%)';trace(cx,l);cx.fill()})}
+  var base=document.createElement('canvas'),paint=document.createElement('canvas');base.width=paint.width=W0;base.height=paint.height=H0;
+  function drawBase(){var cx=base.getContext('2d');cx.clearRect(0,0,W0,H0);cx.fillStyle=css('--g3');LOTS.forEach(function(l){trace(cx,l);cx.fill()})}
+  function ramp(t){return 'hsl('+(50-34*t).toFixed(0)+',82%,'+(isDark()?58:46)+'%)'}
+  var pi=0,t0=0,raf=0,fr=0,DUR=12000,reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function advance(to){var cx=paint.getContext('2d');for(;pi<to;pi++){cx.fillStyle=ramp(pi/(N-1));trace(cx,LOTS[pi]);cx.fill()}}
+  function repaint(){var keep=pi;paint.getContext('2d').clearRect(0,0,W0,H0);pi=0;advance(keep)}
+  function show(){var cx=cvN.getContext('2d');cx.clearRect(0,0,W0,H0);cx.drawImage(base,0,0);cx.drawImage(paint,0,0);
+    var i=Math.max(0,Math.min(N-1,pi-1)),l=LOTS[i];
+    cx.lineJoin='round';cx.lineCap='round';cx.strokeStyle=isDark()?'#f4f2ec':'#0b0b0a';cx.lineWidth=2.4;cx.globalAlpha=.55;cx.beginPath();for(var k=Math.max(0,i-60);k<=i;k++){var q=LOTS[k],x=(q.cx-ox)*sc,y=(q.cy-oy)*sc;if(k===Math.max(0,i-60))cx.moveTo(x,y);else cx.lineTo(x,y)}cx.stroke();cx.globalAlpha=1;
+    var hx=(l.cx-ox)*sc,hy=(l.cy-oy)*sc;cx.fillStyle='#c5a448';cx.strokeStyle='#0b0b0a';cx.lineWidth=3;cx.beginPath();cx.arc(hx,hy,11,0,7);cx.fill();cx.stroke();
+    $('h2big').innerHTML=pad(l.h)+'<small>of 3,185</small>';var p=PASSES.filter(function(q){return l.h>=q.lo&&l.h<=q.hi})[0];$('h2pass').textContent=p?'Pass '+p.n+' of 6 · sections '+p.secs.replace(/ margins;?/,'')+'':'';
+    if(fr++%5===0||pi>=N){var h='';for(var k2=Math.max(0,i-5);k2<=i;k2++)h+='<span>'+LOTS[k2].s+'-'+esc(LOTS[k2].l)+'</span>';$('h2oldlab').innerHTML=h}}
+  function tick(now){var f=Math.min(1,(now-t0)/DUR),e=f<.5?2*f*f:1-Math.pow(-2*f+2,2)/2;advance(Math.max(pi,Math.floor(e*N)));if(f>=1)advance(N);show();if(f<1)raf=requestAnimationFrame(tick);else raf=0;$('h2play').textContent='Replay'}
+  function play(){if(raf)cancelAnimationFrame(raf);paint.getContext('2d').clearRect(0,0,W0,H0);pi=0;fr=0;if(reduce){advance(N);show();return}t0=performance.now();$('h2play').textContent='Restart';raf=requestAnimationFrame(tick)}
+  drawOld();drawBase();on($('h2play'),'click',play);
+  window.addEventListener('beforeprint',function(){if(raf)cancelAnimationFrame(raf);advance(N);drawOld();drawBase();repaint();show()});
+  redraws.push(function(){drawOld();drawBase();repaint();show()});
+  var started=false;function maybe(){if(started)return;var r=cvN.getBoundingClientRect();if(r.top<innerHeight&&r.bottom>0){started=true;play()}}
+  if('IntersectionObserver' in window){new IntersectionObserver(function(es){if(es[0].isIntersecting)maybe()},{threshold:.2}).observe(cvN)}else play();
+  advance(0);show();
 })();
 
-/* defects */
+/* data inconsistencies: seven problems, each with a picture of what goes wrong */
 (function(){
   var oth=A.B_grid_labels_shadowed_by_margin||[],hmax=Math.max.apply(null,FWD.filter(function(r){return r[0]==='H'}).map(function(r){return r[2]}));
-  var d=[['B','Labels claimed twice','Section B\'s grid rule and its margin list both use the labels '+oth[0]+' to '+oth[oth.length-1]+'.','B-373 resolves to the margin position '+pad(FW['B|373'])+'.','The grid places that would carry these '+oth.length+' numbers have no label of their own.','The decoder lets the later rule win. Open: someone has to say which lot each label means.'],
-   ['B, A','Positions with no old label','In the first sweep, 44 H-numbers have no legacy reference.','H000010, H000046 and H000055 are the first three.','These lots can only be found by H-number or by counting on the ground.','Listed in section 09. Open: a field check to see whether a physical lot sits at each position.'],
-   ['D, G','Duplicate keys in the decoder tables','Section D lists 274 twice and Section G lists 19 twice in its first row.','G row 1 reads 19, 19 where one should be 19H.','One of each pair is shadowed, so one lot cannot be reached by its label.','The decoder keeps the later entry and the formula follows it. Open: decide which lot each entry meant.'],
-   ['C','A typo in a row table','Row 8 of C lists "124H" where the pattern requires "142H".','C-142H '+(FW['C|142H']!=null?'is':'is not')+' in the decoder; C-124H is.','A lookup for the lot the pattern calls 142H fails. A lookup for 124H lands on that position.','The formula maps the typo to the intended position. Open: confirm on the map.'],
-   ['B, A','The documents and the code disagree on the order','The reference PDF and decoder docstring say the sweep alternates B column 1, A column 1, and so on. The code visits a whole level of B, then the same level of A.','Under the document\'s order, A column 1 of level 1 would be H000002, not H000023.','Every H-number in B and A after the first lot would change (step 1 shows this).','All checks here follow the code. Open: choose the authoritative traversal order.'],
-   ['C','The idealised grid is not the real grid','The reference sheet assumes 22 lots in every row.','It ends C-417 at H001672. The real rows give H001871.','Anyone using the sheet gets wrong numbers after the first uneven row.','Resolved in the decoder. The sheet should be retired or updated.'],
-   ['H, M','Where H ends and M begins','Section H ends at '+pad(hmax)+' and M begins at '+pad(FW['M|11'])+'. Earlier summaries put M at H002586.','Pass 5 runs H002587 to H002835.','Quoting the older boundary puts the last lot of H and the first lot of M in the wrong passes.','Corrected on this page, which computes pass ranges from the data. Open: check any other document that quotes the boundary.']];
-  $('defects').innerHTML=d.map(function(x){return '<div class="def"><span class="tag bad">Section '+x[0]+'</span> <b>'+x[1]+'</b><div class="f4"><div><em>Finding</em>'+x[2]+'</div><div><em>Example</em>'+x[3]+'</div><div><em>Consequence</em>'+x[4]+'</div><div><em>Status</em>'+x[5]+'</div></div></div>'}).join('');
+  var cell=function(t,c){return '<span class="dc '+(c||'')+'">'+t+'</span>'};
+  /* 1 labels claimed twice */
+  function v1(){var lo=oth[0]||373,hi=oth[oth.length-1]||379,a=372,b=395,pc=function(n){return ((n-a)/(b-a)*100).toFixed(2)+'%'};
+    function bar(x0,x1,cls,txt){return '<div class="rb '+cls+'" style="left:'+pc(x0)+';width:calc('+pc(x1+1)+' - '+pc(x0)+')"><span>'+txt+'</span></div>'}
+    return '<div class="rng"><b>Grid rule</b><div class="rt">'+bar(lo,hi,'g','labels '+lo+' to '+hi)+'</div><b>Margin list</b><div class="rt">'+bar(373,394,'m','labels 373 to 394')+'</div><div class="rt ov"><div class="rb clash" style="left:'+pc(lo)+';width:calc('+pc(hi+1)+' - '+pc(lo)+')"><span>claimed twice</span></div></div></div><p class="dcap"><i class="sw clash"></i>'+oth.length+' labels ('+lo+' to '+hi+') appear in both lists</p>'}
+  /* 2 positions without a label */
+  function v2(){var n=3185,w=1000,t='';X.missingH.forEach(function(h){t+='<rect x="'+(h/n*w).toFixed(1)+'" y="8" width="3" height="34" rx="1.5" fill="var(--bad)"/>'});
+    PASSES.forEach(function(p){t+='<rect x="'+(p.lo/n*w).toFixed(1)+'" y="46" width="'+((p.hi-p.lo+1)/n*w-2).toFixed(1)+'" height="10" rx="5" fill="var(--g3)"/><text x="'+((p.lo+p.hi)/2/n*w).toFixed(1)+'" y="78" text-anchor="middle" font-size="22" fill="var(--g5)" font-family="IBM Plex Mono,monospace">'+p.n+'</text>'});
+    return '<svg viewBox="0 0 1000 86" class="dsvg" role="img" aria-label="Positions along the path with no old label">'+t+'</svg><p class="dcap"><i class="sw bad"></i>each red mark is a position on the path (H000001 to H003185) with no old label, '+X.missingH.length+' in all</p>'}
+  /* 3 duplicate keys */
+  function v3(){return '<div class="dl"><b>Section G, row 1</b><div class="dr">'+cell('17')+cell('18')+cell('19','clash on')+cell('19','clash on')+cell('20')+cell('19H?','ghost')+'</div></div><div class="dl"><b>Section D table</b><div class="dr">'+cell('273')+cell('274','clash on')+cell('274','clash on')+cell('275')+'</div></div><p class="dcap"><i class="sw clash"></i>two lots answer to one label, so the software can only reach one of them</p>'}
+  /* 4 typo */
+  function v4(){return '<div class="dl"><b>Pattern says</b><div class="dr">'+cell('143')+cell('142')+cell('142H','on g')+cell('141')+'</div></div><div class="dl"><b>Table says</b><div class="dr">'+cell('143')+cell('142')+cell('124H','clash on')+cell('141')+'</div></div><p class="dcap"><i class="sw clash"></i>two digits swapped in row 8 of Section C</p>'}
+  /* 5 documents vs code */
+  function grid(order){var b='',a='';order.B.forEach(function(n,i){b+=cell(n,'g on'+(n!==i+1?' clash':''))});order.A.forEach(function(n,i){a+=cell(n,'m on'+(n!==i+4?' clash':''))});return '<div class="dr"><span class="dsec">B</span>'+b+'</div><div class="dr"><span class="dsec">A</span>'+a+'</div>'}
+  function v5(){return '<div class="dtwo"><div><b>The document says: alternate</b>'+grid({B:[1,3,5],A:[2,4,6]})+'</div><div><b>The code does: all of B, then all of A</b>'+grid({B:[1,2,3],A:[4,5,6]})+'</div></div><p class="dcap"><i class="sw clash"></i>the numbers in red land on different lots depending on which order is right</p>'}
+  /* 6 idealised grid */
+  function v6(){return '<div class="dl"><b>Reference sheet</b><div class="dbar"><i style="width:'+(1672/1871*100)+'%"></i><span>C-417 = H001672</span></div></div><div class="dl"><b>Real decoder</b><div class="dbar real"><i style="width:100%"></i><span>C-417 = H001871</span></div></div><p class="dcap"><i class="sw clash"></i>the sheet is 199 lots short, because it assumes every row has 22 lots</p>'}
+  /* 7 H / M boundary */
+  function v7(){var m=FW['M|11']||2587;return '<div class="dl"><b>What the data says</b><div class="dr"><span class="dsec">H</span>'+cell('ends '+pad(hmax),'g on')+cell('M starts '+pad(m),'m on')+'</div></div><div class="dl"><b>What older notes said</b><div class="dr">'+cell('M starts '+pad(m-1),'clash on')+'</div></div><p class="dcap"><i class="sw clash"></i>one position off, so the last lot of H lands in the wrong pass</p>'}
+  var d=[
+   {sec:'B',open:1,t:'Two lists use the same labels',v:v1(),w:'Section B counts its grid and its margin with overlapping numbers. B-373 means a lot in the margin, not the grid.',n:'Which lot does each of these '+oth.length+' labels belong to?'},
+   {sec:'B, A',open:1,t:'Positions with no old label',v:v2(),w:X.missingH.length+' places on the path have no old label. They can only be found by H-number or by counting on the ground.',n:'Does a real lot stand at each of these positions?'},
+   {sec:'D, G',open:1,t:'One label, two lots',v:v3(),w:'Two entries in the old tables share a label, so one lot can never be looked up.',n:'Which lot did each entry mean?'},
+   {sec:'C',open:1,t:'A typo in a row table',v:v4(),w:'Row 8 lists 124H where the pattern needs 142H. A search for 142H finds nothing.',n:'Is the lot on the map really 142H?'},
+   {sec:'B, A',open:1,t:'The paper and the code disagree',v:v5(),w:'The reference PDF alternates B and A column by column. The code does a whole level of B first. Every H-number after the first lot depends on this.',n:'Which order is the official one?'},
+   {sec:'C',open:0,t:'The idealised grid is wrong',v:v6(),w:'The reference sheet assumes 22 lots in every row. Real rows vary. The decoder already uses the real rows.',n:'Retire or correct the old sheet.'},
+   {sec:'H, M',open:0,t:'Where H ends and M begins',v:v7(),w:'Section H ends at '+pad(hmax)+' and M starts at '+pad(FW['M|11'])+'. Earlier summaries quoted M at H002586.',n:'Check any document that quotes the old boundary.'}];
+  var no=d.filter(function(x){return x.open}).length;
+  $('defects').innerHTML='<div class="dsum"><span><b>'+d.length+'</b> problems found</span><span class="o"><b>'+no+'</b> need a decision</span><span class="r"><b>'+(d.length-no)+'</b> handled</span><span class="dfil"><button class="chip" data-df="" aria-pressed="true" type="button">All</button><button class="chip" data-df="1" aria-pressed="false" type="button">Need a decision</button><button class="chip" data-df="0" aria-pressed="false" type="button">Handled</button></span></div><div class="defgrid">'+d.map(function(x){return '<article class="defc" data-o="'+x.open+'"><div class="dh"><span class="pill '+(x.open?'open':'done')+'">'+(x.open?'Needs a decision':'Handled')+'</span><span class="tag bad">Section '+x.sec+'</span></div><h4>'+x.t+'</h4><div class="defv">'+x.v+'</div><p class="dw">'+x.w+'</p><p class="dn"><b>'+(x.open?'We need to know:':'Still to do:')+'</b> '+x.n+'</p></article>'}).join('')+'</div>';
+  [].forEach.call($('defects').querySelectorAll('[data-df]'),function(b){on(b,'click',function(){var v=b.getAttribute('data-df');[].forEach.call($('defects').querySelectorAll('[data-df]'),function(x){x.setAttribute('aria-pressed',x===b)});[].forEach.call($('defects').querySelectorAll('.defc'),function(c){c.style.display=(v===''||c.getAttribute('data-o')===v)?'':'none'})})});
 })();
 
 var IMG=X.img;
@@ -962,6 +1137,35 @@ function demo(id,ctrls,extraDirty,extraReset,rerun){
 (function(){
   var ord='blocks',d;
   function Hf(sec,r,c,N){var SW=2*N;return ord==='blocks'?SW*(r-1)+(sec==='B'?0:N)+c:SW*(r-1)+2*c-(sec==='B'?1:0)}
+  function drawP1(N,R,r,c,sec,Hs){
+    var cv=$('p1cv'),cx=cv.getContext('2d'),W0=1000,gx=118,cw=(W0-gx-24)/N,ch=36,gap=12,lg=34,nl=Math.min(3,R),st=Math.max(1,Math.min(R-nl+1,r-1)),levH=2*ch+gap+lg,top=18,Hh=top+nl*levH+46;
+    cv.width=W0;cv.height=Hh;cx.clearRect(0,0,W0,Hh);var cB=css('--t2'),cA=css('--t1'),bg=css('--bg'),fg=css('--fg'),g5=css('--g5'),dk=isDark();cv._cells=[];cv._g={N:N,R:R};
+    function mix(col,a){cx.globalAlpha=a;cx.fillStyle=col;cx.fill();cx.globalAlpha=1}
+    function rr(x,y,w,h,rad){cx.beginPath();if(cx.roundRect)cx.roundRect(x,y,w,h,rad);else cx.rect(x,y,w,h)}
+    for(var li=0;li<nl;li++){
+      var L=st+li,y0=top+li*levH,yB=y0,yA=y0+ch+gap;
+      cx.fillStyle=g5;cx.font='600 15px "IBM Plex Mono",monospace';cx.textAlign='left';cx.fillText('Level '+L,4,y0+ch*.5+5);cx.font='500 13px "IBM Plex Mono",monospace';cx.fillText('H'+Hf('B',L,1,N)+' to H'+Hf('A',L,N,N),4,y0+ch*.5+24);
+      /* the path of the sweep */
+      cx.lineWidth=2.6;cx.lineCap='round';cx.strokeStyle=fg;cx.globalAlpha=.7;var mY=yB+ch*.5,aY=yA+ch*.5,x0=gx+cw*.5,x1=gx+(N-.5)*cw;cx.beginPath();
+      if(ord==='blocks'){cx.moveTo(x0,mY);cx.lineTo(x1,mY);cx.stroke();cx.setLineDash([2,7]);cx.beginPath();cx.moveTo(x1,mY);cx.bezierCurveTo(x1+30,mY+ch*1.1,x0-30,aY-ch*1.1,x0,aY);cx.stroke();cx.setLineDash([]);cx.beginPath();cx.moveTo(x0,aY);cx.lineTo(x1,aY);cx.stroke();
+        if(li<nl-1){cx.setLineDash([2,7]);cx.beginPath();cx.moveTo(x1,aY);cx.bezierCurveTo(x1+30,aY+lg*1.2,x0-30,y0+levH-lg*.2,x0,y0+levH+ch*.5);cx.stroke();cx.setLineDash([])}}
+      else{cx.beginPath();for(var q=1;q<=N;q++){var qx=gx+(q-.5)*cw;cx.lineTo(qx,mY);cx.lineTo(qx,aY)}cx.stroke()}
+      cx.globalAlpha=1;
+      [['B',yB,cB],['A',yA,cA]].forEach(function(row){var s2=row[0],y=row[1],col=row[2];
+        cx.fillStyle=col;cx.font='700 14px "IBM Plex Mono",monospace';cx.textAlign='center';cx.fillText(s2+' →',gx-26,y+ch*.62);
+        for(var cc=1;cc<=N;cc++){var x=gx+(cc-1)*cw,h=Hf(s2,L,cc,N),on=(L===r&&cc===c&&s2===sec);
+          rr(x+1,y,cw-2,ch,7);cx.fillStyle=bg;cx.fill();mix(col,on?0:(dk?.34:.36));if(on){cx.fillStyle='#c5a448';cx.fill();cx.lineWidth=3;cx.strokeStyle=dk?'#f4f2ec':'#0b0b0a';cx.stroke()}
+          cx.fillStyle=on?'#0b0b0a':fg;cx.font=(on?'700 ':'600 ')+Math.min(14,cw*.4)+'px "IBM Plex Mono",monospace';cx.textAlign='center';if(cw>=22||cc===1||cc===N||on)cx.fillText(h,x+cw/2,y+ch*.62);
+          cv._cells.push({x:x,y:y,w:cw,h:ch,s:s2,L:L,c:cc})}});
+      /* bracket + caption */
+      cx.fillStyle=g5;cx.font='500 13px "IBM Plex Sans",system-ui,sans-serif';cx.textAlign='right';
+    }
+    cx.textAlign='left';var ly=Hh-18;cx.font='500 14px "IBM Plex Mono",monospace';
+    rr(gx,ly-12,22,16,5);mix(cB,.5);cx.fillStyle=g5;cx.fillText('Section B lots',gx+30,ly);
+    rr(gx+190,ly-12,22,16,5);mix(cA,.5);cx.fillStyle=g5;cx.fillText('Section A lots',gx+220,ly);
+    cx.strokeStyle=g5;cx.lineWidth=2.6;cx.setLineDash([2,7]);cx.beginPath();cx.moveTo(gx+400,ly-4);cx.lineTo(gx+440,ly-4);cx.stroke();cx.setLineDash([]);cx.fillText('jump to the next row',gx+450,ly);
+    cx.textAlign='right';cx.fillText(R>nl?('levels '+st+'–'+(st+nl-1)+' of '+R):'',W0-6,ly);
+  }
   function run(){
     var N=+$('p1n').value,R=+$('p1r').value;$('p1nv').textContent=N;$('p1rv').textContent=R;
     var sec=$('p1sec').value,r0=+$('p1lv').value||1,c0=+$('p1c').value||1,r=Math.min(Math.max(1,r0),R),c=Math.min(Math.max(1,c0),N),clamp=(r!==r0||c!==c0);
@@ -970,21 +1174,13 @@ function demo(id,ctrls,extraDirty,extraReset,rerun){
     $('p1eqn').innerHTML=ord==='blocks'?'<span class="lbl">SWEEP  = </span>N<sub>B</sub> + N<sub>A</sub> = '+SW+'<br><span class="lbl">OFFSET = </span>SWEEP × R = '+SW*R+'<br><span class="lbl">H(B, r, c) = </span>SWEEP × (r − 1) + c<br><span class="lbl">H(A, r, c) = </span>SWEEP × (r − 1) + N<sub>B</sub> + c'
       :'<span class="lbl">SWEEP  = </span>N<sub>B</sub> + N<sub>A</sub> = '+SW+'<br><span class="lbl">OFFSET = </span>SWEEP × R = '+SW*R+'<br><span class="lbl">H(B, r, c) = </span>SWEEP × (r − 1) + 2c − 1<br><span class="lbl">H(A, r, c) = </span>SWEEP × (r − 1) + 2c';
     $('p1out').innerHTML='H('+sec+', level '+r+', column '+c+') = '+SW+' × '+(r-1)+(ord==='blocks'?(sec==='A'?' + '+N:''):'')+' + '+(ord==='blocks'?c:(sec==='B'?'2×'+c+'−1':'2×'+c))+' = <span class="hv">'+Hs+'</span> → '+pad(Hs)+'<br>Visited as lot '+Hs+' of '+SW*R+' in this pass. On level '+r+' the sweep visits '+(ord==='blocks'?'B columns 1 to '+N+' (H '+Hf('B',r,1,N)+' to '+Hf('B',r,N,N)+'), then A columns 1 to '+N+' (H '+Hf('A',r,1,N)+' to '+Hf('A',r,N,N)+').':'B and A columns in turn: B1, A1, B2, A2 …')+(clamp?'<br>Level and column were limited to 1–'+R+' and 1–'+N+'.':'');
-    var cv=$('p1cv'),cx=cv.getContext('2d');cx.clearRect(0,0,cv.width,cv.height);
-    var cw=(cv.width-60)/N,ch=Math.min(18,(cv.height-30)/(2*R+1)),tot=2*N*R,dk=isDark();cv._g={cw:cw,ch:ch,N:N,R:R};
-    ['B','A'].forEach(function(s,si){for(var rr=1;rr<=R;rr++)for(var cc=1;cc<=N;cc++){var h=Hf(s,rr,cc,N),t=(h-1)/Math.max(1,tot-1);cx.fillStyle=ramp(t);cx.fillRect(40+(cc-1)*cw,10+(si*(R+1)+rr-1)*ch,cw-1.5,ch-1.5);
-      if(rr===r&&cw>=24){cx.fillStyle=dk?(t<.45?'#f4f2ec':'#0b0b0a'):(t<.55?'#0b0b0a':'#f4f2ec');cx.font='500 '+Math.min(12,cw*.42)+'px "IBM Plex Mono",monospace';cx.textAlign='center';cx.fillText(h,40+(cc-1)*cw+cw/2,10+(si*(R+1)+rr-1)*ch+ch*.72)}}});
-    cx.setLineDash([5,4]);cx.lineWidth=1.6;cx.strokeStyle=css('--fg');[0,1].forEach(function(si){cx.strokeRect(38,10+(si*(R+1)+r-1)*ch-2,N*cw+3,ch+2)});cx.setLineDash([]);
-    cx.fillStyle=css('--fg');cx.font='600 11px "IBM Plex Mono",monospace';cx.textAlign='left';cx.fillText('visit →',40,10+(2*R+1)*ch+16);
-    var si=sec==='B'?0:1,sx=40+(c-1)*cw-1,sy=10+(si*(R+1)+r-1)*ch-1;cx.fillStyle='#c5a448';cx.fillRect(sx,sy,cw,ch);cx.lineWidth=2.5;cx.strokeStyle='#0b0b0a';cx.strokeRect(sx,sy,cw,ch);
-    cx.fillStyle='#0b0b0a';cx.font='700 '+Math.min(12,Math.max(8,cw*.42))+'px "IBM Plex Mono",monospace';cx.textAlign='center';if(cw>=20)cx.fillText(Hs,sx+cw/2,sy+ch*.72);
-    cx.fillStyle=css('--g5');cx.font='600 12px "IBM Plex Mono",monospace';cx.textAlign='left';cx.fillText('B',14,10+ch);cx.fillText('A',14,10+(R+1)*ch+ch);
+    drawP1(N,R,r,c,sec,Hs);
     d.upd();
   }
   d=demo('p1',['p1n','p1r','p1sec','p1lv','p1c'],function(){return ord!=='blocks'},function(){ord='blocks';[].forEach.call(document.querySelectorAll('button[data-ord]'),function(x){x.classList.toggle('on',x.getAttribute('data-ord')==='blocks')})},run);
   ['p1n','p1r','p1sec','p1lv','p1c'].forEach(function(i){on($(i),'input',run)});
   [].forEach.call(document.querySelectorAll('button[data-ord]'),function(b){on(b,'click',function(){ord=b.getAttribute('data-ord');[].forEach.call(document.querySelectorAll('button[data-ord]'),function(x){x.classList.toggle('on',x===b)});run()})});
-  function cell(e){var cv=$('p1cv'),g=cv._g;if(!g)return null;var r=cv.getBoundingClientRect(),x=(e.clientX-r.left)*cv.width/r.width-40,y=(e.clientY-r.top)*cv.height/r.height-10;var cc=Math.floor(x/g.cw)+1,row=Math.floor(y/g.ch),si=row>=g.R+1?1:0,rr=row-si*(g.R+1)+1;if(cc<1||cc>g.N||rr<1||rr>g.R)return null;return {si:si,rr:rr,cc:cc,N:g.N}}
+  function cell(e){var cv=$('p1cv'),rc=cv.getBoundingClientRect(),x=(e.clientX-rc.left)*cv.width/rc.width,y=(e.clientY-rc.top)*cv.height/rc.height,N=cv._g&&cv._g.N,hit=null;(cv._cells||[]).forEach(function(q){if(x>=q.x&&x<=q.x+q.w&&y>=q.y&&y<=q.y+q.h)hit=q});return hit?{si:hit.s==='A'?1:0,rr:hit.L,cc:hit.c,N:N}:null}
   on($('p1cv'),'mousemove',function(e){var q=cell(e);this.title=q?(q.si?'A':'B')+' level '+q.rr+', column '+q.cc+' = '+Hf(q.si?'A':'B',q.rr,q.cc,q.N):''});
   on($('p1cv'),'click',function(e){var q=cell(e);if(!q)return;$('p1sec').value=q.si?'A':'B';$('p1lv').value=q.rr;$('p1c').value=q.cc;run()});
   run();redraws.push(run);
@@ -1096,15 +1292,19 @@ function demo(id,ctrls,extraDirty,extraReset,rerun){
   function hlLine(l){var e=esc(l);if(inDoc){if(/"""/.test(l))inDoc=false;return '<span class="c">'+e+'</span>'}
     if((l.match(/"""/g)||[]).length===1){inDoc=true;return e.replace(/("""[\s\S]*)/,'<span class="c">$1</span>')}
     return e.replace(/(#.*$)|(&quot;[^&]*?&quot;|"[^"]*"|'[^']*')|\b(def|return|if|elif|else|for|in|not|and|or|is|None|True|False|import|from|lambda|while|raise|class|continue|break)\b|\b(\d+)\b/g,function(m,cm,st,kw,nu){return cm?'<span class="c">'+cm+'</span>':st?'<span class="s">'+st+'</span>':kw?'<span class="k">'+kw+'</span>':'<span class="n">'+nu+'</span>'})}
-  var all=[],nav='',panes='';
+  var all=[],names=[],nav='',panes='';
   X.snips.forEach(function(g){nav+='<h6>'+esc(g.title)+'</h6>';
-    g.items.forEach(function(s){var idx=all.push(s.src)-1;inDoc=false;var body=s.src.split('\n').map(function(l){return '<span class="ln">'+hlLine(l)+'</span>'}).join('');
+    g.items.forEach(function(s){var idx=all.push(s.src)-1;names[idx]=s.name;inDoc=false;var body=s.src.split('\n').map(function(l){return '<span class="ln">'+hlLine(l)+'</span>'}).join('');
       nav+='<button type="button" data-i="'+idx+'">'+esc(s.name)+'</button>';
       panes+='<div class="pane" data-i="'+idx+'"'+(idx?' hidden':'')+'><div class="ph"><div><b>'+esc(s.name)+'</b><span class="file">'+esc(s.file)+' · '+s.src.split('\n').length+' lines · '+esc(g.title.toLowerCase())+'</span><p>'+esc(s.desc||'')+'</p>'+(s.demo?'<p>Implements: <a href="'+esc(s.demo[1])+'">'+esc(s.demo[0])+'</a></p>':'')+'</div><button class="cpy" type="button" data-cp="'+idx+'">Copy</button></div><pre class="code">'+body+'</pre></div>'})});
   $('snips').innerHTML='<div class="cw"><div class="fl" role="tablist" aria-label="Functions">'+nav+'<p style="margin:14px;font:500 .7em var(--mono);color:#a8a69e">'+all.length+' functions</p></div><div class="panes" style="min-width:0">'+panes+'</div></div>';
   var btns=[].slice.call($('snips').querySelectorAll('.fl button')),ps=[].slice.call($('snips').querySelectorAll('.pane'));
   function show(i){btns.forEach(function(b){b.classList.toggle('on',+b.getAttribute('data-i')===i)});ps.forEach(function(p){p.hidden=+p.getAttribute('data-i')!==i})}
-  btns.forEach(function(b){on(b,'click',function(){show(+b.getAttribute('data-i'))})});show(0);
+  btns.forEach(function(b){on(b,'click',function(){show(+b.getAttribute('data-i'));setMap(names[+b.getAttribute('data-i')])})});show(0);
+  var FN={A:'H_A_grid',B:'H_B_grid',C:'H_C',D:'H_D',E:'H_E',F:'H_F',G:'H_G',H:'H_H',I:'H_I',J:'H_J',K:'H_K',L:'H_L',M:'H_M'},SUM={A:'19 per row, H-lots',B:'20 per row, margin list',C:'row tops, twins, trios',D:'blocks and margin',E:'twins, lettered lots',F:'18 per row',G:'19 per row',H:'23 per row',I:'a counter',J:'a counter',K:'a stored list',L:'69 to 107',M:'list, then a counter'};
+  $('fnmap').innerHTML=SEC.map(function(c){return '<button type="button" data-fn="'+FN[c]+'" aria-pressed="false"><b>'+c+'</b><code>'+FN[c]+'</code><small>'+SUM[c]+'</small></button>'}).join('');
+  function setMap(n){[].forEach.call($('fnmap').children,function(b){b.setAttribute('aria-pressed',b.getAttribute('data-fn')===n)})}
+  [].forEach.call($('fnmap').children,function(b){on(b,'click',function(){var n=b.getAttribute('data-fn'),i=names.indexOf(n);if(i>=0){show(i);setMap(n);$('snips').scrollIntoView({behavior:'smooth',block:'start'})}})});
   [].forEach.call($('snips').querySelectorAll('[data-cp]'),function(b){on(b,'click',function(){copyText(all[+b.getAttribute('data-cp')])})});
 })();
 function copyText(t){
@@ -1114,7 +1314,7 @@ function copyText(t){
 
 /* ---------------- section 7 ---------------- */
 (function(){
-  var gs=$('gs');gs.innerHTML=SEC.map(function(s){return '<option>'+s+'</option>'}).join('');gs.value='B';
+  var gs=$('gs');gs.innerHTML=SEC.map(function(s){return '<option>'+s+'</option>'}).join('');gs.value='C';
   var RULE={A:'Section A: 19 labels per row, counted right to left; H-lots before places 13, 5 and 1.',B:'Section B: body of 20 per row; last column steps by 19; margin labels come from a stored list.',C:'Section C: row tops, twins and trios from per-row tables.',D:'Section D: 20 per row, blocks in rows 16 to 23, letter labels in row 1, margin from a list.',E:'Section E: 19 per row with twins, plus lettered lots in rows 9 to 12.',F:'Section F: 18 per row; margin 199 to 210.',G:'Section G: 19 per row, plus lots 58 to 75.',H:'Section H: 23 per row.',I:'Section I: straight run 1 to 64.',J:'Section J: straight run 1 to 132.',K:'Section K: a stored list of 115 lots.',L:'Section L: straight run 69 to 107.',M:'Section M: first 51 lots from a list, then 82 to 279 straight.'};
   var BASE={A:'22 (the A half of each 44-lot level)',B:'0',C:'836',D:'836',E:'1871',F:'1871',G:'2413',H:'2413',I:'3082',J:'2950',K:'2835',L:'3078',M:'2556 or 2586'};
   function offsetInfo(S,H,t){
@@ -1146,11 +1346,13 @@ function copyText(t){
   }
   function fhUpdate(S,L,v,t){
     var el=$('fhlive');if(!el)return;
+    [1,2,3,4].forEach(function(n){var e=$('ftv'+n);if(e)e.textContent=''});
     if(!(typeof v==='number'&&!isNaN(v))){el.innerHTML='Enter a valid lot below to see its four terms.';return}
     var tv=termVals(S,v,t),h='<div class="eq">H('+S+', '+esc(L)+') = '+v+'</div>';
-    if(tv)h+='<div>= <span class="v1">O '+tv.O+'</span> + <span class="v2">Σ '+tv.S+'</span> + <span class="v3">σ·W '+tv.W+'</span> + <span class="v4">κ '+tv.K+'</span></div>'+(tv.lv?'':'<div class="note">This section is a straight run, so there are no levels: Σ and σ·W are 0, O is where the run starts and κ is the position in it.</div>');
+    if(tv){var vals={1:tv.O,2:tv.S,3:tv.W,4:tv.K};[1,2,3,4].forEach(function(n){$('ftv'+n).textContent=vals[n]});
+      var lab={1:'O',2:'Σ',3:'σ·W',4:'κ'};h+='<div class="fh-stack" role="img" aria-label="The H-number split into its four terms">'+[1,2,3,4].map(function(n){return vals[n]>0?'<span class="s'+n+'" style="flex:'+Math.max(vals[n],v*.07)+' 1 0" title="'+lab[n]+' = '+vals[n]+'">'+lab[n]+' '+vals[n]+'</span>':''}).join('')+'</div><div class="note" style="margin:6px 0 0">The bar is the H-number split into its four terms. '+(tv.lv?'':'This section is a straight run, so there are no levels: Σ and σ·W are 0, O is where the run starts and κ is the position in it.')+'</div>'}
     else h+='<div class="note">This label has no place recorded in the decoder tables, so its terms are not shown.</div>';
-    if(fhSel){h+='<div style="margin-top:8px"><b class="v'+fhSel+'">'+TDEF[fhSel][0]+'</b> is '+TDEF[fhSel][1]+'.'+(tv?' For this lot it is <b class="v'+fhSel+'">'+({1:tv.O,2:tv.S,3:tv.W,4:tv.K})[fhSel]+'</b>.':'')+'</div>'}
+    if(fhSel&&tv){h+='<div style="margin-top:8px"><b class="v'+fhSel+'">'+TDEF[fhSel][0]+'</b> is '+TDEF[fhSel][1]+'. For this lot it is <b class="v'+fhSel+'">'+({1:tv.O,2:tv.S,3:tv.W,4:tv.K})[fhSel]+'</b>.</div>'}
     el.innerHTML=h;
   }
   function fhSelect(n){fhSel=fhSel===n?0:n;[].forEach.call(document.querySelectorAll('.ft'),function(b){b.setAttribute('aria-pressed',+b.getAttribute('data-t')===fhSel)});[].forEach.call(document.querySelectorAll('.mt'),function(m){m.classList.toggle('on',+m.getAttribute('data-t')===fhSel)});run()}
@@ -1174,7 +1376,7 @@ function copyText(t){
   on(gs,'change',run);on($('gl'),'input',run);
   var ex=[['B','20H'],['A','1'],['C','417'],['D','1H'],['E','199BH'],['G','61'],['K','57'],['M','100'],['J','132'],['L','107'],['F','210'],['B','384HA'],['D','563']],ei=0;
   on($('gex'),'click',function(){var e=ex[ei++%ex.length];gs.value=e[0];$('gl').value=e[1];run()});
-  on($('greset'),'click',function(){gs.value='B';$('gl').value='20H';ei=0;run()});run();
+  on($('greset'),'click',function(){gs.value='C';$('gl').value='89';ei=0;run()});run();
   function rev(){var h=Math.round(+$('gh').value),r=RV[h];
     if(!(h>=1&&h<=3185)){$('grev').innerHTML='<p class="bad">H-numbers run from 1 to 3,185.</p>';return}
     if(!r){$('grev').innerHTML='<div class="big">'+pad(h)+'</div><p><span class="tag bad">No old reference</span> This position has no legacy label. It is one of the '+X.missingH.length+' gaps listed in section 09.</p>';return}

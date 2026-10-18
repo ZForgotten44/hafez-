@@ -82,7 +82,7 @@ var X0=D.ext[0],Y0=D.ext[1],X1=D.ext[2],Y1=D.ext[3],CX=(X0+X1)/2,CZ=(Y0+Y1)/2;
 var SEC='ABCDEFGHIJKLM'.split(''),SCOL=['#e07a3f','#4f86c6','#3f9a63','#a45bb8','#d3a437','#d9534f','#3aa3b4','#8576c8','#e0952a','#6f9a3f','#a9694f','#4d86d6','#b58d78'];
 var lots=D.lots.map(function(r){var p=r[3],pts=[],cx=0,cy=0;for(var k=0;k<p.length;k+=2){pts.push([p[k]/10,p[k+1]/10]);cx+=p[k]/10;cy+=p[k+1]/10}cx/=pts.length;cy/=pts.length;
   var e1=[pts[1][0]-pts[0][0],pts[1][1]-pts[0][1]],e2=[pts[2][0]-pts[1][0],pts[2][1]-pts[1][1]],l1=Math.hypot(e1[0],e1[1]),l2=Math.hypot(e2[0],e2[1]),u=l1>=l2?e1:e2,L=Math.max(l1,l2),Wd=Math.min(l1,l2);
-  return {s:r[0],l:r[1],h:r[2],pts:pts,cx:cx,cy:cy,ux:u[0]/L,uy:u[1]/L,len:L,wid:Wd}});
+  return {s:r[0],l:r[1],h:r[2],pts:pts,cx:cx,cy:cy,ux:u[0]/L,uy:u[1]/L,len:L,wid:Wd,pl:r[4]||0}});
 lots.sort(function(a,b){return a.h-b.h});lots.forEach(function(l,i){l.i=i});
 if(typeof THREE==='undefined'){$('load').textContent='The 3D library did not load. Check your connection and reload.';return}
 var dark=window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches&&document.documentElement.getAttribute('data-theme')!=='light';
@@ -230,11 +230,16 @@ function makeMaus(b,idx){var o=b.o,L=o[2],Wd=o[3],g=new THREE.Group(),B=new Bd()
   B.add(box(L*.92,1.8,2.2),P_.hedge,0,0,Wd/2+4.6);
   [-1,1].forEach(function(s){B.add(box(5,.5,1.7),W.wood,s*L*.28,0.9,Wd/2+7)});
   B.finish(g);return g}
-function makeParking(){var g=new THREE.Group(),B=new Bd(),X=1243,Z=316,Wd=60,Ln=32;
-  var base=new THREE.Mesh(new THREE.PlaneGeometry(Wd,Ln),P_.asphalt);base.rotation.x=-Math.PI/2;base.position.set(X+Wd/2,.2,Z+Ln/2);base.receiveShadow=true;g.add(base);
-  var cx=X+Wd/2,cz=Z+Ln/2,R=seeded(5);
-  for(var i=0;i<=7;i++){B.add(box(.4,.08,9),P_.line,X+1+i*(Wd-2)/7,.22,Z+4.7);B.add(box(.4,.08,9),P_.line,X+1+i*(Wd-2)/7,.22,Z+Ln-9.2)}
-  for(var i=0;i<7;i++){var sx=X+1+(i+.5)*(Wd-2)/7;if(R()<.55)car(B,sx,Z+4.7+4.5,R,0);if(R()<.45)car(B,sx,Z+Ln-4.7,R,1)}
+/* the office car park, traced from the aerial: one paved pad with a single row of stalls along its north edge and an aisle in front of them;
+   the strip south of it is the footpath and the driveway that leaves to the south-east, so there are no stalls there */
+function flat(pts,mat,y){var sh=new THREE.Shape(pts.map(function(p){return new THREE.Vector2(p[0],-p[1])})),g=new THREE.ShapeGeometry(sh);g.rotateX(-Math.PI/2);g.translate(0,y,0);var m=new THREE.Mesh(g,mat);m.receiveShadow=true;return m}
+function makeParking(){var g=new THREE.Group(),B=new Bd(),R=seeded(5),
+  pad=[[1246,314],[1264,312],[1290,314],[1299,321],[1301,331],[1296,338],[1288,345],[1268,343],[1252,342],[1246,332]],
+  drive=[[1288,345],[1296,338],[1302,350],[1318,376],[1326,392],[1308,392],[1296,372],[1282,354]];
+  g.add(flat(pad,P_.asphalt,.2));g.add(flat(drive,P_.asphalt,.2));
+  var n=6,x0=1250,sw=(1298-1250)/n,zN=314.5;
+  for(var i=0;i<=n;i++)B.add(box(.35,.08,16),P_.line,x0+i*sw,.24,zN+.5);
+  for(var i=0;i<n;i++){var sx=x0+(i+.5)*sw;if(R()<.6)car(B,sx,zN+9,R,0)}
   B.finish(g);return g}
 function car(B,x,z,R,k){var m=CARS[Math.floor(R()*CARS.length)],ry=Math.PI/2+(R()-.5)*.08;
   B.add(box(5.4,1.6,14.4),m,x,.6,z,0,0,0);B.add(box(4.8,1.6,7.4),W.glass,x,2.2,z+(k?-.6:.6),0,0,0);B.add(box(4.9,.18,6.2),m,x,3.7,z+(k?-.6:.6));
@@ -279,23 +284,19 @@ var TYPES=[
 var stoneMat=new THREE.MeshStandardMaterial({color:0xffffff,map:T.granite,bumpMap:T.granite,bumpScale:.4,roughness:.78,vertexColors:true});
 var baseMat=new THREE.MeshStandardMaterial({color:0xffffff,map:T.granite,roughness:.9});
 TYPES.forEach(function(t){var gg2=t.g();if(t.flatLay){gg2.rotateX(0)}t.geo=weather(norm(gg2));t.ids=[]});
-lots.forEach(function(l){var r=rnd(l.i,9),a=0;l.type=0;for(var q=0;q<TYPES.length;q++){a+=TYPES[q].p;if(r<a){l.type=q;break}}});
+/* each lot's stone (type, position, direction, size) is fitted inside the lot and off the paths when the page is built */
+lots.forEach(function(l){l.type=l.pl?l.pl[0]:0});
 var meshes=TYPES.map(function(t){var m=new THREE.InstancedMesh(t.geo,stoneMat,lots.length);m.castShadow=true;m.receiveShadow=true;scene.add(m);return m});
 var baseGeo=new THREE.BoxGeometry(1,1,1);baseGeo.translate(0,.5,0);
 var bases=new THREE.InstancedMesh(baseGeo,baseMat,lots.length);bases.castShadow=true;bases.receiveShadow=true;scene.add(bases);
 var STONES=[['#a3a29c',.36],['#bdbbb3',.2],['#6e6e72',.08],['#b0948b',.1],['#e5e2d8',.12],['#bba584',.14]];
 var M4=new THREE.Matrix4(),vx=new THREE.Vector3(),vy=new THREE.Vector3(0,1,0),vz=new THREE.Vector3(),pp=new THREE.Vector3(),SM=new THREE.Matrix4(),LN=new THREE.Matrix4(),EU=new THREE.Euler(),C=new THREE.Color();
 function stoneBase(l){var r=rnd(l.i,5),a=0;for(var q=0;q<STONES.length;q++){a+=STONES[q][1];if(r<a)return STONES[q][0]}return STONES[0][0]}
-function placeStone(l,dim,slot){var t=TYPES[l.type],f=dim?.5:1,w=Math.min(l.wid*.7,t.w*1.2)*(.86+.28*rnd(l.i,1)),h=t.h*1.25*(.82+.36*rnd(l.i,2))*f,th=t.d*(.9+.25*rnd(l.i,3));
-  if(t.flatLay){w=Math.min(l.wid*.62,t.w)*(.9+.2*rnd(l.i,1));th=t.d*(.9+.2*rnd(l.i,3))}
-  var ux=l.ux,uy=l.uy;if(uy>0){ux=-ux;uy=-uy}
-  var ja=(rnd(l.i,4)-.5)*.18,cj=Math.cos(ja),sj=Math.sin(ja),tx=ux*cj-uy*sj;uy=ux*sj+uy*cj;ux=tx;
-  var px=l.cx+ux*l.len*.26,pz=l.cy+uy*l.len*.26,bh=t.base?.42:0;
-  vz.set(ux,0,uy);vx.set(-uy,0,ux);pp.set(px,.1+bh,pz);M4.makeBasis(vx,vy,vz);M4.setPosition(pp);
-  EU.set((rnd(l.i,6)-.5)*.05,0,(rnd(l.i,7)-.5)*.05);LN.makeRotationFromEuler(EU);M4.multiply(LN);SM.makeScale(w,h,th);M4.multiply(SM);meshes[l.type].setMatrixAt(slot,M4);
-  if(t.base){vz.set(ux,0,uy);vx.set(-uy,0,ux);pp.set(px,.1,pz);M4.makeBasis(vx,vy,vz);M4.setPosition(pp);SM.makeScale(w*1.28,bh,th*2.1);M4.multiply(SM)}
-  else{pp.set(px,-6,pz);M4.makeTranslation(px,-6,pz);SM.makeScale(.001,.001,.001);M4.multiply(SM)}
-  bases.setMatrixAt(l.i,M4)}
+function placeStone(l,dim,slot){var q=l.pl,t=TYPES[l.type],f=dim?.5:1,px=q[1],pz=q[2],ux=q[3],uz=q[4],w=q[5],th=q[6],h=t.h*q[7]*1.08*f,bh=t.base?.3:0;
+  vz.set(ux,0,uz);vx.set(-uz,0,ux);pp.set(px,.1+bh,pz);M4.makeBasis(vx,vy,vz);M4.setPosition(pp);
+  EU.set((rnd(l.i,6)-.5)*.04,0,(rnd(l.i,7)-.5)*.04);LN.makeRotationFromEuler(EU);M4.multiply(LN);SM.makeScale(w,h,th);M4.multiply(SM);meshes[l.type].setMatrixAt(slot,M4);
+  if(t.base){vz.set(ux,0,uz);vx.set(-uz,0,ux);pp.set(px,.1,pz);M4.makeBasis(vx,vy,vz);M4.setPosition(pp);SM.makeScale(w*1.2,bh,th*1.9);M4.multiply(SM);bases.setMatrixAt(l.i,M4)}else hideBase(l)}
+function hideBase(l){M4.makeTranslation(l.cx,-6,l.cy);SM.makeScale(.001,.001,.001);M4.multiply(SM);bases.setMatrixAt(l.i,M4)}
 function lotColor(l,mode,pass){
   if(pass&&(l.h<PASS[pass][0]||l.h>PASS[pass][1]))return C.set('#7d7c75');
   if(mode==='sec')return C.set(SCOL[SEC.indexOf(l.s)]);
@@ -304,14 +305,14 @@ function lotColor(l,mode,pass){
   return C.set(stoneBase(l)).offsetHSL(0,0,(rnd(l.i,8)-.5)*.1)}
 var treeMesh=null;
 function recolor(){shadowDirty=true;var mode=$('cmode').value,pass=+$('pass').value,cnt=TYPES.map(function(){return 0});
-  lots.forEach(function(l){var out=pass&&(l.h<PASS[pass][0]||l.h>PASS[pass][1]),slot=cnt[l.type]++;placeStone(l,out,slot);var c=lotColor(l,mode,pass);meshes[l.type].setColorAt(slot,c);bases.setColorAt(l.i,C.clone().multiplyScalar(.82));
+  ids=TYPES.map(function(){return []});
+  lots.forEach(function(l){var out=pass&&(l.h<PASS[pass][0]||l.h>PASS[pass][1]),c;
+    if(l.pl){var slot=cnt[l.type]++;ids[l.type].push(l.i);placeStone(l,out,slot);c=lotColor(l,mode,pass);meshes[l.type].setColorAt(slot,c);bases.setColorAt(l.i,C.clone().multiplyScalar(.82))}else hideBase(l);
     var cc=lotColor(l,mode==='real'?'h':mode,pass),r=range[l.i];for(var v=r[0];v<r[0]+r[1];v++){colA[v*3]=cc.r;colA[v*3+1]=cc.g;colA[v*3+2]=cc.b}});
   meshes.forEach(function(m,i){m.count=cnt[i];m.instanceMatrix.needsUpdate=true;if(m.instanceColor)m.instanceColor.needsUpdate=true});
   bases.instanceMatrix.needsUpdate=true;if(bases.instanceColor)bases.instanceColor.needsUpdate=true;g.attributes.color.needsUpdate=true;
-  lots.forEach(function(l){});slotOf=null;buildSlots();
   plots.visible=mode!=='real'&&view!=='walk';lineMat.opacity=mode==='real'?.2:.32;$('leg').style.display=(mode==='h')?'flex':'none'}
-var slotOf=null,ids=TYPES.map(function(){return []});
-function buildSlots(){var pass=+$('pass').value;ids=TYPES.map(function(){return []});lots.forEach(function(l){ids[l.type].push(l.i)})}
+var ids=TYPES.map(function(){return []});
 /* ---- trees: mature deciduous trees (trunk, forked limbs, open crowns of leaf clusters) and spruce/cedar, all instanced ---- */
 function blob(cx,cy,cz,sx,sy,sz,seed,ws,hs){var g=new THREE.SphereGeometry(1,ws||18,hs||13),p=g.attributes.position;for(var i=0;i<p.count;i++){var x=p.getX(i),y=p.getY(i),z=p.getZ(i),n=(Math.sin(x*3.3+seed)+Math.sin(y*4.1+seed*1.7)+Math.sin(z*3.7+seed*2.3)+Math.sin((x+y+z)*6+seed))/4,k=1+n*.22;p.setXYZ(i,cx+x*sx*k,cy+y*sy*k,cz+z*sz*k)}g.computeVertexNormals();return g}
 function mergeG(list){var P=[],N=[],U=[],Cc=[],hasC=list.every(function(x){return x.attributes.color});list.forEach(function(x){var q=plain(x);P.push(q.attributes.position.array);N.push(q.attributes.normal.array);U.push(q.attributes.uv?q.attributes.uv.array:new Float32Array(q.attributes.position.count*2));if(hasC)Cc.push(q.attributes.color.array)});var m=new THREE.BufferGeometry();m.setAttribute('position',new THREE.BufferAttribute(cat(P),3));m.setAttribute('normal',new THREE.BufferAttribute(cat(N),3));m.setAttribute('uv',new THREE.BufferAttribute(cat(U),2));if(hasC)m.setAttribute('color',new THREE.BufferAttribute(cat(Cc),3));return m}

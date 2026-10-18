@@ -81,6 +81,35 @@ function demo(id,ctrls,extraDirty,extraReset,rerun){
 (function(){
   var ord='blocks',d;
   function Hf(sec,r,c,N){var SW=2*N;return ord==='blocks'?SW*(r-1)+(sec==='B'?0:N)+c:SW*(r-1)+2*c-(sec==='B'?1:0)}
+  function drawP1(N,R,r,c,sec,Hs){
+    var cv=$('p1cv'),cx=cv.getContext('2d'),W0=1000,gx=118,cw=(W0-gx-24)/N,ch=36,gap=12,lg=34,nl=Math.min(3,R),st=Math.max(1,Math.min(R-nl+1,r-1)),levH=2*ch+gap+lg,top=18,Hh=top+nl*levH+46;
+    cv.width=W0;cv.height=Hh;cx.clearRect(0,0,W0,Hh);var cB=css('--t2'),cA=css('--t1'),bg=css('--bg'),fg=css('--fg'),g5=css('--g5'),dk=isDark();cv._cells=[];cv._g={N:N,R:R};
+    function mix(col,a){cx.globalAlpha=a;cx.fillStyle=col;cx.fill();cx.globalAlpha=1}
+    function rr(x,y,w,h,rad){cx.beginPath();if(cx.roundRect)cx.roundRect(x,y,w,h,rad);else cx.rect(x,y,w,h)}
+    for(var li=0;li<nl;li++){
+      var L=st+li,y0=top+li*levH,yB=y0,yA=y0+ch+gap;
+      cx.fillStyle=g5;cx.font='600 15px "IBM Plex Mono",monospace';cx.textAlign='left';cx.fillText('Level '+L,4,y0+ch*.5+5);cx.font='500 13px "IBM Plex Mono",monospace';cx.fillText('H'+Hf('B',L,1,N)+' to H'+Hf('A',L,N,N),4,y0+ch*.5+24);
+      /* the path of the sweep */
+      cx.lineWidth=2.6;cx.lineCap='round';cx.strokeStyle=fg;cx.globalAlpha=.7;var mY=yB+ch*.5,aY=yA+ch*.5,x0=gx+cw*.5,x1=gx+(N-.5)*cw;cx.beginPath();
+      if(ord==='blocks'){cx.moveTo(x0,mY);cx.lineTo(x1,mY);cx.stroke();cx.setLineDash([2,7]);cx.beginPath();cx.moveTo(x1,mY);cx.bezierCurveTo(x1+30,mY+ch*1.1,x0-30,aY-ch*1.1,x0,aY);cx.stroke();cx.setLineDash([]);cx.beginPath();cx.moveTo(x0,aY);cx.lineTo(x1,aY);cx.stroke();
+        if(li<nl-1){cx.setLineDash([2,7]);cx.beginPath();cx.moveTo(x1,aY);cx.bezierCurveTo(x1+30,aY+lg*1.2,x0-30,y0+levH-lg*.2,x0,y0+levH+ch*.5);cx.stroke();cx.setLineDash([])}}
+      else{cx.beginPath();for(var q=1;q<=N;q++){var qx=gx+(q-.5)*cw;cx.lineTo(qx,mY);cx.lineTo(qx,aY)}cx.stroke()}
+      cx.globalAlpha=1;
+      [['B',yB,cB],['A',yA,cA]].forEach(function(row){var s2=row[0],y=row[1],col=row[2];
+        cx.fillStyle=col;cx.font='700 14px "IBM Plex Mono",monospace';cx.textAlign='center';cx.fillText(s2+' →',gx-26,y+ch*.62);
+        for(var cc=1;cc<=N;cc++){var x=gx+(cc-1)*cw,h=Hf(s2,L,cc,N),on=(L===r&&cc===c&&s2===sec);
+          rr(x+1,y,cw-2,ch,7);cx.fillStyle=bg;cx.fill();mix(col,on?0:(dk?.34:.36));if(on){cx.fillStyle='#c5a448';cx.fill();cx.lineWidth=3;cx.strokeStyle=dk?'#f4f2ec':'#0b0b0a';cx.stroke()}
+          cx.fillStyle=on?'#0b0b0a':fg;cx.font=(on?'700 ':'600 ')+Math.min(14,cw*.4)+'px "IBM Plex Mono",monospace';cx.textAlign='center';if(cw>=22||cc===1||cc===N||on)cx.fillText(h,x+cw/2,y+ch*.62);
+          cv._cells.push({x:x,y:y,w:cw,h:ch,s:s2,L:L,c:cc})}});
+      /* bracket + caption */
+      cx.fillStyle=g5;cx.font='500 13px "IBM Plex Sans",system-ui,sans-serif';cx.textAlign='right';
+    }
+    cx.textAlign='left';var ly=Hh-18;cx.font='500 14px "IBM Plex Mono",monospace';
+    rr(gx,ly-12,22,16,5);mix(cB,.5);cx.fillStyle=g5;cx.fillText('Section B lots',gx+30,ly);
+    rr(gx+190,ly-12,22,16,5);mix(cA,.5);cx.fillStyle=g5;cx.fillText('Section A lots',gx+220,ly);
+    cx.strokeStyle=g5;cx.lineWidth=2.6;cx.setLineDash([2,7]);cx.beginPath();cx.moveTo(gx+400,ly-4);cx.lineTo(gx+440,ly-4);cx.stroke();cx.setLineDash([]);cx.fillText('jump to the next row',gx+450,ly);
+    cx.textAlign='right';cx.fillText(R>nl?('levels '+st+'–'+(st+nl-1)+' of '+R):'',W0-6,ly);
+  }
   function run(){
     var N=+$('p1n').value,R=+$('p1r').value;$('p1nv').textContent=N;$('p1rv').textContent=R;
     var sec=$('p1sec').value,r0=+$('p1lv').value||1,c0=+$('p1c').value||1,r=Math.min(Math.max(1,r0),R),c=Math.min(Math.max(1,c0),N),clamp=(r!==r0||c!==c0);
@@ -89,21 +118,13 @@ function demo(id,ctrls,extraDirty,extraReset,rerun){
     $('p1eqn').innerHTML=ord==='blocks'?'<span class="lbl">SWEEP  = </span>N<sub>B</sub> + N<sub>A</sub> = '+SW+'<br><span class="lbl">OFFSET = </span>SWEEP × R = '+SW*R+'<br><span class="lbl">H(B, r, c) = </span>SWEEP × (r − 1) + c<br><span class="lbl">H(A, r, c) = </span>SWEEP × (r − 1) + N<sub>B</sub> + c'
       :'<span class="lbl">SWEEP  = </span>N<sub>B</sub> + N<sub>A</sub> = '+SW+'<br><span class="lbl">OFFSET = </span>SWEEP × R = '+SW*R+'<br><span class="lbl">H(B, r, c) = </span>SWEEP × (r − 1) + 2c − 1<br><span class="lbl">H(A, r, c) = </span>SWEEP × (r − 1) + 2c';
     $('p1out').innerHTML='H('+sec+', level '+r+', column '+c+') = '+SW+' × '+(r-1)+(ord==='blocks'?(sec==='A'?' + '+N:''):'')+' + '+(ord==='blocks'?c:(sec==='B'?'2×'+c+'−1':'2×'+c))+' = <span class="hv">'+Hs+'</span> → '+pad(Hs)+'<br>Visited as lot '+Hs+' of '+SW*R+' in this pass. On level '+r+' the sweep visits '+(ord==='blocks'?'B columns 1 to '+N+' (H '+Hf('B',r,1,N)+' to '+Hf('B',r,N,N)+'), then A columns 1 to '+N+' (H '+Hf('A',r,1,N)+' to '+Hf('A',r,N,N)+').':'B and A columns in turn: B1, A1, B2, A2 …')+(clamp?'<br>Level and column were limited to 1–'+R+' and 1–'+N+'.':'');
-    var cv=$('p1cv'),cx=cv.getContext('2d');cx.clearRect(0,0,cv.width,cv.height);
-    var cw=(cv.width-60)/N,ch=Math.min(18,(cv.height-30)/(2*R+1)),tot=2*N*R,dk=isDark();cv._g={cw:cw,ch:ch,N:N,R:R};
-    ['B','A'].forEach(function(s,si){for(var rr=1;rr<=R;rr++)for(var cc=1;cc<=N;cc++){var h=Hf(s,rr,cc,N),t=(h-1)/Math.max(1,tot-1);cx.fillStyle=ramp(t);cx.fillRect(40+(cc-1)*cw,10+(si*(R+1)+rr-1)*ch,cw-1.5,ch-1.5);
-      if(rr===r&&cw>=24){cx.fillStyle=dk?(t<.45?'#f4f2ec':'#0b0b0a'):(t<.55?'#0b0b0a':'#f4f2ec');cx.font='500 '+Math.min(12,cw*.42)+'px "IBM Plex Mono",monospace';cx.textAlign='center';cx.fillText(h,40+(cc-1)*cw+cw/2,10+(si*(R+1)+rr-1)*ch+ch*.72)}}});
-    cx.setLineDash([5,4]);cx.lineWidth=1.6;cx.strokeStyle=css('--fg');[0,1].forEach(function(si){cx.strokeRect(38,10+(si*(R+1)+r-1)*ch-2,N*cw+3,ch+2)});cx.setLineDash([]);
-    cx.fillStyle=css('--fg');cx.font='600 11px "IBM Plex Mono",monospace';cx.textAlign='left';cx.fillText('visit →',40,10+(2*R+1)*ch+16);
-    var si=sec==='B'?0:1,sx=40+(c-1)*cw-1,sy=10+(si*(R+1)+r-1)*ch-1;cx.fillStyle='#c5a448';cx.fillRect(sx,sy,cw,ch);cx.lineWidth=2.5;cx.strokeStyle='#0b0b0a';cx.strokeRect(sx,sy,cw,ch);
-    cx.fillStyle='#0b0b0a';cx.font='700 '+Math.min(12,Math.max(8,cw*.42))+'px "IBM Plex Mono",monospace';cx.textAlign='center';if(cw>=20)cx.fillText(Hs,sx+cw/2,sy+ch*.72);
-    cx.fillStyle=css('--g5');cx.font='600 12px "IBM Plex Mono",monospace';cx.textAlign='left';cx.fillText('B',14,10+ch);cx.fillText('A',14,10+(R+1)*ch+ch);
+    drawP1(N,R,r,c,sec,Hs);
     d.upd();
   }
   d=demo('p1',['p1n','p1r','p1sec','p1lv','p1c'],function(){return ord!=='blocks'},function(){ord='blocks';[].forEach.call(document.querySelectorAll('button[data-ord]'),function(x){x.classList.toggle('on',x.getAttribute('data-ord')==='blocks')})},run);
   ['p1n','p1r','p1sec','p1lv','p1c'].forEach(function(i){on($(i),'input',run)});
   [].forEach.call(document.querySelectorAll('button[data-ord]'),function(b){on(b,'click',function(){ord=b.getAttribute('data-ord');[].forEach.call(document.querySelectorAll('button[data-ord]'),function(x){x.classList.toggle('on',x===b)});run()})});
-  function cell(e){var cv=$('p1cv'),g=cv._g;if(!g)return null;var r=cv.getBoundingClientRect(),x=(e.clientX-r.left)*cv.width/r.width-40,y=(e.clientY-r.top)*cv.height/r.height-10;var cc=Math.floor(x/g.cw)+1,row=Math.floor(y/g.ch),si=row>=g.R+1?1:0,rr=row-si*(g.R+1)+1;if(cc<1||cc>g.N||rr<1||rr>g.R)return null;return {si:si,rr:rr,cc:cc,N:g.N}}
+  function cell(e){var cv=$('p1cv'),rc=cv.getBoundingClientRect(),x=(e.clientX-rc.left)*cv.width/rc.width,y=(e.clientY-rc.top)*cv.height/rc.height,N=cv._g&&cv._g.N,hit=null;(cv._cells||[]).forEach(function(q){if(x>=q.x&&x<=q.x+q.w&&y>=q.y&&y<=q.y+q.h)hit=q});return hit?{si:hit.s==='A'?1:0,rr:hit.L,cc:hit.c,N:N}:null}
   on($('p1cv'),'mousemove',function(e){var q=cell(e);this.title=q?(q.si?'A':'B')+' level '+q.rr+', column '+q.cc+' = '+Hf(q.si?'A':'B',q.rr,q.cc,q.N):''});
   on($('p1cv'),'click',function(e){var q=cell(e);if(!q)return;$('p1sec').value=q.si?'A':'B';$('p1lv').value=q.rr;$('p1c').value=q.cc;run()});
   run();redraws.push(run);
@@ -215,15 +236,19 @@ function demo(id,ctrls,extraDirty,extraReset,rerun){
   function hlLine(l){var e=esc(l);if(inDoc){if(/"""/.test(l))inDoc=false;return '<span class="c">'+e+'</span>'}
     if((l.match(/"""/g)||[]).length===1){inDoc=true;return e.replace(/("""[\s\S]*)/,'<span class="c">$1</span>')}
     return e.replace(/(#.*$)|(&quot;[^&]*?&quot;|"[^"]*"|'[^']*')|\b(def|return|if|elif|else|for|in|not|and|or|is|None|True|False|import|from|lambda|while|raise|class|continue|break)\b|\b(\d+)\b/g,function(m,cm,st,kw,nu){return cm?'<span class="c">'+cm+'</span>':st?'<span class="s">'+st+'</span>':kw?'<span class="k">'+kw+'</span>':'<span class="n">'+nu+'</span>'})}
-  var all=[],nav='',panes='';
+  var all=[],names=[],nav='',panes='';
   X.snips.forEach(function(g){nav+='<h6>'+esc(g.title)+'</h6>';
-    g.items.forEach(function(s){var idx=all.push(s.src)-1;inDoc=false;var body=s.src.split('\n').map(function(l){return '<span class="ln">'+hlLine(l)+'</span>'}).join('');
+    g.items.forEach(function(s){var idx=all.push(s.src)-1;names[idx]=s.name;inDoc=false;var body=s.src.split('\n').map(function(l){return '<span class="ln">'+hlLine(l)+'</span>'}).join('');
       nav+='<button type="button" data-i="'+idx+'">'+esc(s.name)+'</button>';
       panes+='<div class="pane" data-i="'+idx+'"'+(idx?' hidden':'')+'><div class="ph"><div><b>'+esc(s.name)+'</b><span class="file">'+esc(s.file)+' · '+s.src.split('\n').length+' lines · '+esc(g.title.toLowerCase())+'</span><p>'+esc(s.desc||'')+'</p>'+(s.demo?'<p>Implements: <a href="'+esc(s.demo[1])+'">'+esc(s.demo[0])+'</a></p>':'')+'</div><button class="cpy" type="button" data-cp="'+idx+'">Copy</button></div><pre class="code">'+body+'</pre></div>'})});
   $('snips').innerHTML='<div class="cw"><div class="fl" role="tablist" aria-label="Functions">'+nav+'<p style="margin:14px;font:500 .7em var(--mono);color:#a8a69e">'+all.length+' functions</p></div><div class="panes" style="min-width:0">'+panes+'</div></div>';
   var btns=[].slice.call($('snips').querySelectorAll('.fl button')),ps=[].slice.call($('snips').querySelectorAll('.pane'));
   function show(i){btns.forEach(function(b){b.classList.toggle('on',+b.getAttribute('data-i')===i)});ps.forEach(function(p){p.hidden=+p.getAttribute('data-i')!==i})}
-  btns.forEach(function(b){on(b,'click',function(){show(+b.getAttribute('data-i'))})});show(0);
+  btns.forEach(function(b){on(b,'click',function(){show(+b.getAttribute('data-i'));setMap(names[+b.getAttribute('data-i')])})});show(0);
+  var FN={A:'H_A_grid',B:'H_B_grid',C:'H_C',D:'H_D',E:'H_E',F:'H_F',G:'H_G',H:'H_H',I:'H_I',J:'H_J',K:'H_K',L:'H_L',M:'H_M'},SUM={A:'19 per row, H-lots',B:'20 per row, margin list',C:'row tops, twins, trios',D:'blocks and margin',E:'twins, lettered lots',F:'18 per row',G:'19 per row',H:'23 per row',I:'a counter',J:'a counter',K:'a stored list',L:'69 to 107',M:'list, then a counter'};
+  $('fnmap').innerHTML=SEC.map(function(c){return '<button type="button" data-fn="'+FN[c]+'" aria-pressed="false"><b>'+c+'</b><code>'+FN[c]+'</code><small>'+SUM[c]+'</small></button>'}).join('');
+  function setMap(n){[].forEach.call($('fnmap').children,function(b){b.setAttribute('aria-pressed',b.getAttribute('data-fn')===n)})}
+  [].forEach.call($('fnmap').children,function(b){on(b,'click',function(){var n=b.getAttribute('data-fn'),i=names.indexOf(n);if(i>=0){show(i);setMap(n);$('snips').scrollIntoView({behavior:'smooth',block:'start'})}})});
   [].forEach.call($('snips').querySelectorAll('[data-cp]'),function(b){on(b,'click',function(){copyText(all[+b.getAttribute('data-cp')])})});
 })();
 function copyText(t){
@@ -233,7 +258,7 @@ function copyText(t){
 
 /* ---------------- section 7 ---------------- */
 (function(){
-  var gs=$('gs');gs.innerHTML=SEC.map(function(s){return '<option>'+s+'</option>'}).join('');gs.value='B';
+  var gs=$('gs');gs.innerHTML=SEC.map(function(s){return '<option>'+s+'</option>'}).join('');gs.value='C';
   var RULE={A:'Section A: 19 labels per row, counted right to left; H-lots before places 13, 5 and 1.',B:'Section B: body of 20 per row; last column steps by 19; margin labels come from a stored list.',C:'Section C: row tops, twins and trios from per-row tables.',D:'Section D: 20 per row, blocks in rows 16 to 23, letter labels in row 1, margin from a list.',E:'Section E: 19 per row with twins, plus lettered lots in rows 9 to 12.',F:'Section F: 18 per row; margin 199 to 210.',G:'Section G: 19 per row, plus lots 58 to 75.',H:'Section H: 23 per row.',I:'Section I: straight run 1 to 64.',J:'Section J: straight run 1 to 132.',K:'Section K: a stored list of 115 lots.',L:'Section L: straight run 69 to 107.',M:'Section M: first 51 lots from a list, then 82 to 279 straight.'};
   var BASE={A:'22 (the A half of each 44-lot level)',B:'0',C:'836',D:'836',E:'1871',F:'1871',G:'2413',H:'2413',I:'3082',J:'2950',K:'2835',L:'3078',M:'2556 or 2586'};
   function offsetInfo(S,H,t){
@@ -265,11 +290,13 @@ function copyText(t){
   }
   function fhUpdate(S,L,v,t){
     var el=$('fhlive');if(!el)return;
+    [1,2,3,4].forEach(function(n){var e=$('ftv'+n);if(e)e.textContent=''});
     if(!(typeof v==='number'&&!isNaN(v))){el.innerHTML='Enter a valid lot below to see its four terms.';return}
     var tv=termVals(S,v,t),h='<div class="eq">H('+S+', '+esc(L)+') = '+v+'</div>';
-    if(tv)h+='<div>= <span class="v1">O '+tv.O+'</span> + <span class="v2">Σ '+tv.S+'</span> + <span class="v3">σ·W '+tv.W+'</span> + <span class="v4">κ '+tv.K+'</span></div>'+(tv.lv?'':'<div class="note">This section is a straight run, so there are no levels: Σ and σ·W are 0, O is where the run starts and κ is the position in it.</div>');
+    if(tv){var vals={1:tv.O,2:tv.S,3:tv.W,4:tv.K};[1,2,3,4].forEach(function(n){$('ftv'+n).textContent=vals[n]});
+      var lab={1:'O',2:'Σ',3:'σ·W',4:'κ'};h+='<div class="fh-stack" role="img" aria-label="The H-number split into its four terms">'+[1,2,3,4].map(function(n){return vals[n]>0?'<span class="s'+n+'" style="flex:'+Math.max(vals[n],v*.07)+' 1 0" title="'+lab[n]+' = '+vals[n]+'">'+lab[n]+' '+vals[n]+'</span>':''}).join('')+'</div><div class="note" style="margin:6px 0 0">The bar is the H-number split into its four terms. '+(tv.lv?'':'This section is a straight run, so there are no levels: Σ and σ·W are 0, O is where the run starts and κ is the position in it.')+'</div>'}
     else h+='<div class="note">This label has no place recorded in the decoder tables, so its terms are not shown.</div>';
-    if(fhSel){h+='<div style="margin-top:8px"><b class="v'+fhSel+'">'+TDEF[fhSel][0]+'</b> is '+TDEF[fhSel][1]+'.'+(tv?' For this lot it is <b class="v'+fhSel+'">'+({1:tv.O,2:tv.S,3:tv.W,4:tv.K})[fhSel]+'</b>.':'')+'</div>'}
+    if(fhSel&&tv){h+='<div style="margin-top:8px"><b class="v'+fhSel+'">'+TDEF[fhSel][0]+'</b> is '+TDEF[fhSel][1]+'. For this lot it is <b class="v'+fhSel+'">'+({1:tv.O,2:tv.S,3:tv.W,4:tv.K})[fhSel]+'</b>.</div>'}
     el.innerHTML=h;
   }
   function fhSelect(n){fhSel=fhSel===n?0:n;[].forEach.call(document.querySelectorAll('.ft'),function(b){b.setAttribute('aria-pressed',+b.getAttribute('data-t')===fhSel)});[].forEach.call(document.querySelectorAll('.mt'),function(m){m.classList.toggle('on',+m.getAttribute('data-t')===fhSel)});run()}
@@ -293,7 +320,7 @@ function copyText(t){
   on(gs,'change',run);on($('gl'),'input',run);
   var ex=[['B','20H'],['A','1'],['C','417'],['D','1H'],['E','199BH'],['G','61'],['K','57'],['M','100'],['J','132'],['L','107'],['F','210'],['B','384HA'],['D','563']],ei=0;
   on($('gex'),'click',function(){var e=ex[ei++%ex.length];gs.value=e[0];$('gl').value=e[1];run()});
-  on($('greset'),'click',function(){gs.value='B';$('gl').value='20H';ei=0;run()});run();
+  on($('greset'),'click',function(){gs.value='C';$('gl').value='89';ei=0;run()});run();
   function rev(){var h=Math.round(+$('gh').value),r=RV[h];
     if(!(h>=1&&h<=3185)){$('grev').innerHTML='<p class="bad">H-numbers run from 1 to 3,185.</p>';return}
     if(!r){$('grev').innerHTML='<div class="big">'+pad(h)+'</div><p><span class="tag bad">No old reference</span> This position has no legacy label. It is one of the '+X.missingH.length+' gaps listed in section 09.</p>';return}
