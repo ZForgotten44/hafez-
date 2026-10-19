@@ -67,6 +67,7 @@ for w in (400, 500, 600):
     FONTS += '@font-face{font-family:"IBM Plex Mono";font-style:normal;font-weight:%d;font-display:swap;src:url(data:font/woff2;base64,%s) format("woff2")}' % (w, b64('fonts/IBMPlexMono-%d.woff2' % w))
 html = html.replace('/*__FONTS__*/', FONTS)
 data = json.dumps(X, separators=(',', ':')).replace('</', '<\\/')
-html = html.replace('/*__DATA__*/null', data).replace('/*__SCRIPT__*/', (open('explainer_a.js').read() + open('explainer_b.js').read().replace('/* ---------------- section 4','var IMG=X.img;\n/* ---------------- section 4',1)).replace('</script', '<\\/script'))
+STATIC = 'function(S,L){var m,p,n,f,r,q,c,k,i,j,g,b,' + X['giant']['decl'].replace(';', ',') + ';return ' + X['giant']['expr'] + ';}'
+html = html.replace('/*__DATA__*/null', data).replace('/*__SCRIPT__*/', (open('explainer_a.js').read().replace('/*__STATIC_GH__*/null', STATIC) + open('explainer_b.js').read().replace('/* ---------------- section 4','var IMG=X.img;\n/* ---------------- section 4',1)).replace('</script', '<\\/script'))
 open('Cedar_Grove_Numbering_Explained.html', 'w').write(html)
 print(len(html) // 1024, 'KB', [len(s['items']) for s in X['snips']])

@@ -332,7 +332,7 @@ function copyText(t){
   var full='H = (S, L) => {\n  var m,p,n,f,r,q,c,k,i,j,g,b;\n'+X.giant.decl.split(';').map(function(d){return '  '+d+';'}).join('\n')+'\n  return '+X.giant.expr+';\n}';
   $('giantsrc').textContent=full;on($('cpg'),'click',function(){copyText(full)});
   var dec0=X.giant.decl.split(';').join('\n');$('consts').value=dec0;
-  function chk(decl){var fn,moved=0,nan=0,ex=[];try{fn=compile(decl.replace(/\n/g,';'))}catch(e){return '<span class="bad">Syntax error: '+esc(e.message)+'</span>'}
+  function chk(decl){if(!EV)return '<span class="bad">This browser has script evaluation switched off, so the constants cannot be edited here. The stored formula above still works.</span>';var fn,moved=0,nan=0,ex=[];try{fn=compile(decl.replace(/\n/g,';'))}catch(e){return '<span class="bad">Syntax error: '+esc(e.message)+'</span>'}
     FWD.forEach(function(r){var v;try{v=fn(r[0],r[1])}catch(e){v=NaN}if(v!==r[2]){if(typeof v!=='number'||isNaN(v))nan++;else moved++;if(ex.length<8)ex.push(r[0]+'-'+r[1]+': '+r[2]+' → '+v)}});
     return moved+nan===0?'<span class="good">All '+fmt(FWD.length)+' real labels still match the decoder.</span>':'<span class="bad">'+moved+' H-numbers moved, '+nan+' labels no longer resolve</span> (of '+fmt(FWD.length)+').<br>'+ex.map(esc).join('<br>')}
   on($('capply'),'click',function(){$('cres').innerHTML=chk($('consts').value.trim())});

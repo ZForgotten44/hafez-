@@ -18,7 +18,8 @@ var redraws=[],rdT=0;function redrawAll(){redraws.forEach(function(f){try{f()}ca
 /* a theme change repaints the pictures one after another, after the new colours are on screen, so the switch itself never stalls */
 function scheduleRedraw(){clearTimeout(rdT);rdT=setTimeout(function(){var q=redraws.slice();(function next(){var f=q.shift();if(!f)return;try{f()}catch(e){}setTimeout(next,0)})()},60)}
 function compile(decl){return new Function('S','L','var m,p,n,f,r,q,c,k,i,j,g,b,'+decl.replace(/;/g,',')+';return '+X.giant.expr+';')}
-var GH=compile(X.giant.decl);
+var EV=true;try{new Function('return 1')()}catch(e){EV=false}
+var GH;try{GH=compile(X.giant.decl)}catch(e){GH=/*__STATIC_GH__*/null}
 var RV=(function(){var m={};FWD.forEach(function(r){(m[r[2]]=m[r[2]]||[]).push(r[0]+'-'+r[1])});return m})();
 var pf2=function(w1,w2,r){var s=0;for(var j=0;j<r-1;j++)s+=(w1[j]||0)+(w2[j]||0);return s};
 var PASSES=[
