@@ -1,0 +1,5 @@
+__pycache__/
+
+**/three/*
+!**/three/ground.jpg
+Cedar_Grove_3D.html

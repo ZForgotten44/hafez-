@@ -1,64 +1,78 @@
-# Cedar Grove Cemetery — H-Number Map
+# Cedar Grove Cemetery - H-Number Map
 
-The Cemetery **Overall Map**, redrawn with every lot's new **H-number** in place of its old lot label.
-Built from `Cemetery - Overall Map.pdf` (base drawing) and `Cemetery Map - All Sections on Individual Pages.pdf`
-(where the old lot labels can be read), translated with `s4/s4decoder1.py`.
+An interactive map and printable PDFs that show every lot with its **H-number**, built from the cemetery's vector drawing
+(`Ground Maps/Cedar Grove 2022 with CR.ai`, an Illustrator vector drawing saved with PDF content: lines plus live text objects) and the decoder (`s4/s4decoder1.py`).
 
-## Start here: the interactive site
+* **`site/index.html`** - the interactive map (one file). Search by H-number, lot label or recorded name; click any lot.
+* **`site/pdf/`** - PDFs drawn from the same data: `Cedar_Grove_H-Map_full.pdf` (42 x 24 in overview + 14 tabloid detail pages +
+  unresolved-locations appendix), `..._overview.pdf`, and one PDF per section.
+* **`lots_with_h_numbers.csv`**, **`unresolved_locations.csv`**, and `site/pdf/Cedar_Grove_H-Map_lots.xlsx` (the same lists as an Excel workbook).
+* **`pipeline2/`** - the build. `python3 pipeline2/run_all.py` regenerates everything from the repo (about 6 minutes). See `pipeline2/README.md`.
+* `pipeline/`, `placed_lots.csv`, `lots_not_placed_on_map.csv`, `map_labels_not_in_decoder.csv`, the 44x34in and letter-tile PDFs -
+  the earlier OCR-based build. Superseded; kept for reference. (Its scripts need two source PDFs that are not in the repo.)
 
-**`site/index.html`** — *Cedar Grove Cemetery* — is the primary way to use this; see **[site/README.md](site/README.md)**
-for the full writeup. In short: search by old lot label, H-number, or a recorded name; tap any number on the map for
-a record card (name, dates, notes — shared across viewers, editable in place, blank until filled in); import a
-spreadsheet of records; export a section or a hand-picked list of graves to PDF. ND navy-and-gold, light theme.
+## What changed in this version
 
-It replaces the letter-tile PDF below, whose fixed print crops routinely landed a lot's number under the big maroon
-"SECTION X" title or cut a cluster of numbers across a page seam. The site pans/zooms a native SVG viewBox (not a
-scaled bitmap), so it stays sharp immediately at any zoom — no blur-then-clear delay.
+The old map was redrawn from a PDF whose lot numbers were vector strokes, so old numbers sat under the new ones and
+labels sat off-centre. The vector drawing keeps lot numbers as **real text** and lot outlines as separate lines, so:
 
-## Files
+* No legacy annotation is part of the map. Section titles, chapel/parking/office notes and the mausoleum legend are text in the
+  source and are simply not drawn. Roads, curbs, building and mausoleum footprints and every lot outline are kept.
+  Original text can be switched on in **Layers > Original drawing annotations** (road names, building names, mausoleum legend from the drawing file).
+  The old overall map's maroon "SECTION X" blocks are not in the drawing file, so that layer does not reproduce them.
+* Nothing is erased or covered, so nothing can be erased by mistake. There are no white patches.
+* Each number is fitted inside its own outline: centred, aligned, inset by a clear margin, never clipped, never overlapping.
 
-| File | Use |
-|------|-----|
-| `site/index.html` | **The interactive map + full usage docs.** Open directly in a browser. |
-| `Cedar_Grove_H-Number_Map_44x34in.pdf` | The map at 4x the original size (ANSI E, 44 x 34 in), for plotting. Vector, so it zooms and plots without blur. |
-| `Cedar_Grove_H-Number_Map_letter_tiles.pdf` | *Superseded by the site above* — the same map cut into 25 fixed letter-size pages for a home printer. Kept only for printing a paper copy; several tiles crop a number cluster awkwardly or run it under a section title. Print at **100 % / actual size** and butt the edges together if you use it. |
-| `placed_lots.csv` | Every lot that got a number on the map: section, old label, H-number, position on the map. |
-| `lots_not_placed_on_map.csv` | Lots the decoder knows about that could not be matched to a label on the old maps (see below). |
-| `map_labels_not_in_decoder.csv` | Labels read from the old maps that the decoder has no lot for. |
-| `pipeline/` | The scripts used to build both the PDFs and the site (reference; paths are hard-coded to this machine). |
+## Result
 
-## How to read the map
+| | lots |
+|---|---|
+| Lots with an H-number on the map | **3,103** (3,102 drawn outlines + 1 label whose outline is not drawn) |
+| - section corroborated by a second, independent reading | 2,709 |
+| - section inferred from surrounding lots (not individually reviewed) | 394 (327 with 90-100% neighbour agreement, 46 with 60-89%, 21 whose label exists in only one section) |
+| Visible on the map, identity unresolved ("needs review") | **218** |
+| Known to the decoder, no position on the map | **68** (34 of them match a drawn lot that is also among the 218) |
 
-* Numbers are the H-number **without the leading `H` and zeros**: `1871` = `H001871`. This is what makes them legible at print size
-  (a lot is only ~6 map-units wide on the original sheet).
-* `A` / `B` after a number = the two rows of a double-row lot (`1690A` = `H001690A`).
-* A lot that still shows a small black original label has **no new number yet** (see "Coverage").
+The 394 inferred-section lots are drawn with their H-number but are not counted as verified in the site panel ("Placed lot, section inferred").
+A spot-check of those, starting with the 46 weakest, is the next review task.
 
-## Coverage
+Needs-review lots are tinted with a dashed amber outline and carry **no** number. Their decoder candidate (when there is one) is
+shown only in the details panel, marked as a candidate. Reasons: label not in the section this part of the map belongs to (77),
+label exists in many sections and the area has no region evidence, mostly the mausoleum garden rows (72), the same old label twice
+in one section (28), H-number far from its neighbours (20), label unknown to the decoder (12), outline with no label (9).
+All of them are in `unresolved_locations.csv`, the site's **To review** tab and the last PDF pages.
 
-3,063 of the decoder's 3,147 lots (97 %) were matched and numbered.
+Open human decisions (unchanged from before, now visible as concrete lots): Section B 373-380H collision (the margin-strip
+numbers sit in the main grid), Section G duplicate `19`, Section A `20H, 39H ... 343H` (map shows plain `20`, `39`), the B/C/D
+labels 395-414 and 320/340/360/344H/362H/308H/326H on the Section B side, the mausoleum-garden rows, and the per-lot grave capacity.
+Three lots are placed but too small to carry a legible number (E 195A, E 195B, H 21): they are clickable and listed.
 
-Sanity check on the result: for every section, each lot's H-number was compared with the median of its six nearest
-neighbours. Sections I–L stay within 9. In A–H the only large gaps are the margin strips (B, D, F), where the sweep
-jumps by design, plus four numbers that
-stand out and are worth a quick look on the printed map: **M lot 18** (H002592), **C lots 51H and 9H** (H000972, H000890) and
-**F lot 1** (H001889).
+## Checks that ran (pipeline2/qa.py)
 
-### What did not get a number (`lots_not_placed_on_map.csv`)
+1. Every number's measured text box lies inside its own lot with clearance, clear of every drawn lot line, and overlaps no other number: **3,103 / 3,103**.
+2. Traced lot outlines versus the drawn lines: worst deviation 0.62 drawing units (line half-width is 0.36).
+3. Pixel test in a real browser: of 773,021 number pixels, **0** touch a lot line.
+4. The same test on the rendered PDF pages: **0** of 1.74 million number pixels touch a lot line; every number is in the PDF text layer.
+Detail pages overlap by 36 units (more than the largest lot) and each lot and its number are placed on a page that shows the lot whole.
 
-* **30 rows are not real lots**: the shared base of a double-row lot (D 367–384, E 190–199) and the internal `152dr`/`169dr` keys.
-  The maps only draw the `A`/`B` rows, and those were placed.
-* **~106 lots** have no matching label on the old maps, or the label could not be read. Two groups stand out and look like
-  decoder/map disagreements worth checking rather than reading failures:
-  * **Section A** — `20H, 39H, 58H, 77H, 96H, 115H, 134H, 153H, 172H, 191H, 210H, 229H, 248H, 267H, 286H, 305H, 324H, 343H`
-    (H-numbers 87, 131, 175 …). Where these should be, the map shows plain `20` and `39` (checked) and, I assume, the rest of the run.
-  * **Section B** — labels `373–380H` exist in both the main grid and the margin strip in the decoder (the known B collision); the numbers on the map use the margin-strip lots.
-* Labels such as `400`–`414`, `A362`, `B362`, `C344`, `B308`, `C326` are read inside Section B on the old map but are not in the decoder (`map_labels_not_in_decoder.csv`).
+## Using the site
 
-## Method (short)
+* Click a lot: the map zooms to it, highlights it and opens its panel (H-number, section and lot, how it was verified, grave information).
+  Grave information starts empty ("Grave count not verified", "No grave records entered yet"). Nine positions are never generated.
+* Search accepts `H001914`, `1914`, `H0019141` (grave id, shows the lot), `F 34`, `B 20H`, or part of a recorded name.
+* **Browse map**: sections A to M with H-number ranges,
+  and the **To review** list. **Back** returns to the previous view, **Fit map** shows the whole cemetery.
+* Editing and import: signed-in viewers with edit access only. This is enforced by the shared data service
+  (`db` rule `read: view, write: admin`), not only by hiding the buttons.
 
-1. The old lot labels are drawn as outlined single-stroke glyphs, not text. I recognised each character by template matching
-   (with rotation), rebuilt the labels, and checked each against the decoder for its section.
-2. Each source page was registered onto the Overall Map by matching line segments (residual < 0.05 map units), so a label's
-   position transfers exactly.
-3. The tiny original labels were erased and the H-number was written in the same lot at the same orientation.
+### Record format (collection `lots`, one document per H-number, e.g. `H002589`)
+
+`capacity` (number or null), `capacityVerified`, `notes`, `source`, `updated`, and `records[]` with
+`name, birth, death, position, positionVerified, notes, source`.
+**Import** (CSV or Excel, first row = headers): `h_number` *or* `section` + `lot`; optional `name, birth, death, position,
+position_verified, notes, source`. Unmatched rows are skipped and listed; imported rows are added to existing records.
+
+## Not decided here
+
+The decoder README describes four "H-number sections" (H000001-H002331 grid, margins, M, K/J/I/L). They are decoder passes, not an
+approved public grouping, so the site does not use them. Navigation uses the section letters plus the H range.

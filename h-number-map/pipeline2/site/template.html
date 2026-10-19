@@ -1,0 +1,662 @@
+<title>Cedar Grove Cemetery</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Libre+Baskerville:wght@400;700&display=swap" rel="stylesheet">
+<style>
+/* Layout: header with search; browse sidebar | map | lot panel. One printed-map look, light by design. */
+:root{
+  color-scheme:light;
+  --bg:#faf9f6; --surface:#ffffff; --surface-2:#f3f1ea; --line:#e2dfd6; --line-2:#cfcabd;
+  --navy:#0c2340; --navy-2:#3a5578; --gold:#b8892f; --gold-soft:#efe3c8;
+  --text:#1a2130; --mid:#566274; --faint:#7d8798;
+  --ok:#2f6b46; --ok-bg:#e6f0e8; --review:#9a5b12; --review-bg:#f6e8d2; --danger:#a23325;
+  --map:#fbfaf6; --label:#0c2340;
+  --sans:'DM Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  --serif:'Libre Baskerville',Georgia,serif;
+  --mono:'DejaVu Sans Mono','DM Mono',ui-monospace,Menlo,Consolas,monospace;
+  --r:8px; --shadow:0 8px 24px -8px rgba(12,35,64,.28),0 2px 6px rgba(12,35,64,.08);
+  --panel-w:372px; --side-w:304px;
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;background:var(--bg);color:var(--text);font:15px/1.45 var(--sans);-webkit-font-smoothing:antialiased;overflow:hidden}
+button,input,textarea,select{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:2px solid var(--navy-2);outline-offset:2px}
+[hidden]{display:none!important}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
+
+#app{display:flex;flex-direction:column;height:100%}
+header{flex:0 0 auto;display:flex;align-items:center;gap:12px;padding:8px 16px;background:var(--surface);border-bottom:1px solid var(--line);position:relative;z-index:30}
+.brand{display:flex;align-items:center;gap:10px;flex:0 0 auto}
+.brand .mark{width:32px;height:32px;border-radius:50%;background:var(--navy);color:#fff;display:grid;place-items:center;font:700 12px var(--serif)}
+.brand .nm{font:700 16px var(--serif);color:var(--navy);white-space:nowrap}
+.search{position:relative;flex:1 1 auto;max-width:560px;min-width:0}
+.search svg{position:absolute;left:12px;top:50%;transform:translateY(-50%);width:17px;height:17px;color:var(--faint);pointer-events:none}
+#q{width:100%;height:42px;padding:0 38px 0 38px;border:1px solid var(--line-2);border-radius:var(--r);background:var(--surface-2);font-size:15px}
+#q:focus{outline:none;border-color:var(--navy-2);background:var(--surface);box-shadow:0 0 0 3px rgba(58,85,120,.15)}
+#qx{position:absolute;right:6px;top:50%;transform:translateY(-50%);width:30px;height:30px;border:0;background:none;color:var(--faint);border-radius:50%}
+#qx:hover{background:var(--surface-2)}
+#results{position:absolute;left:0;right:0;top:calc(100% + 6px);background:var(--surface);border:1px solid var(--line-2);border-radius:var(--r);box-shadow:var(--shadow);max-height:min(66vh,480px);overflow:auto;z-index:60}
+.res{display:flex;gap:10px;align-items:center;justify-content:space-between;width:100%;text-align:left;padding:10px 14px;border:0;border-bottom:1px solid var(--line);background:none;min-height:48px}
+.res:last-child{border-bottom:0}
+.res:hover,.res.on{background:var(--surface-2)}
+.res .h{font:700 14px var(--mono);color:var(--navy)}
+.res .sub{font-size:12.5px;color:var(--mid)}
+.res .tag{font-size:11px;font-weight:600;border-radius:99px;padding:2px 8px;white-space:nowrap}
+.tag.ok{background:var(--ok-bg);color:var(--ok)} .tag.rv{background:var(--review-bg);color:var(--review)} .tag.nm{background:var(--gold-soft);color:#6b4d12}
+.res-empty{padding:16px;color:var(--mid);font-size:13.5px}
+.hbtns{display:flex;gap:8px;margin-left:auto;flex:0 0 auto}
+.tbtn{display:inline-flex;align-items:center;gap:7px;height:40px;padding:0 13px;border:1px solid var(--line-2);border-radius:var(--r);background:var(--surface);color:var(--navy);font-weight:600;font-size:13.5px;white-space:nowrap}
+.tbtn:hover{background:var(--surface-2)} .tbtn svg{width:16px;height:16px}
+.tbtn.on{background:var(--navy);color:#fff;border-color:var(--navy)}
+#capnote{font-size:12px;color:var(--faint);white-space:nowrap}
+
+main{flex:1;min-height:0;display:flex;position:relative}
+aside#side{flex:0 0 var(--side-w);width:var(--side-w);background:var(--surface);border-right:1px solid var(--line);display:flex;flex-direction:column;min-height:0}
+aside#side[hidden]{display:none}
+.tabs{display:flex;border-bottom:1px solid var(--line);flex:0 0 auto}
+.tab{flex:1;height:44px;border:0;background:none;font-weight:600;color:var(--mid);border-bottom:2px solid transparent}
+.tab.on{color:var(--navy);border-bottom-color:var(--gold)}
+.side-body{flex:1;overflow:auto;padding:14px 16px 24px}
+.eyebrow{font:700 11px var(--sans);letter-spacing:.06em;text-transform:uppercase;color:var(--faint);margin:0 0 8px}
+.area{display:flex;justify-content:space-between;align-items:center;gap:8px;width:100%;text-align:left;padding:10px 12px;border:1px solid var(--line);border-radius:var(--r);background:var(--surface);margin-bottom:8px;min-height:56px}
+.area:hover{border-color:var(--gold);background:#fffdf8}
+.area b{display:block;color:var(--navy)} .area small{color:var(--mid);font-size:12.5px}
+.area .rng{font:12px var(--mono);color:var(--mid);text-align:right}
+.lnk{border:0;background:none;color:var(--navy-2);font-weight:600;padding:6px 0;text-decoration:underline;text-underline-offset:2px}
+.field{display:block;width:100%;height:40px;padding:0 12px;border:1px solid var(--line-2);border-radius:var(--r);background:var(--surface-2)}
+.field:focus{outline:none;border-color:var(--navy-2);background:var(--surface)}
+textarea.field{height:auto;min-height:64px;padding:9px 12px;resize:vertical}
+.lotlist{margin-top:10px;border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+.li{display:flex;justify-content:space-between;gap:8px;width:100%;padding:9px 12px;border:0;border-bottom:1px solid var(--line);background:var(--surface);text-align:left;min-height:42px;align-items:center}
+.li:last-child{border-bottom:0} .li:hover{background:var(--surface-2)}
+.li .h{font:700 13.5px var(--mono);color:var(--navy)} .li .l{font-size:12.5px;color:var(--mid)}
+.note{font-size:12.5px;color:var(--mid);line-height:1.5}
+.reason-h{font-weight:700;color:var(--review);font-size:13px;margin:16px 0 6px}
+
+#mapwrap{position:relative;flex:1;min-width:0;background:var(--map);overflow:hidden;touch-action:none;cursor:grab;user-select:none;-webkit-user-select:none}
+#mapwrap.drag{cursor:grabbing}
+#svg{display:block;width:100%;height:100%}
+.b-lot{stroke-linejoin:round}
+.lot{fill:var(--gold);fill-opacity:0;stroke:none;cursor:pointer}
+.lot:hover{fill-opacity:.16}
+.lot.hasrec{fill:#4f9a6a;fill-opacity:.2}
+.lot.hasrec:hover{fill-opacity:.32}
+.rv{fill:#f1dcc0;fill-opacity:.5;stroke:#c9892f;stroke-opacity:.85;stroke-width:1;stroke-dasharray:3 2;vector-effect:non-scaling-stroke;cursor:pointer}
+.rv:hover{fill-opacity:.8}
+.rv.pv{fill:#cfe4ee;fill-opacity:.75;stroke:#2c7da0;stroke-opacity:.95;stroke-dasharray:none}.rv.pv:hover{fill-opacity:.95}
+.rv-dot.pv{fill:#cfe4ee;stroke:#2c7da0}
+.ex{fill:#fff;fill-opacity:.55;stroke:#2c7da0;stroke-width:1.5;stroke-dasharray:2 1.6;vector-effect:non-scaling-stroke;cursor:pointer}.ex:hover{fill-opacity:.9}
+#provl{display:none}#provl.show{display:block}
+#provl text{font-family:var(--mono);font-weight:700;font-style:italic;fill:#1d5f7d;text-anchor:middle;pointer-events:none;lengthAdjust:spacingAndGlyphs}
+.no-prov .rv.pv,.no-prov .rv-dot.pv,.no-prov #provl,.no-prov #exg{display:none}
+#legend .pvk{background:#cfe4ee;border:1px solid #2c7da0}#legend .exk{background:#fff;border:1px dashed #2c7da0;border-radius:50%}
+.chip.pv{background:#d6e9f2;color:#1d5f7d}.tag.pvt{background:#d6e9f2;color:#1d5f7d}
+.box.pvbox{background:#eef6fa;border-color:#b9d8e7}
+.blk{display:block;width:100%;text-align:left;padding:10px 12px;border:1px solid var(--line);border-radius:var(--r);background:var(--surface);margin:0 0 8px}
+.blk:hover{border-color:var(--gold)} .blk b{color:var(--navy)} .blk small{display:block;color:var(--mid);font-size:12.5px;margin-top:2px}
+
+.rv-dot{fill:#f1dcc0;fill-opacity:.8;stroke:#c9892f;stroke-width:1.2;vector-effect:non-scaling-stroke;cursor:pointer}
+.no-review #review{display:none}
+#labels text{font-family:var(--mono);font-weight:700;fill:var(--label);text-anchor:middle;pointer-events:none}
+#labels g{display:none} #labels g.show{display:block}
+#seclabels text{font-family:var(--sans);font-weight:700;fill:var(--navy);text-anchor:middle;cursor:pointer;paint-order:stroke;stroke:#fbfaf6;stroke-width:5px;stroke-linejoin:round;vector-effect:non-scaling-stroke}
+#seclabels text.sub{font-family:var(--mono);font-weight:600;fill:var(--navy-2);stroke-width:4px}
+#seclabels text:hover{fill:var(--gold)}
+#sel{fill:var(--gold);fill-opacity:.28;stroke:var(--navy);stroke-width:2.2;vector-effect:non-scaling-stroke;pointer-events:none}
+#hint{fill:var(--gold);fill-opacity:.07;stroke:var(--gold);stroke-width:1.6;stroke-dasharray:6 4;vector-effect:non-scaling-stroke;pointer-events:none}
+#ann text{font-family:var(--sans);fill:#8a6f4a;opacity:.85;pointer-events:none}
+.ctl{position:absolute;z-index:8}
+#zoomctl{right:12px;bottom:12px;display:flex;flex-direction:column;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);overflow:hidden}
+#zoomctl button{display:flex;align-items:center;justify-content:center;gap:7px;min-width:48px;height:46px;border:0;border-bottom:1px solid var(--line);background:none;color:var(--navy);font-weight:600;font-size:13px;padding:0 12px}
+#zoomctl button:last-child{border-bottom:0} #zoomctl button:hover:not(:disabled){background:var(--surface-2)} #zoomctl button:disabled{opacity:.4;cursor:default}
+#zoomctl svg{width:17px;height:17px}
+#fsctl{z-index:9}.immersive header,.immersive aside#side{display:none}
+#layers{left:12px;top:12px;z-index:9}.lgrp{font:700 11px var(--sans);letter-spacing:.06em;text-transform:uppercase;color:var(--faint);padding:8px 8px 2px}
+.layers-btn{height:38px;display:inline-flex;align-items:center;gap:7px;padding:0 12px;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);font-weight:600;font-size:13px;color:var(--navy)}
+.layers-btn svg{width:15px;height:15px}
+#layers-menu{margin-top:6px;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);padding:6px;min-width:230px}
+.lrow{display:flex;gap:9px;align-items:flex-start;padding:9px 8px;border-radius:6px;cursor:pointer;font-size:13.5px}
+.lrow:hover{background:var(--surface-2)} .lrow input{margin-top:3px;accent-color:var(--navy);width:16px;height:16px}
+.lrow small{display:block;color:var(--mid);font-size:12px}
+#legend{left:12px;bottom:12px;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);padding:8px 12px;font-size:12px;color:var(--mid);display:flex;gap:6px 14px;flex-wrap:wrap;max-width:min(520px,calc(100% - 110px))}
+#legend i{display:inline-block;width:11px;height:11px;border-radius:3px;margin-right:6px;vertical-align:-1px}
+#legend .rvk{background:#f1dcc0;border:1px dashed #c9892f} #legend .rec{background:#bfe0c9;border:1px solid #4f9a6a}
+#zoomhint{left:50%;top:12px;transform:translateX(-50%);background:var(--navy);color:#fff;font-size:12.5px;padding:6px 12px;border-radius:99px;box-shadow:var(--shadow);pointer-events:none}
+
+aside#panel{flex:0 0 var(--panel-w);width:var(--panel-w);background:var(--surface);border-left:1px solid var(--line);display:flex;flex-direction:column;min-height:0;z-index:20}
+aside#panel[hidden]{display:none}
+.p-head{display:flex;justify-content:space-between;gap:10px;padding:16px 16px 10px;align-items:flex-start;flex:0 0 auto}
+.p-h{font:700 28px var(--mono);color:var(--navy);letter-spacing:-.02em;line-height:1.1}
+.p-x{width:40px;height:40px;border:0;background:none;border-radius:50%;color:var(--mid);font-size:18px;flex:0 0 auto;margin:-6px -6px 0 0}
+.p-x:hover{background:var(--surface-2)}
+.p-body{flex:1;overflow:auto;padding:0 16px 24px}
+.chip{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:700;border-radius:99px;padding:3px 10px}
+.chip.ok{background:var(--ok-bg);color:var(--ok)} .chip.rv{background:var(--review-bg);color:var(--review)} .chip.gen{background:var(--surface-2);color:var(--mid)}
+.kv{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;margin:14px 0;font-size:14px}
+.kv dt{color:var(--faint)} .kv dd{margin:0;font-weight:500;min-width:0;overflow-wrap:anywhere}
+.box{border:1px solid var(--line);border-radius:var(--r);padding:12px 14px;margin:12px 0}
+.box h3{margin:0 0 6px;font-size:13px;letter-spacing:.04em;text-transform:uppercase;color:var(--faint)}
+.box.rvbox{background:#fdf6ea;border-color:#ecd3a9}
+.empty{color:var(--mid);font-size:13.5px}
+.rec{border-top:1px solid var(--line);padding:10px 0}
+.rec:first-of-type{border-top:0}
+.rec .nm{font-weight:700;font-size:16px}
+.rec .d{color:var(--mid);font-size:13.5px}
+.badge{font-size:11px;font-weight:700;border-radius:4px;padding:1px 6px;background:var(--surface-2);color:var(--mid)} .badge.v{background:var(--ok-bg);color:var(--ok)}
+.btns{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.btn{height:40px;padding:0 14px;border:1px solid var(--line-2);border-radius:var(--r);background:var(--surface);font-weight:600;font-size:13.5px;color:var(--navy)}
+.btn:hover{background:var(--surface-2)} .btn.pri{background:var(--navy);border-color:var(--navy);color:#fff} .btn.pri:hover{background:#13315a}
+.btn.dng{color:var(--danger)} .btn:disabled{opacity:.5;cursor:default}
+.form label{display:block;font-size:11.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--faint);margin:8px 0 3px}
+.form .field{height:36px}.form textarea.field{height:auto;min-height:44px}.form details{margin-top:10px}.form summary{cursor:pointer;font-weight:600;color:var(--navy-2);font-size:13.5px;padding:6px 0}
+.form .two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.form .chk{display:flex;gap:8px;align-items:center;margin-top:8px;font-size:13.5px;text-transform:none;letter-spacing:0;font-weight:500;color:var(--text)}
+.rform{border:1px solid var(--line-2);border-radius:var(--r);padding:2px 12px 8px;margin:8px 0;background:var(--surface-2)}
+.status{font-size:12.5px;min-height:18px;margin-top:6px;color:var(--mid)} .status.ok{color:var(--ok)} .status.err{color:var(--danger)}
+
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(10px);background:var(--navy);color:#fff;padding:10px 16px;border-radius:var(--r);font-weight:600;font-size:13.5px;box-shadow:var(--shadow);opacity:0;pointer-events:none;transition:opacity .18s,transform .18s;z-index:300;max-width:90vw}
+.toast.show{opacity:1;transform:translateX(-50%)}
+.modal-ov{position:fixed;inset:0;background:rgba(12,20,35,.5);z-index:200;display:grid;place-items:center;padding:16px}
+.modal{background:var(--surface);border-radius:12px;box-shadow:var(--shadow);width:min(520px,100%);max-height:88vh;overflow:auto;padding:20px}
+.modal h2{margin:0 0 4px;font-size:19px;color:var(--navy)}
+.xopt{display:flex;justify-content:space-between;gap:10px;align-items:center;border:1px solid var(--line);border-radius:var(--r);padding:11px 12px;margin-top:10px}
+.xopt b{display:block;font-size:14px} .xopt small{color:var(--mid);font-size:12.5px}
+.xgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px;margin-top:8px}
+table.t{width:100%;border-collapse:collapse;font-size:12.5px;margin-top:8px}
+table.t th{text-align:left;color:var(--faint);font-size:11px;text-transform:uppercase;letter-spacing:.04em;padding:5px 6px;border-bottom:1px solid var(--line)}
+table.t td{padding:5px 6px;border-bottom:1px solid var(--line);overflow-wrap:anywhere}
+.scrollx{overflow-x:auto}
+
+@media (max-width:860px){
+  :root{--panel-w:100%;--side-w:100%}
+  .brand .nm{display:none} #capnote{display:none}
+  header{gap:8px;padding:8px 12px} .tbtn .lbl{display:none} .tbtn{padding:0 11px}
+  aside#side{position:absolute;inset:0;z-index:25;border:0}
+  aside#panel{position:absolute;left:0;right:0;bottom:0;height:var(--sheet-h,46%);border-left:0;border-top:1px solid var(--line-2);border-radius:14px 14px 0 0;box-shadow:0 -10px 30px -10px rgba(12,35,64,.3)}
+  .p-h{font-size:24px}
+  #legend{display:none}
+  #zoomctl{bottom:calc(12px + var(--sheet-px,0px))}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+<div id="app">
+<header>
+  <div class="brand"><div class="mark">CG</div><div class="nm">Cedar Grove Cemetery</div></div>
+  <div class="search">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+    <label class="sr" for="q">Search H-number, lot, or name</label>
+    <input id="q" type="search" autocomplete="off" spellcheck="false" placeholder="Search H-number, lot (B 20H), or name">
+    <button id="qx" type="button" aria-label="Clear search" hidden>&#10005;</button>
+    <div id="results" role="listbox" hidden></div>
+  </div>
+  <span id="capnote"></span>
+  <div class="hbtns">
+    <button class="tbtn on" id="b-browse" type="button" aria-pressed="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h10"/></svg><span class="lbl">Browse map</span></button>
+    <button class="tbtn" id="b-3d" type="button" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9L12 3zM12 12l8-4.5M12 12v9M12 12L4 7.5"/></svg><span class="lbl">3D view</span></button>
+    <button class="tbtn" id="b-export" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m0 0l-4-4m4 4l4-4M5 21h14"/></svg><span class="lbl">Export</span></button>
+    <button class="tbtn" id="b-import" type="button" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21V9m0 0l-4 4m4-4l4 4M5 3h14"/></svg><span class="lbl">Import records</span></button>
+  </div>
+</header>
+<main>
+  <aside id="side">
+    <div class="tabs" role="tablist">
+      <button class="tab on" id="t-areas" role="tab" type="button">Areas</button>
+      <button class="tab" id="t-review" role="tab" type="button">To review</button>
+    </div>
+    <div class="side-body" id="side-body"></div>
+  </aside>
+  <div id="mapwrap">
+    <svg id="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" aria-label="Map of lots with H-numbers">
+      <image id="photo" href="ground.jpg" x="220" y="60" width="1580" height="980" preserveAspectRatio="none" hidden=""/>
+      <g id="base">__BASE__</g>
+      <g id="ann" hidden=""></g>
+      <g id="hintg"><polygon id="hint" points="" hidden=""/></g>
+      <g id="review">__REVIEW__</g>
+      <g id="lots">__LOTS__</g>
+      <polygon id="sel" points="" hidden=""/>
+      <g id="labels">__LABELS__</g>
+      <g id="provl">__PROVL__</g>
+      <g id="exg">__EXP__</g>
+      <g id="seclabels"></g>
+    </svg>
+    <div class="ctl" id="layers">
+      <button class="layers-btn" id="layers-btn" type="button" aria-expanded="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3l9 5-9 5-9-5 9-5zM3 13l9 5 9-5"/></svg>Layers</button>
+      <div id="layers-menu" hidden>
+        <div class="lgrp">View</div>
+        <label class="lrow"><input type="radio" name="ly-view" id="ly-2d" checked><span>2D lot map<small>Every lot outline with its H-number.</small></span></label>
+        <label class="lrow"><input type="radio" name="ly-view" id="ly-3d"><span>3D model<small>Headstones, trees and buildings. Click a stone to open its lot.</small></span></label>
+        <div class="lgrp">Layers</div>
+        <label class="lrow"><input type="checkbox" id="ly-photo" disabled><span>Ground photo<small id="ly-photo-s">Checking for the aerial photo…</small></span></label>
+        <label class="lrow"><input type="checkbox" id="ly-prov" checked><span>Inferred lots<small>Lots and spots whose number is worked out from the path. Please confirm them.</small></span></label>
+        <label class="lrow"><input type="checkbox" id="ly-review" checked><span>Lots to review<small>Outlined lots that could not be tied to one H-number.</small></span></label>
+        <label class="lrow"><input type="checkbox" id="ly-ann"><span>Original drawing annotations<small>Road names, building names and the mausoleum legend from the source drawing.</small></span></label>
+      </div>
+    </div>
+    <div class="ctl" id="fsctl" style="right:12px;top:12px"><button class="layers-btn" id="fs" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg><span id="fs-l">Full screen</span></button></div>
+    <iframe id="v3d" title="3D model of Cedar Grove" hidden style="position:absolute;inset:0;width:100%;height:100%;border:0;background:var(--map);z-index:1"></iframe>
+    <div class="ctl" id="zoomhint" hidden>Zoom in to read every lot number</div>
+    <div class="ctl" id="legend"><span>Numbers are H-numbers (H and leading zeros left off)</span><span><i class="rvk"></i>Needs review</span><span><i class="pvk"></i>Inferred from the path, please confirm</span><span><i class="exk"></i>Expected spot, no outline drawn</span><span id="lg-rec" hidden><i class="rec"></i>Has grave records</span></div>
+    <div class="ctl" id="zoomctl">
+      <button id="z-in" type="button" aria-label="Zoom in"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></button>
+      <button id="z-out" type="button" aria-label="Zoom out"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14"/></svg></button>
+      <button id="z-fit" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>Fit map</button>
+      <button id="z-back" type="button" disabled><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 6l-6 6 6 6M4 12h16"/></svg>Back</button>
+    </div>
+  </div>
+  <aside id="panel" hidden></aside>
+</main>
+</div>
+<div class="toast" id="toast"></div>
+<div id="modal-root"></div>
+
+<script>
+var DATA = /*__DATA__*/null;
+(function(){
+'use strict';
+var BLOCKS=DATA.blocks||[], LOTS=DATA.lots, REVIEW=DATA.review, UNPL=DATA.unplaced, AREAS=DATA.areas, REASONS=DATA.reasons, ANN=DATA.ann, CB=DATA.bbox, PDFS=DATA.pdfs;
+// lot row: [d,h,s,l,hn,cx,cy,x0,y0,x1,y1,ev,labelOnly]
+var $=function(id){return document.getElementById(id)};
+function esc(s){var d=document.createElement('div');d.textContent=String(s==null?'':s);return d.innerHTML}
+var tt;function toast(m){var t=$('toast');t.textContent=m;t.classList.add('show');clearTimeout(tt);tt=setTimeout(function(){t.classList.remove('show')},2600)}
+function copy(txt,label){function ok(){toast((label||'Copied')+' to clipboard')}
+  function fb(){var a=document.createElement('textarea');a.value=txt;a.style.position='fixed';a.style.opacity='0';document.body.appendChild(a);a.select();try{document.execCommand('copy');ok()}catch(e){toast('Select and copy: '+txt)}a.remove()}
+  if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(txt).then(ok,fb)}else fb()}
+function isMobile(){return window.matchMedia('(max-width:860px)').matches}
+
+/* ---------- indexes ---------- */
+var byH={},byLeg={},elLot=[];
+LOTS.forEach(function(r,i){(byH[r[1]]=byH[r[1]]||[]).push(i);byLeg[r[2]+'|'+r[3]]=i});
+Array.prototype.forEach.call(document.querySelectorAll('#lots [data-i]'),function(e){elLot[+e.getAttribute('data-i')]=e});
+var elRv=[];Array.prototype.forEach.call(document.querySelectorAll('#review [data-r]'),function(e){elRv[+e.getAttribute('data-r')]=e});
+function hnum(h){return parseInt(h.slice(1),10)}
+
+/* ---------- camera ---------- */
+var svg=$('svg'),wrap=$('mapwrap'),W=1,H=1,cam={x:(CB[0]+CB[2])/2,y:(CB[1]+CB[3])/2,s:.7},raf=null,anim=null,hist=[];
+var MAXS=70;
+function measure(){var r=wrap.getBoundingClientRect();W=Math.max(1,r.width);H=Math.max(1,r.height)}
+function fitScale(box,padPx){return Math.min((W-2*padPx)/(box[2]-box[0]),(H-2*padPx)/(box[3]-box[1]))}
+function minScale(){return fitScale(CB,8)*.8}
+function clampCam(c){c.s=Math.max(minScale(),Math.min(MAXS,c.s));return c}
+function render(){var vw=W/cam.s,vh=H/cam.s;svg.setAttribute('viewBox',(cam.x-vw/2).toFixed(3)+' '+(cam.y-vh/2).toFixed(3)+' '+vw.toFixed(3)+' '+vh.toFixed(3));lod()}
+function queue(){if(raf)return;raf=requestAnimationFrame(function(){raf=null;render()})}
+var bins=[['b1',4.0],['b2',3.0],['b3',2.2]],gl={};
+Array.prototype.forEach.call(document.querySelectorAll('#labels g'),function(g){gl[g.getAttribute('data-bin')]=g});
+var LBLS=1.55;/* every section's numbers switch on at the same zoom, so no section is left bare while its neighbour has numbers */
+function lod(){var on=cam.s>=LBLS,any=on;bins.forEach(function(b){if(gl[b[0]])gl[b[0]].classList.toggle('show',on)});
+  $('seclabels').style.display=cam.s<LBLS?'':'none';$('provl').classList.toggle('show',on);
+  $('zoomhint').hidden=any;$('z-in').disabled=cam.s>=MAXS-.01;$('z-out').disabled=cam.s<=minScale()+.001}
+function insets(){var i={l:0,r:0,t:0,b:0};if(isMobile()){var p=$('panel');if(!p.hidden)i.b=p.getBoundingClientRect().height}return i}
+function targetFor(box,fill,minS,maxS){var ins=insets(),aw=W-ins.l-ins.r,ah=H-ins.t-ins.b,w=box[2]-box[0],h=box[3]-box[1];
+  var s=Math.max(minS,Math.min(maxS,fill*Math.min(aw,ah)/Math.max(w,h)));
+  var cx=(box[0]+box[2])/2,cy=(box[1]+box[3])/2,dx=(ins.l-ins.r)/2,dy=(ins.t-ins.b)/2;
+  return clampCam({x:cx-dx/s,y:cy-dy/s,s:s})}
+function animateTo(t,ms){if(anim)cancelAnimationFrame(anim);var a={x:cam.x,y:cam.y,s:cam.s},t0=performance.now();ms=ms||420;
+  if(window.matchMedia('(prefers-reduced-motion:reduce)').matches){cam=t;render();return}
+  (function step(now){var k=Math.min(1,(now-t0)/ms),e=1-Math.pow(1-k,3);
+    cam.s=Math.exp(Math.log(a.s)+(Math.log(t.s)-Math.log(a.s))*e);
+    // keep the point under the screen centre moving smoothly in screen space
+    cam.x=a.x+(t.x-a.x)*e;cam.y=a.y+(t.y-a.y)*e;render();
+    if(k<1)anim=requestAnimationFrame(step);else anim=null})(performance.now())}
+function pushHist(){hist.push({cam:{x:cam.x,y:cam.y,s:cam.s},sel:sel&&{k:sel.k,i:sel.i}});if(hist.length>30)hist.shift();$('z-back').disabled=false}
+function zoomAt(px,py,f){var r=wrap.getBoundingClientRect(),mx=cam.x+(px-r.left-W/2)/cam.s,my=cam.y+(py-r.top-H/2)/cam.s;
+  var s=Math.max(minScale(),Math.min(MAXS,cam.s*f));cam.x=mx-(px-r.left-W/2)/s;cam.y=my-(py-r.top-H/2)/s;cam.s=s;queue()}
+function fitMap(){pushHist();animateTo(targetFor(CB,1,0,MAXS))}
+
+/* pointer: drag, pinch, wheel */
+var pts=new Map(),drag=null,moved=false,pinch0=null;
+wrap.addEventListener('pointerdown',function(e){if(e.target.closest('.ctl'))return;pts.set(e.pointerId,{x:e.clientX,y:e.clientY});moved=false;
+  if(anim){cancelAnimationFrame(anim);anim=null}
+  if(pts.size===1){drag={x:e.clientX,y:e.clientY,cx:cam.x,cy:cam.y}}
+  if(pts.size===2){var a=Array.from(pts.values());pinch0={d:Math.hypot(a[0].x-a[1].x,a[0].y-a[1].y),s:cam.s};drag=null}});
+window.addEventListener('pointermove',function(e){if(!pts.has(e.pointerId))return;pts.set(e.pointerId,{x:e.clientX,y:e.clientY});
+  if(pts.size===2&&pinch0){var a=Array.from(pts.values()),d=Math.hypot(a[0].x-a[1].x,a[0].y-a[1].y);moved=true;
+    zoomAt((a[0].x+a[1].x)/2,(a[0].y+a[1].y)/2,(pinch0.s*d/pinch0.d)/cam.s);return}
+  if(drag){var dx=e.clientX-drag.x,dy=e.clientY-drag.y;if(!moved&&Math.hypot(dx,dy)<5)return;moved=true;wrap.classList.add('drag');
+    cam.x=drag.cx-dx/cam.s;cam.y=drag.cy-dy/cam.s;queue()}});
+function up(e){pts.delete(e.pointerId);if(pts.size<2)pinch0=null;if(pts.size===0){drag=null;wrap.classList.remove('drag')}else if(pts.size===1){var p=Array.from(pts.values())[0];drag={x:p.x,y:p.y,cx:cam.x,cy:cam.y}}}
+window.addEventListener('pointerup',up);window.addEventListener('pointercancel',up);
+wrap.addEventListener('wheel',function(e){e.preventDefault();var dy=e.deltaMode===1?e.deltaY*16:e.deltaY;zoomAt(e.clientX,e.clientY,Math.exp(-dy*(e.ctrlKey?.01:.0016)))},{passive:false});
+svg.addEventListener('click',function(e){if(moved){moved=false;return}
+  var l=e.target.closest('#lots [data-i]');if(l){selectLot(+l.getAttribute('data-i'));return}
+  var r=e.target.closest('#review [data-r]');if(r){selectReview(+r.getAttribute('data-r'));return}
+  var ex=e.target.closest('#exg [data-u]');if(ex){selectUnplaced(+ex.getAttribute('data-u'));return}
+  if(sel&&!isMobile())clearSel()});
+$('z-in').onclick=function(){var r=wrap.getBoundingClientRect();zoomAt(r.left+W/2,r.top+H/2,1.6)};
+$('z-out').onclick=function(){var r=wrap.getBoundingClientRect();zoomAt(r.left+W/2,r.top+H/2,1/1.6)};
+$('z-fit').onclick=fitMap;
+$('z-back').onclick=function(){var h=hist.pop();if(!h)return;$('z-back').disabled=!hist.length;
+  if(h.sel)applySel(h.sel.k,h.sel.i,true);else clearSel(true);animateTo(clampCam(h.cam))};
+window.addEventListener('keydown',function(e){if(e.key==='Escape'){if($('modal-root').firstChild){closeModal();return}if(!$('results').hidden){$('results').hidden=true;return}if(sel)clearSel()}});
+new ResizeObserver(function(){measure();render()}).observe(wrap);
+
+/* ---------- selection ---------- */
+var sel=null,RECS={},canEdit=false,dbns=null;
+function polyPts(r){var e=elLot[r];return e?e.getAttribute('points'):null}
+function vis(el,on){if(on)el.removeAttribute('hidden');else el.setAttribute('hidden','')}
+function setSelShape(k,i){var s=$('sel'),p=null;
+  if(k==='lot'){var e=elLot[i];if(e&&e.tagName==='polygon')p=e.getAttribute('points');else if(e){var cx=+e.getAttribute('cx'),cy=+e.getAttribute('cy'),r=2.6;p=[[cx-r,cy-r],[cx+r,cy-r],[cx+r,cy+r],[cx-r,cy+r]].join(' ')}}
+  if(k==='review'){var e2=elRv[i];if(e2&&e2.tagName==='polygon')p=e2.getAttribute('points');else{var rv=REVIEW[i],r2=2.6;p=[[rv.x-r2,rv.y-r2],[rv.x+r2,rv.y-r2],[rv.x+r2,rv.y+r2],[rv.x-r2,rv.y+r2]].join(' ')}}
+  if(p){s.setAttribute('points',p);vis(s,true)}else vis(s,false)}
+function boxOf(k,i){if(k==='lot'){var r=LOTS[i];return[r[7],r[8],r[9],r[10]]}
+  if(k==='unplaced'&&UNPL[i].x!=null){var u=UNPL[i];return[u.x-6,u.y-6,u.x+6,u.y+6]}
+  if(k==='review'){var v=REVIEW[i];return v.b||[v.x-4,v.y-4,v.x+4,v.y+4]}
+  var a=AREAS[UNPL[i].s];return a?a.b:CB}
+function sheetPx(){var p=$('panel');document.documentElement.style.setProperty('--sheet-px',(isMobile()&&!p.hidden?Math.round(p.getBoundingClientRect().height):0)+'px')}
+function applySel(k,i,noMove){if(isMobile()){$('side').hidden=true;$('b-browse').classList.remove('on');$('b-browse').setAttribute('aria-pressed','false')}sel={k:k,i:i};setSelShape(k,i);var hint=$('hint');vis(hint,false);
+  if(k==='unplaced'){var u0=UNPL[i];if(u0.x!=null){var q=3;$('sel').setAttribute('points',[[u0.x-q,u0.y-q],[u0.x+q,u0.y-q],[u0.x+q,u0.y+q],[u0.x-q,u0.y+q]].join(' '));vis($('sel'),true)}else{var a=AREAS[u0.s];if(a&&a.hull){hint.setAttribute('points',a.hull.map(function(p){return p.join(',')}).join(' '));vis(hint,true)}vis($('sel'),false)}}
+  renderPanel();if(!noMove)requestAnimationFrame(function(){requestAnimationFrame(function(){flyToSel()})});markList()}
+function flyToSel(){if(!sel)return;measure();var b=boxOf(sel.k,sel.i);
+  if(sel.k==='unplaced'&&UNPL[sel.i].x==null)animateTo(targetFor(b,.9,0,MAXS));else animateTo(targetFor(b,.2,8,22))}
+function selectLot(i){if(sel&&sel.k==='lot'&&sel.i===i&&!$('panel').hidden){return}pushHist();applySel('lot',i)}
+function selectReview(i){pushHist();applySel('review',i)}
+function selectUnplaced(i){pushHist();applySel('unplaced',i)}
+function clearSel(noHist){sel=null;vis($('sel'),false);vis($('hint'),false);$('panel').hidden=true;$('panel').innerHTML='';
+  requestAnimationFrame(function(){measure();render();sheetPx()});markList()}
+
+/* ---------- panel ---------- */
+function evText(ev){return ev===0?'The label on the drawing matches this lot, and its section was confirmed by a second, independent reading of the drawing.':'The label on the drawing matches this lot. Its section follows from the surrounding lots, so the section is inferred, not read directly.'}
+function areaOfSel(){return sel.k==='lot'?LOTS[sel.i][2]:sel.k==='unplaced'?UNPL[sel.i].s:(REVIEW[sel.i].r0||null)}
+function renderPanel(){var p=$('panel');p.hidden=false;measure();if(isMobile())document.documentElement.style.setProperty('--sheet-h','48%');
+  var h='';
+  if(sel.k==='lot'){var r=LOTS[sel.i];
+    h='<div class="p-head"><div><div class="p-h" id="p-h">'+esc(r[1])+'</div><div style="margin-top:8px"><span class="chip '+(r[11]===0?'ok':'gen')+'">'+(r[11]===0?'Verified lot':'Placed lot, section inferred')+'</span></div></div><button class="p-x" id="p-x" aria-label="Close details">&#10005;</button></div><div class="p-body">'
+     +'<dl class="kv"><dt>Old reference</dt><dd>Section '+esc(r[2])+' &middot; Lot '+esc(r[3])+'</dd><dt>Map position</dt><dd>'+(r[12]?'Label position only (outline not drawn in the source)':'Outline drawn in the source')+'</dd></dl>'
+     +'<p class="note" style="margin:0 0 4px">'+evText(r[11])+'</p>'
+     +'<div id="rec-box"></div>'
+     +'<div class="btns"><button class="btn" id="p-copy" type="button">Copy H-number</button><button class="btn" id="p-list" type="button">Add to list</button><button class="btn" id="p-3d" type="button">View in 3D</button></div></div>'}
+  else if(sel.k==='review'){var v=REVIEW[sel.i],X='<button class="p-x" id="p-x" aria-label="Close details">&#10005;</button>';
+    if(v.p){h='<div class="p-head"><div><div class="p-h">'+esc(v.h)+'</div><div style="margin-top:8px"><span class="chip pv">Inferred from the path &middot; '+esc(v.p[0])+' confidence</span></div></div>'+X+'</div><div class="p-body">'
+      +'<div class="box pvbox"><h3>Please confirm</h3><p class="note" style="margin:0">'+esc(v.p[2])+'</p></div>'
+      +'<dl class="kv"><dt>Proposed</dt><dd>Section '+esc(v.s)+' &middot; Lot '+esc(v.l)+'</dd><dt>Label on drawing</dt><dd class="mono">'+(v.t?esc(v.t):'(none)')+'</dd></dl>'
+      +'<div class="box"><h3>Why we think so</h3><p class="note" style="margin:0">'+esc(v.p[1])+'</p></div>'
+      +'<p class="note">Not counted as verified. The outline is exactly where the drawing puts it; only its number is inferred, from where the lots before and after it on the path stand.</p></div>'}
+    else if(v.o){h='<div class="p-head"><div><div class="p-h" style="font-size:22px">Needs review</div><div style="margin-top:8px"><span class="chip rv">Not shown as an H-number</span></div></div>'+X+'</div><div class="p-body">'
+      +'<div class="box rvbox"><h3>Why</h3><p class="note" style="margin:0">'+esc(v.o[0])+'</p></div>'
+      +'<div class="box"><h3>We need to know</h3><p class="note" style="margin:0">'+esc(v.o[1])+'</p></div>'
+      +'<dl class="kv"><dt>Label on drawing</dt><dd class="mono">'+(v.t?esc(v.t):'(none)')+'</dd></dl>'+(v.o[2]?'<p class="note">'+esc(v.o[2])+'</p>':'')+'</div>'}
+    else{h='<div class="p-head"><div><div class="p-h" style="font-size:22px">Needs review</div><div style="margin-top:8px"><span class="chip rv">Not shown as an H-number</span></div></div>'+X+'</div><div class="p-body">'
+     +'<div class="box rvbox"><h3>Why</h3><ul style="margin:0;padding-left:18px">'+v.r.map(function(i){return '<li>'+esc(REASONS[i])+'</li>'}).join('')+'</ul></div>'
+     +'<dl class="kv"><dt>Label on drawing</dt><dd class="mono">'+(v.t?esc(v.t):'(none)')+'</dd>'
+     +(v.h?'<dt>Decoder candidate</dt><dd><span class="mono">'+esc(v.h)+'</span> &middot; Section '+esc(v.s)+' &middot; Lot '+esc(v.l)+'</dd>':'')+'</dl></div>'}}
+  else {var u=UNPL[sel.i],a=AREAS[u.s],X2='<button class="p-x" id="p-x" aria-label="Close details">&#10005;</button>';
+    h='<div class="p-head"><div><div class="p-h">'+esc(u.h)+'</div><div style="margin-top:8px"><span class="chip '+(u.x!=null?'pv':'gen')+'">'+(u.x!=null?'Expected spot &middot; '+esc(u.c)+' confidence':'Map position not resolved')+'</span></div></div>'+X2+'</div><div class="p-body">'
+     +'<dl class="kv"><dt>Old reference</dt><dd>Section '+esc(u.s)+' &middot; Lot '+esc(u.l)+'</dd>'+(u.x==null?'<dt>General area</dt><dd>Section '+esc(u.s)+'</dd>':'')+'</dl>'
+     +(u.x!=null?'<div class="box pvbox"><h3>Where it should be</h3><p class="note" style="margin:0">'+esc(u.w)+' No lot outline is drawn there, so the dashed ring marks where it should stand.</p></div><div class="box"><h3>Please check</h3><p class="note" style="margin:0">'+esc(u.k)+'</p></div>'
+       :'<div class="box rvbox"><h3>Not an exact location</h3><p class="note" style="margin:0">The decoder knows this lot, but no label on the drawing could be tied to it'+(u.w?' ('+esc(u.w)+')':'')+'. The dashed outline on the map only shows the general area of section '+esc(u.s)+'.'+(u.n?' '+esc(u.n)+'.':'')+'</p></div>')
+     +'<div id="rec-box"></div><div class="btns"><button class="btn" id="p-copy" type="button">Copy H-number</button></div></div>'}
+  p.innerHTML=h;sheetPx();$('p-x').onclick=function(){clearSel()};
+  var cp=$('p-copy');if(cp)cp.onclick=function(){copy(sel.k==='lot'?LOTS[sel.i][1]:UNPL[sel.i].h,'H-number copied')};
+  var pl=$('p-list');if(pl)pl.onclick=function(){addToList(sel.i)};
+  var p3=$('p-3d');if(p3)p3.onclick=function(){go3(true)};
+  if(sel.k!=='review')renderRec();if(in3d&&sel.k==='lot'&&v3loaded&&num3())post3({cg:'goto',h:num3()})}
+
+/* ---------- records ---------- */
+function curH(){return sel.k==='lot'?LOTS[sel.i][1]:UNPL[sel.i].h}
+function docFor(h){return RECS[h]||null}
+function recSummary(rec){var o='';
+  var cap=rec&&rec.capacity!=null&&rec.capacity!==''?'<b>'+esc(rec.capacity)+'</b> graves'+(rec.capacityVerified?' (verified)':' (not verified)'):'Grave count not verified';
+  o+='<p class="empty" style="margin:0 0 6px">'+cap+'</p>';
+  var rs=rec&&rec.records||[];
+  if(!rs.length)o+='<p class="empty" style="margin:0">No grave records entered yet.</p>';
+  rs.forEach(function(r){var dates=[r.birth,r.death].filter(Boolean).join(' \u2013 ');
+    o+='<div class="rec"><div class="nm">'+esc(r.name||'(no name)')+'</div>'+(dates?'<div class="d">'+esc(dates)+'</div>':'')
+      +'<div class="d">Position: '+(r.position?esc(r.position):'not recorded')+' <span class="badge'+(r.positionVerified?' v':'')+'">'+(r.positionVerified?'verified':'not verified')+'</span></div>'
+      +(r.notes?'<div class="d" style="white-space:pre-wrap;margin-top:4px">'+esc(r.notes)+'</div>':'')+(r.source?'<div class="d">Source: '+esc(r.source)+'</div>':'')+'</div>'});
+  if(rec&&(rec.notes||rec.note||rec.source))o+='<div class="rec">'+((rec.notes||rec.note)?'<div class="d" style="white-space:pre-wrap">'+esc(rec.notes||rec.note)+'</div>':'')+(rec.source?'<div class="d">Source: '+esc(rec.source)+'</div>':'')+'</div>';
+  return o}
+function renderRec(){var box=$('rec-box');if(!box)return;var h=curH(),rec=docFor(h);
+  box.innerHTML='<div class="box"><h3>Grave information</h3>'+recSummary(rec)
+   +(canEdit?'<div class="btns"><button class="btn pri" id="r-edit" type="button">Edit record</button></div>':'<p class="note" style="margin:10px 0 0">'+(dbns?'Records can be edited by people with edit access.':'Shared records are not available in this view.')+'</p>')+'</div>';
+  var eb=$('r-edit');if(eb)eb.onclick=function(){renderForm(rec)}}
+function f(id,lbl,val,type,ph){return '<label for="'+id+'">'+lbl+'</label><input class="field" id="'+id+'" type="'+(type||'text')+'" value="'+esc(val==null?'':val)+'"'+(ph?' placeholder="'+esc(ph)+'"':'')+'>'}
+function recForm(r,k){return '<div class="rform" data-k="'+k+'">'+f('rn'+k,'Name',r.name)+'<div class="two"><div>'+f('rb'+k,'Birth',r.birth,'text','e.g. 1931 or 4 Mar 1931')+'</div><div>'+f('rd'+k,'Death',r.death,'text','e.g. 2004')+'</div></div>'
+  +f('rp'+k,'Grave position',r.position,'text','e.g. east half, row 2')+'<label class="chk"><input type="checkbox" id="rv'+k+'"'+(r.positionVerified?' checked':'')+'> Position verified on site or in a source</label>'
+  +'<label for="rt'+k+'">Notes</label><textarea class="field" id="rt'+k+'">'+esc(r.notes||'')+'</textarea>'+f('rs'+k,'Source reference',r.source,'text','e.g. burial register p. 42')
+  +'<div class="btns" style="margin-top:8px"><button type="button" class="btn dng" data-del="'+k+'" style="height:32px;font-size:12.5px">Remove this record</button></div></div>'}
+var formN=0;
+function renderForm(rec){var box=$('rec-box'),rs=(rec&&rec.records||[]).map(function(r){return Object.assign({},r)});formN=0;
+  box.innerHTML='<div class="box form"><h3>Edit grave information</h3>'
+   +'<div class="two"><div>'+f('c-cap','Grave count',rec&&rec.capacity,'number','unknown')+'</div><div><label class="chk" style="margin-top:30px"><input type="checkbox" id="c-ver"'+(rec&&rec.capacityVerified?' checked':'')+'> Count verified</label></div></div>'
+   +'<div id="rforms">'+rs.map(function(r){return recForm(r,formN++)}).join('')+'</div>'
+   +'<div class="btns"><button class="btn" id="r-add" type="button">Add a record</button></div>'
+   +'<details'+((rec&&(rec.notes||rec.source))?' open':'')+'><summary>Lot notes and source</summary><label for="c-notes">Lot notes</label><textarea class="field" id="c-notes">'+esc(rec&&(rec.notes||rec.note)||'')+'</textarea>'+f('c-src','Lot source reference',rec&&rec.source)+'</details>'
+   +'<div class="btns"><button class="btn pri" id="r-save" type="button">Save</button><button class="btn" id="r-cancel" type="button">Cancel</button></div><div class="status" id="r-status"></div></div>';
+  $('r-add').onclick=function(){var d=document.createElement('div');d.innerHTML=recForm({},formN++);$('rforms').appendChild(d.firstChild)};
+  $('rforms').addEventListener('click',function(e){var b=e.target.closest('[data-del]');if(b){var el=b.closest('.rform');el.parentNode.removeChild(el)}});
+  $('r-cancel').onclick=renderRec;
+  $('r-save').onclick=function(){var h=curH(),out=[];
+    Array.prototype.forEach.call(document.querySelectorAll('.rform'),function(el){var k=el.getAttribute('data-k'),g=function(p){var n=$(p+k);return n?n.value.trim():''};
+      var r={name:g('rn'),birth:g('rb'),death:g('rd'),position:g('rp'),positionVerified:$('rv'+k).checked,notes:g('rt'),source:g('rs')};
+      if(r.name||r.birth||r.death||r.position||r.notes||r.source)out.push(r)});
+    var cap=$('c-cap').value.trim(),doc={h:h,capacity:cap===''?null:Math.max(0,parseInt(cap,10)||0),capacityVerified:$('c-ver').checked&&cap!=='',records:out,notes:$('c-notes').value.trim(),source:$('c-src').value.trim(),updated:new Date().toISOString()};
+    var st=$('r-status');st.className='status';st.textContent='Saving…';$('r-save').disabled=true;
+    writeDoc(h,doc).then(function(){st.className='status ok';st.textContent='Saved';RECS[h]=doc;indexNames();markRecs();setTimeout(renderRec,500)},
+      function(err){$('r-save').disabled=false;st.className='status err';st.textContent=(err&&err.code==='invalid_argument')?'You do not have edit access, so this was not saved.':'Not saved: '+(err&&err.message||'try again')})}}
+function writeDoc(h,doc){if(!dbns)return Promise.reject({message:'Shared records are not available in this view.'});return dbns.doc('lots/'+h).set(doc)}
+
+/* ---------- lists (to print / export) ---------- */
+var LIST=[];try{LIST=JSON.parse(localStorage.getItem('cg_list')||'[]')}catch(e){}
+function addToList(i){var h=LOTS[i][1];if(LIST.indexOf(h)<0)LIST.push(h);try{localStorage.setItem('cg_list',JSON.stringify(LIST))}catch(e){}toast('Added '+h+' ('+LIST.length+' on your list)')}
+
+/* ---------- search ---------- */
+var NAMEIDX=[];
+function indexNames(){NAMEIDX=[];Object.keys(RECS).forEach(function(h){((RECS[h]&&RECS[h].records)||[]).forEach(function(r){if(r.name)NAMEIDX.push({h:h,n:r.name,lc:r.name.toLowerCase()})})})}
+function markRecs(){elLot.forEach(function(e,i){if(e)e.classList.toggle('hasrec',!!(RECS[LOTS[i][1]]&&((RECS[LOTS[i][1]].records||[]).length)))});
+  $('lg-rec').hidden=!Object.keys(RECS).some(function(h){return(RECS[h].records||[]).length})}
+function search(raw){var q=raw.trim();if(!q)return[];var out=[],seen={};
+  function add(o){var k=o.k+':'+o.i;if(seen[k])return;seen[k]=1;out.push(o)}
+  var up=q.toUpperCase().replace(/\s+/g,' ');
+  // H-number (incl. grave id H + 6 digit lot + grave digit)
+  var m=up.replace(/[\s-]/g,'').match(/^H?0*(\d{1,7})([A-Z]?)$/),dig=m&&m[1];
+  var gm=up.replace(/[\s-]/g,'').match(/^H(\d{6})(\d)$/);
+  var cand=[];if(gm)cand.push({n:parseInt(gm[1],10),sfx:'',grave:gm[2]});
+  if(m)cand.push({n:parseInt(m[1],10),sfx:m[2]});
+  cand.forEach(function(c){LOTS.forEach(function(r,i){if(r[4]===c.n&&(!c.sfx||r[1].slice(-1)===c.sfx))add({k:'lot',i:i,rank:0,grave:c.grave})});
+    UNPL.forEach(function(u,i){if(hnum(u.h)===c.n&&(!c.sfx||u.h.slice(-1)===c.sfx))add({k:'unplaced',i:i,rank:2})});
+    REVIEW.forEach(function(v,i){if(v.h&&hnum(v.h)===c.n)add({k:'review',i:i,rank:3})})});
+  // legacy: "B 20H", "section b lot 20h", "B-20H"
+  var lm=up.replace(/^SECTION\s*/,'').replace(/\bLOT\b/,' ').match(/^([A-M])\s*[-:\s]\s*(\d+[A-Z]*(?:_\d+)?)$/)||up.replace(/^SECTION\s*/,'').match(/^([A-M])(\d+[A-Z]*)$/);
+  if(lm){var key=lm[1]+'|'+lm[2];if(byLeg[key]!==undefined)add({k:'lot',i:byLeg[key],rank:0});
+    UNPL.forEach(function(u,i){if(u.s===lm[1]&&u.l===lm[2])add({k:'unplaced',i:i,rank:1})});
+    REVIEW.forEach(function(v,i){if(v.s===lm[1]&&v.l===lm[2])add({k:'review',i:i,rank:1})})}
+  if(lm&&byLeg[lm[1]+'|'+lm[2]]===undefined){LOTS.forEach(function(r,i){if(r[2]===lm[1]&&r[3].indexOf(lm[2])===0)add({k:'lot',i:i,rank:1+(r[3].length-lm[2].length)/10})})}
+  // bare legacy label (20H, 19) in any section
+  var bare=up.replace(/\s/g,'');if(/^\d+[A-Z]*(_\d+)?$/.test(bare))LOTS.forEach(function(r,i){if(r[3]===bare)add({k:'lot',i:i,rank:5})});
+  // names
+  if(q.length>=2){var ql=q.toLowerCase();NAMEIDX.forEach(function(n){if(n.lc.indexOf(ql)>=0){var ix=byH[n.h];if(ix)add({k:'lot',i:ix[0],rank:4,name:n.n});else{var ui=UNPL.findIndex(function(u){return u.h===n.h});if(ui>=0)add({k:'unplaced',i:ui,rank:4,name:n.n})}}})}
+  out.sort(function(a,b){return a.rank-b.rank});return out.slice(0,14)}
+var resEl=$('results'),qEl=$('q'),active=-1,curRes=[];
+function renderResults(list){curRes=list;active=-1;
+  if(!qEl.value.trim()){resEl.hidden=true;return}
+  if(!list.length){resEl.innerHTML='<div class="res-empty"><b>No match.</b> Try an H-number (<span class="mono">H000023</span> or <span class="mono">23</span>), a lot label (<span class="mono">B 20H</span>) or part of a recorded name.</div>';resEl.hidden=false;return}
+  resEl.innerHTML=list.map(function(o,n){var h,sub,tag;
+    if(o.k==='lot'){var r=LOTS[o.i];h=r[1];sub='Section '+r[2]+' lot '+r[3];tag=o.name?'<span class="tag nm">'+esc(o.name)+'</span>':'<span class="tag ok">On map</span>'}
+    else if(o.k==='unplaced'){var u=UNPL[o.i];h=u.h;sub='Section '+u.s+' lot '+u.l;tag='<span class="tag rv">Not placed</span>'}
+    else{var v=REVIEW[o.i];h=v.h||('Label '+(v.t||'?'));sub=v.h?'Section '+v.s+' lot '+v.l:'Unresolved label on drawing';tag=v.p?'<span class="tag pvt">Inferred</span>':'<span class="tag rv">To review</span>'}
+    return '<button type="button" class="res" role="option" data-n="'+n+'"><span><span class="h">'+esc(h)+'</span><br><span class="sub">'+esc(sub)+(o.grave?' &middot; grave position '+esc(o.grave)+' (lot shown)':'')+'</span></span>'+tag+'</button>'}).join('');resEl.hidden=false}
+function pick(n){var o=curRes[n];if(!o)return;resEl.hidden=true;qEl.blur();if(o.k==='lot')selectLot(o.i);else if(o.k==='unplaced')selectUnplaced(o.i);else selectReview(o.i)}
+qEl.addEventListener('input',function(){$('qx').hidden=!qEl.value;renderResults(search(qEl.value))});
+qEl.addEventListener('focus',function(){if(qEl.value)renderResults(search(qEl.value))});
+qEl.addEventListener('keydown',function(e){var items=resEl.querySelectorAll('.res');
+  if(e.key==='ArrowDown'||e.key==='ArrowUp'){e.preventDefault();if(!items.length)return;active=(active+(e.key==='ArrowDown'?1:-1)+items.length)%items.length;Array.prototype.forEach.call(items,function(x,i){x.classList.toggle('on',i===active)});items[active].scrollIntoView({block:'nearest'})}
+  else if(e.key==='Enter'){e.preventDefault();pick(active>=0?active:0)}});
+resEl.addEventListener('click',function(e){var b=e.target.closest('.res');if(b)pick(+b.getAttribute('data-n'))});
+$('qx').onclick=function(){qEl.value='';$('qx').hidden=true;resEl.hidden=true;qEl.focus()};
+document.addEventListener('click',function(e){if(!e.target.closest('.search'))resEl.hidden=true});
+
+/* ---------- browse sidebar ---------- */
+var tab='areas',areaOpen=null,areaFilter='';
+function setTab(t){tab=t;areaOpen=null;$('t-areas').classList.toggle('on',t==='areas');$('t-review').classList.toggle('on',t==='review');vis($('hint'),!!(sel&&sel.k==='unplaced'));renderSide()}
+$('t-areas').onclick=function(){setTab('areas')};$('t-review').onclick=function(){setTab('review')};
+function fmtH(n){return 'H'+('000000'+n).slice(-6)}
+function renderSide(){var b=$('side-body'),h='';
+  if(tab==='areas'&&!areaOpen){h='<p class="eyebrow">Browse by area</p><p class="note" style="margin:0 0 12px">The cemetery is split into sections A to M. Pick one to zoom to it, or search above for an H-number.</p>';
+    Object.keys(AREAS).sort(function(a,c){return AREAS[a].hmin-AREAS[c].hmin}).forEach(function(s){var a=AREAS[s];
+      h+='<button type="button" class="area" data-area="'+s+'"><span><b>Section '+s+'</b><small>'+a.n+' lots'+(a.nr+a.nu?' &middot; '+(a.nr+a.nu)+' to review':'')+(a.np?' &middot; '+a.np+' inferred':'')+'</small></span><span class="rng">'+fmtH(a.hmin)+'<br>'+fmtH(a.hmax)+'</span></button>'});
+    b.innerHTML=h;Array.prototype.forEach.call(b.querySelectorAll('[data-area]'),function(x){x.onclick=function(){openArea(x.getAttribute('data-area'))};
+      x.onmouseenter=function(){showHint(x.getAttribute('data-area'))};x.onmouseleave=function(){if(!(sel&&sel.k==='unplaced'))vis($('hint'),false)}})}
+  else if(tab==='areas'){var s=areaOpen,a=AREAS[s],rows=[];
+    h='<button type="button" class="lnk" id="a-back">&larr; All areas</button><h2 style="margin:6px 0 2px;font-size:18px;color:var(--navy)">Section '+s+'</h2><p class="note" style="margin:0 0 10px">'+a.n+' lots &middot; '+fmtH(a.hmin)+' to '+fmtH(a.hmax)+'</p>'
+     +'<div class="btns" style="margin:0 0 12px"><button type="button" class="btn pri" id="a-pdf">Download this area (PDF)</button></div>'
+     +'<label class="sr" for="a-q">Filter lots</label><input class="field" id="a-q" placeholder="Filter by H-number or lot" value="'+esc(areaFilter)+'"><div class="lotlist" id="a-list"></div>';
+    b.innerHTML=h;$('a-back').onclick=function(){areaOpen=null;areaFilter='';vis($('hint'),false);renderSide()};$('a-pdf').onclick=function(){exportPdf('area_'+s)};
+    $('a-q').oninput=function(){areaFilter=this.value;fillAreaList()};fillAreaList()}
+  else{var inf=[],opn=[];REVIEW.forEach(function(v,i){(v.p?inf:opn).push(i)});
+    h='<p class="eyebrow">To review</p><p class="note" style="margin:0 0 6px"><b>'+inf.length+'</b> lots are inferred from the path and only need a yes or no. <b>'+opn.filter(function(i){return !REVIEW[i].o||!REVIEW[i].o[4]}).length+'</b> single lots and <b>'+BLOCKS.length+'</b> blocks are still open. <b>'+UNPL.length+'</b> H-numbers have no lot yet. Nothing here counts as verified.</p>'
+     +'<div class="btns" style="margin:0 0 6px"><button class="btn" id="rv-csv" type="button">Download list (CSV)</button></div>';
+    ['high','medium','low'].forEach(function(c){var ids=inf.filter(function(i){return REVIEW[i].p[0]===c});if(!ids.length)return;
+      h+='<div class="reason-h">Inferred from the path, '+c+' confidence ('+ids.length+')</div><div class="lotlist">'+ids.map(function(i){var v=REVIEW[i];return '<button type="button" class="li" data-rv="'+i+'"><span class="h">'+esc(v.h)+'</span><span class="l">Sec '+esc(v.s)+' lot '+esc(v.l)+'</span></button>'}).join('')+'</div>'});
+    if(BLOCKS.length){h+='<div class="reason-h">Blocks to decide ('+BLOCKS.length+')</div>'+BLOCKS.map(function(b,i){return '<button type="button" class="blk" data-blk="'+i+'"><b>'+b.n+' lots near ('+Math.round(b.x)+', '+Math.round(b.y)+')</b><small>'+esc(b.text)+'</small><small>'+esc(b.question)+'</small></button>'}).join('')}
+    var groups={};opn.forEach(function(i){var v=REVIEW[i];if(v.o&&v.o[4])return;var k=v.r[0];(groups[k]=groups[k]||[]).push(i)});
+    Object.keys(groups).sort(function(a,c){return groups[c].length-groups[a].length}).forEach(function(k){h+='<div class="reason-h">'+esc(REASONS[k])+' ('+groups[k].length+')</div><div class="lotlist">'
+      +groups[k].slice(0,60).map(function(i){var v=REVIEW[i];return '<button type="button" class="li" data-rv="'+i+'"><span class="h">'+esc(v.h||v.t||'(no label)')+'</span><span class="l">'+(v.s?'Sec '+esc(v.s)+' lot '+esc(v.l):'')+'</span></button>'}).join('')
+      +(groups[k].length>60?'<div class="note" style="padding:8px 12px">+ '+(groups[k].length-60)+' more in the CSV</div>':'')+'</div>'});
+    h+='<div class="reason-h">Known H-numbers with no lot yet ('+UNPL.length+')</div><div class="lotlist">'+UNPL.map(function(u,i){return '<button type="button" class="li" data-un="'+i+'"><span class="h">'+esc(u.h)+(u.x!=null?' &middot; expected spot':'')+'</span><span class="l">Sec '+esc(u.s)+' lot '+esc(u.l)+'</span></button>'}).join('')+'</div>';
+    b.innerHTML=h;$('rv-csv').onclick=exportReviewCsv;
+    Array.prototype.forEach.call(b.querySelectorAll('[data-rv]'),function(x){x.onclick=function(){selectReview(+x.getAttribute('data-rv'))}});
+    Array.prototype.forEach.call(b.querySelectorAll('[data-blk]'),function(x){x.onclick=function(){var bl=BLOCKS[+x.getAttribute('data-blk')],xs=[],ys=[];REVIEW.forEach(function(v){if(v.o&&v.o[4]===bl.id){xs.push(v.x);ys.push(v.y)}});measure();animateTo(targetFor([Math.min.apply(null,xs)-8,Math.min.apply(null,ys)-8,Math.max.apply(null,xs)+8,Math.max.apply(null,ys)+8],.8,1,MAXS))}});
+    Array.prototype.forEach.call(b.querySelectorAll('[data-un]'),function(x){x.onclick=function(){selectUnplaced(+x.getAttribute('data-un'))}})}
+  markList()}
+function fillAreaList(){var s=areaOpen,q=areaFilter.trim().toUpperCase().replace(/^H0*/,''),rows=[];
+  LOTS.forEach(function(r,i){if(r[2]!==s)return;if(q&&r[1].toUpperCase().replace(/^H0*/,'').indexOf(q)<0&&r[3].toUpperCase().indexOf(q)<0)return;rows.push(i)});
+  rows.sort(function(a,c){return LOTS[a][4]-LOTS[c][4]});
+  $('a-list').innerHTML=rows.slice(0,200).map(function(i){var r=LOTS[i];return '<button type="button" class="li" data-lot="'+i+'"><span class="h">'+r[1]+'</span><span class="l">Lot '+esc(r[3])+'</span></button>'}).join('')+(rows.length>200?'<div class="note" style="padding:8px 12px">Showing 200 of '+rows.length+'. Type to narrow.</div>':'')+(rows.length?'':'<div class="note" style="padding:12px">No lots match.</div>');
+  Array.prototype.forEach.call($('a-list').querySelectorAll('[data-lot]'),function(x){x.onclick=function(){selectLot(+x.getAttribute('data-lot'))}})}
+function showHint(s){var a=AREAS[s],hint=$('hint');if(a&&a.hull){hint.setAttribute('points',a.hull.map(function(p){return p.join(',')}).join(' '));vis(hint,true)}}
+function openArea(s){areaOpen=s;areaFilter='';showHint(s);pushHist();renderSide();measure();animateTo(targetFor(AREAS[s].b,.94,LBLS+.05,MAXS))}
+function markList(){}
+/* section names on the map: visible while zoomed out, clicking one opens that section */
+(function(){var g=$('seclabels'),NS='http://www.w3.org/2000/svg',items=[];
+  Object.keys(AREAS).forEach(function(s){var a=AREAS[s],b=a.b,w=b[2]-b[0],h=b[3]-b[1],fs=Math.max(14,Math.min(30,Math.min(w,h)*.2+8)),cx=a.c?a.c[0]:(b[0]+b[2])/2,cy=a.c?a.c[1]:(b[1]+b[3])/2;
+    if(h<w*.35){cx=(b[0]+b[2])/2;cy=b[1]-fs*.5}   /* long thin sections: the name sits just above, not on the numbers */
+    items.push({s:s,a:a,fs:fs,cx:cx,cy:cy,hw:fs*4.1,hh:fs*2.2,area:w*h})});
+  items.sort(function(p,q){return q.area-p.area});
+  items.forEach(function(it,k){for(var n=0;n<14;n++){var hit=false;for(var m=0;m<k;m++){var o=items[m];if(Math.abs(it.cx-o.cx)<it.hw/2+o.hw/2&&Math.abs(it.cy-o.cy)<it.hh/2+o.hh/2){hit=true;break}}
+    if(!hit)break;it.cy+=(n%2?-1:1)*it.hh*(1+(n>>1)*.3)*1.05}});
+  items.forEach(function(it){var t=document.createElementNS(NS,'text');t.setAttribute('x',it.cx);t.setAttribute('y',it.cy);t.setAttribute('font-size',it.fs);t.textContent='Section '+it.s;
+    var u=document.createElementNS(NS,'text');u.setAttribute('class','sub');u.setAttribute('x',it.cx);u.setAttribute('y',it.cy+it.fs*.95);u.setAttribute('font-size',it.fs*.5);u.textContent=fmtH(it.a.hmin)+' to '+fmtH(it.a.hmax);
+    [t,u].forEach(function(e){e.addEventListener('click',function(ev){ev.stopPropagation();openArea(it.s)});g.appendChild(e)})})})();
+
+/* ---------- full screen (browser full screen where allowed, otherwise the map fills the window) ---------- */
+function fsEl(){return document.fullscreenElement||document.webkitFullscreenElement}
+function fsSync(){var on=!!fsEl()||document.body.classList.contains('immersive');$('fs-l').textContent=on?'Exit full screen':'Full screen';setTimeout(function(){measure();render()},60)}
+function setImm(on){document.body.classList.toggle('immersive',on);fsSync()}
+$('fs').onclick=function(){var d=document.documentElement,rq=d.requestFullscreen||d.webkitRequestFullscreen;
+  if(fsEl()){(document.exitFullscreen||document.webkitExitFullscreen).call(document);return}
+  if(document.body.classList.contains('immersive')){setImm(false);return}
+  if(rq){try{var r=rq.call(d);if(r&&r.catch)r.catch(function(){setImm(true)})}catch(e){setImm(true)}}else setImm(true)};
+['fullscreenchange','webkitfullscreenchange'].forEach(function(n){document.addEventListener(n,fsSync)});
+document.addEventListener('keydown',function(e){if(e.key==='Escape'&&document.body.classList.contains('immersive'))setImm(false)});
+
+/* ---------- layers ---------- */
+$('layers-btn').onclick=function(){var m=$('layers-menu');m.hidden=!m.hidden;this.setAttribute('aria-expanded',String(!m.hidden))};
+var in3d=false,v3loaded=false;
+function num3(){return sel&&sel.k==='lot'?(parseInt(String(LOTS[sel.i][1]).replace(/\D/g,''),10)||0):0}
+function post3(m){var f=$('v3d');if(v3loaded&&f.contentWindow)f.contentWindow.postMessage(m,'*')}
+function setPhoto(on){vis($('photo'),on);post3({cg:'photo',on:on})}
+function setView3(on){in3d=on;var f=$('v3d');
+  if(on&&!f.src){f.src='3d.html#embed'+(num3()?'&h='+num3():'')+($('ly-photo').checked?'&photo=1':'&photo=0');f.onload=function(){v3loaded=true}}
+  f.hidden=!on;$('svg').style.visibility=on?'hidden':'visible';['legend','zoomctl','zoomhint'].forEach(function(id){$(id).style.display=on?'none':''});
+  if(on&&v3loaded&&num3())post3({cg:'goto',h:num3()});if(!on){measure();render()}}
+(function(){var im=new Image();im.onload=function(){$('ly-photo').disabled=false;$('ly-photo').checked=true;setPhoto(true);$('ly-photo-s').textContent='Google Earth view under the lots, in the 2D map and the 3D model.'};im.onerror=function(){$('ly-photo-s').textContent='Not included in this copy of the page.'};im.src='ground.jpg'})();
+$('ly-photo').onchange=function(){setPhoto(this.checked)};
+function go3(on){$('ly-3d').checked=on;$('ly-2d').checked=!on;$('b-3d').classList.toggle('on',on);$('b-3d').setAttribute('aria-pressed',String(on));setView3(on)}
+$('b-3d').onclick=function(){go3(!in3d)};
+$('ly-2d').onchange=function(){if(this.checked)go3(false)};$('ly-3d').onchange=function(){if(this.checked)go3(true)};
+window.addEventListener('message',function(e){var d=e.data||{};if(d.cg==='lot'){for(var i=0;i<LOTS.length;i++)if((parseInt(String(LOTS[i][1]).replace(/\D/g,''),10)||0)===d.h){if(!(sel&&sel.k==='lot'&&sel.i===i)){pushHist();applySel('lot',i,true)}break}}});
+$('ly-prov').onchange=function(){wrap.classList.toggle('no-prov',!this.checked)};
+$('ly-review').onchange=function(){wrap.classList.toggle('no-review',!this.checked)};
+function buildAnn(){var g=$('ann');g.innerHTML=ANN.map(function(a){return '<text transform="translate('+a[1]+' '+a[2]+') rotate('+a[4]+')" font-size="'+Math.max(2.4,a[3]*.9)+'">'+esc(a[0])+'</text>'}).join('')}
+buildAnn();$('ly-ann').onchange=function(){vis($('ann'),this.checked)};
+$('b-browse').onclick=function(){var s=$('side');s.hidden=!s.hidden;this.classList.toggle('on',!s.hidden);this.setAttribute('aria-pressed',String(!s.hidden));setTimeout(function(){measure();render()},30)};
+
+/* ---------- exports ---------- */
+var modalRoot=$('modal-root');
+function closeModal(){modalRoot.innerHTML=''}
+function openModal(html){modalRoot.innerHTML='<div class="modal-ov" id="mov"><div class="modal" role="dialog" aria-modal="true">'+html+'</div></div>';$('mov').addEventListener('click',function(e){if(e.target.id==='mov')closeModal()});var c=modalRoot.querySelector('[data-close]');if(c)c.onclick=closeModal}
+function saveFile(name,data,type){return Promise.resolve(window.claude&&window.claude.use?window.claude.use('downloads'):null).then(function(dl){
+  if(!dl){toast('Downloads are not available in this view');return}return dl.save({filename:name,data:data}).then(function(){toast('Saved '+name)},function(err){if(err&&err.code!=='cancelled'&&err.code!=='declined')toast('Could not save the file')})})}
+function exportPdf(key){var p=PDFS[key];if(!p){toast('That PDF is not available');return}toast('Preparing '+p.name+'…');
+  fetch(p.file).then(function(r){if(!r.ok)throw 0;return r.blob()}).then(function(b){return saveFile(p.name,b)}).catch(function(){toast('The PDF could not be loaded in this view')})}
+function csv(rows){return rows.map(function(r){return r.map(function(c){c=String(c==null?'':c);return /[",\n]/.test(c)?'"'+c.replace(/"/g,'""')+'"':c}).join(',')}).join('\r\n')}
+function exportReviewCsv(){var rows=[['status','confidence','reason','what_to_check','h_number','section','lot','label_on_drawing','map_x','map_y']];
+  REVIEW.forEach(function(v){rows.push([v.p?'inferred_please_confirm':'needs_review',v.p?v.p[0]:'',v.p?v.p[1]:(v.o?v.o[0]:v.r.map(function(i){return REASONS[i]}).join(' | ')),v.p?v.p[2]:(v.o?v.o[1]:''),v.h||'',v.s||'',v.l||'',v.t||'',v.x,v.y])});
+  UNPL.forEach(function(u){rows.push([u.x!=null?'expected_spot':'known_h_no_map_position',u.c||'',u.w||u.n||'Decoder lot with no matching label on the drawing',u.k||'',u.h,u.s,u.l,'',u.x==null?'':u.x,u.y==null?'':u.y])});
+  saveFile('Cedar_Grove_unresolved_locations.csv',new Blob([csv(rows)],{type:'text/csv'}))}
+function exportLotsCsv(){var rows=[['h_number','section','lot','section_evidence']];LOTS.forEach(function(r){rows.push([r[1],r[2],r[3],r[11]===0?'two independent readings':'inferred from surrounding lots'])});
+  saveFile('Cedar_Grove_lots_with_H-numbers.csv',new Blob([csv(rows)],{type:'text/csv'}))}
+function exportXlsx(){toast('Preparing the workbook\u2026');loadScript(XLSX_URL).then(function(){
+  var ok=LOTS.filter(function(r){return r[11]===0}).length,wb=XLSX.utils.book_new();
+  function sh(name,rows,w){var ws=XLSX.utils.aoa_to_sheet(rows);ws['!cols']=w.map(function(x){return{wch:x}});XLSX.utils.book_append_sheet(wb,ws,name)}
+  sh('Read me',[['Cedar Grove Cemetery - H-map lot lists'],[],['Lots with H-numbers',LOTS.length,'Outline (or label position) and a decoded H-number. Section corroborated by two independent readings ('+ok+') or inferred from surrounding lots ('+(LOTS.length-ok)+').'],['Lots to review',REVIEW.length,'Visible on the drawing; identity could not be tied to one H-number. Not drawn as H-numbers.'],['No map position',UNPL.length,'Known to the decoder; no label on the drawing resolves to them. Some match a drawn lot in the review list.'],[],['Section and lot are cross-reference only. Burial records are not part of this workbook.']],[22,10,110]);
+  sh('Lots with H-numbers',[['H-number','Section','Lot','Section evidence','Outline']].concat(LOTS.slice().sort(function(a,b){return a[4]-b[4]||(a[1]<b[1]?-1:1)}).map(function(r){return[r[1],r[2],r[3],r[11]===0?'two independent readings':'inferred from surrounding lots',r[12]?'label only':'drawn']})),[12,14,11,32,12]);
+  sh('Lots to review',[['Status','Confidence','Reason','What to check','H-number','Section','Lot','Label on drawing','Map x','Map y']].concat(REVIEW.map(function(v){return[v.p?'Inferred, please confirm':'Needs review',v.p?v.p[0]:'',v.p?v.p[1]:(v.o?v.o[0]:v.r.map(function(i){return REASONS[i]}).join(' | ')),v.p?v.p[2]:(v.o?v.o[1]:''),v.h||'',v.s||'',v.l||'',v.t||'',v.x,v.y]})),[22,12,70,50,12,10,8,14,9,9]);
+  sh('No map position',[['H-number','Section','Lot','Expected x','Expected y','Confidence','Note']].concat(UNPL.map(function(u){return[u.h,u.s,u.l,u.x==null?'':u.x,u.y==null?'':u.y,u.c||'',u.w||u.n||'No label on the drawing resolves to this decoder lot']})),[12,10,8,10,10,11,80]);
+  var buf=XLSX.write(wb,{type:'array',bookType:'xlsx'});
+  return saveFile('Cedar_Grove_H-Map_lots.xlsx',new Blob([buf],{type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'}))},function(){toast('The Excel writer could not be loaded in this view')})}
+function exportListCsv(){if(!LIST.length){toast('Your list is empty. Open a lot and choose Add to list.');return}
+  var rows=[['h_number','legacy_section','legacy_lot','name','birth','death','notes']];LIST.forEach(function(h){var ix=byH[h];if(!ix)return;var r=LOTS[ix[0]],d=RECS[h],rs=(d&&d.records)||[];
+    if(!rs.length)rows.push([h,r[2],r[3],'','','','']);rs.forEach(function(x){rows.push([h,r[2],r[3],x.name,x.birth,x.death,x.notes])})});
+  saveFile('Cedar_Grove_my_list.csv',new Blob([csv(rows)],{type:'text/csv'}))}
+$('b-export').onclick=function(){var areas=Object.keys(AREAS).sort();
+  openModal('<h2>Export</h2><p class="note" style="margin:0">PDFs are drawn from the same map data as the screen, with every H-number inside its lot. Overview sheet first, then detail pages.</p>'
+   +'<div class="xopt"><span><b>Full map (PDF)</b><small>Overview sheet plus detail pages for the whole cemetery</small></span><button class="btn pri" data-pdf="full">Download</button></div>'
+   +'<div class="xopt"><span><b>Overview sheet only</b><small>One large sheet; numbers appear where they are readable</small></span><button class="btn" data-pdf="overview">Download</button></div>'
+   +'<div class="xopt"><span><b>Excel workbook (.xlsx)</b><small>Lots with H-numbers, lots to review, and decoder lots with no map position, one sheet each, plus a read-me sheet</small></span><button class="btn pri" data-act="xlsx">Download</button></div>'
+   +'<div class="xopt"><span><b>Unresolved locations (CSV)</b><small>'+REVIEW.length+' lots to review, '+UNPL.length+' known H-numbers without a position</small></span><button class="btn" data-act="rvcsv">Download</button></div>'
+   +'<div class="xopt"><span><b>Lots with H-numbers (CSV)</b><small>'+LOTS.length+' lots: H-number, section and lot, how the section was confirmed</small></span><button class="btn" data-act="lotcsv">Download</button></div>'
+   +'<div class="xopt"><span><b>My list ('+LIST.length+')</b><small>Lots you added with Add to list</small></span><button class="btn" data-act="listcsv">Download</button></div>'
+   +'<div style="margin-top:14px"><b style="font-size:14px">By area</b><div class="xgrid">'+areas.map(function(s){return '<button class="btn" data-pdf="area_'+s+'">Section '+s+'</button>'}).join('')+'</div></div>'
+   +'<div class="btns" style="justify-content:flex-end"><button class="btn" data-close>Close</button></div>');
+  Array.prototype.forEach.call(modalRoot.querySelectorAll('[data-pdf]'),function(b){b.onclick=function(){exportPdf(b.getAttribute('data-pdf'))}});
+  Array.prototype.forEach.call(modalRoot.querySelectorAll('[data-act]'),function(b){b.onclick=function(){var a=b.getAttribute('data-act');if(a==='xlsx')exportXlsx();if(a==='rvcsv')exportReviewCsv();if(a==='lotcsv')exportLotsCsv();if(a==='listcsv')exportListCsv()}})};
+
+/* ---------- import (editors only) ---------- */
+var XLSX_URL='https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js';
+function loadScript(src){return new Promise(function(res,rej){var s=document.createElement('script');s.src=src;s.onload=res;s.onerror=rej;document.head.appendChild(s)})}
+function parseCsv(t){var rows=[],row=[],c='',q=false;for(var i=0;i<t.length;i++){var ch=t[i];if(q){if(ch==='"'){if(t[i+1]==='"'){c+='"';i++}else q=false}else c+=ch}else if(ch==='"')q=true;else if(ch===','){row.push(c);c=''}else if(ch==='\n'||ch==='\r'){if(ch==='\r'&&t[i+1]==='\n')i++;row.push(c);rows.push(row);row=[];c=''}else c+=ch}
+  if(c||row.length){row.push(c);rows.push(row)}return rows.filter(function(r){return r.some(function(x){return String(x).trim()})})}
+var COLS={h:['h_number','h','hnumber','h-number'],s:['section','legacy_section'],l:['lot','legacy_lot','lot_label'],name:['name','full_name'],birth:['birth','born','birth_date'],death:['death','died','death_date'],notes:['notes','note'],source:['source','source_reference'],position:['position','grave_position','grave'],pv:['position_verified','verified']};
+function colIdx(head,keys){for(var i=0;i<head.length;i++){if(keys.indexOf(String(head[i]).trim().toLowerCase().replace(/\s+/g,'_'))>=0)return i}return -1}
+function importRows(rows){var head=rows[0],ix={};Object.keys(COLS).forEach(function(k){ix[k]=colIdx(head,COLS[k])});
+  var out={},ok=0,skipped=[];rows.slice(1).forEach(function(r,n){var h=ix.h>=0?String(r[ix.h]).trim().toUpperCase():'',lot=null;
+    if(h){var mm=h.replace(/\s/g,'').match(/^H?0*(\d+)([A-Z]?)$/);if(mm){var key='H'+('000000'+mm[1]).slice(-6)+mm[2];if(byH[key])lot=key}}
+    if(!lot&&ix.s>=0&&ix.l>=0){var k2=String(r[ix.s]).trim().toUpperCase()+'|'+String(r[ix.l]).trim().toUpperCase();if(byLeg[k2]!==undefined)lot=LOTS[byLeg[k2]][1]}
+    if(!lot){skipped.push(n+2);return}
+    var g=function(k){return ix[k]>=0?String(r[ix[k]]||'').trim():''};
+    var rec={name:g('name'),birth:g('birth'),death:g('death'),position:g('position'),positionVerified:/^(y|yes|true|1|verified)$/i.test(g('pv')),notes:g('notes'),source:g('source')};
+    if(!(rec.name||rec.birth||rec.death||rec.notes||rec.position)){skipped.push(n+2);return}
+    (out[lot]=out[lot]||[]).push(rec);ok++});
+  return{byLot:out,ok:ok,skipped:skipped,found:{h:ix.h>=0,sl:ix.s>=0&&ix.l>=0,name:ix.name>=0}}}
+$('b-import').onclick=function(){openModal('<h2>Import grave records</h2><p class="note" style="margin:0 0 10px">Choose a CSV or Excel file. Each row is matched to a lot by <b>h_number</b>, or by <b>section</b> and <b>lot</b>. Other columns: name, birth, death, position, position_verified, notes, source. Rows that match no lot are skipped and listed. Records are added to what each lot already has.</p><input type="file" id="imp-f" accept=".csv,.xlsx,.xls" class="field" style="height:auto;padding:10px"><div id="imp-out" style="margin-top:12px"></div><div class="btns" style="justify-content:flex-end"><button class="btn" data-close>Close</button></div>');
+  $('imp-f').onchange=function(){var f=this.files[0];if(!f)return;var out=$('imp-out');out.textContent='Reading…';
+    var go=function(rows){var res=importRows(rows);
+      if(!res.found.h&&!res.found.sl){out.innerHTML='<p class="status err">No h_number column, and no section + lot columns, were found in the first row.</p>';return}
+      var lots=Object.keys(res.byLot);out.innerHTML='<p><b>'+res.ok+'</b> records for <b>'+lots.length+'</b> lots are ready. <b>'+res.skipped.length+'</b> rows were skipped'+(res.skipped.length?' (rows '+res.skipped.slice(0,20).join(', ')+(res.skipped.length>20?' &hellip;':'')+')':'')+'.</p><div class="btns"><button class="btn pri" id="imp-go" type="button"'+(lots.length?'':' disabled')+'>Add to records</button></div><div class="status" id="imp-st"></div>';
+      $('imp-go').onclick=function(){var b=this;b.disabled=true;var n=0,fail=0,st=$('imp-st');
+        (function next(){if(!lots.length){st.className='status '+(fail?'err':'ok');st.textContent='Added records to '+n+' lots'+(fail?'; '+fail+' could not be saved (edit access needed).':'.');markRecs();return}
+          var h=lots.shift(),ex=RECS[h]||{h:h,capacity:null,capacityVerified:false,records:[],notes:'',source:''};
+          var doc=Object.assign({},ex,{records:(ex.records||[]).concat(res.byLot[h]),updated:new Date().toISOString()});
+          writeDoc(h,doc).then(function(){RECS[h]=doc;n++;st.textContent='Saving… '+n},function(){fail++}).then(next)})()}};
+    if(/\.csv$/i.test(f.name)){var fr=new FileReader();fr.onload=function(){go(parseCsv(String(fr.result)))};fr.readAsText(f)}
+    else loadScript(XLSX_URL).then(function(){var fr=new FileReader();fr.onload=function(){var wb=XLSX.read(fr.result,{type:'array'}),ws=wb.Sheets[wb.SheetNames[0]];go(XLSX.utils.sheet_to_json(ws,{header:1,raw:false,defval:''}))};fr.readAsArrayBuffer(f)},function(){out.innerHTML='<p class="status err">The Excel reader could not be loaded. Save the sheet as CSV and try again.</p>'})}};
+
+/* ---------- shared records (db) ---------- */
+function initCaps(){var note=$('capnote');
+  if(!window.claude||typeof window.claude.use!=='function'){note.textContent='Shared records unavailable here';return}
+  Promise.resolve(window.claude.use('user')).then(function(u){return Promise.resolve(u&&u.canEdit?u.canEdit():false).catch(function(){return false}).then(function(ce){canEdit=!!ce;$('b-import').hidden=!canEdit})})
+   .then(function(){return window.claude.use('db')}).then(function(d){
+     if(!d){note.textContent='Shared records unavailable here';return}dbns=d;note.textContent=canEdit?'Shared records · you can edit':'Shared records · view only';
+     d.collection('lots').onSnapshot(function(snap){RECS={};snap.docs.forEach(function(x){RECS[x.id]=x.data()});indexNames();markRecs();if(sel&&sel.k!=='review'&&!document.querySelector('.rform'))renderRec()},function(){note.textContent='Shared records unavailable here'})})
+   .catch(function(){note.textContent='Shared records unavailable here'})}
+
+/* ---------- boot ---------- */
+if(isMobile()){$('side').hidden=true;$('b-browse').classList.remove('on');$('b-browse').setAttribute('aria-pressed','false')}
+measure();cam=targetFor(CB,1,0,MAXS);render();renderSide();initCaps();
+(function(){var h=(location.hash||'').replace('#','').toUpperCase();if(/^H\d{6}[A-Z]?$/.test(h)&&byH[h])setTimeout(function(){applySel('lot',byH[h][0])},60)})();
+})();
+</script>
