@@ -1,7 +1,5 @@
 __pycache__/
 
-# Google Earth imagery stays out of the public repo
-img/google_earth_topdown.jpg
-three/
+**/three/*
+!**/three/ground.jpg
 Cedar_Grove_3D.html
-h-number-map/math/img/google_earth_wide.jpg
