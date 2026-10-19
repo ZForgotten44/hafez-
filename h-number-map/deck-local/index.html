@@ -1,0 +1,790 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>How the Cedar Grove H-numbers were built</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>html,body{margin:0;height:100%;background:#0b0b0a;overflow:hidden;font-family:Arial,sans-serif}
+#stage{position:absolute;left:50%;top:50%;width:1920px;height:1080px;transform-origin:0 0}
+.slide{display:none !important}.slide.on{display:flex !important}
+.slide table{border-collapse:collapse;width:100%}.slide th,.slide td{padding:.35em .6em;border-bottom:1px solid rgba(127,127,127,.35);vertical-align:top}
+.slide p,.slide h1,.slide h2,.slide h3{margin:0}.slide ul,.slide ol{margin:0}
+#bar{position:fixed;left:0;right:0;bottom:0;display:flex;gap:10px;align-items:center;justify-content:center;padding:8px;background:rgba(0,0,0,.6);color:#ddd;font:14px Arial;z-index:9}
+#bar button{background:#24241f;color:#eee;border:1px solid #555;border-radius:6px;padding:6px 14px;cursor:pointer}
+#notes{position:fixed;left:0;right:0;bottom:44px;max-height:30%;overflow:auto;background:#141413;color:#e8e6dc;padding:12px 24px;font:17px/1.45 Arial;display:none;z-index:9}</style></head><body>
+<div id="stage"><section class="slide" style="position:relative;width:1920px;height:1080px;overflow:hidden;flex-shrink:0;background:#141413;color:#f1efe8;font-family:'Space Grotesk', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;justify-content:center;gap:36px">
+<p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:28px;letter-spacing:3px;text-transform:uppercase;color:#c5a448;width:1400px">Cedar Grove Cemetery · Notre Dame</p>
+<h1 style="font-size:116px;font-weight:700;line-height:1.02;width:1500px">How the H-numbers were built</h1>
+<p style="font-size:38px;line-height:1.35;color:#c9c7bf;width:1300px">Scripts, formulas, image processing and the checks behind them.</p>
+<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:24px;color:#8f8d82">Method deck · repo ZForgotten44/hafez-</p>
+
+</section>
+
+<section class="slide" style="position:relative;width:1920px;height:1080px;overflow:hidden;flex-shrink:0;background:#ece9e1;color:#141413;font-family:'Space Grotesk', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:40px">
+<p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:28px;letter-spacing:3px;text-transform:uppercase;color:#7a5f10;width:1200px">Scope</p>
+<h2 style="font-size:76px;font-weight:700;line-height:1.05;width:1500px">Four things came out of one drawing</h2>
+<div style="display:flex;gap:20px">
+<div style="flex:1;display:flex;flex-direction:column;gap:14px;background:#f8f6f0;padding:32px;border-radius:20px;border-top:10px solid #c5a448">
+<h3 style="font-size:40px;font-weight:700">H-number system</h3>
+<p style="font-size:28px;line-height:1.35;color:#3f3e39">One running number per lot, H000001 to H003185, with one formula that maps the old label to it.</p></div>
+<div style="flex:1;display:flex;flex-direction:column;gap:14px;background:#f8f6f0;padding:32px;border-radius:20px;border-top:10px solid #4f86c6">
+<h3 style="font-size:40px;font-weight:700">Atlas</h3>
+<p style="font-size:28px;line-height:1.35;color:#3f3e39">One HTML file: lot map, search, layers, one-page section PDFs.</p></div>
+<div style="flex:1;display:flex;flex-direction:column;gap:14px;background:#f8f6f0;padding:32px;border-radius:20px;border-top:10px solid #3f9a63">
+<h3 style="font-size:40px;font-weight:700">Explainer</h3>
+<p style="font-size:28px;line-height:1.35;color:#3f3e39">Page that walks through the old numbering, the new one and the formula.</p></div>
+<div style="flex:1;display:flex;flex-direction:column;gap:14px;background:#f8f6f0;padding:32px;border-radius:20px;border-top:10px solid #d9694f">
+<h3 style="font-size:40px;font-weight:700">3D model</h3>
+<p style="font-size:28px;line-height:1.35;color:#3f3e39">three.js scene fitted to the lot map and the aerial photo.</p></div>
+</div>
+<div style="display:flex;flex-direction:column;gap:12px;background:#141413;color:#f1efe8;padding:30px 36px;border-radius:20px">
+<p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:26px;color:#c5a448">Stack</p>
+<p style="font-size:30px;line-height:1.35;width:1560px">Python (PyMuPDF, OpenCV, NumPy, SciPy, Shapely) does the extraction and image work. The output is static HTML and JavaScript. The 3D view is three.js r128. No server.</p></div>
+<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:24px;color:#5a5851">How the H-numbers were built · 2</p>
+
+</section>
+
+<section class="slide" style="position:relative;width:1920px;height:1080px;overflow:hidden;flex-shrink:0;background:#141413;color:#f1efe8;font-family:'Space Grotesk', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:40px">
+<p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:28px;letter-spacing:3px;text-transform:uppercase;color:#c5a448;width:1200px">Inputs</p>
+<h2 style="font-size:76px;font-weight:700;line-height:1.05;width:1500px">What we had to work from</h2>
+<table style="font-size:30px;color:#f1efe8;font-family:'Space Grotesk', Arial, sans-serif">
+<tr><th style="width:26%;text-align:left">Input</th><th style="width:34%;text-align:left">What is in it</th><th style="width:40%;text-align:left">Used for</th></tr>
+<tr><td>Cemetery drawing (.ai)</td><td>15,282 draw objects, 3,560 text spans</td><td>Lot outlines, old labels, section letters</td></tr>
+<tr><td>Old numbering code</td><td>One table builder per section (s4decoder1.py)</td><td>Reading the rules of the old numbers</td></tr>
+<tr><td>Google Earth screenshots</td><td>Aerial views, no geodata</td><td>Registration, trees, paths, buildings</td></tr>
+<tr><td>Site photos</td><td>Chapel, office, mausoleums</td><td>Building shapes and colours</td></tr>
+</table>
+<p style="font-size:30px;line-height:1.4;color:#c9c7bf;width:1500px">Nothing was typed in by hand. Every lot and label comes from the drawing file.</p>
+<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:24px;color:#8f8d82">How the H-numbers were built · 3</p>
+
+</section>
+
+<section class="slide" style="position:relative;width:1920px;height:1080px;overflow:hidden;flex-shrink:0;background:#ece9e1;color:#141413;font-family:'Space Grotesk', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:30px">
+<p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:28px;letter-spacing:3px;text-transform:uppercase;color:#7a5f10;width:1200px">Starting point</p>
+<h2 style="font-size:70px;font-weight:700;line-height:1.05;width:1600px">The old maps: labels repeat, sections overlap</h2>
+<div style="display:flex;gap:24px;align-items:flex-start">
+<div style="display:flex;flex-direction:column;gap:12px"><img src="images/oldpdf_overall_s.jpg" alt="Old overall map PDF" style="width:760px;height:588px;object-fit:contain;background:#ffffff;border-radius:12px"><p style="font-size:26px;line-height:1.3;width:760px;color:#3f3e39">Old overall PDF. Sections are small and the numbers are unreadable.</p></div>
+<div style="display:flex;flex-direction:column;gap:12px"><img src="images/oldpdf_B_zoom.jpg" alt="Old section B zoom" style="width:784px;height:588px;object-fit:contain;background:#ffffff;border-radius:12px"><p style="font-size:26px;line-height:1.3;width:784px;color:#3f3e39">Section B zoomed. Labels like 19 and 20H are only unique inside one section.</p></div>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:24px;color:#5a5851">How the H-numbers were built · 4</p>
+
+</section>
+
+<section class="slide" style="position:relative;width:1920px;height:1080px;overflow:hidden;flex-shrink:0;background:#141413;color:#f1efe8;font-family:'Space Grotesk', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:40px">
+<p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:28px;letter-spacing:3px;text-transform:uppercase;color:#c5a448;width:1200px">The problem, measured</p>
+<h2 style="font-size:76px;font-weight:700;line-height:1.05;width:1500px">Old labels are not unique</h2>
+<div style="display:flex;gap:20px">
+<div style="flex:1;display:flex;flex-direction:column;gap:10px;background:#24241f;padding:32px;border-radius:20px;border-top:8px solid #c5a448"><p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:72px;font-weight:600;color:#c5a448">3,197</p><p style="font-size:28px;line-height:1.3;color:#d6d4cc">labels read from the drawing</p></div>
+<div style="flex:1;display:flex;flex-direction:column;gap:10px;background:#24241f;padding:32px;border-radius:20px;border-top:8px solid #86b3e6"><p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:72px;font-weight:600;color:#86b3e6">768</p><p style="font-size:28px;line-height:1.3;color:#d6d4cc">distinct values among them</p></div>
+<div style="flex:1;display:flex;flex-direction:column;gap:10px;background:#24241f;padding:32px;border-radius:20px;border-top:8px solid #78c595"><p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:72px;font-weight:600;color:#78c595">474</p><p style="font-size:28px;line-height:1.3;color:#d6d4cc">values used by 2+ sections</p></div>
+<div style="flex:1;display:flex;flex-direction:column;gap:10px;background:#24241f;padding:32px;border-radius:20px;border-top:8px solid #f08b7e"><p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:72px;font-weight:600;color:#f08b7e">91%</p><p style="font-size:28px;line-height:1.3;color:#d6d4cc">of labels share a value with another section</p></div>
+</div>
+<p style="font-size:32px;line-height:1.4;color:#d6d4cc;width:1500px">Twelve sections each have a lot "19". To name a lot you need the section and the label. To count lots you also need the section's own stepping rule, and those rules differ.</p>
+<p style="font-size:30px;line-height:1.4;color:#c9c7bf;width:1500px">Measured by analyze.py over the whole labelled set.</p>
+<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:24px;color:#8f8d82">How the H-numbers were built · 5</p>
+
+</section>
+
+<section class="slide" style="position:relative;width:1920px;height:1080px;overflow:hidden;flex-shrink:0;background:#ece9e1;color:#141413;font-family:'Space Grotesk', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:34px">
+<p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:28px;letter-spacing:3px;text-transform:uppercase;color:#7a5f10;width:1200px">Part 1 · Drawing to data</p>
+<h2 style="font-size:76px;font-weight:700;line-height:1.05;width:1600px">Eleven scripts, run in order</h2>
+<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px">
+<div style="display:flex;flex-direction:column;gap:6px;background:#f8f6f0;padding:22px 24px;border-radius:16px"><p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:26px;font-weight:600;color:#7a5f10">1 extract_ai</p><p style="font-size:26px;line-height:1.25;color:#3f3e39">Dump draw objects and text to JSON</p></div>
+<div style="display:flex;flex-direction:column;gap:6px;background:#f8f6f0;padding:22px 24px;border-radius:16px"><p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:26px;font-weight:600;color:#7a5f10">2 lots</p><p style="font-size:26px;line-height:1.25;color:#3f3e39">Find lot cells from the lot lines</p></div>
+<div style="display:flex;flex-direction:column;gap:6px;background:#f8f6f0;padding:22px 24px;border-radius:16px"><p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:26px;font-weight:600;color:#7a5f10">3 identify</p><p style="font-size:26px;line-height:1.25;color:#3f3e39">Attach text to cells, decode to H</p></div>
+<div style="display:flex;flex-direction:column;gap:6px;background:#f8f6f0;padding:22px 24px;border-radius:16px"><p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:26px;font-weight:600;color:#7a5f10">4 classify</p><p style="font-size:26px;line-height:1.25;color:#3f3e39">Verified, review or unplaced</p></div>
+<div style="display:flex;flex-direction:column;gap:6px;background:#f8f6f0;padding:22px 24px;border-radius:16px"><p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:26px;font-weight:600;color:#7a5f10">5 fit</p><p style="font-size:26px;line-height:1.25;color:#3f3e39">Place and size each label</p></div>
+<div style="display:flex;flex-direction:column;gap:6px;background:#f8f6f0;padding:22px 24px;border-radius:16px"><p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:26px;font-weight:600;color:#7a5f10">6 resolve</p><p style="font-size:26px;line-height:1.25;color:#3f3e39">Infer held-back lots by path</p></div>
+<div style="display:flex;flex-direction:column;gap:6px;background:#f8f6f0;padding:22px 24px;border-radius:16px"><p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:26px;font-weight:600;color:#7a5f10">7 basemap · svgmap</p><p style="font-size:26px;line-height:1.25;color:#3f3e39">Background and the SVG lot map</p></div>
+<div style="display:flex;flex-direction:column;gap:6px;background:#f8f6f0;padding:22px 24px;border-radius:16px"><p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:26px;font-weight:600;color:#7a5f10">8 qa</p><p style="font-size:26px;line-height:1.25;color:#3f3e39">Model, outline and pixel checks</p></div>
+<div style="display:flex;flex-direction:column;gap:6px;background:#f8f6f0;padding:22px 24px;border-radius:16px"><p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:26px;font-weight:600;color:#7a5f10">9 build_pdf</p><p style="font-size:26px;line-height:1.25;color:#3f3e39">One-page PDF per section</p></div>
+<div style="display:flex;flex-direction:column;gap:6px;background:#f8f6f0;padding:22px 24px;border-radius:16px"><p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:26px;font-weight:600;color:#7a5f10">10 build_site</p><p style="font-size:26px;line-height:1.25;color:#3f3e39">Template plus data into one HTML</p></div>
+<div style="display:flex;flex-direction:column;gap:6px;background:#f8f6f0;padding:22px 24px;border-radius:16px"><p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:26px;font-weight:600;color:#7a5f10">11 export_lists</p><p style="font-size:26px;line-height:1.25;color:#3f3e39">Review sheets as CSV and PDF</p></div>
+<div style="display:flex;flex-direction:column;gap:6px;background:#141413;padding:22px 24px;border-radius:16px"><p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:26px;font-weight:600;color:#c5a448">Then</p><p style="font-size:26px;line-height:1.25;color:#d6d4cc">Formula work and the 3D build run on this output</p></div>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:24px;color:#5a5851">How the H-numbers were built · 6</p>
+
+</section>
+
+<section class="slide" style="position:relative;width:1920px;height:1080px;overflow:hidden;flex-shrink:0;background:#141413;color:#f1efe8;font-family:'Space Grotesk', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:34px">
+<p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:28px;letter-spacing:3px;text-transform:uppercase;color:#c5a448;width:1200px">lots.py</p>
+<h2 style="font-size:70px;font-weight:700;line-height:1.05;width:1600px">Finding lot cells on a raster</h2>
+<div style="display:flex;gap:40px;align-items:flex-start">
+<div style="display:flex;flex-direction:column;gap:20px;width:760px">
+<p style="font-size:30px;line-height:1.35"><b style="color:#c5a448">1.</b> Draw only the lot-colour lines onto a blank image at 8 px per drawing unit.</p>
+<p style="font-size:30px;line-height:1.35"><b style="color:#c5a448">2.</b> Label the empty space as connected regions. An enclosed region is one lot cell. The big outside region is thrown away.</p>
+<p style="font-size:30px;line-height:1.35"><b style="color:#c5a448">3.</b> Trace each region's boundary and divide by 8 to get a vector outline.</p>
+<p style="font-size:28px;line-height:1.35;color:#c9c7bf">Why not join the vector strokes directly: they are separate lines that stop a little short of each other, so polygon building leaves gaps. On the raster a 1–2 px gap closes when the lines are drawn thick enough.</p></div>
+<div style="width:860px;background:#24241f;border-radius:16px;padding:28px 32px;display:flex;flex-direction:column;gap:6px">
+<p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:24px;line-height:1.5;color:#86b3e6"># simplified from lots.py</p>
+<p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:24px;line-height:1.5;color:#f1efe8">S = 8</p>
+<p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:24px;line-height:1.5;color:#f1efe8">img = np.zeros((H*S, W*S), np.uint8)</p>
+<p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:24px;line-height:1.5;color:#f1efe8">for p in lot_colour_paths:</p>
+<p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:24px;line-height:1.5;color:#f1efe8">    cv2.polylines(img, [p*S], False, 255, 2)</p>
+<p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:24px;line-height:1.5;color:#f1efe8">n, lab = cv2.connectedComponents(img == 0)</p>
+<p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:24px;line-height:1.5;color:#f1efe8">for k in range(1, n):</p>
+<p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:24px;line-height:1.5;color:#f1efe8">    if touches_border(lab == k): continue</p>
+<p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:24px;line-height:1.5;color:#f1efe8">    c = cv2.findContours(lab == k, ...)</p>
+<p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:24px;line-height:1.5;color:#f1efe8">    cells.append(c / S)</p></div>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:24px;color:#8f8d82">How the H-numbers were built · 7</p>
+
+</section>
+
+<section class="slide" style="position:relative;width:1920px;height:1080px;overflow:hidden;flex-shrink:0;background:#ece9e1;color:#141413;font-family:'Space Grotesk', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:34px">
+<p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:28px;letter-spacing:3px;text-transform:uppercase;color:#7a5f10;width:1400px">identify.py · classify.py</p>
+<h2 style="font-size:70px;font-weight:700;line-height:1.05;width:1600px">Attaching labels to cells</h2>
+<div style="display:flex;gap:20px;align-items:stretch">
+<div style="flex:1;display:flex;flex-direction:column;gap:10px;background:#f8f6f0;padding:30px;border-radius:18px"><p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:28px;font-weight:600;color:#7a5f10">Group</p><p style="font-size:28px;line-height:1.35;color:#3f3e39">Text spans inside one cell are joined. "335" and "H" become 335H.</p></div>
+<div style="flex:1;display:flex;flex-direction:column;gap:10px;background:#f8f6f0;padding:30px;border-radius:18px"><p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:28px;font-weight:600;color:#7a5f10">Section</p><p style="font-size:28px;line-height:1.35;color:#3f3e39">Section letter comes from an earlier, independent reading of the drawing.</p></div>
+<div style="flex:1;display:flex;flex-direction:column;gap:10px;background:#f8f6f0;padding:30px;border-radius:18px"><p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:28px;font-weight:600;color:#7a5f10">Decode</p><p style="font-size:28px;line-height:1.35;color:#3f3e39">Section and label go through the old decoder (s4decoder1.h_lot) to get an H-number.</p></div>
+<div style="flex:1;display:flex;flex-direction:column;gap:10px;background:#f8f6f0;padding:30px;border-radius:18px"><p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:28px;font-weight:600;color:#7a5f10">Classify</p><p style="font-size:28px;line-height:1.35;color:#3f3e39">Each cell gets a status. Only agreeing cells are called verified.</p></div>
+</div>
+<div style="display:flex;gap:6px">
+<p style="flex:3103;font-size:28px;font-weight:700;padding:26px 0 26px 28px;background:#3f9a63;color:#0b0b0a;border-radius:14px">verified 3,103</p>
+<p style="flex:218;font-size:24px;padding:26px 0;background:#e08a2f;border-radius:14px;text-align:center"> </p>
+<p style="flex:68;font-size:24px;padding:26px 0;background:#4f86c6;border-radius:14px"> </p></div>
+<div style="display:flex;gap:40px">
+<p style="font-size:28px;color:#3f3e39;width:520px"><b style="color:#3f9a63">Verified</b> 3,103 cells</p>
+<p style="font-size:28px;color:#3f3e39;width:520px"><b style="color:#b8671a">Review</b> 218 cells held back</p>
+<p style="font-size:28px;color:#3f3e39;width:520px"><b style="color:#2f66a5">Known unplaced</b> 68 H-numbers</p></div>
+<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:24px;color:#5a5851">How the H-numbers were built · 8</p>
+
+</section>
+
+<section class="slide" style="position:relative;width:1920px;height:1080px;overflow:hidden;flex-shrink:0;background:#141413;color:#f1efe8;font-family:'Space Grotesk', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:34px">
+<p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:28px;letter-spacing:3px;text-transform:uppercase;color:#c5a448;width:1200px">fit.py</p>
+<h2 style="font-size:70px;font-weight:700;line-height:1.05;width:1600px">Sizing 3,000 labels to fit their lots</h2>
+<div style="display:flex;gap:40px;align-items:flex-start">
+<div style="display:flex;flex-direction:column;gap:20px;width:820px">
+<p style="font-size:30px;line-height:1.35"><b style="color:#c5a448">Where:</b> the pole of inaccessibility of the outline (polylabel). It is the point farthest from every edge, so it sits inside thin and curved lots too.</p>
+<p style="font-size:30px;line-height:1.35"><b style="color:#c5a448">How big:</b> the largest font size whose measured text box fits inside the outline pulled in by a margin.</p>
+<p style="font-size:30px;line-height:1.35"><b style="color:#c5a448">Measured, not guessed:</b> the monospace advance is 0.60 em and the ink is at most 0.77 em tall. Both were measured in Chromium.</p>
+<p style="font-size:30px;line-height:1.35"><b style="color:#c5a448">On the page:</b> each label has a fixed text length so it looks the same in every browser.</p></div>
+<div style="width:800px;background:#24241f;border-radius:16px;padding:28px 32px;display:flex;flex-direction:column;gap:6px">
+<p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:24px;line-height:1.5;color:#86b3e6"># sketch, per lot</p>
+<p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:24px;line-height:1.5;color:#f1efe8">cx, cy = polylabel(outline)</p>
+<p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:24px;line-height:1.5;color:#f1efe8">inner = outline.buffer(-margin)</p>
+<p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:24px;line-height:1.5;color:#f1efe8">for size in sizes_desc:</p>
+<p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:24px;line-height:1.5;color:#f1efe8">    w = 0.60 * size * len(text)</p>
+<p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:24px;line-height:1.5;color:#f1efe8">    h = 0.77 * size</p>
+<p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:24px;line-height:1.5;color:#f1efe8">    if inner.contains(box(cx, cy, w, h)):</p>
+<p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:24px;line-height:1.5;color:#f1efe8">        break</p>
+<p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:24px;line-height:1.5;color:#86b3e6"># qa.py then checks it in a real browser</p></div>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:24px;color:#8f8d82">How the H-numbers were built · 9</p>
+
+</section>
+
+<section class="slide" style="position:relative;width:1920px;height:1080px;overflow:hidden;flex-shrink:0;background:#ece9e1;color:#141413;font-family:'Space Grotesk', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:30px">
+<p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:28px;letter-spacing:3px;text-transform:uppercase;color:#7a5f10;width:1200px">Old map vs generated map · overview</p>
+<h2 style="font-size:70px;font-weight:700;line-height:1.05;width:1600px">Same cemetery, before and after</h2>
+<div style="display:flex;gap:24px">
+<div style="display:flex;flex-direction:column;gap:12px"><img src="images/old_overview.jpg" alt="Old overview map" style="width:820px;height:431px;object-fit:cover;border-radius:12px"><p style="font-size:28px;color:#3f3e39;width:820px">Old: labels too small to read at this scale.</p></div>
+<div style="display:flex;flex-direction:column;gap:12px"><img src="images/new_overview.jpg" alt="New overview map" style="width:820px;height:431px;object-fit:cover;border-radius:12px"><p style="font-size:28px;color:#3f3e39;width:820px">New: every lot has an H-number sized to its outline.</p></div>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:24px;color:#5a5851">How the H-numbers were built · 10</p>
+
+</section>
+
+<section class="slide" style="position:relative;width:1920px;height:1080px;overflow:hidden;flex-shrink:0;background:#141413;color:#f1efe8;font-family:'Space Grotesk', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:30px">
+<p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:28px;letter-spacing:3px;text-transform:uppercase;color:#c5a448;width:1200px">Old vs new · dense rows</p>
+<h2 style="font-size:70px;font-weight:700;line-height:1.05;width:1600px">Narrow lots, one label each</h2>
+<div style="display:flex;gap:24px">
+<div style="display:flex;flex-direction:column;gap:12px"><img src="images/old_dense.jpg" alt="Old dense rows" style="width:820px;height:525px;object-fit:cover;border-radius:12px"><p style="font-size:28px;color:#c9c7bf;width:820px">Old</p></div>
+<div style="display:flex;flex-direction:column;gap:12px"><img src="images/new_dense.jpg" alt="New dense rows" style="width:820px;height:525px;object-fit:cover;border-radius:12px"><p style="font-size:28px;color:#c9c7bf;width:820px">New: font size set per lot by fit.py</p></div>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:24px;color:#8f8d82">How the H-numbers were built · 11</p>
+
+</section>
+
+<section class="slide" style="position:relative;width:1920px;height:1080px;overflow:hidden;flex-shrink:0;background:#ece9e1;color:#141413;font-family:'Space Grotesk', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:30px">
+<p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:28px;letter-spacing:3px;text-transform:uppercase;color:#7a5f10;width:1200px">Old vs new · curved edge</p>
+<h2 style="font-size:70px;font-weight:700;line-height:1.05;width:1600px">Curved sections use the interior point</h2>
+<div style="display:flex;gap:24px">
+<div style="display:flex;flex-direction:column;gap:12px"><img src="images/old_curved.jpg" alt="Old curved section" style="width:820px;height:525px;object-fit:cover;border-radius:12px"><p style="font-size:28px;color:#3f3e39;width:820px">Old</p></div>
+<div style="display:flex;flex-direction:column;gap:12px"><img src="images/new_curved.jpg" alt="New curved section" style="width:820px;height:525px;object-fit:cover;border-radius:12px"><p style="font-size:28px;color:#3f3e39;width:820px">New: label sits at polylabel, not the bounding-box centre</p></div>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:24px;color:#5a5851">How the H-numbers were built · 12</p>
+
+</section>
+
+<section class="slide" style="position:relative;width:1920px;height:1080px;overflow:hidden;flex-shrink:0;background:#141413;color:#f1efe8;font-family:'Space Grotesk', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:34px">
+<p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:28px;letter-spacing:3px;text-transform:uppercase;color:#c5a448;width:1400px">Part 2 · Decoder to formula · step 1</p>
+<h2 style="font-size:70px;font-weight:700;line-height:1.05;width:1600px">The old code is a lookup table per section</h2>
+<div style="display:flex;gap:40px;align-items:flex-start">
+<div style="display:flex;flex-direction:column;gap:20px;width:700px">
+<p style="font-size:30px;line-height:1.35">Section B is 22 columns by 19 rows. The decoder builds a dictionary from every legacy label to a (column, row) cell.</p>
+<p style="font-size:30px;line-height:1.35">The H-number is then the position of that cell along the sweep: <span style="color:#c5a448">44 × (row − 1) + column</span>.</p>
+<p style="font-size:30px;line-height:1.35">extract_decoder.py dumped all of these builders. The job was to replace each table with arithmetic that gives the same answer.</p></div>
+<div style="width:900px;background:#24241f;border-radius:16px;padding:26px 30px;display:flex;flex-direction:column;gap:4px">
+<p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:24px;line-height:1.45;color:#86b3e6"># s4decoder1.py</p>
+<p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:24px;line-height:1.45;color:#f1efe8">def build_B_decoder():</p>
+<p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:24px;line-height:1.45;color:#f1efe8">    d = {}</p>
+<p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:24px;line-height:1.45;color:#f1efe8">    for r in range(1, ROWS+1):</p>
+<p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:24px;line-height:1.45;color:#f1efe8">        d[f"{20*r}H"] = (1, r)</p>
+<p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:24px;line-height:1.45;color:#f1efe8">    d["19A"] = (2, 1)</p>
+<p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:24px;line-height:1.45;color:#f1efe8">    for r in range(2, ROWS+1):</p>
+<p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:24px;line-height:1.45;color:#f1efe8">        d[str(19 + 20*(r-1))] = (2, r)</p>
+<p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:24px;line-height:1.45;color:#f1efe8">    for r in range(1, ROWS+1):</p>
+<p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:24px;line-height:1.45;color:#f1efe8">        for c in range(3, 22):</p>
+<p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:24px;line-height:1.45;color:#f1efe8">            d[str((r-1)*20 + (22-c))] = (c, r)</p>
+<p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:24px;line-height:1.45;color:#f1efe8">    for r in range(1, ROWS+1):</p>
+<p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:24px;line-height:1.45;color:#f1efe8">        d[str(12 + 19*(r-1))] = (22, r)</p>
+<p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:24px;line-height:1.45;color:#f1efe8">    return d</p></div>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:24px;color:#8f8d82">How the H-numbers were built · 13</p>
+
+</section>
+
+<section class="slide" style="position:relative;width:1920px;height:1080px;overflow:hidden;flex-shrink:0;background:#ece9e1;color:#141413;font-family:'Space Grotesk', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:30px">
+<p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:28px;letter-spacing:3px;text-transform:uppercase;color:#7a5f10;width:1400px">Step 2 · analyze.py</p>
+<h2 style="font-size:70px;font-weight:700;line-height:1.05;width:1600px">Each section counts differently</h2>
+<table style="font-size:28px;color:#141413;font-family:'Space Grotesk', Arial, sans-serif">
+<tr><th style="width:14%;text-align:left">Section</th><th style="width:30%;text-align:left">Label step per row</th><th style="width:56%;text-align:left">Notes</th></tr>
+<tr><td>B</td><td>20</td><td>Right to left. Last column steps by 19.</td></tr>
+<tr><td>A</td><td>19</td><td>"H" twins sit before 3 of the 19 places.</td></tr>
+<tr><td>D</td><td>20</td><td>Rows 16–23 are blocks, not a pure step.</td></tr>
+<tr><td>C</td><td>19, then 16</td><td>Row tops are a list. Some rows start C, B, A.</td></tr>
+<tr><td>F · E</td><td>18 · 19</td><td>E has extra blocks and a few lettered lots.</td></tr>
+<tr><td>H</td><td>23</td><td>Four rows of 23.</td></tr>
+<tr><td>I J K L M</td><td>straight or list</td><td>Sequential, or an ordered list when the map breaks the order.</td></tr>
+</table>
+<p style="font-size:28px;line-height:1.4;color:#3f3e39;width:1550px">analyze.py compares neighbouring labels along each row and reports the step and every exception. The exceptions decide which pieces become formulas and which stay as small tables.</p>
+<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:24px;color:#5a5851">How the H-numbers were built · 14</p>
+
+</section>
+
+<section class="slide" style="position:relative;width:1920px;height:1080px;overflow:hidden;flex-shrink:0;background:#141413;color:#f1efe8;font-family:'Space Grotesk', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:30px">
+<p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:28px;letter-spacing:3px;text-transform:uppercase;color:#c5a448;width:1400px">Step 3 · one path</p>
+<h2 style="font-size:70px;font-weight:700;line-height:1.05;width:1600px">The H-number is the order on one sweep</h2>
+<div style="display:flex;gap:4px">
+<p style="flex:836;font-size:26px;font-weight:700;padding:24px 0 24px 20px;background:#4f86c6;color:#0b0b0a;border-radius:10px">1 · B, A</p>
+<p style="flex:1035;font-size:26px;font-weight:700;padding:24px 0 24px 20px;background:#78c595;color:#0b0b0a;border-radius:10px">2 · D, C</p>
+<p style="flex:460;font-size:26px;font-weight:700;padding:24px 0 24px 20px;background:#c5a448;color:#0b0b0a;border-radius:10px">3 · F, E</p>
+<p style="flex:255;font-size:26px;font-weight:700;padding:24px 0 24px 12px;background:#f08b7e;color:#0b0b0a;border-radius:10px">4</p>
+<p style="flex:249;font-size:26px;font-weight:700;padding:24px 0 24px 12px;background:#86b3e6;color:#0b0b0a;border-radius:10px">5</p>
+<p style="flex:350;font-size:26px;font-weight:700;padding:24px 0 24px 12px;background:#a98a2f;color:#0b0b0a;border-radius:10px">6</p></div>
+<table style="font-size:28px;color:#f1efe8;font-family:'Space Grotesk', Arial, sans-serif">
+<tr><th style="width:10%;text-align:left">Pass</th><th style="width:40%;text-align:left">Sections</th><th style="width:30%;text-align:left">H range</th><th style="width:20%;text-align:right">Lots</th></tr>
+<tr><td>1</td><td>B, A</td><td>1–836</td><td style="text-align:right">836</td></tr>
+<tr><td>2</td><td>D, C</td><td>837–1871</td><td style="text-align:right">1,035</td></tr>
+<tr><td>3</td><td>F, E</td><td>1872–2331</td><td style="text-align:right">460</td></tr>
+<tr><td>4</td><td>margins, G, H</td><td>2332–2586</td><td style="text-align:right">255</td></tr>
+<tr><td>5</td><td>M</td><td>2587–2835</td><td style="text-align:right">249</td></tr>
+<tr><td>6</td><td>K, J, I, L</td><td>2836–3185</td><td style="text-align:right">350</td></tr>
+</table>
+<p style="font-size:28px;line-height:1.4;color:#c9c7bf;width:1550px">Two sections that sit side by side are swept together: one row of the first, then the same row of the second. That is why the formula needs row widths.</p>
+<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:24px;color:#8f8d82">How the H-numbers were built · 15</p>
+
+</section>
+
+<section class="slide" style="position:relative;width:1920px;height:1080px;overflow:hidden;flex-shrink:0;background:#ece9e1;color:#141413;font-family:'Space Grotesk', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:30px">
+<p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:28px;letter-spacing:3px;text-transform:uppercase;color:#7a5f10;width:1400px">Step 4 · hformula.py</p>
+<h2 style="font-size:70px;font-weight:700;line-height:1.05;width:1600px">One formula shape for every section</h2>
+<p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:44px;font-weight:600;background:#141413;color:#c5a448;padding:22px 32px;border-radius:16px;width:1600px">H = O + Σ + σ·W + κ</p>
+<div style="display:flex;gap:16px;align-items:stretch">
+<div style="flex:1;display:flex;flex-direction:column;gap:8px;background:#f8f6f0;padding:24px;border-radius:16px;border-top:8px solid #c5a448"><p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:34px;font-weight:600;color:#7a5f10">O</p><p style="font-size:26px;line-height:1.3;color:#3f3e39">Lots already swept before this pass: 836, 1871, 2331 and so on.</p></div>
+<div style="flex:1;display:flex;flex-direction:column;gap:8px;background:#f8f6f0;padding:24px;border-radius:16px;border-top:8px solid #4f86c6"><p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:34px;font-weight:600;color:#2f66a5">Σ</p><p style="font-size:26px;line-height:1.3;color:#3f3e39">Lots in all earlier rows of both sections of the pass.</p></div>
+<div style="flex:1;display:flex;flex-direction:column;gap:8px;background:#f8f6f0;padding:24px;border-radius:16px;border-top:8px solid #3f9a63"><p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:34px;font-weight:600;color:#2a7a4b">σ·W</p><p style="font-size:26px;line-height:1.3;color:#3f3e39">If the lot is in the second section of the pair, the first section's width in this row. σ is 0 or 1.</p></div>
+<div style="flex:1;display:flex;flex-direction:column;gap:8px;background:#f8f6f0;padding:24px;border-radius:16px;border-top:8px solid #d9694f"><p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:34px;font-weight:600;color:#b04a33">κ</p><p style="font-size:26px;line-height:1.3;color:#3f3e39">Place of the lot inside its own row, from the old label.</p></div>
+</div>
+<div style="background:#141413;border-radius:16px;padding:22px 30px;display:flex;flex-direction:column;gap:4px">
+<p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:24px;line-height:1.45;color:#f1efe8">def pre(w1, w2, r):</p>
+<p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:24px;line-height:1.45;color:#f1efe8">    return sum((w1[j] if j &lt; len(w1) else 0) + (w2[j] if j &lt; len(w2) else 0) for j in range(r - 1))</p></div>
+<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:24px;color:#5a5851">How the H-numbers were built · 16</p>
+
+</section>
+
+<section class="slide" style="position:relative;width:1920px;height:1080px;overflow:hidden;flex-shrink:0;background:#141413;color:#f1efe8;font-family:'Space Grotesk', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:30px">
+<p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:28px;letter-spacing:3px;text-transform:uppercase;color:#c5a448;width:1400px">Step 5 · gen_giant.py</p>
+<h2 style="font-size:70px;font-weight:700;line-height:1.05;width:1600px">Compiled into a single JavaScript function</h2>
+<div style="display:flex;gap:40px;align-items:flex-start">
+<div style="display:flex;flex-direction:column;gap:18px;width:700px">
+<p style="font-size:29px;line-height:1.35">gen_giant.py reads the Python constants and writes one function <span style="color:#c5a448">H(S, L)</span>: section letter and old label in, H-number out.</p>
+<p style="font-size:29px;line-height:1.35">Row widths, twin lists and blocks are written into the file as literals. It needs no other file.</p>
+<p style="font-size:29px;line-height:1.35">One branch per section, chained. An unknown label returns NaN, never a guess.</p>
+<div style="display:flex;gap:16px"><div style="flex:1;background:#24241f;border-radius:14px;padding:18px 22px"><p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:40px;font-weight:600;color:#c5a448">3,165</p><p style="font-size:24px;color:#c9c7bf">chars, expression</p></div>
+<div style="flex:1;background:#24241f;border-radius:14px;padding:18px 22px"><p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:40px;font-weight:600;color:#86b3e6">6,100</p><p style="font-size:24px;color:#c9c7bf">chars, whole file</p></div></div></div>
+<div style="width:900px;background:#24241f;border-radius:16px;padding:24px 28px;display:flex;flex-direction:column;gap:4px">
+<p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:23px;line-height:1.5;color:#86b3e6"># parts from gen_giant.py</p>
+<p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:23px;line-height:1.5;color:#f1efe8">parts['J'] = "((p===''&amp;&amp;f===''</p>
+<p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:23px;line-height:1.5;color:#f1efe8">  &amp;&amp;n&gt;=1&amp;&amp;n&lt;=132)?2950+n:NaN)"</p>
+<p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:23px;line-height:1.5;color:#f1efe8">parts['M'] = "((p===''&amp;&amp;f==='')?</p>
+<p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:23px;line-height:1.5;color:#f1efe8">  ((n&gt;=82&amp;&amp;n&lt;=279)?n+2556:</p>
+<p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:23px;line-height:1.5;color:#f1efe8">  (i=MF.indexOf(String(n)))&gt;=0?</p>
+<p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:23px;line-height:1.5;color:#f1efe8">  2586+i+1:NaN):NaN)"</p>
+<p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:23px;line-height:1.5;color:#86b3e6"># chained into one expression</p>
+<p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:23px;line-height:1.5;color:#f1efe8">S==='A' ? A : S==='B' ? B : S==='C' ? C</p>
+<p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:23px;line-height:1.5;color:#f1efe8">: ... : S==='L' ? L : NaN</p></div>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:24px;color:#8f8d82">How the H-numbers were built · 17</p>
+
+</section>
+
+<section class="slide" style="position:relative;width:1920px;height:1080px;overflow:hidden;flex-shrink:0;background:#ece9e1;color:#141413;font-family:'Space Grotesk', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:30px">
+<p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:28px;letter-spacing:3px;text-transform:uppercase;color:#7a5f10;width:1400px">Worked example · section C, label 89</p>
+<h2 style="font-size:70px;font-weight:700;line-height:1.05;width:1600px">C-89 to H001059, term by term</h2>
+<div data-build-in="rise 1" style="position:absolute;left:128px;top:330px;width:1664px;height:96px;background:#f8f6f0;border-radius:16px;border-left:12px solid #3f9a63"></div>
+<p data-build-in="rise 1" style="position:absolute;left:170px;top:346px;width:170px;font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:44px;font-weight:600;color:#2a7a4b">5</p>
+<p data-build-in="rise 1" style="position:absolute;left:340px;top:352px;width:1400px;font-size:30px;line-height:1.3;color:#3f3e39">Row (level): the first entry of CT = [19, 38, 57, 76, 95, …] that is ≥ 89 is 95, the fifth.</p>
+<div data-build-in="rise 2" style="position:absolute;left:128px;top:440px;width:1664px;height:96px;background:#f8f6f0;border-radius:16px;border-left:12px solid #c5a448"></div>
+<p data-build-in="rise 2" style="position:absolute;left:170px;top:456px;width:170px;font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:44px;font-weight:600;color:#7a5f10">836</p>
+<p data-build-in="rise 2" style="position:absolute;left:340px;top:462px;width:1400px;font-size:30px;line-height:1.3;color:#3f3e39">O: C belongs to pass 2, and pass 1 (B, A) already swept 836 lots.</p>
+<div data-build-in="rise 3" style="position:absolute;left:128px;top:550px;width:1664px;height:96px;background:#f8f6f0;border-radius:16px;border-left:12px solid #4f86c6"></div>
+<p data-build-in="rise 3" style="position:absolute;left:170px;top:566px;width:170px;font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:44px;font-weight:600;color:#2f66a5">194</p>
+<p data-build-in="rise 3" style="position:absolute;left:340px;top:572px;width:1400px;font-size:30px;line-height:1.3;color:#3f3e39">Σ: P2[5 − 1] = lots of D and C in rows 1 to 4.</p>
+<div data-build-in="rise 4" style="position:absolute;left:128px;top:660px;width:1664px;height:96px;background:#f8f6f0;border-radius:16px;border-left:12px solid #3f9a63"></div>
+<p data-build-in="rise 4" style="position:absolute;left:170px;top:676px;width:170px;font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:44px;font-weight:600;color:#2a7a4b">22</p>
+<p data-build-in="rise 4" style="position:absolute;left:340px;top:682px;width:1400px;font-size:30px;line-height:1.3;color:#3f3e39">σ·W: C comes after D in each row, so add D's width in row 5, WD[4] = 22.</p>
+<div data-build-in="rise 5" style="position:absolute;left:128px;top:770px;width:1664px;height:96px;background:#f8f6f0;border-radius:16px;border-left:12px solid #d9694f"></div>
+<p data-build-in="rise 5" style="position:absolute;left:170px;top:786px;width:170px;font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:44px;font-weight:600;color:#b04a33">7</p>
+<p data-build-in="rise 5" style="position:absolute;left:340px;top:792px;width:1400px;font-size:30px;line-height:1.3;color:#3f3e39">κ: CT[4] − n + 1 = 95 − 89 + 1 = 7. No twin lots in this row lie before 89.</p>
+<p data-build-in="pop 6" style="position:absolute;left:128px;top:880px;width:1664px;font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:40px;font-weight:600;color:#141413">836 + 194 + 22 + 7 = 1,059 → H001059</p>
+<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:24px;color:#5a5851">How the H-numbers were built · 18</p>
+
+</section>
+
+<section class="slide" style="position:relative;width:1920px;height:1080px;overflow:hidden;flex-shrink:0;background:#141413;color:#f1efe8;font-family:'Space Grotesk', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:30px">
+<p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:28px;letter-spacing:3px;text-transform:uppercase;color:#c5a448;width:1400px">The formula running</p>
+<h2 style="font-size:70px;font-weight:700;line-height:1.05;width:1600px">Five labels through H(S, L)</h2>
+<iframe sandbox="allow-scripts" style="position:absolute;left:128px;top:320px;width:1664px;height:520px;border:0" srcdoc="&lt;!doctype html&gt;&lt;html&gt;&lt;head&gt;&lt;meta charset=&quot;utf-8&quot;&gt;&lt;style&gt;
+*{box-sizing:border-box}body{margin:0;background:#141413;color:#f1efe8;font-family:Arial,Helvetica,sans-serif;overflow:hidden}
+#w{padding:6px 0}
+#lab{font-family:Menlo,Consolas,monospace;font-size:44px;color:#c5a448;margin:0 0 6px 0}
+#desc{font-size:26px;color:#c9c7bf;margin:0 0 22px 0;height:34px}
+#row{display:flex;gap:14px;align-items:stretch}
+.t{flex:1;background:#24241f;border-radius:14px;padding:16px 18px;border-top:8px solid #555}
+.t b{display:block;font-family:Menlo,Consolas,monospace;font-size:26px;color:#c9c7bf;font-weight:400}
+.t span{display:block;font-family:Menlo,Consolas,monospace;font-size:52px;font-weight:700;margin-top:6px}
+.t i{display:block;font-style:normal;font-size:24px;color:#a8a69c;margin-top:8px;height:60px}
+.op{align-self:center;font-size:44px;color:#8f8d82;font-family:Menlo,Consolas,monospace}
+#tot{margin-top:22px;font-family:Menlo,Consolas,monospace;font-size:54px;font-weight:700;color:#f1efe8}
+#tot em{font-style:normal;color:#c5a448}
+#dots{margin-top:14px;font-size:26px;color:#8f8d82;font-family:Menlo,Consolas,monospace}
+&lt;/style&gt;&lt;/head&gt;&lt;body&gt;&lt;div id=&quot;w&quot;&gt;
+&lt;p id=&quot;lab&quot;&gt;&lt;/p&gt;&lt;p id=&quot;desc&quot;&gt;&lt;/p&gt;
+&lt;div id=&quot;row&quot;&gt;
+&lt;div class=&quot;t&quot; style=&quot;border-top-color:#c5a448&quot;&gt;&lt;b&gt;O&lt;/b&gt;&lt;span id=&quot;o&quot;&gt;0&lt;/span&gt;&lt;i id=&quot;oi&quot;&gt;&lt;/i&gt;&lt;/div&gt;&lt;div class=&quot;op&quot;&gt;+&lt;/div&gt;
+&lt;div class=&quot;t&quot; style=&quot;border-top-color:#4f86c6&quot;&gt;&lt;b&gt;Σ&lt;/b&gt;&lt;span id=&quot;s&quot;&gt;0&lt;/span&gt;&lt;i id=&quot;si&quot;&gt;&lt;/i&gt;&lt;/div&gt;&lt;div class=&quot;op&quot;&gt;+&lt;/div&gt;
+&lt;div class=&quot;t&quot; style=&quot;border-top-color:#3f9a63&quot;&gt;&lt;b&gt;σ·W&lt;/b&gt;&lt;span id=&quot;w2&quot;&gt;0&lt;/span&gt;&lt;i id=&quot;wi&quot;&gt;&lt;/i&gt;&lt;/div&gt;&lt;div class=&quot;op&quot;&gt;+&lt;/div&gt;
+&lt;div class=&quot;t&quot; style=&quot;border-top-color:#d9694f&quot;&gt;&lt;b&gt;κ&lt;/b&gt;&lt;span id=&quot;k&quot;&gt;0&lt;/span&gt;&lt;i id=&quot;ki&quot;&gt;&lt;/i&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;p id=&quot;tot&quot;&gt;&lt;/p&gt;&lt;p id=&quot;dots&quot;&gt;&lt;/p&gt;
+&lt;/div&gt;&lt;script&gt;
+var E=[
+{l:&quot;B-20H&quot;,d:&quot;Pass 1, first column, row 1&quot;,o:0,s:0,w:0,k:1,oi:&quot;pass 1 starts at 0&quot;,si:&quot;no earlier rows&quot;,wi:&quot;B is first of pair&quot;,ki:&quot;place 1 in row 1&quot;},
+{l:&quot;A-13H&quot;,d:&quot;Pass 1, section A, row 1&quot;,o:0,s:0,w:22,k:7,oi:&quot;pass 1 starts at 0&quot;,si:&quot;no earlier rows&quot;,wi:&quot;+ B row width&quot;,ki:&quot;place 7 in row&quot;},
+{l:&quot;C-89&quot;,d:&quot;Pass 2, row 5&quot;,o:836,s:194,w:22,k:7,oi:&quot;B and A swept&quot;,si:&quot;D and C rows 1-4&quot;,wi:&quot;+ D row 5 width&quot;,ki:&quot;95 - 89 + 1&quot;},
+{l:&quot;M-100&quot;,d:&quot;Pass 5, shifted count&quot;,o:2556,s:0,w:0,k:100,oi:&quot;base for n 82-279&quot;,si:&quot;not used&quot;,wi:&quot;single section&quot;,ki:&quot;n = 100&quot;},
+{l:&quot;J-57&quot;,d:&quot;Pass 6, straight count&quot;,o:2950,s:0,w:0,k:57,oi:&quot;base for J&quot;,si:&quot;not used&quot;,wi:&quot;single section&quot;,ki:&quot;n = 57&quot;}];
+var i=0,timer=null;
+function pad(n){n=String(n);while(n.length&lt;6)n=&quot;0&quot;+n;return n}
+function show(){
+var e=E[i];document.getElementById(&quot;lab&quot;).textContent=e.l;document.getElementById(&quot;desc&quot;).textContent=e.d;
+document.getElementById(&quot;oi&quot;).textContent=e.oi;document.getElementById(&quot;si&quot;).textContent=e.si;document.getElementById(&quot;wi&quot;).textContent=e.wi;document.getElementById(&quot;ki&quot;).textContent=e.k?e.ki:&quot;&quot;;
+var ids=[&quot;o&quot;,&quot;s&quot;,&quot;w2&quot;,&quot;k&quot;],vals=[e.o,e.s,e.w,e.k],t0=null,tot=e.o+e.s+e.w+e.k;
+document.getElementById(&quot;tot&quot;).innerHTML=&quot;&quot;;
+function step(ts){if(!t0)t0=ts;var p=Math.min(1,(ts-t0)/900);
+for(var j=0;j&lt;4;j++){document.getElementById(ids[j]).textContent=Math.round(vals[j]*p).toLocaleString(&quot;en-US&quot;)}
+if(p&lt;1){requestAnimationFrame(step)}else{document.getElementById(&quot;tot&quot;).innerHTML=&quot;= &lt;em&gt;&quot;+tot.toLocaleString(&quot;en-US&quot;)+&quot;&lt;/em&gt; &amp;rarr; H&quot;+pad(tot)}}
+requestAnimationFrame(step);
+var d=&quot;&quot;;for(var q=0;q&lt;E.length;q++){d+=(q==i?&quot;● &quot;:&quot;○ &quot;)}document.getElementById(&quot;dots&quot;).textContent=d;
+i=(i+1)%E.length}
+show();setInterval(show,3800);
+&lt;/script&gt;&lt;/body&gt;&lt;/html&gt;"></iframe>
+<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:24px;color:#8f8d82">How the H-numbers were built · 19</p>
+
+</section>
+
+<section class="slide" style="position:relative;width:1920px;height:1080px;overflow:hidden;flex-shrink:0;background:#ece9e1;color:#141413;font-family:'Space Grotesk', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:30px">
+<p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:28px;letter-spacing:3px;text-transform:uppercase;color:#7a5f10;width:1400px">verify.py · test_giant.js</p>
+<h2 style="font-size:70px;font-weight:700;line-height:1.05;width:1600px">Checked against the old decoder, every label</h2>
+<div style="display:flex;gap:20px">
+<div style="flex:1;background:#f8f6f0;border-radius:18px;padding:30px;display:flex;flex-direction:column;gap:8px;border-top:10px solid #3f9a63"><p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:64px;font-weight:600;color:#2a7a4b">3,199</p><p style="font-size:28px;line-height:1.3;color:#3f3e39">of 3,199 matched in Python (hformula.py vs decoder)</p></div>
+<div style="flex:1;background:#f8f6f0;border-radius:18px;padding:30px;display:flex;flex-direction:column;gap:8px;border-top:10px solid #3f9a63"><p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:64px;font-weight:600;color:#2a7a4b">3,197</p><p style="font-size:28px;line-height:1.3;color:#3f3e39">of 3,197 real labels matched in the JavaScript function</p></div>
+</div>
+<p style="font-size:30px;line-height:1.35;width:1550px">The 3,199 include two internal keys (152dr, 169dr) that are not labels on the map. The JavaScript test leaves those two out.</p>
+<table style="font-size:28px;color:#141413;font-family:'Space Grotesk', Arial, sans-serif">
+<tr><th style="width:24%;text-align:left">Tier</th><th style="width:56%;text-align:left">What it means</th><th style="width:20%;text-align:right">Labels</th></tr>
+<tr><td>closed</td><td>pure arithmetic from the label</td><td style="text-align:right">2,039</td></tr>
+<tr><td>rows</td><td>arithmetic plus per-row constants</td><td style="text-align:right">951</td></tr>
+<tr><td>list</td><td>an ordered list of labels</td><td style="text-align:right">207</td></tr>
+<tr><td>errata</td><td>fixes for decoder typos</td><td style="text-align:right">2</td></tr>
+</table>
+<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:24px;color:#5a5851">How the H-numbers were built · 20</p>
+
+</section>
+
+<section class="slide" style="position:relative;width:1920px;height:1080px;overflow:hidden;flex-shrink:0;background:#141413;color:#f1efe8;font-family:'Space Grotesk', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:30px">
+<p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:28px;letter-spacing:3px;text-transform:uppercase;color:#c5a448;width:1400px">What writing the formula exposed</p>
+<h2 style="font-size:70px;font-weight:700;line-height:1.05;width:1600px">Seven data conflicts found by the checks</h2>
+<table style="font-size:27px;color:#f1efe8;font-family:'Space Grotesk', Arial, sans-serif">
+<tr><th style="width:6%;text-align:left">#</th><th style="width:94%;text-align:left">Finding</th></tr>
+<tr><td>1</td><td>B grid and the margin labels 373–379 both claim the same lots</td></tr>
+<tr><td>2</td><td>Some positions in the old numbering have no label on the map</td></tr>
+<tr><td>3</td><td>Duplicate keys in the decoder: D-274 and G-19</td></tr>
+<tr><td>4</td><td>Typo in section C: 124H in the code, 142H on the map</td></tr>
+<tr><td>5</td><td>Document and code disagree on the sweep order of B and A</td></tr>
+<tr><td>6</td><td>The idealised C grid gives H001672 for C-417; the real value is H001871</td></tr>
+<tr><td>7</td><td>The H and M passes meet at H002586 and H002587</td></tr>
+</table>
+<p style="font-size:28px;line-height:1.4;color:#c9c7bf;width:1550px">The formula had to match the code that is already in use, so these are written down as exceptions, not silently fixed. Five need a decision from staff.</p>
+<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:24px;color:#8f8d82">How the H-numbers were built · 21</p>
+
+</section>
+
+<section class="slide" style="position:relative;width:1920px;height:1080px;overflow:hidden;flex-shrink:0;background:#141413;color:#f1efe8;font-family:'Space Grotesk', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:30px">
+<p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:28px;letter-spacing:3px;text-transform:uppercase;color:#c5a448;width:1400px">Part 3 · Atlas · build_site.py</p>
+<h2 style="font-size:70px;font-weight:700;line-height:1.05;width:1600px">One HTML file, no server</h2>
+<div style="display:flex;gap:40px;align-items:flex-start">
+<img src="images/atlas_lot.jpg" alt="Atlas with lot H000976 selected" style="width:960px;height:607px;object-fit:contain;background:#24241f;border-radius:14px">
+<div style="display:flex;flex-direction:column;gap:18px;width:664px">
+<p style="font-size:28px;line-height:1.35"><b style="color:#c5a448">Inputs:</b> the SVG map, the lot list as JSON and site/template.html.</p>
+<p style="font-size:28px;line-height:1.35"><b style="color:#c5a448">Output:</b> site/index.html, with data and code inlined.</p>
+<p style="font-size:28px;line-height:1.35"><b style="color:#c5a448">Does:</b> click a lot for its H-number, section and status. Search by H-number or old label.</p>
+<p style="font-size:28px;line-height:1.35"><b style="color:#c5a448">States:</b> verified, review, inferred. Each has its own colour on the map.</p></div>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:24px;color:#8f8d82">How the H-numbers were built · 22</p>
+
+</section>
+
+<section class="slide" style="position:relative;width:1920px;height:1080px;overflow:hidden;flex-shrink:0;background:#ece9e1;color:#141413;font-family:'Space Grotesk', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:30px">
+<p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:28px;letter-spacing:3px;text-transform:uppercase;color:#7a5f10;width:1400px">build_pdf.py</p>
+<h2 style="font-size:70px;font-weight:700;line-height:1.05;width:1600px">One page per section</h2>
+<div style="display:flex;gap:40px;align-items:flex-start">
+<div style="display:flex;flex-direction:column;gap:10px"><img src="images/oldpdf_B.jpg" alt="Old section B PDF" style="width:560px;height:700px;object-fit:contain;background:#ffffff;border-radius:12px"><p style="font-size:26px;color:#3f3e39;width:560px">Old section B sheet</p></div>
+<div style="display:flex;flex-direction:column;gap:20px;width:1040px">
+<p style="font-size:30px;line-height:1.35">Each section is rendered from the same geometry as the website, so the label positions are identical.</p>
+<p style="font-size:30px;line-height:1.35">The script picks the smallest sheet that keeps numbers at 3 pt per map unit or more, otherwise tabloid at the best fit.</p>
+<p style="font-size:30px;line-height:1.35">Earlier, long sections such as C ran over two pages. A section is now never split.</p>
+<p style="font-size:30px;line-height:1.35">qa.py rasterises the PDF and compares it with the browser render, as it does for the site.</p></div>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:24px;color:#5a5851">How the H-numbers were built · 23</p>
+
+</section>
+
+<section class="slide" style="position:relative;width:1920px;height:1080px;overflow:hidden;flex-shrink:0;background:#141413;color:#f1efe8;font-family:'Space Grotesk', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:30px">
+<p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:28px;letter-spacing:3px;text-transform:uppercase;color:#c5a448;width:1400px">qa.py</p>
+<h2 style="font-size:70px;font-weight:700;line-height:1.05;width:1600px">Four checks on the placed labels</h2>
+<div style="display:grid;grid-template-columns:repeat(2,1fr);gap:20px">
+<div style="display:flex;flex-direction:column;gap:10px;background:#24241f;padding:30px 34px;border-radius:18px;border-left:10px solid #c5a448"><h3 style="font-size:36px;font-weight:700">A · Model</h3><p style="font-size:28px;line-height:1.35;color:#d6d4cc">Each label box lies inside its own lot with clearance, clear of every drawn lot line, and overlaps no other number.</p></div>
+<div style="display:flex;flex-direction:column;gap:10px;background:#24241f;padding:30px 34px;border-radius:18px;border-left:10px solid #86b3e6"><h3 style="font-size:36px;font-weight:700">B · Outline</h3><p style="font-size:28px;line-height:1.35;color:#d6d4cc">Traced lot outlines coincide with the lot lines in the drawing.</p></div>
+<div style="display:flex;flex-direction:column;gap:10px;background:#24241f;padding:30px 34px;border-radius:18px;border-left:10px solid #78c595"><h3 style="font-size:36px;font-weight:700">C · Browser pixels</h3><p style="font-size:28px;line-height:1.35;color:#d6d4cc">Labels and lot lines are rendered separately in a real browser. Count label pixels that touch a line pixel.</p></div>
+<div style="display:flex;flex-direction:column;gap:10px;background:#24241f;padding:30px 34px;border-radius:18px;border-left:10px solid #f08b7e"><h3 style="font-size:36px;font-weight:700">D · PDF pixels</h3><p style="font-size:28px;line-height:1.35;color:#d6d4cc">The same pixel test on the rasterised PDF pages.</p></div>
+</div>
+<p style="font-size:28px;line-height:1.4;color:#c9c7bf;width:1550px">Check C exists because the model cannot see font differences: a font that renders slightly wider than its measured width passes A and fails C.</p>
+<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:24px;color:#8f8d82">How the H-numbers were built · 24</p>
+
+</section>
+
+<section class="slide" style="position:relative;width:1920px;height:1080px;overflow:hidden;flex-shrink:0;background:#ece9e1;color:#141413;font-family:'Space Grotesk', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:26px">
+<p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:28px;letter-spacing:3px;text-transform:uppercase;color:#7a5f10;width:1400px">resolve.py</p>
+<h2 style="font-size:66px;font-weight:700;line-height:1.05;width:1600px">Placing held-back lots by path continuity</h2>
+<iframe sandbox="allow-scripts" style="position:absolute;left:128px;top:300px;width:1000px;height:430px;border:0" srcdoc="&lt;!doctype html&gt;&lt;html&gt;&lt;head&gt;&lt;meta charset=&quot;utf-8&quot;&gt;&lt;style&gt;
+body{margin:0;background:#141413;font-family:Arial,Helvetica,sans-serif;color:#f1efe8;overflow:hidden}
+svg{display:block}
+.n{font-family:Menlo,Consolas,monospace;font-size:24px;fill:#f1efe8}
+#msg{position:absolute;left:20px;bottom:12px;right:20px;font-size:26px;color:#c9c7bf;font-family:Menlo,Consolas,monospace}
+.f{opacity:0;transition:opacity .6s}.f.on{opacity:1}
+&lt;/style&gt;&lt;/head&gt;&lt;body&gt;
+&lt;svg width=&quot;1000&quot; height=&quot;380&quot; viewBox=&quot;0 0 1000 380&quot;&gt;
+&lt;g stroke=&quot;#8f8d82&quot; stroke-width=&quot;3&quot; fill=&quot;none&quot;&gt;&lt;path d=&quot;M80 120 L270 100 L460 125&quot;/&gt;&lt;path d=&quot;M640 110 L830 95 L940 130&quot;/&gt;&lt;/g&gt;
+&lt;g fill=&quot;#4f86c6&quot;&gt;&lt;circle cx=&quot;80&quot; cy=&quot;120&quot; r=&quot;14&quot;/&gt;&lt;circle cx=&quot;270&quot; cy=&quot;100&quot; r=&quot;14&quot;/&gt;&lt;circle cx=&quot;460&quot; cy=&quot;125&quot; r=&quot;14&quot;/&gt;&lt;circle cx=&quot;640&quot; cy=&quot;110&quot; r=&quot;14&quot;/&gt;&lt;circle cx=&quot;830&quot; cy=&quot;95&quot; r=&quot;14&quot;/&gt;&lt;circle cx=&quot;940&quot; cy=&quot;130&quot; r=&quot;14&quot;/&gt;&lt;/g&gt;
+&lt;text class=&quot;n&quot; x=&quot;48&quot; y=&quot;165&quot;&gt;h-3&lt;/text&gt;&lt;text class=&quot;n&quot; x=&quot;238&quot; y=&quot;145&quot;&gt;h-2&lt;/text&gt;&lt;text class=&quot;n&quot; x=&quot;428&quot; y=&quot;170&quot;&gt;h-1&lt;/text&gt;&lt;text class=&quot;n&quot; x=&quot;618&quot; y=&quot;155&quot;&gt;h+1&lt;/text&gt;&lt;text class=&quot;n&quot; x=&quot;798&quot; y=&quot;140&quot;&gt;h+2&lt;/text&gt;
+&lt;circle class=&quot;f&quot; id=&quot;c1&quot; cx=&quot;460&quot; cy=&quot;125&quot; r=&quot;150&quot; fill=&quot;none&quot; stroke=&quot;#c5a448&quot; stroke-width=&quot;3&quot; stroke-dasharray=&quot;8 6&quot;/&gt;
+&lt;circle class=&quot;f&quot; id=&quot;c2&quot; cx=&quot;640&quot; cy=&quot;110&quot; r=&quot;150&quot; fill=&quot;none&quot; stroke=&quot;#c5a448&quot; stroke-width=&quot;3&quot; stroke-dasharray=&quot;8 6&quot;/&gt;
+&lt;g class=&quot;f&quot; id=&quot;ca&quot;&gt;&lt;circle cx=&quot;550&quot; cy=&quot;125&quot; r=&quot;16&quot; fill=&quot;#3f9a63&quot;/&gt;&lt;text class=&quot;n&quot; x=&quot;522&quot; y=&quot;178&quot; fill=&quot;#78c595&quot; style=&quot;fill:#78c595&quot;&gt;A&lt;/text&gt;&lt;/g&gt;
+&lt;g class=&quot;f&quot; id=&quot;cb&quot;&gt;&lt;circle cx=&quot;420&quot; cy=&quot;290&quot; r=&quot;16&quot; fill=&quot;#d9694f&quot;/&gt;&lt;text class=&quot;n&quot; x=&quot;392&quot; y=&quot;338&quot; style=&quot;fill:#f08b7e&quot;&gt;B&lt;/text&gt;&lt;/g&gt;
+&lt;g class=&quot;f&quot; id=&quot;cc&quot;&gt;&lt;circle cx=&quot;770&quot; cy=&quot;270&quot; r=&quot;16&quot; fill=&quot;#d9694f&quot;/&gt;&lt;text class=&quot;n&quot; x=&quot;742&quot; y=&quot;318&quot; style=&quot;fill:#f08b7e&quot;&gt;C&lt;/text&gt;&lt;/g&gt;
+&lt;/svg&gt;&lt;div id=&quot;msg&quot;&gt;&lt;/div&gt;
+&lt;script&gt;
+var M=[&quot;Lot h is held back. Its neighbours h-1 and h+1 are placed.&quot;,&quot;Allowed distance: 32 units + 14 per skipped number.&quot;,&quot;Candidate lots: A, B, C. Test each against both neighbours.&quot;,&quot;Only A is near both. B and C fail. Exactly one passes: accept A.&quot;];
+var s=0;function ids(a){a.forEach(function(i){document.getElementById(i).classList.add(&quot;on&quot;)})}
+function run(){var m=document.getElementById(&quot;msg&quot;);[&quot;c1&quot;,&quot;c2&quot;,&quot;ca&quot;,&quot;cb&quot;,&quot;cc&quot;].forEach(function(i){document.getElementById(i).classList.remove(&quot;on&quot;)});
+m.textContent=M[0];
+setTimeout(function(){m.textContent=M[1];ids([&quot;c1&quot;,&quot;c2&quot;])},1800);
+setTimeout(function(){m.textContent=M[2];ids([&quot;ca&quot;,&quot;cb&quot;,&quot;cc&quot;])},3800);
+setTimeout(function(){m.textContent=M[3]},5800)}
+run();setInterval(run,9000);
+&lt;/script&gt;&lt;/body&gt;&lt;/html&gt;"></iframe>
+<div style="position:absolute;left:1168px;top:300px;width:624px;display:flex;flex-direction:column;gap:14px">
+<p style="font-size:27px;line-height:1.35">Rule: lot h must stand next to lots h−1 and h+1 on the path.</p>
+<p style="font-size:27px;line-height:1.35">Accept a candidate only if exactly one reading passes. Otherwise leave it open.</p>
+<p style="font-size:27px;line-height:1.35">Output: provisional.json, proposed_fixes.csv, decisions_needed.md.</p>
+<p style="font-size:24px;line-height:1.35;color:#5a5851">Illustration, not to scale.</p></div>
+<div style="position:absolute;left:128px;top:760px;width:1664px;display:flex;gap:16px">
+<div style="flex:1;background:#f8f6f0;border-radius:14px;padding:16px 22px;border-top:8px solid #3f9a63"><p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:40px;font-weight:600;color:#2a7a4b">31</p><p style="font-size:24px;color:#3f3e39">inferred (2 + 1 + 11 + 17 by group)</p></div>
+<div style="flex:1;background:#f8f6f0;border-radius:14px;padding:16px 22px;border-top:8px solid #e08a2f"><p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:40px;font-weight:600;color:#b8671a">187</p><p style="font-size:24px;color:#3f3e39">still open (130 probably not in table)</p></div>
+<div style="flex:1;background:#f8f6f0;border-radius:14px;padding:16px 22px;border-top:8px solid #4f86c6"><p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:40px;font-weight:600;color:#2f66a5">218</p><p style="font-size:24px;color:#3f3e39">held back in total</p></div></div>
+<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:24px;color:#5a5851">How the H-numbers were built · 25</p>
+
+</section>
+
+<section class="slide" style="position:relative;width:1920px;height:1080px;overflow:hidden;flex-shrink:0;background:#141413;color:#f1efe8;font-family:'Space Grotesk', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:30px">
+<p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:28px;letter-spacing:3px;text-transform:uppercase;color:#c5a448;width:1400px">Atlas layers</p>
+<h2 style="font-size:70px;font-weight:700;line-height:1.05;width:1600px">2D grid, 3D model and photo as layers</h2>
+<div style="display:flex;gap:40px;align-items:flex-start">
+<img src="images/atlas_3d_layers.jpg" alt="Atlas 3D layer with layers menu" style="width:960px;height:607px;object-fit:contain;background:#24241f;border-radius:14px">
+<div style="display:flex;flex-direction:column;gap:18px;width:664px">
+<p style="font-size:28px;line-height:1.35"><b style="color:#c5a448">2D:</b> the SVG lot map with H-number labels.</p>
+<p style="font-size:28px;line-height:1.35"><b style="color:#c5a448">3D:</b> the three.js scene runs in an iframe. The atlas sends it the selected lot and layer state with postMessage.</p>
+<p style="font-size:28px;line-height:1.35"><b style="color:#c5a448">Photo:</b> site/ground.jpg. The page probes for the file first and greys the layer out if it is missing.</p>
+<p style="font-size:28px;line-height:1.35"><b style="color:#c5a448">Full screen:</b> Fullscreen API, with a CSS fallback where the browser blocks it.</p></div>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:24px;color:#8f8d82">How the H-numbers were built · 26</p>
+
+</section>
+
+<section class="slide" style="position:relative;width:1920px;height:1080px;overflow:hidden;flex-shrink:0;background:#141413;color:#f1efe8;font-family:'Space Grotesk', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:24px">
+<p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:28px;letter-spacing:3px;text-transform:uppercase;color:#c5a448;width:1400px">Part 4 · 3D model · registration</p>
+<h2 style="font-size:66px;font-weight:700;line-height:1.05;width:1600px">Screenshots have no coordinates</h2>
+<img src="images/reg_screens.jpg" alt="The two Google Earth screenshots used as inputs" style="width:1500px;height:432px;object-fit:contain;background:#24241f;border-radius:12px">
+<div style="display:flex;gap:40px">
+<p style="font-size:27px;line-height:1.35;width:810px">Inputs: a top-down and a wide Google Earth view, 1500 × 868 each. No geodata, so they have to be aligned to the lot map by image processing.</p>
+<p style="font-size:27px;line-height:1.35;width:810px">Step 1: six control points (building corners, path junctions) picked on both images give a homography with cv2.findHomography.</p></div>
+<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:24px;color:#8f8d82">How the H-numbers were built · 27</p>
+
+</section>
+
+<section class="slide" style="position:relative;width:1920px;height:1080px;overflow:hidden;flex-shrink:0;background:#ece9e1;color:#141413;font-family:'Space Grotesk', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:24px">
+<p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:28px;letter-spacing:3px;text-transform:uppercase;color:#7a5f10;width:1400px">Registration · feature matching</p>
+<h2 style="font-size:66px;font-weight:700;line-height:1.05;width:1600px">Chaining the second view with SIFT</h2>
+<img src="images/reg_matches.jpg" alt="SIFT matches between the two screenshots" style="width:1500px;height:434px;object-fit:contain;background:#141413;border-radius:12px">
+<div style="display:flex;gap:40px">
+<p style="font-size:27px;line-height:1.35;width:810px">SIFT with 6000 features, ratio test 0.75: <b>1,319</b> good matches. RANSAC with a 4.0 px threshold keeps <b>1,217</b> inliers. Every 14th inlier is drawn.</p>
+<p style="font-size:27px;line-height:1.35;width:810px">The homography between the views is chained with the six-point one: H = G · H1. The wide view lands on the lot map without more clicking.</p></div>
+<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:24px;color:#5a5851">How the H-numbers were built · 28</p>
+
+</section>
+
+<section class="slide" style="position:relative;width:1920px;height:1080px;overflow:hidden;flex-shrink:0;background:#141413;color:#f1efe8;font-family:'Space Grotesk', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:24px">
+<p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:28px;letter-spacing:3px;text-transform:uppercase;color:#c5a448;width:1400px">Registration · the test</p>
+<h2 style="font-size:66px;font-weight:700;line-height:1.05;width:1600px">Lot polygons over the warped photo</h2>
+<div style="display:flex;gap:40px;align-items:flex-start">
+<img src="images/reg_overlay.jpg" alt="Lot polygons over the warped aerial photo" style="width:960px;height:617px;object-fit:contain;background:#24241f;border-radius:12px">
+<div style="display:flex;flex-direction:column;gap:18px;width:664px">
+<p style="font-size:27px;line-height:1.35">Warp: 1.4 px per map unit, region (220, 60) to (1800, 1040). The texture is 2212 × 1372.</p>
+<p style="font-size:27px;line-height:1.35">The check is visual and direct: draw all 3,102 lot polygons on the warped photo and look for drift.</p>
+<p style="font-size:27px;line-height:1.35">The centre fits. The west edge fits worse (inset in the image), which is the limit of a single homography over the whole area.</p></div>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:24px;color:#8f8d82">How the H-numbers were built · 29</p>
+
+</section>
+
+<section class="slide" style="position:relative;width:1920px;height:1080px;overflow:hidden;flex-shrink:0;background:#ece9e1;color:#141413;font-family:'Space Grotesk', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:24px">
+<p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:28px;letter-spacing:3px;text-transform:uppercase;color:#7a5f10;width:1400px">extract_buildings.py</p>
+<h2 style="font-size:66px;font-weight:700;line-height:1.05;width:1600px">30 building footprints from the photo</h2>
+<div style="display:flex;gap:40px;align-items:flex-start">
+<img src="images/footprints_all.jpg" alt="30 building footprints over the warped photo" style="width:1000px;height:620px;object-fit:contain;background:#141413;border-radius:12px">
+<div style="display:flex;flex-direction:column;gap:16px;width:624px">
+<p style="font-size:27px;line-height:1.35">Roofs are traced from the warped raster: flood fill from a seed inside each roof, then cv2.minAreaRect for a clean rectangle.</p>
+<p style="font-size:27px;line-height:1.35">30 buildings: 23 houses, 4 mausoleums, 1 office, 1 garage, 1 chapel.</p>
+<p style="font-size:27px;line-height:1.35">Roofs lean in an aerial view. The maus and office footprints are shifted by measured offsets so the base sits on the ground.</p></div>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:24px;color:#5a5851">How the H-numbers were built · 30</p>
+
+</section>
+
+<section class="slide" style="position:relative;width:1920px;height:1080px;overflow:hidden;flex-shrink:0;background:#141413;color:#f1efe8;font-family:'Space Grotesk', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:24px">
+<p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:28px;letter-spacing:3px;text-transform:uppercase;color:#c5a448;width:1400px">Tree detection · attempt 1</p>
+<h2 style="font-size:66px;font-weight:700;line-height:1.05;width:1600px">Colour mask: rejected</h2>
+<div style="display:flex;gap:40px;align-items:flex-start">
+<img src="images/tree_lawn.jpg" alt="Lawn colour mask on a map crop" style="width:835px;height:620px;object-fit:contain;background:#24241f;border-radius:12px">
+<div style="display:flex;flex-direction:column;gap:16px;width:789px">
+<p style="font-size:27px;line-height:1.35">First idea: trees are green. Threshold in HSV: H 28–48, S &gt; 55, V &gt; 95.</p>
+<p style="font-size:27px;line-height:1.35">It selects patches of bright lawn, not trees. In this imagery the canopies are dark, not green, so a colour range is the wrong tool.</p>
+<p style="font-size:27px;line-height:1.35">Crop of the map, x 900–1250, y 540–800.</p>
+<div style="background:#24241f;border-radius:14px;padding:16px 22px"><p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:24px;line-height:1.45;color:#f08b7e">lo = (28, 55, 95); hi = (48, 255, 255)<br>mask = cv2.inRange(hsv, lo, hi)</p></div></div>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:24px;color:#8f8d82">How the H-numbers were built · 31</p>
+
+</section>
+
+<section class="slide" style="position:relative;width:1920px;height:1080px;overflow:hidden;flex-shrink:0;background:#ece9e1;color:#141413;font-family:'Space Grotesk', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:24px">
+<p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:28px;letter-spacing:3px;text-transform:uppercase;color:#7a5f10;width:1400px">Tree detection · step 2</p>
+<h2 style="font-size:66px;font-weight:700;line-height:1.05;width:1600px">Dark-blob mask</h2>
+<div style="display:flex;gap:40px;align-items:flex-start">
+<img src="images/tree_dark.jpg" alt="Dark blob mask on the same crop" style="width:835px;height:620px;object-fit:contain;background:#141413;border-radius:12px">
+<div style="display:flex;flex-direction:column;gap:14px;width:789px">
+<p style="font-size:27px;line-height:1.35"><b>1.</b> Blur the brightness channel (Gaussian, sigma 2.5).</p>
+<p style="font-size:27px;line-height:1.35"><b>2.</b> Keep pixels with V &lt; 92.</p>
+<p style="font-size:27px;line-height:1.35"><b>3.</b> Remove everything known not to be a tree: white map labels, roads, buildings.</p>
+<p style="font-size:27px;line-height:1.35"><b>4.</b> Morphological opening, 7 × 7, to drop thin shadows and grave lines.</p>
+<div style="background:#141413;border-radius:14px;padding:16px 22px"><p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:24px;line-height:1.45;color:#f1efe8">Vb = cv2.GaussianBlur(V, (0,0), 2.5)<br>dark = (Vb &lt; 92) &amp; ~labels &amp; ~road &amp; ~bldg<br>dark = cv2.morphologyEx(dark, MORPH_OPEN, k7)</p></div></div>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:24px;color:#5a5851">How the H-numbers were built · 32</p>
+
+</section>
+
+<section class="slide" style="position:relative;width:1920px;height:1080px;overflow:hidden;flex-shrink:0;background:#141413;color:#f1efe8;font-family:'Space Grotesk', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:24px">
+<p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:28px;letter-spacing:3px;text-transform:uppercase;color:#c5a448;width:1400px">Tree detection · step 3</p>
+<h2 style="font-size:66px;font-weight:700;line-height:1.05;width:1600px">One tree per distance-transform peak</h2>
+<div style="display:flex;gap:40px;align-items:flex-start">
+<img src="images/tree_peaks.jpg" alt="Distance transform peaks, red kept and grey rejected" style="width:835px;height:620px;object-fit:contain;background:#24241f;border-radius:12px">
+<div style="display:flex;flex-direction:column;gap:14px;width:789px">
+<p style="font-size:27px;line-height:1.35">A blob can hold several overlapping canopies. The distance transform gives each pixel its distance to the blob edge, and each tree centre is a local maximum of it.</p>
+<p style="font-size:27px;line-height:1.35">Peak = local max in a 15 × 15 window. Keep it if the distance is at least 10 px, which is the tree's radius in pixels.</p>
+<p style="font-size:27px;line-height:1.35">In this crop: <b>150 peaks found, 39 kept</b>. Red = kept, grey = rejected as too small.</p>
+<div style="background:#24241f;border-radius:14px;padding:16px 22px"><p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:24px;line-height:1.45;color:#f1efe8">dt = cv2.distanceTransform(dark, DIST_L2, 5)<br>peak = (dt == cv2.dilate(dt, k15)) &amp; (dt &gt;= 10)</p></div></div>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:24px;color:#8f8d82">How the H-numbers were built · 33</p>
+
+</section>
+
+<section class="slide" style="position:relative;width:1920px;height:1080px;overflow:hidden;flex-shrink:0;background:#ece9e1;color:#141413;font-family:'Space Grotesk', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:24px">
+<p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:28px;letter-spacing:3px;text-transform:uppercase;color:#7a5f10;width:1400px">Tree detection · result</p>
+<h2 style="font-size:66px;font-weight:700;line-height:1.05;width:1600px">415 trees over the whole map</h2>
+<div style="display:flex;gap:40px;align-items:flex-start">
+<img src="images/tree_final.jpg" alt="All detected trees as circles on the warped photo" style="width:1000px;height:620px;object-fit:contain;background:#141413;border-radius:12px">
+<div style="display:flex;flex-direction:column;gap:14px;width:624px">
+<p style="font-size:26px;line-height:1.35"><b>408</b> leafy (includes the west woods fill, spacing 19) and <b>7</b> evergreen. Evergreen if mean V under 58.</p>
+<p style="font-size:26px;line-height:1.35">Crown radius = r / 1.4 × 1.25, converted from pixels to map units.</p>
+<p style="font-size:26px;line-height:1.35">Overlaps removed by non-maximum suppression at 0.9 × the larger radius.</p>
+<p style="font-size:26px;line-height:1.35">Trees within 8 + 0.8 r of a building are dropped. Those were roof shadows.</p></div>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:24px;color:#5a5851">How the H-numbers were built · 34</p>
+
+</section>
+
+<section class="slide" style="position:relative;width:1920px;height:1080px;overflow:hidden;flex-shrink:0;background:#141413;color:#f1efe8;font-family:'Space Grotesk', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:24px">
+<p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:28px;letter-spacing:3px;text-transform:uppercase;color:#c5a448;width:1400px">place_stones.py · road mask</p>
+<h2 style="font-size:66px;font-weight:700;line-height:1.05;width:1600px">Finding roads and paths in the photo</h2>
+<img src="images/road_mask.jpg" alt="Road and path mask over the aerial" style="width:1380px;height:540px;object-fit:contain;background:#24241f;border-radius:12px">
+<div style="display:flex;gap:40px">
+<p style="font-size:26px;line-height:1.35;width:810px">Pale, grey and smooth pixels are paved. Two passes, strict then loose, each cleaned with line openings so grave rows are not mistaken for paths.</p>
+<p style="font-size:26px;line-height:1.35;width:810px">Closed with a 7 × 7 kernel. The mask covers <b>21.6%</b> of the map pixels. Stones may not touch it.</p></div>
+<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:24px;color:#8f8d82">How the H-numbers were built · 35</p>
+
+</section>
+
+<section class="slide" style="position:relative;width:1920px;height:1080px;overflow:hidden;flex-shrink:0;background:#ece9e1;color:#141413;font-family:'Space Grotesk', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:22px">
+<p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:28px;letter-spacing:3px;text-transform:uppercase;color:#7a5f10;width:1400px">place_stones.py · headstones</p>
+<h2 style="font-size:66px;font-weight:700;line-height:1.05;width:1600px">Every stone inside its lot, none on a path</h2>
+<img src="images/stones_before_after.jpg" alt="Stone placement before and after" style="width:1300px;height:525px;object-fit:contain;background:#141413;border-radius:12px">
+<div style="display:flex;gap:30px">
+<div style="background:#f8f6f0;border-radius:14px;padding:14px 22px;width:400px"><p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:36px;font-weight:600;color:#b04a33">206 → 0</p><p style="font-size:24px;color:#3f3e39">stones off-lot or on a path</p></div>
+<div style="background:#f8f6f0;border-radius:14px;padding:14px 22px;width:400px"><p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:36px;font-weight:600;color:#2a7a4b">2,819</p><p style="font-size:24px;color:#3f3e39">stones placed, 282 lots dropped on paths</p></div>
+<div style="background:#f8f6f0;border-radius:14px;padding:14px 22px;width:400px"><p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:36px;font-weight:600;color:#2f66a5">~30%</p><p style="font-size:24px;color:#3f3e39">smaller stones than first version</p></div></div>
+<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:24px;color:#5a5851">How the H-numbers were built · 36</p>
+
+</section>
+
+<section class="slide" style="position:relative;width:1920px;height:1080px;overflow:hidden;flex-shrink:0;background:#141413;color:#f1efe8;font-family:'Space Grotesk', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:24px">
+<p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:28px;letter-spacing:3px;text-transform:uppercase;color:#c5a448;width:1400px">Buildings</p>
+<h2 style="font-size:66px;font-weight:700;line-height:1.05;width:1600px">Footprint from the map, look from photos</h2>
+<div style="display:flex;gap:20px">
+<div style="display:flex;flex-direction:column;gap:10px"><img src="images/3d_office.jpg" alt="3D office, garage and cars" style="width:540px;height:341px;object-fit:cover;border-radius:12px"><p style="font-size:24px;color:#c9c7bf;width:540px">Office, garage, parking</p></div>
+<div style="display:flex;flex-direction:column;gap:10px"><img src="images/3d_mausoleum.jpg" alt="3D mausoleum buildings" style="width:540px;height:341px;object-fit:cover;border-radius:12px"><p style="font-size:24px;color:#c9c7bf;width:540px">Mausoleums</p></div>
+<div style="display:flex;flex-direction:column;gap:10px"><img src="images/3d_house.jpg" alt="3D houses along the south edge" style="width:540px;height:341px;object-fit:cover;border-radius:12px"><p style="font-size:24px;color:#c9c7bf;width:540px">Houses, south edge</p></div></div>
+<div style="display:flex;gap:40px">
+<p style="font-size:26px;line-height:1.35;width:810px">Footprint, position and rotation come from the traced rectangles. Height, roof type and materials come from the site photos supplied for the chapel, office and mausoleums.</p>
+<p style="font-size:26px;line-height:1.35;width:810px">Each building is built from a few boxes and prisms by one helper, Bd, which merges them into a single mesh so the scene stays light.</p></div>
+<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:24px;color:#8f8d82">How the H-numbers were built · 37</p>
+
+</section>
+
+<section class="slide" style="position:relative;width:1920px;height:1080px;overflow:hidden;flex-shrink:0;background:#ece9e1;color:#141413;font-family:'Space Grotesk', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:24px">
+<p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:28px;letter-spacing:3px;text-transform:uppercase;color:#7a5f10;width:1400px">cemetery3d_page2.html · rendering</p>
+<h2 style="font-size:66px;font-weight:700;line-height:1.05;width:1600px">Keeping 3,000 lots and 2,800 stones fast</h2>
+<div style="display:flex;gap:40px;align-items:flex-start">
+<img src="images/3d_trees_west.jpg" alt="3D trees in the west area over the ground photo" style="width:900px;height:568px;object-fit:cover;border-radius:12px">
+<div style="display:flex;flex-direction:column;gap:14px;width:724px">
+<p style="font-size:26px;line-height:1.35"><b>InstancedMesh</b> for lots and stones: one draw call each, per-instance colour for pass and state.</p>
+<p style="font-size:26px;line-height:1.35"><b>Leaf-card trees:</b> a trunk plus a few crossed alpha cards instead of full geometry.</p>
+<p style="font-size:26px;line-height:1.35"><b>Shadows</b> are updated manually, not on every frame.</p>
+<p style="font-size:26px;line-height:1.35"><b>Triangles:</b> about 0.9 M, down from 1.9 M after the stone and tree changes.</p>
+<p style="font-size:26px;line-height:1.35">three.js r128, no build step, one HTML file.</p></div>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:24px;color:#5a5851">How the H-numbers were built · 38</p>
+
+</section>
+
+<section class="slide" style="position:relative;width:1920px;height:1080px;overflow:hidden;flex-shrink:0;background:#141413;color:#f1efe8;font-family:'Space Grotesk', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:24px">
+<p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:28px;letter-spacing:3px;text-transform:uppercase;color:#c5a448;width:1400px">3D walk-through</p>
+<h2 style="font-size:66px;font-weight:700;line-height:1.05;width:1600px">The camera follows the H-number order</h2>
+<div style="display:flex;gap:40px;align-items:flex-start">
+<img src="images/3d_walk.jpg" alt="3D walk mode with options panel" style="width:900px;height:569px;object-fit:cover;border-radius:12px">
+<div style="display:flex;flex-direction:column;gap:14px;width:724px">
+<p style="font-size:26px;line-height:1.35">The path is the lots in H order: H000001, H000002 and so on, taken from the same data as the atlas.</p>
+<p style="font-size:26px;line-height:1.35">Raw lot centres zig-zag, so the camera position is a moving average over ±5 lots.</p>
+<p style="font-size:26px;line-height:1.35">The current lot is shown as a gold volume, not a beam. The trail behind it grows with drawRange on one line geometry.</p>
+<p style="font-size:26px;line-height:1.35">Changing the options was lagging because it rebuilt the scene. It now only updates what changed.</p></div>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:24px;color:#8f8d82">How the H-numbers were built · 39</p>
+
+</section>
+
+<section class="slide" style="position:relative;width:1920px;height:1080px;overflow:hidden;flex-shrink:0;background:#ece9e1;color:#141413;font-family:'Space Grotesk', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:22px">
+<p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:28px;letter-spacing:3px;text-transform:uppercase;color:#7a5f10;width:1400px">3D model · snippets</p>
+<h2 style="font-size:66px;font-weight:700;line-height:1.05;width:1600px">Views from the model</h2>
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px">
+<img src="images/3d_overview.jpg" alt="3D overview" style="width:544px;height:300px;object-fit:cover;border-radius:12px">
+<img src="images/3d_top.jpg" alt="3D view from above" style="width:544px;height:300px;object-fit:cover;border-radius:12px">
+<img src="images/3d_headstones.jpg" alt="3D selected lot with headstones" style="width:544px;height:300px;object-fit:cover;border-radius:12px">
+<img src="images/3d_notredame_ave.jpg" alt="3D Notre Dame Avenue edge" style="width:544px;height:300px;object-fit:cover;border-radius:12px">
+<img src="images/3d_mausoleum.jpg" alt="3D mausoleums" style="width:544px;height:300px;object-fit:cover;border-radius:12px">
+<img src="images/3d_office.jpg" alt="3D office" style="width:544px;height:300px;object-fit:cover;border-radius:12px"></div>
+<p style="font-size:26px;line-height:1.35;color:#3f3e39;width:1600px">Overview, from above, selected lot H001698, Notre Dame Ave edge, mausoleums, office. Screenshots are software-rendered, so textures look softer than in a browser.</p>
+<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:24px;color:#5a5851">How the H-numbers were built · 40</p>
+
+</section>
+
+<section class="slide" style="position:relative;width:1920px;height:1080px;overflow:hidden;flex-shrink:0;background:#141413;color:#f1efe8;font-family:'Space Grotesk', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:24px">
+<p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:28px;letter-spacing:3px;text-transform:uppercase;color:#c5a448;width:1400px">Part 5 · Explainer page</p>
+<h2 style="font-size:66px;font-weight:700;line-height:1.05;width:1600px">Showing the old problem next to the new one</h2>
+<div style="display:flex;gap:24px">
+<div style="display:flex;flex-direction:column;gap:10px"><img src="images/raw_annotated.jpg" alt="Raw map with old numbers" style="width:810px;height:560px;object-fit:contain;background:#24241f;border-radius:12px"><p style="font-size:26px;color:#c9c7bf;width:810px">Raw map with the old numbers, annotated</p></div>
+<div style="display:flex;flex-direction:column;gap:10px"><img src="images/expl_why.jpg" alt="Explainer section on why old numbers confuse" style="width:810px;height:560px;object-fit:contain;background:#24241f;border-radius:12px"><p style="font-size:26px;color:#c9c7bf;width:810px">Explainer: three kinds of confusion in the old system</p></div></div>
+<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:24px;color:#8f8d82">How the H-numbers were built · 41</p>
+
+</section>
+
+<section class="slide" style="position:relative;width:1920px;height:1080px;overflow:hidden;flex-shrink:0;background:#ece9e1;color:#141413;font-family:'Space Grotesk', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:24px">
+<p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:28px;letter-spacing:3px;text-transform:uppercase;color:#7a5f10;width:1400px">Explainer page · interactive parts</p>
+<h2 style="font-size:66px;font-weight:700;line-height:1.05;width:1600px">Walk the path, run the passes</h2>
+<div style="display:flex;gap:24px">
+<div style="display:flex;flex-direction:column;gap:10px"><img src="images/expl_walk.jpg" alt="Explainer walk-the-path section" style="width:810px;height:536px;object-fit:contain;background:#141413;border-radius:12px"><p style="font-size:26px;color:#3f3e39;width:810px">Walk the path: old order, section by section</p></div>
+<div style="display:flex;flex-direction:column;gap:10px"><img src="images/expl_passes.jpg" alt="Explainer six-pass simulator" style="width:810px;height:536px;object-fit:contain;background:#141413;border-radius:12px"><p style="font-size:26px;color:#3f3e39;width:810px">Six-pass simulator: 836, 1,035, 460, 255, 249, 350</p></div></div>
+<p style="font-size:27px;line-height:1.35;color:#3f3e39;width:1600px">Also on the page: old vs H slider for straight rows, and the giant formula calculator, which runs the same function as slide 19.</p>
+<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:24px;color:#5a5851">How the H-numbers were built · 42</p>
+
+</section>
+
+<section class="slide" style="position:relative;width:1920px;height:1080px;overflow:hidden;flex-shrink:0;background:#141413;color:#f1efe8;font-family:'Space Grotesk', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:28px">
+<p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:28px;letter-spacing:3px;text-transform:uppercase;color:#c5a448;width:1400px">Part 6 · Status</p>
+<h2 style="font-size:70px;font-weight:700;line-height:1.05;width:1600px">What is exact and what is approximate</h2>
+<table style="font-size:27px;color:#f1efe8;font-family:'Space Grotesk', Arial, sans-serif">
+<tr><th style="width:36%;text-align:left">Part</th><th style="width:16%;text-align:left">Status</th><th style="width:48%;text-align:left">Basis</th></tr>
+<tr><td>Lot outlines, 3,103 verified</td><td style="color:#78c595">Exact</td><td>Traced from the drawing, pixel-checked</td></tr>
+<tr><td>H-number formula</td><td style="color:#78c595">Exact</td><td>3,199 of 3,199 against the old decoder</td></tr>
+<tr><td>Atlas and PDFs</td><td style="color:#78c595">Done</td><td>Built from the same data, QA passes</td></tr>
+<tr><td>31 inferred lots</td><td style="color:#86b3e6">Proposed</td><td>Path continuity, need a yes or no</td></tr>
+<tr><td>187 open lots</td><td style="color:#e9a35c">Open</td><td>Waiting for staff decisions</td></tr>
+<tr><td>3D trees, stones, buildings</td><td style="color:#e9a35c">Approximate</td><td>From the photo, west edge fits less well</td></tr>
+<tr><td>Field check on the ground</td><td style="color:#f08b7e">Not done</td><td>Needs people on site</td></tr>
+</table>
+<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:24px;color:#8f8d82">How the H-numbers were built · 43</p>
+
+</section>
+
+<section class="slide" style="position:relative;width:1920px;height:1080px;overflow:hidden;flex-shrink:0;background:#ece9e1;color:#141413;font-family:'Space Grotesk', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:36px">
+<p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:28px;letter-spacing:3px;text-transform:uppercase;color:#7a5f10;width:1400px">Live tools and source</p>
+<h2 style="font-size:76px;font-weight:700;line-height:1.05;width:1500px">Everything here can be run</h2>
+<div style="display:flex;gap:20px">
+<div style="flex:1;display:flex;flex-direction:column;gap:12px;background:#141413;color:#f1efe8;padding:34px;border-radius:22px"><h3 style="font-size:42px;font-weight:700">Atlas</h3><p style="font-size:26px;line-height:1.35;color:#d6d4cc">Map, search, layers, PDFs.</p><p style="font-size:28px;font-weight:700"><a href="https://claude.ai/artifact/UCsi1zVy5aHdaYbdb8Lz5B" style="color:#c5a448">Open the atlas</a></p></div>
+<div style="flex:1;display:flex;flex-direction:column;gap:12px;background:#141413;color:#f1efe8;padding:34px;border-radius:22px"><h3 style="font-size:42px;font-weight:700">Explainer</h3><p style="font-size:26px;line-height:1.35;color:#d6d4cc">Passes, old vs H, giant formula calculator.</p><p style="font-size:28px;font-weight:700"><a href="https://claude.ai/artifact/BJVzAb7mM6aKk6eon8oqkE" style="color:#c5a448">Open the explainer</a></p></div>
+<div style="flex:1;display:flex;flex-direction:column;gap:12px;background:#141413;color:#f1efe8;padding:34px;border-radius:22px"><h3 style="font-size:42px;font-weight:700">3D model</h3><p style="font-size:26px;line-height:1.35;color:#d6d4cc">Walk the numbering through the cemetery.</p><p style="font-size:28px;font-weight:700"><a href="https://claude.ai/artifact/WFkwDQ3tU3QSik9k3KoeWY" style="color:#c5a448">Open the 3D model</a></p></div>
+</div>
+<div style="display:flex;flex-direction:column;gap:10px;background:#f8f6f0;padding:30px 34px;border-radius:20px">
+<p style="font-size:30px;line-height:1.4">Source and scripts: <a href="https://github.com/ZForgotten44/hafez-" style="color:#7a5f10">github.com/ZForgotten44/hafez-</a></p>
+<p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:24px;line-height:1.5;color:#3f3e39">math/hformula.py · math/gen_giant.py · pipeline2/*.py · math/build_3d_data.py · math/place_stones.py</p></div>
+<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:24px;color:#5a5851">How the H-numbers were built · 44</p>
+
+</section>
+</div><div id="notes"></div>
+<div id="bar"><button id="p">&larr; Prev</button><span id="c"></span><button id="n">Next &rarr;</button><button id="t">Notes (N)</button><button id="f">Full screen (F)</button></div>
+<script>var N=["This deck is about method, not results. For each part I show the input, the script that processes it, an intermediate output and how it was checked. Live tools are linked on the last slide.", "Everything is generated by scripts from the original drawing, so a changed decision can be rebuilt in one run instead of redrawn.", "The .ai file is a PDF-compatible vector drawing, so PyMuPDF can read every path and text span with coordinates. That is why this could be done without retyping anything. The screenshots have no coordinates; Part 5 shows how they were aligned.", "The old label is just a position inside a section. The same label appears in many sections, so on its own it does not identify a lot. We counted it: 3,197 labels, only 768 distinct values.", "This is why a single running number is useful. The H-number is unique for every lot and is computed from section plus label, so nothing has to be looked up by hand.", "Each script reads the previous script's JSON and writes its own. Any step can be re-run alone. Changing one decision (for example one lot's section) means re-running from that step down.", "The code shown is a shortened sketch of the idea, not the script verbatim. 8 px per drawing unit is the resolution the script uses.", "The 218 review cells are held back until a decision is made on them. Part 4 shows how 31 of them were inferred from path continuity. The 68 are H-numbers that exist in the numbering but have no cell yet.", "qa.py renders the site in headless Chromium and compares pixels: labels must sit inside their outline in the screenshot, not just in the model. The same check is repeated for the PDF output.", "Both images are crops of the same region at the same scale. The new one is rendered from the generated SVG, not drawn by hand.", "Dense rows are the hard case for label fitting: the lot is narrow, so the font is limited by width.", "On a curved lot the bounding-box centre can fall outside the outline. polylabel always returns a point inside it.", "Reading the loops gives the rule directly. Column 1 holds 20H, 40H, 60H. Columns 3 to 21 count 20 per row from right to left. The last column steps by 19 (12, 31, 50). That is why B has two different increments in one row.", "Three tiers came out of this: closed (pure arithmetic), rows (arithmetic plus a table of row widths) and list (an ordered list of labels). Slide 20 shows how many labels fall in each tier.", "The sweep is the one fixed route through the cemetery that makes every number follow from the previous one. The interactive version is in the explainer: six-pass simulator. Pass 4 is the margins and sections G and H.", "The shape is the same everywhere. What changes is how O, the row widths and the place inside the row are obtained: closed form where the map is regular, a small table of row widths where it is not, an ordered list where it is not regular at all. pre() is the \u03a3 term exactly as it appears in hformula.py.", "Section J is the simplest case: H = 2950 + n for n 1 to 132. Section M is a shifted count for most lots (n + 2556 for 82 to 279) and an ordered list for the first rows. The pass bases O are 2950 for J and 2586 for M, which is where the 2950 and 2586+i+1 come from.", "Each line is read from the real C branch of the giant function: r = CT.findIndex(t => n <= t) + 1; H = 836 + P2[r-1] + WD[r-1] + k, with k = CT[r-1] - n + 1 + 3*TR[r-1] + b. For C-89, TR is 0 and b is 0.", "The embed cycles by itself, about four seconds per label, so it works in the web view and is flattened in PDF. The five values are real outputs of the function: B-20H is H000001, A-13H is H000029, C-89 is H001059, M-100 is H002656 and J-57 is H003007. The same function is live in the explainer page's giant formula calculator.", "About 64% of labels are pure arithmetic. The list tier is the honest part: 207 labels follow no rule in the map, so they are stored in order. The test is exhaustive: every label is run through both implementations and the outputs are compared one by one.", "This is a useful side effect of turning tables into arithmetic: wherever a rule almost holds, the exception shows up as a failed assertion. The C typo is handled in the formula with a one-line errata (L==='124H' then n=142). Details of the five open items are in decisions_needed.md in the repo.", "Static means it can be hosted anywhere or opened from a file. The site and the PDFs are both built from the same pipeline output.", "The image on the left is the old sheet for comparison. The fix for the two-page problem was to choose the sheet size per section, from the section's shape.", "Checks A to C are the three listed at the top of qa.py. The PDF pixel test is the same idea applied to the print output.", "Confidence is graded high, medium, low. The 31 inferred lots are proposals and are never marked verified. The 187 open lots mostly sit in 11 blocks whose labels are already used elsewhere. The embed loops by itself.", "The same 3D page also accepts deep links: #h= for a lot, #walk= for the walk-through and #embed for the mode used inside the atlas.", "The homography maps one plane onto another, which is correct for a top-down view of flat ground. It is only approximate for tall things, so roofs lean; that is handled later in the building step.", "1,217 of 1,319 is 92% inliers, so the two views agree with each other. The six hand-picked points only have to be right once; everything else is automatic.", "Because the edge fit is weaker, nothing in the 3D model depends on the photo being exact there: trees and paths are placed from the photo, but lot positions always come from the drawing.", "Heights and roof shapes are not from the photo. They come from the site photos of the chapel, office and mausoleums, covered a few slides later.", "This is kept in the deck because the failed attempt explains the next one. The canopies show up as dark blobs, so the next attempt looks for dark blobs instead.", "Code lines are a short form of what build_3d_data.py does. The exclusion masks matter: without them, black building roofs and map text would be counted as trees.", "Where two kept circles overlap heavily, only one survives in the final step, which uses non-maximum suppression at 0.9 of the larger radius.", "The circles are the output as drawn by the script, so what you see is exactly what the 3D scene receives. The west woods are too dense to separate tree by tree in the photo, so they are filled with a scatter at minimum spacing 19.", "This mask came after the user pointed out headstones standing on roads, Notre Dame Avenue and the walking paths. Before it, stones were placed from the lot polygon alone.", "The left panel of the image is a simulated before, redrawn for this comparison: stones centred in the lot at the old size with no checks. In that crop 13 of 139 are off the lot or on a path. The right panel is the real output. The 206 to 0 figure is the full-map count from the script's own check.", "The 3D images are software-rendered screenshots, so textures look softer than in a real browser. No photo-versus-model comparison pair exists for a building yet; the site photos were used as reference while modelling, not saved as paired figures.", "The user reported lag in walk mode after changing options. The fixes were the instancing, the manual shadow update and the triangle reduction above. One r128 limitation caused a bug: BufferGeometry has no applyQuaternion there, so rotations are applied with applyMatrix4.", "Deep link into a walk: the 3D page accepts #walk= in the URL. The smoothing window is a trade-off: wider is smoother but cuts corners at the section edges.", "Live version: open the 3D model link on the last slide. Selected lots can be opened directly with a #h= link.", "build_explainer.py assembles the page from explainer_a.js, explainer_b.js and explainer_data.json. explainer_data.json holds the data the page uses.", "The old-numbering walk goes section by section, not in the six passes, because that is how the old numbers were assigned. The H walk uses the passes. Showing both next to each other is what makes the difference visible.", "The split is deliberate: everything derived from the drawing is checked by script. Everything derived from the photos is visual and approximate. The remaining decisions are listed in decisions_needed.md and are for cemetery staff to answer.", "The three tool links are private until shared from each page's Share menu. Share all three with anyone who needs to open the deck's links."];var S=[].slice.call(document.querySelectorAll('.slide')),i=0;
+function fit(){var s=Math.min(innerWidth/1920,(innerHeight-44)/1080),st=document.getElementById('stage');st.style.transform='scale('+s+')';st.style.marginLeft=(-960*s)+'px';st.style.marginTop=(-540*s-22)+'px'}
+function show(k){i=Math.max(0,Math.min(S.length-1,k));S.forEach(function(e,j){e.classList.toggle('on',j==i)});document.getElementById('c').textContent=(i+1)+' / '+S.length;document.getElementById('notes').textContent=N[i];location.hash=i+1}
+function nt(){var e=document.getElementById('notes');e.style.display=e.style.display=='block'?'none':'block'}
+function fs(){document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen()}
+document.getElementById('p').onclick=function(){show(i-1)};document.getElementById('n').onclick=function(){show(i+1)};document.getElementById('t').onclick=nt;document.getElementById('f').onclick=fs;
+addEventListener('keydown',function(e){if(e.key=='ArrowRight'||e.key==' '||e.key=='PageDown')show(i+1);else if(e.key=='ArrowLeft'||e.key=='PageUp')show(i-1);else if(e.key=='n'||e.key=='N')nt();else if(e.key=='f'||e.key=='F')fs()});
+addEventListener('resize',fit);fit();show((parseInt(location.hash.slice(1))||1)-1);</script></body></html>
