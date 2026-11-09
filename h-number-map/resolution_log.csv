@@ -1,0 +1,216 @@
+decision,label_on_drawing,h_number,section_lot,confidence,why
+numbered from the path,199,H002402,F 199,high,"The label F-199 decodes to H002402, far from the lots around it on the map, but both path neighbours are close (10 and 27 units away), so the numbering path does reach this lot here."
+numbered from the path,15,H002590,M 15,high,"Of the 12 sections that use the label 15, only Section M puts this lot where H002590 belongs: both path neighbours are close (15 and 23 units away)."
+numbered from the path,200,H002403,F 200,high,"The label F-200 decodes to H002403, far from the lots around it on the map, but both path neighbours are close (20 and 15 units away), so the numbering path does reach this lot here."
+numbered from the path,30,H002600,M 30,high,The drawing shows M-30 in 2 places. This one sits where H002600 belongs: both path neighbours are close (11 and 11 units away).
+numbered from the path,35,H002603,M 35,high,The drawing shows M-35 in 2 places. This one sits where H002603 belongs: both path neighbours are close (12 and 10 units away).
+numbered from the path,65,H002625,M 65,high,The drawing shows M-65 in 2 places. This one sits where H002625 belongs: both path neighbours are close (14 and 10 units away).
+numbered from the path,204,H002407,F 204,high,"The label F-204 decodes to H002407, far from the lots around it on the map, but both path neighbours are close (13 and 15 units away), so the numbering path does reach this lot here."
+numbered from the path,207,H002410,F 207,high,"The label F-207 decodes to H002410, far from the lots around it on the map, but both path neighbours are close (10 and 18 units away), so the numbering path does reach this lot here."
+numbered from the path,202,H002405,F 202,high,"The label F-202 decodes to H002405, far from the lots around it on the map, but both path neighbours are close (10 and 18 units away), so the numbering path does reach this lot here."
+numbered from the path,210,H002413,F 210,high,"The label F-210 decodes to H002413, far from the lots around it on the map, but both path neighbours are close (10 and 28 units away), so the numbering path does reach this lot here."
+numbered from the path,20,H002594,M 20,high,The drawing shows M-20 in 2 places. This one sits where H002594 belongs: both path neighbours are close (12 and 28 units away).
+numbered from the path,380H,H002341,B 380H,high,"The label B-380H decodes to H002341, far from the lots around it on the map, but both path neighbours are close (19 and 37 units away), so the numbering path does reach this lot here."
+numbered from the path,380,H002340,B 380,medium,"The label B-380 decodes to H002340, far from the lots around it on the map, but the neighbour before it is close (9 units), so the numbering path does reach this lot here."
+numbered from the path,70,H002631,M 70,medium,"The drawing shows M-70 in 2 places. This one sits where H002631 belongs: the neighbour after it is close (9 units), the other is 52 units away."
+numbered from the path,376H,H002336,B 376H,medium,"The label B-376H decodes to H002336, far from the lots around it on the map, but the neighbour after it is close (11 units), so the numbering path does reach this lot here."
+numbered from the path,382,H002343,B 382,medium,"The label B-382 decodes to H002343, far from the lots around it on the map, but the neighbour after it is close (11 units), so the numbering path does reach this lot here."
+numbered from the path,75,H002630,M 75,medium,"The drawing shows M-75 in 2 places. This one sits where H002630 belongs: the neighbour before it is close (12 units), the other is 66 units away."
+numbered from the path,9,H002842,K 9,medium,"The drawing shows K-9 in 2 places. This one sits where H002842 belongs: the neighbour before it is close (12 units), the other is 33 units away."
+numbered from the path,25,H002597,M 25,medium,"The drawing shows M-25 in 2 places. This one sits where H002597 belongs: the neighbour before it is close (13 units), the other is 33 units away."
+numbered from the path,1,H002836,K 1,medium,"The drawing shows K-1 in 2 places. This one sits where H002836 belongs: the neighbour after it is close (10 units), the other is 96 units away."
+numbered from the path,542,H002373,D 542,medium,"The label D-542 decodes to H002373, far from the lots around it on the map, but the neighbour after it is close (11 units), the other is 102 units away, so the numbering path does reach this lot here."
+numbered from the path,1,H003083,I 1,medium,"Of the 11 sections that use the label 1, only Section I puts this lot where H003083 belongs: the neighbour after it is close (17 units), the other is 267 units away."
+numbered from the path,15,H002845,K 15,low,The drawing shows K-15 in 2 places. This one sits where H002845 belongs: both path neighbours are close (9 and 10 units away).
+numbered from the path,16,H002846,K 16,low,The drawing shows K-16 in 2 places. This one sits where H002846 belongs: both path neighbours are close (20 and 18 units away).
+numbered from the path,140H,H000265,B 140H,low,"The label B-140H decodes to H000265, far from the lots around it on the map, but the neighbour after it is close (21 units), the other is 482 units away, so the numbering path does reach this lot here."
+numbered from the path,100H,H000177,B 100H,low,"The label B-100H decodes to H000177, far from the lots around it on the map, but the neighbour after it is close (21 units), the other is 483 units away, so the numbering path does reach this lot here."
+numbered from the path,160H,H000309,B 160H,low,"The label B-160H decodes to H000309, far from the lots around it on the map, but the neighbour after it is close (21 units), the other is 483 units away, so the numbering path does reach this lot here."
+numbered from the path,300H,H000617,B 300H,low,"The label B-300H decodes to H000617, far from the lots around it on the map, but the neighbour after it is close (21 units), the other is 483 units away, so the numbering path does reach this lot here."
+numbered from the path,120H,H000221,B 120H,low,"The label B-120H decodes to H000221, far from the lots around it on the map, but the neighbour after it is close (21 units), the other is 483 units away, so the numbering path does reach this lot here."
+numbered from the path,376,H002335,B 376,low,"The label B-376 decodes to H002335, far from the lots around it on the map, but the neighbour after it is close (21 units), so the numbering path does reach this lot here."
+no number (graves between the mausoleums),26,,,,Not part of the H-numbering
+no number (graves between the mausoleums),27,,,,Not part of the H-numbering
+no number (graves between the mausoleums),28,,,,Not part of the H-numbering
+no number (graves between the mausoleums),29,,,,Not part of the H-numbering
+no number (graves between the mausoleums),32,,,,Not part of the H-numbering
+no number (graves between the mausoleums),33,,,,Not part of the H-numbering
+no number (graves between the mausoleums),42,,,,Not part of the H-numbering
+no number (graves between the mausoleums),41,,,,Not part of the H-numbering
+no number (graves between the mausoleums),40,,,,Not part of the H-numbering
+no number (graves between the mausoleums),39,,,,Not part of the H-numbering
+no number (graves between the mausoleums),38,,,,Not part of the H-numbering
+no number (graves between the mausoleums),37,,,,Not part of the H-numbering
+no number (graves between the mausoleums),36,,,,Not part of the H-numbering
+no number (graves between the mausoleums),35,,,,Not part of the H-numbering
+no number (graves between the mausoleums),34,,,,Not part of the H-numbering
+no number (graves between the mausoleums),43,,,,Not part of the H-numbering
+no number (graves between the mausoleums),44,,,,Not part of the H-numbering
+no number (graves between the mausoleums),45,,,,Not part of the H-numbering
+no number (graves between the mausoleums),46,,,,Not part of the H-numbering
+no number (graves between the mausoleums),47,,,,Not part of the H-numbering
+no number (graves between the mausoleums),48,,,,Not part of the H-numbering
+no number (graves between the mausoleums),49,,,,Not part of the H-numbering
+no number (graves between the mausoleums),50,,,,Not part of the H-numbering
+no number (graves between the mausoleums),25,,,,Not part of the H-numbering
+no number (graves between the mausoleums),24,,,,Not part of the H-numbering
+no number (graves between the mausoleums),16,,,,Not part of the H-numbering
+no number (graves between the mausoleums),15,,,,Not part of the H-numbering
+no number (graves between the mausoleums),8,,,,Not part of the H-numbering
+no number (graves between the mausoleums),7,,,,Not part of the H-numbering
+no number (graves between the mausoleums),6,,,,Not part of the H-numbering
+no number (graves between the mausoleums),5,,,,Not part of the H-numbering
+no number (graves between the mausoleums),4,,,,Not part of the H-numbering
+no number (graves between the mausoleums),3,,,,Not part of the H-numbering
+no number (graves between the mausoleums),2,,,,Not part of the H-numbering
+no number (graves between the mausoleums),1,,,,Not part of the H-numbering
+no number (graves between the mausoleums),14,,,,Not part of the H-numbering
+no number (graves between the mausoleums),13,,,,Not part of the H-numbering
+no number (graves between the mausoleums),12,,,,Not part of the H-numbering
+no number (graves between the mausoleums),11,,,,Not part of the H-numbering
+no number (graves between the mausoleums),10,,,,Not part of the H-numbering
+no number (graves between the mausoleums),9,,,,Not part of the H-numbering
+no number (graves between the mausoleums),23,,,,Not part of the H-numbering
+no number (graves between the mausoleums),22,,,,Not part of the H-numbering
+no number (graves between the mausoleums),21,,,,Not part of the H-numbering
+no number (graves between the mausoleums),20,,,,Not part of the H-numbering
+no number (graves between the mausoleums),19,,,,Not part of the H-numbering
+no number (graves between the mausoleums),18,,,,Not part of the H-numbering
+no number (graves between the mausoleums),17,,,,Not part of the H-numbering
+no number (graves between the mausoleums),51,,,,Not part of the H-numbering
+no number (graves between the mausoleums),52,,,,Not part of the H-numbering
+no number (graves between the mausoleums),53,,,,Not part of the H-numbering
+no number (graves between the mausoleums),54,,,,Not part of the H-numbering
+no number (graves between the mausoleums),55,,,,Not part of the H-numbering
+no number (graves between the mausoleums),56,,,,Not part of the H-numbering
+no number (graves between the mausoleums),57,,,,Not part of the H-numbering
+no number (graves between the mausoleums),58,,,,Not part of the H-numbering
+no number (graves between the mausoleums),61,,,,Not part of the H-numbering
+no number (graves between the mausoleums),62,,,,Not part of the H-numbering
+no number (graves between the mausoleums),63,,,,Not part of the H-numbering
+no number (graves between the mausoleums),64,,,,Not part of the H-numbering
+no number (graves between the mausoleums),67,,,,Not part of the H-numbering
+no number (graves between the mausoleums),68,,,,Not part of the H-numbering
+no number (graves between the mausoleums),,,,,Not part of the H-numbering
+no number (graves between the mausoleums),,,,,Not part of the H-numbering
+replicated label removed (loose number),56,,,,a loose number without a lot outline repeats a label that is already used
+replicated label removed (loose number),80,,,,a loose number without a lot outline repeats a label that is already used
+replicated label removed (loose number),75,H002630,M 75,,the label already has its lot
+replicated label removed (loose number),70,H002631,M 70,,the label already has its lot
+replicated label removed (loose number),65,H002625,M 65,,the label already has its lot
+replicated label removed (loose number),50,,,,a loose number without a lot outline repeats a label that is already used
+replicated label removed (loose number),60,,,,a loose number without a lot outline repeats a label that is already used
+replicated label removed (loose number),55,,,,a loose number without a lot outline repeats a label that is already used
+replicated label removed (loose number),45,,,,a loose number without a lot outline repeats a label that is already used
+replicated label removed (loose number),40,,,,a loose number without a lot outline repeats a label that is already used
+replicated label removed (loose number),35,H002603,M 35,,the label already has its lot
+replicated label removed (loose number),30,H002600,M 30,,the label already has its lot
+replicated label removed (loose number),25,H002597,M 25,,the label already has its lot
+replicated label removed (loose number),20,H002594,M 20,,the label already has its lot
+replicated label removed (loose number),5,,,,a loose number without a lot outline repeats a label that is already used
+replicated label removed (loose number),15,H002590,M 15,,a loose number without a lot outline repeats a label that is already used
+replicated label removed (loose number),10,,,,a loose number without a lot outline repeats a label that is already used
+replicated label removed (loose number),1,,,,a loose number without a lot outline repeats a label that is already used
+same lot drawn 2 times: one number,381,H002342,B 381,,"outlines 8 units apart or less, same label"
+same lot drawn 2 times: one number,375,H002334,B 375,,"outlines 11 units apart or less, same label"
+same lot drawn 2 times: one number,19,H002415,G 19,,"outlines 14 units apart or less, same label"
+numbered by its label next to its own section,374,H002333,B 374,,only outline with this label; 22 lots of Section B within 70 units
+numbered by its label next to its own section,373,H002332,B 373,,only outline with this label; 20 lots of Section B within 70 units
+outline without an H-number (not in the numbering table),214H,,,,no free H-number near it
+outline without an H-number (not in the numbering table),157H,,,,no free H-number near it
+outline without an H-number (not in the numbering table),396,,,,no free H-number near it
+outline without an H-number (not in the numbering table),395,,,,no free H-number near it
+outline without an H-number (not in the numbering table),320,,,,no free H-number near it
+outline without an H-number (not in the numbering table),340,,,,no free H-number near it
+outline without an H-number (not in the numbering table),397,,,,no free H-number near it
+outline without an H-number (not in the numbering table),398,,,,no free H-number near it
+outline without an H-number (not in the numbering table),400,,,,no free H-number near it
+outline without an H-number (not in the numbering table),360,,,,no free H-number near it
+outline without an H-number (not in the numbering table),399,,,,no free H-number near it
+outline without an H-number (not in the numbering table),401,,,,no free H-number near it
+outline without an H-number (not in the numbering table),344H,,,,no free H-number near it
+outline without an H-number (not in the numbering table),A362,,,,no free H-number near it
+outline without an H-number (not in the numbering table),403,,,,no free H-number near it
+outline without an H-number (not in the numbering table),402,,,,no free H-number near it
+outline without an H-number (not in the numbering table),362H,,,,no free H-number near it
+outline without an H-number (not in the numbering table),404,,,,no free H-number near it
+outline without an H-number (not in the numbering table),405,,,,no free H-number near it
+outline without an H-number (not in the numbering table),308H,,,,no free H-number near it
+outline without an H-number (not in the numbering table),326H,,,,no free H-number near it
+outline without an H-number (not in the numbering table),411,,,,no free H-number near it
+outline without an H-number (not in the numbering table),407,,,,no free H-number near it
+outline without an H-number (not in the numbering table),406,,,,no free H-number near it
+outline without an H-number (not in the numbering table),408,,,,no free H-number near it
+outline without an H-number (not in the numbering table),409,,,,no free H-number near it
+outline without an H-number (not in the numbering table),410,,,,no free H-number near it
+outline without an H-number (not in the numbering table),412,,,,no free H-number near it
+outline without an H-number (not in the numbering table),413,,,,no free H-number near it
+outline without an H-number (not in the numbering table),414,,,,no free H-number near it
+outline without an H-number (not in the numbering table),372H,,,,no free H-number near it
+outline without an H-number (not in the numbering table),280,,,,no free H-number near it
+outline without an H-number (not in the numbering table),300,,,,no free H-number near it
+outline without an H-number (not in the numbering table),260,,,,no free H-number near it
+outline without an H-number (not in the numbering table),336H,,,,no free H-number near it
+outline without an H-number (not in the numbering table),354H,,,,no free H-number near it
+outline without an H-number (not in the numbering table),318H,,,,no free H-number near it
+outline without an H-number (not in the numbering table),220,,,,no free H-number near it
+outline without an H-number (not in the numbering table),200,,,,no free H-number near it
+outline without an H-number (not in the numbering table),160,,,,no free H-number near it
+outline without an H-number (not in the numbering table),180,,,,no free H-number near it
+outline without an H-number (not in the numbering table),140,,,,no free H-number near it
+outline without an H-number (not in the numbering table),100,,,,no free H-number near it
+outline without an H-number (not in the numbering table),120,,,,no free H-number near it
+outline without an H-number (not in the numbering table),80,,,,no free H-number near it
+outline without an H-number (not in the numbering table),40,,,,no free H-number near it
+outline without an H-number (not in the numbering table),60,,,,no free H-number near it
+outline without an H-number (not in the numbering table),20,,,,no free H-number near it
+outline without an H-number (not in the numbering table),293,,,,no free H-number near it
+outline without an H-number (not in the numbering table),333,,,,no free H-number near it
+outline without an H-number (not in the numbering table),322,,,,no free H-number near it
+outline without an H-number (not in the numbering table),300H,,,,no free H-number near it
+outline without an H-number (not in the numbering table),311,,,,no free H-number near it
+outline without an H-number (not in the numbering table),10,,,,no free H-number near it
+outline without an H-number (not in the numbering table),21,,,,no free H-number near it
+outline without an H-number (not in the numbering table),12,,,,no free H-number near it
+outline without an H-number (not in the numbering table),11,,,,no free H-number near it
+outline without an H-number (not in the numbering table),4,,,,no free H-number near it
+outline without an H-number (not in the numbering table),6,,,,no free H-number near it
+outline without an H-number (not in the numbering table),2,,,,no free H-number near it
+outline without an H-number (not in the numbering table),3,,,,no free H-number near it
+outline without an H-number (not in the numbering table),9,,,,no free H-number near it
+outline without an H-number (not in the numbering table),8,,,,no free H-number near it
+outline without an H-number (not in the numbering table),7,,,,no free H-number near it
+outline without an H-number (not in the numbering table),5,,,,no free H-number near it
+outline without an H-number (not in the numbering table),1,,,,no free H-number near it
+outline without an H-number (not in the numbering table),9H,,,,no free H-number near it
+outline without an H-number (not in the numbering table),28H,,,,no free H-number near it
+outline without an H-number (not in the numbering table),161H,,,,no free H-number near it
+outline without an H-number (not in the numbering table),218H,,,,no free H-number near it
+outline without an H-number (not in the numbering table),237H,,,,no free H-number near it
+outline without an H-number (not in the numbering table),13,,,,no free H-number near it
+outline without an H-number (not in the numbering table),89H,,,,no free H-number near it
+outline without an H-number (not in the numbering table),70H,,,,no free H-number near it
+outline without an H-number (not in the numbering table),13H,,,,no free H-number near it
+outline without an H-number (not in the numbering table),14,,,,no free H-number near it
+outline without an H-number (not in the numbering table),15,,,,no free H-number near it
+outline without an H-number (not in the numbering table),16,,,,no free H-number near it
+outline without an H-number (not in the numbering table),17,,,,no free H-number near it
+outline without an H-number (not in the numbering table),18,,,,no free H-number near it
+outline without an H-number (not in the numbering table),19,,,,no free H-number near it
+outline without an H-number (not in the numbering table),69,,,,no free H-number near it
+outline without an H-number (not in the numbering table),68,,,,no free H-number near it
+outline without an H-number (not in the numbering table),63,,,,no free H-number near it
+outline without an H-number (not in the numbering table),62,,,,no free H-number near it
+outline without an H-number (not in the numbering table),57,,,,no free H-number near it
+outline without an H-number (not in the numbering table),A361,,,,no free H-number near it
+outline without an H-number (not in the numbering table),204A,,,,no free H-number near it
+outline without an H-number (not in the numbering table),312A,,,,no free H-number near it
+outline without an H-number (not in the numbering table),291A,,,,no free H-number near it
+outline without an H-number (not in the numbering table),293A,,,,no free H-number near it
+outline without an H-number (not in the numbering table),,,,,no free H-number near it
+outline without an H-number (not in the numbering table),,,,,no free H-number near it
+outline without an H-number (not in the numbering table),,,,,no free H-number near it
+outline without an H-number (not in the numbering table),,,,,no free H-number near it
+outline without an H-number (not in the numbering table),,,,,no free H-number near it
+outline without an H-number (not in the numbering table),,,,,no free H-number near it
+outline without an H-number (not in the numbering table),,,,,no free H-number near it

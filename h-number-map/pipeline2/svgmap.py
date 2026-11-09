@@ -9,8 +9,12 @@ def pts(poly): return ' '.join('%.2f,%.2f' % (x, y) for x, y in poly)
 def load():
     import os
     pv = json.load(open(f'{DATA}/provisional.json')) if os.path.exists(f'{DATA}/provisional.json') else dict(items=[], expected=[], blocks=[])
+    reg = json.load(open(f'{DATA}/registry.json'))
+    if not reg['review']:       # every case was closed by finalize.py: only the expected spots of the H-numbers that still have no lot are kept
+        left = {(u['section'], u['legacy']) for u in reg['known_unplaced']}
+        pv = dict(items=[], expected=[e for e in pv['expected'] if (e['section'], e['label']) in left], blocks=[])
     return dict(base=json.load(open(f'{DATA}/base.json')), lots=json.load(open(f'{DATA}/lots_fit.json')),
-                reg=json.load(open(f'{DATA}/registry.json')), cells=json.load(open(f'{DATA}/cells.json')), pv=pv,
+                reg=reg, cells=json.load(open(f'{DATA}/cells.json')), pv=pv,
                 pvmap={i['ri']: i for i in pv['items']})
 
 def base_svg(base):

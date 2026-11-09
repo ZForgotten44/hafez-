@@ -11,10 +11,12 @@
 | 4 | `classify.py` | verified / review / known-but-unplaced; flags duplicates and numbers far from their neighbours |
 | 5 | `fit.py` | places each number: centre, orientation (horizontal preferred), largest font whose measured box fits inside the inset outline |
 | 5b | `resolve.py` | proposes (never verifies) a number for held-back lots and an expected spot for missing H-numbers, from path continuity: lot h must stand next to the lots with h-1 and h+1. Writes `data/provisional.json`, `out/proposed_fixes.csv`, `out/decisions_needed.md`. Proposals are drawn in blue and marked PROVISIONAL everywhere |
+| 5c | `finalize.py` | closes every open case: accepts the path proposals, merges a lot drawn twice into one number, removes repeated loose labels, gives a missing H-number to the outline standing between its neighbours, leaves the mausoleum graves and any outline not in the numbering without a number. The review list ends up empty; `out/resolution_log.csv` has one row per decision |
 | 6 | `basemap.py` | clean base: every drawing except text and the legend frame; text goes to the optional annotations layer |
 | 7 | `svgmap.py` | SVG fragments shared by the site and the QA renders |
 | 8 | `qa.py` | model, outline, browser-pixel and PDF-pixel checks (`out/qa_report.json`) |
 | 9 | `build_pdf.py` | overview sheet, overlapping detail pages, per-area PDFs, appendix |
+| 9b | `build_overall.py` | the poster map (50 x 35 in): every H-number, pass colours, old section letters, grid, landmarks, index. `--trees trees.json` makes the tree map on the same sheet and grid |
 | 10 | `build_site.py` + `site/template.html` | the single-file site (the template is kept here, so the site can always be rebuilt) |
 | 11 | `export_lists.py` | `lots_with_h_numbers.csv`, `unresolved_locations.csv` |
 

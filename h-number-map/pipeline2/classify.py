@@ -63,7 +63,7 @@ def run():
             review.append(dict(gid=None, cell=c['id'], pt=[round(p.x, 2), round(p.y, 2)], ang=0, tokens=[], geom='outlined', status='review',
                                evidence=[], flags=['outline_without_label'], cands=[], reasons=['An outlined lot on the drawing has no label text inside it.']))
     out = dict(verified=lots, review=review, known_unplaced=known_unplaced, cells=len(C))
-    json.dump(out, open(f'{DATA}/registry.json', 'w'))
+    json.dump(out, open(f'{DATA}/registry.json', 'w')); json.dump(out, open(f'{DATA}/registry_raw.json', 'w'))
     print('verified', len(lots), 'outlined', sum(r['geom'] == 'outlined' for r in lots), 'label_only', sum(r['geom'] == 'label_only' for r in lots))
     print('review', len(review), collections.Counter(f for r in review for f in r['flags']).most_common())
     print('known_unplaced', len(known_unplaced), collections.Counter(k['section'] for k in known_unplaced))

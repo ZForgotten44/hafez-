@@ -63,6 +63,14 @@ TEAL = (44 / 255, 125 / 255, 160 / 255); TEAL_FILL = (207 / 255, 228 / 255, 238 
 def draw_review(sh, D, cells, only=None):
     """open lots in amber dashes; lots whose number is inferred from the path in teal, with their proposed number written inside"""
     pg = sh.page; v = sh.view; amber = pg.new_shape(); teal = pg.new_shape(); texts = []
+    if not only:        # outlines that carry no H-number: plain grey
+        gs = pg.new_shape()
+        for u in D['reg'].get('unnumbered', []):
+            if u['cell'] is None: continue
+            poly = cells[u['cell']]['poly']
+            if max(p[0] for p in poly) < v[0] or min(p[0] for p in poly) > v[2] or max(p[1] for p in poly) < v[1] or min(p[1] for p in poly) > v[3]: continue
+            gs.draw_polyline([sh.P(x, y) for x, y in poly] + [sh.P(*poly[0])])
+        gs.finish(color=(.55, .57, .6), fill=(.9, .9, .88), width=.45, closePath=True); gs.commit()
     for i, r in enumerate(D['reg']['review']):
         pv = D['pvmap'].get(i); prov = bool(pv and pv['status'] == 'provisional')
         sec = pv['prop']['section'] if prov else (r.get('section') or r.get('region'))
@@ -88,7 +96,7 @@ def frame(sh, title, sub, pageno, total, D, win=None):
     pg = sh.page; W, H = pg.rect.width, pg.rect.height; u = min(W, 1224) / 1224.0
     pg.insert_text((sh.mx, sh.top - 18 * u), title, fontsize=15 * u, fontname='uib', fontfile=UIB, color=NAVY)
     pg.insert_text((sh.mx, sh.top - 5 * u), sub, fontsize=8 * u, fontname='ui', fontfile=UI, color=(.34, .38, .45))
-    foot = 'Numbers are H-numbers (H and leading zeros left off; A / B = the two rows of a double-row lot). Amber dashed = could not be tied to one H-number. Blue = number inferred from the path, please confirm.'
+    foot = 'Numbers are H-numbers (H and leading zeros left off; A / B = the two rows of a double-row lot). Grey outline = a drawn lot that carries no H-number.'
     pg.insert_text((sh.mx, H - 14 * u), foot, fontsize=7 * u, fontname='ui', fontfile=UI, color=(.34, .38, .45))
     pg.insert_text((W - sh.mx - 70 * u, H - 14 * u), 'Page %d of %d' % (pageno, total), fontsize=7.5 * u, fontname='ui', fontfile=UI, color=(.34, .38, .45))
     if win:     # index map
@@ -260,10 +268,8 @@ def build_area_pdf(D, raw, cells, area, st):
     ky = H - 22; x = M
     page.insert_text((x, ky + 3.5), '12', fontsize=9, fontname='dvsmb', fontfile=FONT, color=NAVY); x += 18
     page.insert_text((x, ky + 3.5), '= H-number, H and leading zeros left off (A / B = the two rows of a double-row lot)', fontsize=7.5, fontname='ui', fontfile=UI, color=(.34, .38, .45)); x += 330
-    shp = page.new_shape(); shp.draw_rect(fitz.Rect(x, ky - 3, x + 13, ky + 6)); shp.finish(color=(201 / 255, 137 / 255, 47 / 255), fill=(244 / 255, 231 / 255, 208 / 255), width=.6, dashes='[2 1.5] 0'); shp.commit()
-    page.insert_text((x + 18, ky + 3.5), '= to review: could not be tied to one H-number', fontsize=7.5, fontname='ui', fontfile=UI, color=(.34, .38, .45)); x += 250
-    shp = page.new_shape(); shp.draw_rect(fitz.Rect(x, ky - 3, x + 13, ky + 6)); shp.finish(color=TEAL, fill=TEAL_FILL, width=.6); shp.commit()
-    page.insert_text((x + 18, ky + 3.5), '= number inferred from the path, please confirm', fontsize=7.5, fontname='ui', fontfile=UI, color=(.34, .38, .45))
+    shp = page.new_shape(); shp.draw_rect(fitz.Rect(x, ky - 3, x + 13, ky + 6)); shp.finish(color=(.55, .57, .6), fill=(.9, .9, .88), width=.6); shp.commit()
+    page.insert_text((x + 18, ky + 3.5), '= drawn lot without an H-number', fontsize=7.5, fontname='ui', fontfile=UI, color=(.34, .38, .45))
     page.insert_text((M, H - 8), 'Source: Cedar Grove Ground Maps drawing. Positions follow the drawing, which is marked "not to scale".', fontsize=6.5, fontname='ui', fontfile=UI, color=(.5, .52, .56))
     bb = svgmap.content_bbox(D); iw = 110; ih = iw * (bb[3] - bb[1]) / (bb[2] - bb[0]); ix, iy = W - M - iw, 14
     k = iw / (bb[2] - bb[0]); shp = page.new_shape(); shp.draw_rect(fitz.Rect(ix, iy, ix + iw, iy + ih)); shp.finish(color=(.8, .8, .8), fill=(.97, .97, .95), width=.4); shp.commit()

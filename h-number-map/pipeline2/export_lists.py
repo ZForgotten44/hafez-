@@ -4,6 +4,15 @@ from common import *
 def run():
     R = json.load(open(f'{DATA}/registry.json')); L = json.load(open(f'{DATA}/lots_fit.json')); out = os.path.join(REPO, 'h-number-map')
     PV = json.load(open(f'{DATA}/provisional.json')) if os.path.exists(f'{DATA}/provisional.json') else dict(items=[], expected=[], blocks=[])
+    if not R['review']:
+        left = {(u['section'], u['legacy']) for u in R['known_unplaced']}
+        PV = dict(items=[], expected=[x for x in PV['expected'] if (x['section'], x['label']) in left], blocks=[])
+    def how(o):
+        ev = o['ev']
+        for k, t in (('old_ocr_agrees', 'two independent readings'), ('resolved_path', 'numbered from the path (neighbours h-1 and h+1)'), ('resolved_gap', 'numbered by its neighbours (the number missing between them)'),
+                     ('resolved_label', 'numbered by its label next to its own section'), ('merged_duplicate', 'same lot drawn twice, one number')):
+            if k in ev: return t
+        return 'inferred from surrounding lots'
     pvm = {i['ri']: i for i in PV['items']}
     inferred = [(ri, pvm[ri]) for ri in sorted(pvm) if pvm[ri]['status'] == 'provisional']
     open_items = [(ri, r) for ri, r in enumerate(R['review']) if pvm.get(ri, {}).get('status') != 'provisional']
@@ -13,7 +22,7 @@ def run():
     with open(f'{out}/lots_with_h_numbers.csv', 'w', newline='') as f:
         w = csv.writer(f); w.writerow(['h_number', 'section', 'lot', 'map_x', 'map_y', 'outline', 'section_evidence', 'status', 'confidence'])
         for o in sorted(L, key=lambda o: (o['hn'], o['h'])):
-            w.writerow([o['h'], o['s'], o['l'], o['cx'], o['cy'], 'drawn' if o['poly'] else 'label only', 'two independent readings' if 'old_ocr_agrees' in o['ev'] else 'inferred from surrounding lots', 'verified', ''])
+            w.writerow([o['h'], o['s'], o['l'], o['cx'], o['cy'], 'drawn' if o['poly'] else 'label only', how(o), 'verified' if 'old_ocr_agrees' in o['ev'] or any(x.startswith('region') for x in o['ev']) else 'resolved', ''])
         for ri, it in inferred:
             r = R['review'][ri]; p = it['prop']
             w.writerow([p['htext'], p['section'], p['label'], r['pt'][0], r['pt'][1], 'drawn' if r['geom'] == 'outlined' else 'label only', 'inferred from the path: ' + it['reason'], 'PROVISIONAL, please confirm', it['conf']])
@@ -26,6 +35,16 @@ def run():
             e = expd.get((u['section'], u['legacy']))
             ex = e and e['x'] is not None and e['conf']
             w.writerow(['known H-number, expected spot (no outline drawn)' if ex else 'known H-number, map position unresolved', (e['reason'] if e else '') or u['note'] or 'No label on the drawing resolves to this decoder lot', u['htext'], u['section'], u['legacy'], '', e['x'] if ex else '', e['y'] if ex else '', '', e['check'] if ex else ''])
+    C = {c['id']: c for c in json.load(open(f'{DATA}/cells.json'))}
+    with open(f'{out}/lots_without_h_number.csv', 'w', newline='') as f:
+        w = csv.writer(f); w.writerow(['label_on_drawing', 'map_x', 'map_y', 'outline', 'note'])
+        for u in R.get('unnumbered', []):
+            w.writerow([''.join(u['tokens']), u['pt'][0], u['pt'][1], u['geom'], 'graves between the mausoleums (not part of the numbering)' if u.get('graves') else 'label repeats one already used elsewhere / not in the numbering table'])
+    with open(f'{out}/h_numbers_without_lot.csv', 'w', newline='') as f:
+        w = csv.writer(f); w.writerow(['h_number', 'section', 'lot', 'expected_x', 'expected_y', 'note'])
+        for u in unplaced:
+            e_ = expd.get((u['section'], u['legacy'])) or {}
+            w.writerow([u['htext'], u['section'], u['legacy'], e_.get('x', ''), e_.get('y', ''), 'no lot is drawn for this number on the map' + ('; internal bookkeeping key' if u['legacy'].endswith('dr') else '')])
     # Excel workbook (same registry), shipped next to the PDFs so the site can offer it
     from openpyxl import Workbook
     from openpyxl.styles import Font, PatternFill, Alignment
@@ -45,7 +64,7 @@ def run():
         for d in data: s.append(d)
         for i in range(1, len(head) + 1): s.column_dimensions[get_column_letter(i)].width = max(14, min(60, max(len(str(c.value or '')) for c in s[get_column_letter(i)]) + 2))
         s.freeze_panes = 'A2'; s.auto_filter.ref = s.dimensions
-    sheet('Lots with H-numbers', ['H-number', 'Section', 'Lot', 'Section evidence', 'Outline'], [[o['h'], o['s'], o['l'], 'two independent readings' if 'old_ocr_agrees' in o['ev'] else 'inferred from surrounding lots', 'drawn' if o['poly'] else 'label only'] for o in sorted(L, key=lambda o: (o['hn'], o['h']))])
+    sheet('Lots with H-numbers', ['H-number', 'Section', 'Lot', 'Section evidence', 'Outline'], [[o['h'], o['s'], o['l'], how(o), 'drawn' if o['poly'] else 'label only'] for o in sorted(L, key=lambda o: (o['hn'], o['h']))])
     sheet('Inferred lots', ['Status', 'Confidence', 'Proposed H-number', 'Section', 'Lot', 'Label on drawing', 'Why', 'Please check', 'Map x', 'Map y', 'Your answer (Y/N)'], [['PROVISIONAL', i['conf'], i['prop']['htext'], i['prop']['section'], i['prop']['label'], ''.join(R['review'][ri]['tokens']), i['reason'], i['check'], R['review'][ri]['pt'][0], R['review'][ri]['pt'][1], ''] for ri, i in inferred])
     sheet('Lots to review', ['Reason', 'What we need to know', 'H-number candidate', 'Section', 'Lot', 'Label on drawing', 'Map x', 'Map y', 'Outline'], [[(pvm[ri]['reason'] if ri in pvm else ' | '.join(r.get('reasons', []))), (pvm[ri]['check'] if ri in pvm else ''), r.get('htext', ''), r.get('section', ''), r.get('legacy', ''), ''.join(r['tokens']), r['pt'][0], r['pt'][1], r['geom']] for ri, r in open_items])
     sheet('No map position', ['H-number', 'Section', 'Lot', 'Expected x', 'Expected y', 'Confidence', 'Note'], [[u['htext'], u['section'], u['legacy'], (expd.get((u['section'], u['legacy'])) or {}).get('x', ''), (expd.get((u['section'], u['legacy'])) or {}).get('y', ''), (expd.get((u['section'], u['legacy'])) or {}).get('conf') or '', (expd.get((u['section'], u['legacy'])) or {}).get('reason') or u['note'] or 'No label on the drawing resolves to this decoder lot'] for u in unplaced])

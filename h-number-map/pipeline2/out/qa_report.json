@@ -1,8 +1,8 @@
 {
  "pdf": {
   "pages": 15,
-  "pdf_label_pixels": 1740743,
-  "pdf_touching": 0,
+  "pdf_label_pixels": 2147062,
+  "pdf_touching": 381586,
   "text_layer_missing": 0,
   "detail_pages": 14,
   "overlap_units": 36.2
@@ -91,7 +91,7 @@
   ]
  ],
  "pixel": {
-  "ink": 773021,
+  "ink": 781933,
   "touching": 0
  }
 }

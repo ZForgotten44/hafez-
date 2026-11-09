@@ -68,8 +68,8 @@ def fit_one(poly, s):
     pick = max(horiz, key=lambda r: r[0]) if horiz else best
     return (pick[0], pick[0], pick[1], pick[2], pick[3])
 
-def run():
-    R = json.load(open(f'{DATA}/registry.json')); C = json.load(open(f'{DATA}/cells.json'))
+def run(reg='registry.json', dst='lots_fit.json'):
+    R = json.load(open(f'{DATA}/{reg}')); C = json.load(open(f'{DATA}/cells.json'))
     polys = {c['id']: Polygon(c['poly']).buffer(0) for c in C}
     out, small = [], []
     for r in R['verified']:
@@ -77,15 +77,17 @@ def run():
         rec = dict(gid=r['gid'], s=r['section'], l=r['legacy'], h=r['htext'], d=s, hn=r['hnum'], geom=r['geom'], ev=r['evidence'])
         if r['geom'] == 'outlined':
             poly = polys[r['cell']]; rec['poly'] = [[round(x, 2), round(y, 2)] for x, y in poly.exterior.coords][:-1]; rec['cell'] = r['cell']
-            b = fit_one(poly, s)
-            if b is None or b[1] < FS_MIN:
+            b = None if r.get('twin') else fit_one(poly, s)
+            if r.get('twin'):
+                rec.update(fs=0, ang=0, cx=round(poly.representative_point().x, 2), cy=round(poly.representative_point().y, 2), twin=1)
+            elif b is None or b[1] < FS_MIN:
                 rec.update(fs=0, ang=0, cx=round(poly.representative_point().x, 2), cy=round(poly.representative_point().y, 2)); small.append(rec)
             else:
                 rec.update(fs=round(b[1], 2), ang=round(b[2], 1), cx=round(b[3], 2), cy=round(b[4], 2))
         else:
             rec.update(fs=2.4, ang=norm_angle(r['ang']), cx=r['pt'][0], cy=r['pt'][1], poly=None)
         out.append(rec)
-    json.dump(out, open(f'{DATA}/lots_fit.json', 'w'))
+    json.dump(out, open(f'{DATA}/{dst}', 'w'))
     fs = np.array([o['fs'] for o in out if o['fs']])
     print('lots', len(out), 'fitted', len(fs), 'too small to label', len(small), 'font size pctl 5/50/95', np.percentile(fs, [5, 50, 95]).round(2))
     print('too small', [(o['s'], o['l']) for o in small][:20])

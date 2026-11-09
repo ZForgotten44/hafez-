@@ -18,7 +18,7 @@ T1 = 32.0          # largest believable distance between lots h and h+1 (p95 of 
 def tol(gap): return T1 + 14.0 * (gap - 1)
 
 def run():
-    R = json.load(open(f'{DATA}/registry.json')); L = json.load(open(f'{DATA}/lots_fit.json')); I = json.load(open(f'{DATA}/identified.json')); C = json.load(open(f'{DATA}/cells.json'))
+    R = json.load(open(f'{DATA}/registry_raw.json')); L = json.load(open(f'{DATA}/lots_fit_raw.json')); I = json.load(open(f'{DATA}/identified.json')); C = json.load(open(f'{DATA}/cells.json'))
     G = {g['id']: g for g in I['groups']}; cells = {c['id']: c for c in C}
     dec = load_decoder(); table = {(r['section'], r['lot_label']): r for s in SECTIONS for r in dec.full_table(s)}
     byH = {(r['hnum']) : r for r in []}

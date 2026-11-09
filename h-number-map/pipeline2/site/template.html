@@ -205,7 +205,7 @@ table.t td{padding:5px 6px;border-bottom:1px solid var(--line);overflow-wrap:any
   <aside id="side">
     <div class="tabs" role="tablist">
       <button class="tab on" id="t-areas" role="tab" type="button">Areas</button>
-      <button class="tab" id="t-review" role="tab" type="button">To review</button>
+      <button class="tab" id="t-review" role="tab" type="button">No lot drawn</button>
     </div>
     <div class="side-body" id="side-body"></div>
   </aside>
@@ -232,14 +232,14 @@ table.t td{padding:5px 6px;border-bottom:1px solid var(--line);overflow-wrap:any
         <div class="lgrp">Layers</div>
         <label class="lrow"><input type="checkbox" id="ly-photo" disabled><span>Ground photo<small id="ly-photo-s">Checking for the aerial photo…</small></span></label>
         <label class="lrow"><input type="checkbox" id="ly-prov" checked><span>Inferred lots<small>Lots and spots whose number is worked out from the path. Please confirm them.</small></span></label>
-        <label class="lrow"><input type="checkbox" id="ly-review" checked><span>Lots to review<small>Outlined lots that could not be tied to one H-number.</small></span></label>
+        <label class="lrow" hidden><input type="checkbox" id="ly-review" checked><span>Lots to review</span></label>
         <label class="lrow"><input type="checkbox" id="ly-ann"><span>Original drawing annotations<small>Road names, building names and the mausoleum legend from the source drawing.</small></span></label>
       </div>
     </div>
     <div class="ctl" id="fsctl" style="right:12px;top:12px"><button class="layers-btn" id="fs" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg><span id="fs-l">Full screen</span></button></div>
     <iframe id="v3d" title="3D model of Cedar Grove" hidden style="position:absolute;inset:0;width:100%;height:100%;border:0;background:var(--map);z-index:1"></iframe>
     <div class="ctl" id="zoomhint" hidden>Zoom in to read every lot number</div>
-    <div class="ctl" id="legend"><span>Numbers are H-numbers (H and leading zeros left off)</span><span><i class="rvk"></i>Needs review</span><span><i class="pvk"></i>Inferred from the path, please confirm</span><span><i class="exk"></i>Expected spot, no outline drawn</span><span id="lg-rec" hidden><i class="rec"></i>Has grave records</span></div>
+    <div class="ctl" id="legend"><span>Numbers are H-numbers (H and leading zeros left off)</span><span><i class="exk"></i>Expected spot, no outline drawn</span><span id="lg-rec" hidden><i class="rec"></i>Has grave records</span></div>
     <div class="ctl" id="zoomctl">
       <button id="z-in" type="button" aria-label="Zoom in"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></button>
       <button id="z-out" type="button" aria-label="Zoom out"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14"/></svg></button>
@@ -496,7 +496,7 @@ function fmtH(n){return 'H'+('000000'+n).slice(-6)}
 function renderSide(){var b=$('side-body'),h='';
   if(tab==='areas'&&!areaOpen){h='<p class="eyebrow">Browse by area</p><p class="note" style="margin:0 0 12px">The cemetery is split into sections A to M. Pick one to zoom to it, or search above for an H-number.</p>';
     Object.keys(AREAS).sort(function(a,c){return AREAS[a].hmin-AREAS[c].hmin}).forEach(function(s){var a=AREAS[s];
-      h+='<button type="button" class="area" data-area="'+s+'"><span><b>Section '+s+'</b><small>'+a.n+' lots'+(a.nr+a.nu?' &middot; '+(a.nr+a.nu)+' to review':'')+(a.np?' &middot; '+a.np+' inferred':'')+'</small></span><span class="rng">'+fmtH(a.hmin)+'<br>'+fmtH(a.hmax)+'</span></button>'});
+      h+='<button type="button" class="area" data-area="'+s+'"><span><b>Section '+s+'</b><small>'+a.n+' lots'+(a.nu?' &middot; '+a.nu+' H-number'+(a.nu>1?'s':'')+' with no lot drawn':'')+'</small></span><span class="rng">'+fmtH(a.hmin)+'<br>'+fmtH(a.hmax)+'</span></button>'});
     b.innerHTML=h;Array.prototype.forEach.call(b.querySelectorAll('[data-area]'),function(x){x.onclick=function(){openArea(x.getAttribute('data-area'))};
       x.onmouseenter=function(){showHint(x.getAttribute('data-area'))};x.onmouseleave=function(){if(!(sel&&sel.k==='unplaced'))vis($('hint'),false)}})}
   else if(tab==='areas'){var s=areaOpen,a=AREAS[s],rows=[];
@@ -506,7 +506,7 @@ function renderSide(){var b=$('side-body'),h='';
     b.innerHTML=h;$('a-back').onclick=function(){areaOpen=null;areaFilter='';vis($('hint'),false);renderSide()};$('a-pdf').onclick=function(){exportPdf('area_'+s)};
     $('a-q').oninput=function(){areaFilter=this.value;fillAreaList()};fillAreaList()}
   else{var inf=[],opn=[];REVIEW.forEach(function(v,i){(v.p?inf:opn).push(i)});
-    h='<p class="eyebrow">To review</p><p class="note" style="margin:0 0 6px"><b>'+inf.length+'</b> lots are inferred from the path and only need a yes or no. <b>'+opn.filter(function(i){return !REVIEW[i].o||!REVIEW[i].o[4]}).length+'</b> single lots and <b>'+BLOCKS.length+'</b> blocks are still open. <b>'+UNPL.length+'</b> H-numbers have no lot yet. Nothing here counts as verified.</p>'
+    h='<p class="eyebrow">H-numbers with no lot drawn</p><p class="note" style="margin:0 0 6px">Every lot on the map has its number. These <b>'+UNPL.length+'</b> H-numbers exist in the numbering but the map draws no lot for them.</p>'
      +'<div class="btns" style="margin:0 0 6px"><button class="btn" id="rv-csv" type="button">Download list (CSV)</button></div>';
     ['high','medium','low'].forEach(function(c){var ids=inf.filter(function(i){return REVIEW[i].p[0]===c});if(!ids.length)return;
       h+='<div class="reason-h">Inferred from the path, '+c+' confidence ('+ids.length+')</div><div class="lotlist">'+ids.map(function(i){var v=REVIEW[i];return '<button type="button" class="li" data-rv="'+i+'"><span class="h">'+esc(v.h)+'</span><span class="l">Sec '+esc(v.s)+' lot '+esc(v.l)+'</span></button>'}).join('')+'</div>'});
