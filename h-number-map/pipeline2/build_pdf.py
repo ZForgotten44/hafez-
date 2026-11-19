@@ -26,7 +26,7 @@ class Sheet:
         self.clip = fitz.Rect(self.ox, self.oy, self.ox + self.s * (view[2] - view[0]), self.oy + self.s * (view[3] - view[1]))
     def P(self, x, y): return fitz.Point(self.ox + (x - self.view[0]) * self.s, self.oy + (y - self.view[1]) * self.s)
 
-def draw_base(sh, D, raw, only_lines=False, skip_lots=False):
+def draw_base(sh, D, raw, only_lines=False, skip_lots=False, boost=1.0):
     pg = sh.page; v = sh.view; pad = 2
     groups = collections.OrderedDict()
     for d in raw['draws']:
@@ -48,7 +48,10 @@ def draw_base(sh, D, raw, only_lines=False, skip_lots=False):
                 elif op == 're': shp.draw_rect(fitz.Rect(sh.P(it[1], it[2]), sh.P(it[3], it[4])))
                 elif op == 'qu': shp.draw_polyline([sh.P(it[1 + 2 * i], it[2 + 2 * i]) for i in range(4)] + [sh.P(it[1], it[2])])
                 n += 1
-        if n: shp.finish(color=hex2rgb(stroke) if stroke else None, fill=hex2rgb(fill) if fill else None, width=max(0.3, w * 0.45), closePath=False, lineJoin=1)
+        if n:
+            if boost > 1.0 and stroke:      # quiet lots, strong roads: paths and road edges must read at a glance
+                stroke = {'road': '#7f8b52', 'garden': '#a8864f', 'building': '#7d6a90'}.get(role, stroke)
+            shp.finish(color=hex2rgb(stroke) if stroke else None, fill=hex2rgb(fill) if fill else None, width=max(0.3, w * 0.45 * (boost if role in ('road', 'garden', 'building') else 1.0)), closePath=False, lineJoin=1)
         if n: shp.commit()
 
 def put_label(sh, o):

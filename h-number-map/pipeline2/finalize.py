@@ -56,7 +56,7 @@ def run():
     unnumbered = []
     for ri in graves:
         r = R['review'][ri]; unnumbered.append(dict(cell=r['cell'], pt=r['pt'], tokens=r['tokens'], geom=r['geom'], graves=True))
-        log.append(['no number (graves between the mausoleums)', ''.join(r['tokens']), '', '', '', 'Not part of the H-numbering'])
+        log.append(['no number (mausoleum crypt, numbered 1 to 68 on the drawing)', ''.join(r['tokens']), '', '', '', 'Not part of the H-numbering'])
 
     # 2. replicated labels
     owner = {}
@@ -77,7 +77,10 @@ def run():
             if r['geom'] != 'outlined':
                 log.append(['replicated label removed (loose number)', ''.join(r['tokens']), r.get('htext', ''), '%s %s' % keys[0], '', 'the label already has its lot']); done.add(ri); continue
         if r['geom'] != 'outlined' and ri not in done:     # loose numbers repeating labels elsewhere: scale / annotation rows
-            log.append(['replicated label removed (loose number)', ''.join(r['tokens']), r.get('htext', ''), (r.get('section', '') + ' ' + r.get('legacy', '')).strip(), '', 'a loose number without a lot outline repeats a label that is already used']); done.add(ri)
+            if 800 <= r['pt'][0] <= 1000 and 345 <= r['pt'][1] <= 372: log.append(['no number (cremains area, niches 1 to 80)', ''.join(r['tokens']), '', '', '', 'The cremains strip is numbered 1 to 80 on the drawing, every fifth niche written; it is not part of the H-numbering'])
+            elif 1240 <= r['pt'][0] <= 1265 and 320 <= r['pt'][1] <= 336 and ''.join(r['tokens']) == '56': log.append(['loose number kept out of the numbering: Section M lot 56', '56', '', 'M 56', '', 'a real Section M lot (it is in the burial records) with no outline traced and no H-number; see section_M_check.md'])
+            else: log.append(['replicated label removed (loose number)', ''.join(r['tokens']), r.get('htext', ''), (r.get('section', '') + ' ' + r.get('legacy', '')).strip(), '', 'a loose number without a lot outline repeats a label that is already used'])
+            done.add(ri)
 
     # 2b. the same label drawn on adjacent outlines with no owner yet: one lot drawn twice, one H-number
     grp = collections.defaultdict(list)
@@ -185,10 +188,12 @@ def run():
           '| Outline whose label is exactly a label the numbering still lacked a lot for, next to its own section | %d |' % c['numbered by its label next to its own section'],
           '| Same lot drawn twice: one H-number, written once | %d lots (%d outlines) |' % (sum(v for k, v in c.items() if k.startswith('same lot drawn')), sum(v * 2 for k, v in c.items() if k.startswith('same lot drawn'))),
           '| Loose number that only repeats a label already used: removed | %d |' % c['replicated label removed (loose number)'],
-          '| Graves between the mausoleums (labels 1 to 68): no number, no review | %d |' % len(gr),
+          '| Cremains strip niche numbers (1 to 80): not part of the H-numbering | %d |' % c['no number (cremains area, niches 1 to 80)'],
+          '| Mausoleum crypts (numbered 1 to 68 on the drawing): no number, no review | %d |' % len(gr),
           '| Outline that is not in the numbering table and has no free H-number near it: drawn grey, no number | %d |' % len(nu), '',
           'H-numbers with no lot drawn on the map: **%d** (`h_numbers_without_lot.csv`). 18 of them are the Section A "H" lots that start every row.' % len(out['known_unplaced']), '',
-          'Nothing was renumbered: no H-number moved. If the grey outlines should get numbers, say which rule (append after H003185, or insert).', '']
+          'Nothing was renumbered: no H-number moved. If the grey outlines should get numbers, say which rule (append after H003185, or insert).', '',
+          '**Section M needs one decision** (details and evidence in `section_M_check.md`): six real lots (56, 57, 62, 63, 68, 69) are drawn and in the burial records but have no H-number, and three numbers (11, 12, 16 = H002587, H002588, H002591) have no lot in the drawing or the records. Append H003186 to H003191 for the six (nothing else moves), or insert them in route order (every later number moves).', '']
     open(os.path.join(OUT, 'decisions_needed.md'), 'w').write('\n'.join(md))
     shutil.copy(os.path.join(OUT, 'resolution_log.csv'), os.path.join(REPO, 'h-number-map', 'resolution_log.csv'))
     shutil.copy(os.path.join(OUT, 'decisions_needed.md'), os.path.join(REPO, 'h-number-map', 'decisions_needed.md'))
