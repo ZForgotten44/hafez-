@@ -64,7 +64,7 @@ def pixel_check(D, scale=5):
                 '<style>text{font-family:"DejaVu Sans Mono","DM Mono",ui-monospace,monospace;font-weight:700;fill:#000;text-anchor:middle}</style>%s</svg></body></html>' % (W, H, bb[0], bb[1], w, h, inner))
     imgs = []
     with sync_playwright() as p:
-        b = p.chromium.launch(executable_path='/opt/pw-browsers/chromium-1194/chrome-linux/chrome', args=['--no-sandbox'])
+        b = p.chromium.launch(executable_path=(__import__('glob').glob('/opt/pw-browsers/chromium-*/chrome-linux*/chrome') or ['/opt/pw-browsers/chromium-1194/chrome-linux/chrome'])[0], args=['--no-sandbox'])
         for inner in (lines, labels):
             pg = b.new_page(viewport={'width': W, 'height': H}); pg.set_content(page(inner)); imgs.append(np.array(Image.open(io.BytesIO(pg.screenshot())).convert('L')) < 128); pg.close()
         b.close()

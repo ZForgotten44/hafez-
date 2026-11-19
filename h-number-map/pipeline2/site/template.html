@@ -189,7 +189,7 @@ table.t td{padding:5px 6px;border-bottom:1px solid var(--line);overflow-wrap:any
   <div class="search">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
     <label class="sr" for="q">Search H-number, lot, or name</label>
-    <input id="q" type="search" autocomplete="off" spellcheck="false" placeholder="Search H-number, lot (B 20H), or name">
+    <input id="q" type="search" autocomplete="off" spellcheck="false" placeholder="Search H-number, lot (B 20H), crypt 12, niche 12, or name">
     <button id="qx" type="button" aria-label="Clear search" hidden>&#10005;</button>
     <div id="results" role="listbox" hidden></div>
   </div>
@@ -257,7 +257,7 @@ table.t td{padding:5px 6px;border-bottom:1px solid var(--line);overflow-wrap:any
 var DATA = /*__DATA__*/null;
 (function(){
 'use strict';
-var BLOCKS=DATA.blocks||[], LOTS=DATA.lots, REVIEW=DATA.review, UNPL=DATA.unplaced, AREAS=DATA.areas, REASONS=DATA.reasons, ANN=DATA.ann, CB=DATA.bbox, PDFS=DATA.pdfs;
+var BLOCKS=DATA.blocks||[], LOTS=DATA.lots, REVIEW=DATA.review, UNPL=DATA.unplaced, AREAS=DATA.areas, REASONS=DATA.reasons, ANN=DATA.ann, CB=DATA.bbox, PDFS=DATA.pdfs, SPECIAL=DATA.special||[];
 // lot row: [d,h,s,l,hn,cx,cy,x0,y0,x1,y1,ev,labelOnly]
 var $=function(id){return document.getElementById(id)};
 function esc(s){var d=document.createElement('div');d.textContent=String(s==null?'':s);return d.innerHTML}
@@ -340,9 +340,11 @@ function vis(el,on){if(on)el.removeAttribute('hidden');else el.setAttribute('hid
 function setSelShape(k,i){var s=$('sel'),p=null;
   if(k==='lot'){var e=elLot[i];if(e&&e.tagName==='polygon')p=e.getAttribute('points');else if(e){var cx=+e.getAttribute('cx'),cy=+e.getAttribute('cy'),r=2.6;p=[[cx-r,cy-r],[cx+r,cy-r],[cx+r,cy+r],[cx-r,cy+r]].join(' ')}}
   if(k==='review'){var e2=elRv[i];if(e2&&e2.tagName==='polygon')p=e2.getAttribute('points');else{var rv=REVIEW[i],r2=2.6;p=[[rv.x-r2,rv.y-r2],[rv.x+r2,rv.y-r2],[rv.x+r2,rv.y+r2],[rv.x-r2,rv.y+r2]].join(' ')}}
+  if(k==='special'){var sp=SPECIAL[i];if(sp.poly)p=sp.poly.map(function(q){return q.join(',')}).join(' ');else{var r3=sp.kind==='niche'?1.4:2.2;p=[[sp.x-r3,sp.y-r3],[sp.x+r3,sp.y-r3],[sp.x+r3,sp.y+r3],[sp.x-r3,sp.y+r3]].join(' ')}}
   if(p){s.setAttribute('points',p);vis(s,true)}else vis(s,false)}
 function boxOf(k,i){if(k==='lot'){var r=LOTS[i];return[r[7],r[8],r[9],r[10]]}
   if(k==='unplaced'&&UNPL[i].x!=null){var u=UNPL[i];return[u.x-6,u.y-6,u.x+6,u.y+6]}
+  if(k==='special'){var q0=SPECIAL[i];return[q0.x-7,q0.y-7,q0.x+7,q0.y+7]}
   if(k==='review'){var v=REVIEW[i];return v.b||[v.x-4,v.y-4,v.x+4,v.y+4]}
   var a=AREAS[UNPL[i].s];return a?a.b:CB}
 function sheetPx(){var p=$('panel');document.documentElement.style.setProperty('--sheet-px',(isMobile()&&!p.hidden?Math.round(p.getBoundingClientRect().height):0)+'px')}
@@ -354,12 +356,13 @@ function flyToSel(){if(!sel)return;measure();var b=boxOf(sel.k,sel.i);
 function selectLot(i){if(sel&&sel.k==='lot'&&sel.i===i&&!$('panel').hidden){return}pushHist();applySel('lot',i)}
 function selectReview(i){pushHist();applySel('review',i)}
 function selectUnplaced(i){pushHist();applySel('unplaced',i)}
+function selectSpecial(i){pushHist();applySel('special',i)}
 function clearSel(noHist){sel=null;vis($('sel'),false);vis($('hint'),false);$('panel').hidden=true;$('panel').innerHTML='';
   requestAnimationFrame(function(){measure();render();sheetPx()});markList()}
 
 /* ---------- panel ---------- */
 function evText(ev){return ev===0?'The label on the drawing matches this lot, and its section was confirmed by a second, independent reading of the drawing.':'The label on the drawing matches this lot. Its section follows from the surrounding lots, so the section is inferred, not read directly.'}
-function areaOfSel(){return sel.k==='lot'?LOTS[sel.i][2]:sel.k==='unplaced'?UNPL[sel.i].s:(REVIEW[sel.i].r0||null)}
+function areaOfSel(){return sel.k==='special'?null:sel.k==='lot'?LOTS[sel.i][2]:sel.k==='unplaced'?UNPL[sel.i].s:(REVIEW[sel.i].r0||null)}
 function renderPanel(){var p=$('panel');p.hidden=false;measure();if(isMobile())document.documentElement.style.setProperty('--sheet-h','48%');
   var h='';
   if(sel.k==='lot'){var r=LOTS[sel.i];
@@ -368,6 +371,10 @@ function renderPanel(){var p=$('panel');p.hidden=false;measure();if(isMobile())d
      +'<p class="note" style="margin:0 0 4px">'+evText(r[11])+'</p>'
      +'<div id="rec-box"></div>'
      +'<div class="btns"><button class="btn" id="p-copy" type="button">Copy H-number</button><button class="btn" id="p-list" type="button">Add to list</button><button class="btn" id="p-3d" type="button">View in 3D</button></div></div>'}
+  else if(sel.k==='special'){var sp=SPECIAL[sel.i];
+    h='<div class="p-head"><div><div class="p-h" id="p-h">'+esc(sp.name)+'</div><div style="margin-top:8px"><span class="chip gen">Not an H-number location</span></div></div><button class="p-x" id="p-x" aria-label="Close details">&#10005;</button></div><div class="p-body">'
+     +'<dl class="kv"><dt>Own numbering</dt><dd>'+esc(sp.name)+' (id '+esc(sp.id)+')</dd><dt>Where</dt><dd>'+esc(sp.where||'')+'</dd><dt>How it was numbered</dt><dd>'+esc(sp.how)+', '+esc(sp.conf)+' confidence</dd></dl>'
+     +'<p class="note" style="margin:0 0 4px">'+esc(sp.note||'')+'</p></div>'}
   else if(sel.k==='review'){var v=REVIEW[sel.i],X='<button class="p-x" id="p-x" aria-label="Close details">&#10005;</button>';
     if(v.p){h='<div class="p-head"><div><div class="p-h">'+esc(v.h)+'</div><div style="margin-top:8px"><span class="chip pv">Inferred from the path &middot; '+esc(v.p[0])+' confidence</span></div></div>'+X+'</div><div class="p-body">'
       +'<div class="box pvbox"><h3>Please confirm</h3><p class="note" style="margin:0">'+esc(v.p[2])+'</p></div>'
@@ -458,6 +465,8 @@ function search(raw){var q=raw.trim();if(!q)return[];var out=[],seen={};
   cand.forEach(function(c){LOTS.forEach(function(r,i){if(r[4]===c.n&&(!c.sfx||r[1].slice(-1)===c.sfx))add({k:'lot',i:i,rank:0,grave:c.grave})});
     UNPL.forEach(function(u,i){if(hnum(u.h)===c.n&&(!c.sfx||u.h.slice(-1)===c.sfx))add({k:'unplaced',i:i,rank:2})});
     REVIEW.forEach(function(v,i){if(v.h&&hnum(v.h)===c.n)add({k:'review',i:i,rank:3})})});
+  var sm=up.match(/^(?:MAUSOLEUM\s+)?CRYPT[\s-]*0*(\d+)$/)||up.match(/^(?:CREMAINS\s+)?NICHE[\s-]*0*(\d+)$/);
+  if(sm){var isC=/CRYPT/.test(up),nn=+sm[1];SPECIAL.forEach(function(sp,i){if(sp.kind===(isC?'crypt':'niche')&&sp.n===nn)add({k:'special',i:i,rank:0})})}
   // legacy: "B 20H", "section b lot 20h", "B-20H"
   var lm=up.replace(/^SECTION\s*/,'').replace(/\bLOT\b/,' ').match(/^([A-M])\s*[-:\s]\s*(\d+[A-Z]*(?:_\d+)?)$/)||up.replace(/^SECTION\s*/,'').match(/^([A-M])(\d+[A-Z]*)$/);
   if(lm){var key=lm[1]+'|'+lm[2];if(byLeg[key]!==undefined)add({k:'lot',i:byLeg[key],rank:0});
@@ -476,9 +485,10 @@ function renderResults(list){curRes=list;active=-1;
   resEl.innerHTML=list.map(function(o,n){var h,sub,tag;
     if(o.k==='lot'){var r=LOTS[o.i];h=r[1];sub='Section '+r[2]+' lot '+r[3];tag=o.name?'<span class="tag nm">'+esc(o.name)+'</span>':'<span class="tag ok">On map</span>'}
     else if(o.k==='unplaced'){var u=UNPL[o.i];h=u.h;sub='Section '+u.s+' lot '+u.l;tag='<span class="tag rv">Not placed</span>'}
+    else if(o.k==='special'){var sq=SPECIAL[o.i];h=sq.name;sub=sq.where;tag='<span class="tag ok">On map</span>'}
     else{var v=REVIEW[o.i];h=v.h||('Label '+(v.t||'?'));sub=v.h?'Section '+v.s+' lot '+v.l:'Unresolved label on drawing';tag=v.p?'<span class="tag pvt">Inferred</span>':'<span class="tag rv">To review</span>'}
     return '<button type="button" class="res" role="option" data-n="'+n+'"><span><span class="h">'+esc(h)+'</span><br><span class="sub">'+esc(sub)+(o.grave?' &middot; grave position '+esc(o.grave)+' (lot shown)':'')+'</span></span>'+tag+'</button>'}).join('');resEl.hidden=false}
-function pick(n){var o=curRes[n];if(!o)return;resEl.hidden=true;qEl.blur();if(o.k==='lot')selectLot(o.i);else if(o.k==='unplaced')selectUnplaced(o.i);else selectReview(o.i)}
+function pick(n){var o=curRes[n];if(!o)return;resEl.hidden=true;qEl.blur();if(o.k==='lot')selectLot(o.i);else if(o.k==='unplaced')selectUnplaced(o.i);else if(o.k==='special')selectSpecial(o.i);else selectReview(o.i)}
 qEl.addEventListener('input',function(){$('qx').hidden=!qEl.value;renderResults(search(qEl.value))});
 qEl.addEventListener('focus',function(){if(qEl.value)renderResults(search(qEl.value))});
 qEl.addEventListener('keydown',function(e){var items=resEl.querySelectorAll('.res');

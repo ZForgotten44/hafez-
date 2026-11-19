@@ -6,6 +6,14 @@ from common import *
 import svgmap
 
 REASON_ORDER = []
+def special_items():
+    p = os.path.join(DATA, 'special_areas.json')
+    if not os.path.exists(p): return []
+    S = json.load(open(p)); out = []
+    for it in S['items']:
+        out.append(dict(id=it['id'], kind=it['kind'], n=it['n'], name=it['name'], x=it['x'], y=it['y'], poly=it.get('poly') or it.get('nominal_poly'), how=it['how'], conf=it['confidence'],
+                        where=it.get('court') or ('cremains strip' if it['kind'] == 'niche' else ''), note=('Mausoleum crypts are numbered 1 to 68 on the drawing; they have no H-number.' if it['kind'] == 'crypt' else 'The cremains area is numbered 1 to 80 on the drawing; it has no H-number.')))
+    return out
 def run(pdfs=None):
     if not pdfs:
         pd = os.path.join(REPO, 'h-number-map', 'site', 'pdf'); pdfs = {}
@@ -71,7 +79,7 @@ def run(pdfs=None):
         if u['s'] in areas: areas[u['s']]['nu'] += 1
     ann = [[a['t'], a['x'], a['y'], a['fs'], a['a']] for a in D['base']['annotations']]
     bbox = svgmap.content_bbox(D)
-    data = dict(lots=rows, review=rv, unplaced=unpl, areas=areas, reasons=reasons, ann=ann, bbox=bbox, pdfs=pdfs or {}, blocks=D['pv'].get('blocks', []))
+    data = dict(lots=rows, review=rv, unplaced=unpl, areas=areas, reasons=reasons, ann=ann, bbox=bbox, pdfs=pdfs or {}, blocks=D['pv'].get('blocks', []), special=special_items())
     # --- svg fragments
     lab = svgmap.label_svg(lots)
     labels = ''.join('<g data-bin="%s">%s</g>' % (b, v) for b, v in lab.items())

@@ -44,7 +44,7 @@ def run():
         w = csv.writer(f); w.writerow(['h_number', 'section', 'lot', 'expected_x', 'expected_y', 'note'])
         for u in unplaced:
             e_ = expd.get((u['section'], u['legacy'])) or {}
-            w.writerow([u['htext'], u['section'], u['legacy'], e_.get('x', ''), e_.get('y', ''), 'no lot is drawn for this number on the map' + ('; internal bookkeeping key' if u['legacy'].endswith('dr') else '')])
+            w.writerow([u['htext'], u['section'], u['legacy'], e_.get('x', ''), e_.get('y', ''), 'location unverified: the number is in the numbering table but no lot is drawn for it on the 2022 drawing' + ('; internal bookkeeping key' if u['legacy'].endswith('dr') else '; see jon_questions/QUESTIONS.md')])
     # Excel workbook (same registry), shipped next to the PDFs so the site can offer it
     from openpyxl import Workbook
     from openpyxl.styles import Font, PatternFill, Alignment

@@ -23,15 +23,14 @@ VIEW_TREE = [215, 55, 1810, 1045]                 # the whole aerial: the woods 
 MX, TOP, BOT = 60, 200, 610
 NAVY, GREY, PALE = B.NAVY, (.34, .38, .45), (.93, .92, .88)
 PASSES = [(1, 836, 'Pass 1', 'B, A', '#cfe0f5'), (837, 1871, 'Pass 2', 'D, C', '#d5ecd9'), (1872, 2331, 'Pass 3', 'F, E', '#f6e7b9'),
-          (2332, 2586, 'Pass 4', 'margins, G, H', '#f6d3cf'), (2587, 2835, 'Pass 5', 'M', '#dcd3ee'), (2836, 3185, 'Pass 6', 'K, J, I, L', '#cfe6e4')]
+          (2332, 2586, 'Pass 4', 'margins, G, H', '#f6d3cf'), (2587, 2841, 'Pass 5', 'M', '#dcd3ee'), (2842, 3191, 'Pass 6', 'K, J, I, L', '#cfe6e4')]
 # number, name, note, x, y (drawing units, read off the drawing and the old section maps)
 LANDMARKS = [
     (1, 'Office', 'the cottage', 1378, 358), (2, 'Maintenance building', 'the garage', 1288, 385), (3, 'Chapel', 'in Section B', 1415, 538),
-    (4, 'Saint Joseph', 'hexagon marker', 1331, 314), (5, 'Parking', 'north of the office', 1288, 336), (6, 'Restroom', 'hatched building, accessible space', 1330, 341),
-    (7, 'Mausoleum 1', 'Mary Queen of Angels', 635, 399), (8, 'Mausoleum 2', 'Mary Queen of All Saints', 635, 355), (9, 'Mausoleum 3', 'Mary Mother of the Church', 562, 412),
-    (10, 'Mausoleum 4', 'Mary Mother of God', 562, 342), (11, 'Mausoleum crypts', 'numbered 1 to 68, no H-number', 595, 380),
-    (12, 'Cremains area', 'niches 1 to 80, no H-number', 905, 361), (13, 'Spoils yard', '', 386, 534)]
-EXTRA_NOTES = {'M': '6 drawn lots have no H-number yet: 56, 57, 62, 63, 68, 69'}
+    (4, 'Saint Joseph', 'hexagon marker', 1331, 314), (5, 'Parking', 'north of the office', 1288, 336),
+    (6, 'Mausoleum 1', 'Mary Queen of Angels', 635, 399), (7, 'Mausoleum 2', 'Mary Queen of All Saints', 635, 355), (8, 'Mausoleum 3', 'Mary Mother of the Church', 562, 412),
+    (9, 'Mausoleum 4', 'Mary Mother of God', 562, 342), (10, 'Mausoleum crypts', 'numbered 1 to 68, no H-number', 595, 380),
+    (11, 'Cremains area', 'niches 1 to 80, no H-number', 905, 361), (12, 'Spoils yard', '', 386, 534)]
 ROADS = (('NOTRE DAME AVENUE', 1707, 605, -90, 30), ('HOLY CROSS DRIVE', 1080, 246, -3.5, 26))
 
 class Sheet2:
@@ -118,6 +117,24 @@ def draw_trees(sh, trees):
     dots.finish(color=None, fill=(.1, .36, .18)); dots.commit()
     tri.finish(color=(.05, .22, .1), fill=(.05, .22, .1), width=.6, closePath=True); tri.commit()
 
+OBST = []          # rectangles (map units) that section letters must keep clear of
+
+def draw_special_ranges(sh):
+    """the native numbering of the crypts and the cremains niches: the range on the overview (individual numbers are on the detail sheets)"""
+    p = os.path.join(DATA, 'special_areas.json')
+    if not os.path.exists(p): return
+    pg = sh.page
+    for r in json.load(open(p))['ranges']:
+        b = r['bbox']; pad = 4; a = sh.P(b[0] - pad, b[1] - pad); c = sh.P(b[2] + pad, b[3] + pad)
+        shp = pg.new_shape(); shp.draw_rect(fitz.Rect(a, c)); shp.finish(color=(.1, .28, .5), width=1.8, dashes='[7 5] 0', fill=None); shp.commit()
+        short = ('Crypts 1-68' if r['kind'] == 'crypt' else 'Niches 1-80'); fs = 24; w = tw(short, fs, True) + 16
+        x = (a.x + c.x) / 2 - w / 2 if r['kind'] == 'niche' else a.x - w - 8; y = c.y + 34 if r['kind'] == 'niche' else (a.y + c.y) / 2 - 6
+        q = pg.new_shape(); q.draw_rect(fitz.Rect(x, y - fs, x + w, y + 8), radius=.2); q.finish(color=(.1, .28, .5), fill=(1, 1, 1), fill_opacity=.92, width=1); q.commit()
+        text(pg, x + 8, y, short, fs, True, (.1, .28, .5))
+        u0 = lambda px, py: (sh.view[0] + (px - sh.ox) / sh.s, sh.view[1] + (py - sh.oy) / sh.s)
+        (ax, ay), (cx2, cy2) = u0(x, y - fs), u0(x + w, y + 8)
+        OBST.append(sbox(min(ax, b[0] - pad), min(ay, b[1] - pad), max(cx2, b[2] + pad), max(cy2, b[3] + pad)))
+
 def draw_map(sh, D, raw, cells, mode, trees):
     pg = sh.page; lots = D['lots']; R = D['reg']; trees_mode = mode == 'trees'
     pg.draw_rect(sh.clip, fill=(1, 1, 1), color=None)
@@ -147,7 +164,7 @@ def section_tags(sh, D, with_range):
     for o in D['lots']:
         if o['poly'] and len(o['poly']) > 2: polys.setdefault(o['s'], []).append(Polygon(o['poly']).buffer(0))
     allp = [p for v in polys.values() for p in v]; tree = STRtree(allp); v = sh.view
-    placed = [sbox(x - 14, y - 14, x + 14, y + 14) for _, _, _, x, y in LANDMARKS]
+    placed = [sbox(x - 14, y - 14, x + 14, y + 14) for _, _, _, x, y in LANDMARKS] + list(OBST)
     for t, x, y, ang, fs in ROADS: placed.append(sbox(x - 15, y - 95, x + 15, y + 5) if ang == -90 else sbox(x - 5, y - 20, x + 90, y + 10))
     big = 26 if not with_range else 28; tags = []
     for sec in sorted(st, key=lambda s: -st[s]['n']):
@@ -193,7 +210,6 @@ def panel_numbers(pg, D, st):
         if e['mlo']: note.append('margin strip %s to %s' % (B.fmtH(e['mlo']), B.fmtH(e['mhi'])))
         if e['missing']: note.append('%d number%s with no lot drawn' % (len(e['missing']), '' if len(e['missing']) == 1 else 's'))
         if note: text(pg, xx + 175, yy + 21, ' · '.join(note), 18, False, GREY)
-        if sname in EXTRA_NOTES: text(pg, xx + 175, yy + 40, EXTRA_NOTES[sname], 18, False, GREY)
     # how to read a number (middle)
     x2 = MX + 1840
     text(pg, x2, y0, 'Reading a number', 40, True)
@@ -253,6 +269,7 @@ def build(mode='numbers', trees=None, dest=None):
     doc = fitz.open(); pg = doc.new_page(width=W, height=H)
     sh = Sheet2(pg, view, MX + 50, TOP, W - MX - 50, H - BOT)
     draw_map(sh, D, raw, cells, mode, trees)
+    draw_special_ranges(sh)
     section_tags(sh, D, mode == 'numbers')
     grid_lines(sh)
     for n, nm, note, x, y in LANDMARKS:
@@ -275,6 +292,6 @@ if __name__ == '__main__':
     if '--trees' in sys.argv:
         i = sys.argv.index('--trees'); tf = sys.argv[i + 1] if len(sys.argv) > i + 1 and not sys.argv[i + 1].startswith('-') else None
         if tf: trees = json.load(open(tf))
-        else: trees = json.load(open(os.path.join(REPO, 'h-number-map', 'math', 'three', 'data3d.json')))['trees']
+        else: trees = [[t['x'], t['y'], t['radius'], t['kind']] for t in json.load(open(os.path.join(REPO, 'h-number-map', 'trees.json')))]
         print(build('trees', trees, os.path.join(REPO, 'h-number-map', 'site', 'pdf', 'Cedar_Grove_Tree_Map_overall.pdf')))
     else: print(build())

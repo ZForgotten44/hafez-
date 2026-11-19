@@ -29,11 +29,11 @@ DESC = {
  'H_E': ('Section E: 19 per row with twins, plus the lettered lots in rows 9 to 12.', ('Step 4 · twins and trios', '#p4')),
  'H_G': ('Section G: 19 per row, plus lots 58 to 75.', ('Step 3 · running totals', '#p3')),
  'H_H': ('Section H: 23 per row, four rows.', ('Step 3 · running totals', '#p3')),
- 'H_M': ('Section M: n + 2556 from lot 82, and a stored list below that.', ('Step 5 · straight-line sections', '#p5')),
+ 'H_M': ('Section M: n + 2562 from lot 82, and a stored list below that.', ('Step 5 · straight-line sections', '#p5')),
  'H_K': ('Section K: the position of the label in a stored list of 115.', ('Step 5 · straight-line sections', '#p5')),
- 'H_J': ('Section J: 2950 + n.', ('Step 5 · straight-line sections', '#p5')),
- 'H_I': ('Section I: 3082 + n.', ('Step 5 · straight-line sections', '#p5')),
- 'H_L': ('Section L: 3146 + (n − 68).', ('Step 5 · straight-line sections', '#p5')),
+ 'H_J': ('Section J: 2956 + n.', ('Step 5 · straight-line sections', '#p5')),
+ 'H_I': ('Section I: 3088 + n.', ('Step 5 · straight-line sections', '#p5')),
+ 'H_L': ('Section L: 3152 + (n − 68).', ('Step 5 · straight-line sections', '#p5')),
  'H': ('The dispatcher: parse the label, call the section\'s function, apply the known errata.', ('Section 07 · the giant formula', '#giant'))}
 def items(path, names):
     out = []

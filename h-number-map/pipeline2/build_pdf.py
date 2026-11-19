@@ -243,7 +243,9 @@ def build_area_pdf(D, raw, cells, area, st):
     """One page per section: every lot, outline and number inside the margins, nothing cut. The page size and orientation are chosen
     from the section's shape (the smallest sheet that keeps numbers at 3 pt per map unit or more, else tabloid at the best fit);
     the map is clipped to the section's own window so neighbouring lots never appear half-cut."""
-    lots = D['lots']; e = st[area]; pad = 7
+    lots = D['lots']; e = dict(st[area]); pad = 7
+    miss = [u['hnum'] for u in D['reg']['known_unplaced'] if u['section'] == area and not u['legacy'].endswith('dr')]
+    if miss: e['hmin'] = min(e['hmin'], min(miss)); e['hmax'] = max(e['hmax'], max(miss))
     ab = [e['b'][0] - pad, e['b'][1] - pad, e['b'][2] + pad, e['b'][3] + pad]
     w, h = ab[2] - ab[0], ab[3] - ab[1]; M, T, B = 36, 66, 46
     sizes = [(612, 792), (792, 612), (792, 1224), (1224, 792)]
@@ -266,7 +268,7 @@ def build_area_pdf(D, raw, cells, area, st):
     shp = page.new_shape(); shp.draw_rect(sh.clip); shp.finish(color=(.62, .64, .68), width=.6, fill=None); shp.commit()
     u = min(W, 1224) / 1224.0
     page.insert_text((M, 34), 'Section %s' % area, fontsize=26, fontname='uib', fontfile=UIB, color=NAVY)
-    page.insert_text((M, 50), 'Cedar Grove Cemetery · %s to %s · %d lots · one page, drawn to fit (print at any size)' % (fmtH(e['hmin']), fmtH(e['hmax']), e['n']), fontsize=8.5, fontname='ui', fontfile=UI, color=(.34, .38, .45))
+    page.insert_text((M, 50), 'Cedar Grove Cemetery · %s to %s · %d lots drawn%s · one page, drawn to fit (print at any size)' % (fmtH(e['hmin']), fmtH(e['hmax']), e['n'], (' · %d numbers with no lot drawn' % len(miss)) if miss else ''), fontsize=8.5, fontname='ui', fontfile=UI, color=(.34, .38, .45))
     # key
     ky = H - 22; x = M
     page.insert_text((x, ky + 3.5), '12', fontsize=9, fontname='dvsmb', fontfile=FONT, color=NAVY); x += 18

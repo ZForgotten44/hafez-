@@ -1,8 +1,8 @@
 {
  "pdf": {
   "pages": 15,
-  "pdf_label_pixels": 2147062,
-  "pdf_touching": 381586,
+  "pdf_label_pixels": 2153356,
+  "pdf_touching": 382307,
   "text_layer_missing": 0,
   "detail_pages": 14,
   "overlap_units": 36.2
@@ -35,7 +35,7 @@
   ],
   [
    0.62,
-   "H003171"
+   "H003177"
   ],
   [
    0.62,
@@ -75,7 +75,7 @@
   ],
   [
    0.62,
-   "H002709"
+   "H002715"
   ],
   [
    0.61,
@@ -91,7 +91,7 @@
   ]
  ],
  "pixel": {
-  "ink": 781933,
+  "ink": 784342,
   "touching": 0
  }
 }

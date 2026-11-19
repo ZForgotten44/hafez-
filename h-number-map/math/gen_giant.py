@@ -42,11 +42,11 @@ parts['G'] = ("(L==='19'?2415:p!==''?NaN:(f===''&&(n===58||n===59||n===60))?2413
               "((f===''||f==='H')&&n>=1&&n<=57)?(r=Math.floor((n-1)/19)+1,j=19*r-n,f==='H'?(n===19*r?2413+PG[r-1]+2:n===19*r-11?2413+PG[r-1]+14:NaN):2413+PG[r-1]+(j<=10?j+3:j+4)):"
               "(f===''&&n>=61&&n<=75)?2413+PG[3]+(n-60):NaN)")
 parts['H'] = "((p===''&&f===''&&n>=1&&n<=92)?(r=Math.floor((n-1)/23)+1,2413+PG[r-1]+22*0+WG[r-1]+23*r+1-n):NaN)"
-parts['M'] = "((p===''&&f==='')?((n>=82&&n<=279)?n+2556:(i=MF.indexOf(String(n)))>=0?2586+i+1:NaN):NaN)"
-parts['K'] = "((p===''&&f===''&&(i=KO.indexOf(String(n)))>=0)?2835+i+1:NaN)"
-parts['J'] = "((p===''&&f===''&&n>=1&&n<=132)?2950+n:NaN)"
-parts['I'] = "((p===''&&f===''&&n>=1&&n<=64)?3082+n:NaN)"
-parts['L'] = "((p===''&&f===''&&n>=69&&n<=107)?3146+n-68:NaN)"
+parts['M'] = "((p===''&&f==='')?((n>=82&&n<=279)?n+2562:(i=MF.indexOf(String(n)))>=0?2586+i+1:NaN):NaN)"
+parts['K'] = "((p===''&&f===''&&(i=KO.indexOf(String(n)))>=0)?2841+i+1:NaN)"
+parts['J'] = "((p===''&&f===''&&n>=1&&n<=132)?2956+n:NaN)"
+parts['I'] = "((p===''&&f===''&&n>=1&&n<=64)?3088+n:NaN)"
+parts['L'] = "((p===''&&f===''&&n>=69&&n<=107)?3152+n-68:NaN)"
 consts = dict(BM=F.BMARGIN, CT=F.CT, TW=TW, TR=TR, P2=P2, WD=WD24, P3=P3, WF=F.WF, PG=PG, WG=F.WG, DM=list(F.DM_TW), DH=DH, DB=DB, EB=EB, EH=EH, MF=F.MFIRST, KO=F.KORDER)
 pre = ("(m=/^([A-Z]?)([0-9]+)(.*)$/.exec(L),p=m?m[1]:'',n=m?+m[2]:NaN,f=m?m[3]:'',"
        "S==='A'?" + parts['A'] + ":S==='B'?" + parts['B'] + ":S==='C'?" + parts['C'] + ":S==='D'?" + parts['D'] + ":S==='E'?" + parts['E'] + ":S==='F'?" + parts['F'] + ":S==='G'?" + parts['G'] +

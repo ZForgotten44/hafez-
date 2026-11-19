@@ -351,8 +351,8 @@ _M_ROWS = {
     6:  ['34','35','36','37'],
     7:  ['40','41','42','43'],
     8:  ['46','47','48','49'],
-    9:  ['52','53','54','55','61'],
-    10: ['58','59','60','66','67'],
+    9:  ['52','53','54','55','56','57','61','62','63'],
+    10: ['58','59','60','66','67','68','69'],
     11: ['64','65','71','72','73','74','75'],
     12: ['70','76','77','78','79','80','81'],
     13: ['82','83','84','85','86','87'],
@@ -400,11 +400,23 @@ _M_ROWS = {
 }
 
 
+# Map version 2 (this decoder) vs version 1 (s4decoder_v1.py, frozen):
+#  * lots 56, 57, 62, 63, 68, 69 are real lots (2022 drawing, burial workbook) that version 1 never numbered. Each continues straight south
+#    from the lot it stands below in the route (56, 57 after 55; 62, 63 after 61; 68, 69 after 67), see section_M_check.md.
+#  * lots 11, 12 and 16 (east tip) are drawn on the old section sheet but not on the 2022 drawing and not in the burial workbook. Whether they
+#    are still recognized, were renumbered or were withdrawn is open (jon_questions/M_east_tip.png). 'active' keeps their H-numbers reserved so
+#    nothing is reused; 'withdrawn' drops them (every later number moves up by 3). Either way the old IDs stay in crosswalk_v1_to_v2.csv.
+M_EASTTIP_LOTS = ('11', '12', '16')
+M_EASTTIP_STATUS = 'active'          # 'active' | 'withdrawn'
+M_ADDED_LOTS = ('56', '57', '62', '63', '68', '69')
+
+
 def _build_m_tables():
     M_LOT_H, M_H_LOT = {}, {}
     h = _S2_MAX_H
     for r in sorted(_M_ROWS):
         for lot in _M_ROWS[r]:
+            if M_EASTTIP_STATUS == 'withdrawn' and lot in M_EASTTIP_LOTS: continue
             h += 1
             if lot not in M_LOT_H:
                 M_LOT_H[lot] = h
@@ -416,7 +428,7 @@ _M_LOT_H, _M_H_LOT, _S3_MAX_H = _build_m_tables()
 
 # ══════════════════════════════════════════════════════════════════════
 # H-NUMBERS SECTION 4  —  K  J  I  L
-# Continues from _S3_MAX_H (H002835). Sequential, no double-rows.
+# Continues from _S3_MAX_H (H002841 in map version 2; H002841 in version 1). Sequential, no double-rows.
 # Sweep order: all of K → all of J → all of I → all of L
 # ══════════════════════════════════════════════════════════════════════
 
@@ -617,6 +629,9 @@ _DECODERS = {'A':A_DECODER,'B':B_DECODER,'E':E_DECODER,'F':F_DECODER}
 
 
 
+B_H_ROW_ALIASES = {'318H': 661, '336H': 705, '354H': 749, '372H': 793}     # label on the map -> H-number of the table lot (320H, 340H, 360H, 380H)
+
+
 def h_lot(section, lot_label):
     """
     Return (h_number, 'H000837') for a section + lot label.
@@ -627,6 +642,13 @@ def h_lot(section, lot_label):
     """
     sec = section.upper().strip()
     lot = str(lot_label).strip()
+
+    # Map version 2: the map labels the last four H lots of Section B's north-edge row 318H, 336H, 354H, 372H; the numbering table keys them
+    # 320H, 340H, 360H, 380H (the row has 19 H lots on the map and 19 in the table, matched by position, jon_questions/B_H_suffix_row.png).
+    # Either label finds the lot; the table keys and their H-numbers are unchanged. 380H is also a margin key, so the alias carries the number.
+    if sec == 'B' and lot in B_H_ROW_ALIASES:
+        h = B_H_ROW_ALIASES[lot]
+        return h, f"H{h:06d}"
 
     # ── Pass 2: D and C (table-driven, Section 1 + Section 2) ──────
     if sec == 'D':
@@ -990,9 +1012,12 @@ def self_test():
         # Section 3: M
         ("M","11",   2587, "H002587",  "M row 1 first lot — start of Section 3"),
         ("M","12",   2588, "H002588",  "M row 1 last lot"),
-        ("M","61",   2618, "H002618",  "M row 9 last lot (jumps from 55)"),
-        ("M","70",   2631, "H002631",  "M row 12 first lot"),
-        ("M","279",  2835, "H002835",  "M row 54 last lot — end of system"),
+        ("M","61",   2620, "H002620",  "M 61 follows 57 (56 and 57 are numbered after 55)"),
+        ("M","56",   2618, "H002618",  "M 56 added: continues south from 55"),
+        ("M","62",   2621, "H002621",  "M 62 added: continues south from 61"),
+        ("M","68",   2628, "H002628",  "M 68 added: continues south from 67"),
+        ("M","70",   2637, "H002637",  "M row 12 first lot"),
+        ("M","279",  2841, "H002841",  "M row 54 last lot — end of system"),
     ]
     def lot_fn(row):
         sec,lot,exp_h,exp_fmt,desc = row
@@ -1366,42 +1391,44 @@ def _do_test_section(sec=None):
         'M': [
             ("M","11",   2587, "H002587", "Row 1 first — Section 3 start"),
             ("M","12",   2588, "H002588", "Row 1 last"),
-            ("M","61",   2618, "H002618", "Row 9 last  (gap: skips 56-60)"),
-            ("M","70",   2631, "H002631", "Row 12 first"),
-            ("M","82",   2638, "H002638", "Row 13 first"),
-            ("M","100",  2656, "H002656", "Row 16 first"),
-            ("M","160",  2716, "H002716", "Row 26 first"),
-            ("M","270",  2826, "H002826", "Row 50 first"),
-            ("M","279",  2835, "H002835", "Row 54 last  — system max"),
+            ("M","61",   2620, "H002620", "Row 9 (56, 57 follow 55; 61, 62, 63 follow)"),
+            ("M","56",   2618, "H002618", "Row 9 added lot, after 55"),
+            ("M","69",   2629, "H002629", "Row 10 added lot, after 68"),
+            ("M","70",   2637, "H002637", "Row 12 first"),
+            ("M","82",   2644, "H002644", "Row 13 first"),
+            ("M","100",  2662, "H002662", "Row 16 first"),
+            ("M","160",  2722, "H002722", "Row 26 first"),
+            ("M","270",  2832, "H002832", "Row 50 first"),
+            ("M","279",  2841, "H002841", "Row 54 last  — system max"),
         ],
         'K': [
-            ("K","1",    2836, "H002836", "Row 1  first lot — S4 start"),
-            ("K","3",    2838, "H002838", "Row 1  last lot"),
-            ("K","6",    2839, "H002839", "Row 2  first lot"),
-            ("K","22",   2847, "H002847", "Row 4  single lot"),
-            ("K","5",    2848, "H002848", "Row 5  single lot"),
-            ("K","246",  2913, "H002913", "Row 35 first lot"),
-            ("K","361",  2950, "H002950", "Row 44 last lot — K end"),
+            ("K","1",    2842, "H002842", "Row 1  first lot — S4 start"),
+            ("K","3",    2844, "H002844", "Row 1  last lot"),
+            ("K","6",    2845, "H002845", "Row 2  first lot"),
+            ("K","22",   2853, "H002853", "Row 4  single lot"),
+            ("K","5",    2854, "H002854", "Row 5  single lot"),
+            ("K","246",  2919, "H002919", "Row 35 first lot"),
+            ("K","361",  2956, "H002956", "Row 44 last lot — K end"),
         ],
         'J': [
-            ("J","1",    2951, "H002951", "Row 1  first lot — J start"),
-            ("J","5",    2955, "H002955", "Row 1  last lot"),
-            ("J","6",    2956, "H002956", "Row 2  first lot"),
-            ("J","47",   2997, "H002997", "Row 7  last lot"),
-            ("J","132",  3082, "H003082", "Row 28 last lot — J end"),
+            ("J","1",    2957, "H002957", "Row 1  first lot — J start"),
+            ("J","5",    2961, "H002961", "Row 1  last lot"),
+            ("J","6",    2962, "H002962", "Row 2  first lot"),
+            ("J","47",   3003, "H003003", "Row 7  last lot"),
+            ("J","132",  3088, "H003088", "Row 28 last lot — J end"),
         ],
         'I': [
-            ("I","1",    3083, "H003083", "Row 1  first lot — I start"),
-            ("I","2",    3084, "H003084", "Row 1  last lot"),
-            ("I","63",   3145, "H003145", "Row 32 first lot"),
-            ("I","64",   3146, "H003146", "Row 32 last lot — I end"),
+            ("I","1",    3089, "H003089", "Row 1  first lot — I start"),
+            ("I","2",    3090, "H003090", "Row 1  last lot"),
+            ("I","63",   3151, "H003151", "Row 32 first lot"),
+            ("I","64",   3152, "H003152", "Row 32 last lot — I end"),
         ],
         'L': [
-            ("L","69",   3147, "H003147", "Row 1  first lot — L start"),
-            ("L","73",   3151, "H003151", "Row 1  last lot"),
-            ("L","74",   3152, "H003152", "Row 2  first lot"),
-            ("L","92",   3170, "H003170", "Row 4  last lot"),
-            ("L","107",  3185, "H003185", "Row 7  last lot — system max"),
+            ("L","69",   3153, "H003153", "Row 1  first lot — L start"),
+            ("L","73",   3157, "H003157", "Row 1  last lot"),
+            ("L","74",   3158, "H003158", "Row 2  first lot"),
+            ("L","92",   3176, "H003176", "Row 4  last lot"),
+            ("L","107",  3191, "H003191", "Row 7  last lot — system max"),
         ],
     }
 
@@ -1626,13 +1653,13 @@ def _help():
         "lookup E 199A 2          →  H002260A2  (double-row grave)",
         "lookup B 390C            →  H002364    (B margin sub-lot)",
         "lookup G 58              →  H002414    (Section G)",
-        "lookup M 279             →  H002835    (Section M last lot)",
+        "lookup M 279             →  H002841    (Section M last lot)",
     ], None, W))
     print()
 
     print(_section_block("REVERSE", [
         "reverse <H>    Find which section and lot owns an H number.",
-        "               Accepts H002835, 002835, or 2835.",
+        "               Accepts H002841, 002835, or 2835.",
         "",
         "reverse 1            →  Section B  Lot 20H",
         "reverse H000837      →  Section D  Lot 1U",
@@ -1656,7 +1683,7 @@ def _help():
         "table <section>   Print all lots sorted by H number.",
         "export [dir]      Save all 9 section CSVs (default: current dir).",
         "",
-        "table M           →  249 lots, H002587–H002835",
+        "table M           →  255 lots, H002587–H002841",
         "table G           →  80 lots",
         "export            →  saves A B C D E F G H M csv files",
     ], None, W))

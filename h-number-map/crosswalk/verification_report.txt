@@ -1,0 +1,16 @@
+A. Section M: decoder H002587 to H002841 | drawn lots H002589 to H002841 | atlas H002589 to H002841 | overview index H002587 to H002841 | agree
+A. Section K: decoder H002842 to H002956 | drawn lots H002842 to H002956 | atlas H002842 to H002956 | overview index H002842 to H002956 | agree
+A. Section J: decoder H002957 to H003088 | drawn lots H002957 to H003088 | atlas H002957 to H003088 | overview index H002957 to H003088 | agree
+A. Section I: decoder H003089 to H003152 | drawn lots H003089 to H003152 | atlas H003089 to H003152 | overview index H003089 to H003152 | agree
+A. Section L: decoder H003153 to H003191 | drawn lots H003153 to H003191 | atlas H003153 to H003191 | overview index H003153 to H003191 | agree
+B. 602 drawn lots of M, K, J, I, L: atlas H-number equals the decoder v2 number; failures 0
+C. 602 numbers on the M, K, J, I, L section sheets checked against the PDF text layer; missing 0
+C. overview: M 56 -> H002618 written on the sheet
+C. overview: M 57 -> H002619 written on the sheet
+C. overview: M 62 -> H002621 written on the sheet
+C. overview: M 63 -> H002622 written on the sheet
+C. overview: M 68 -> H002628 written on the sheet
+C. overview: M 69 -> H002629 written on the sheet
+D. crosswalk page: 300 random graves, new ID and old ID both answered correctly; failures 0
+
+failures: 0

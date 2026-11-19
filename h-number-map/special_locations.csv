@@ -1,0 +1,149 @@
+id,name,area,map_x,map_y,how_established,confidence
+CRYPT-001,Mausoleum crypt 1,south court (between Mausoleum 3 and Mausoleum 1),592.31,411.19,labelled on drawing,high
+CRYPT-002,Mausoleum crypt 2,south court (between Mausoleum 3 and Mausoleum 1),590.87,408.19,labelled on drawing,high
+CRYPT-003,Mausoleum crypt 3,south court (between Mausoleum 3 and Mausoleum 1),589.43,405.19,labelled on drawing,high
+CRYPT-004,Mausoleum crypt 4,south court (between Mausoleum 3 and Mausoleum 1),588.05,402.19,labelled on drawing,high
+CRYPT-005,Mausoleum crypt 5,south court (between Mausoleum 3 and Mausoleum 1),586.67,399.19,labelled on drawing,high
+CRYPT-006,Mausoleum crypt 6,south court (between Mausoleum 3 and Mausoleum 1),585.23,396.17,labelled on drawing,high
+CRYPT-007,Mausoleum crypt 7,south court (between Mausoleum 3 and Mausoleum 1),583.81,393.13,labelled on drawing,high
+CRYPT-008,Mausoleum crypt 8,south court (between Mausoleum 3 and Mausoleum 1),582.44,390.09,labelled on drawing,high
+CRYPT-009,Mausoleum crypt 9,south court (between Mausoleum 3 and Mausoleum 1),599.67,409.81,labelled on drawing,high
+CRYPT-010,Mausoleum crypt 10,south court (between Mausoleum 3 and Mausoleum 1),598.24,406.82,labelled on drawing,high
+CRYPT-011,Mausoleum crypt 11,south court (between Mausoleum 3 and Mausoleum 1),596.81,403.81,labelled on drawing,high
+CRYPT-012,Mausoleum crypt 12,south court (between Mausoleum 3 and Mausoleum 1),595.43,400.82,labelled on drawing,high
+CRYPT-013,Mausoleum crypt 13,south court (between Mausoleum 3 and Mausoleum 1),594.05,397.81,labelled on drawing,high
+CRYPT-014,Mausoleum crypt 14,south court (between Mausoleum 3 and Mausoleum 1),592.61,394.82,labelled on drawing,high
+CRYPT-015,Mausoleum crypt 15,south court (between Mausoleum 3 and Mausoleum 1),591.16,391.79,labelled on drawing,high
+CRYPT-016,Mausoleum crypt 16,south court (between Mausoleum 3 and Mausoleum 1),589.8,388.75,labelled on drawing,high
+CRYPT-017,Mausoleum crypt 17,south court (between Mausoleum 3 and Mausoleum 1),588.44,385.71,labelled on drawing,high
+CRYPT-018,Mausoleum crypt 18,south court (between Mausoleum 3 and Mausoleum 1),607.64,406.31,labelled on drawing,high
+CRYPT-019,Mausoleum crypt 19,south court (between Mausoleum 3 and Mausoleum 1),606.18,403.32,labelled on drawing,high
+CRYPT-020,Mausoleum crypt 20,south court (between Mausoleum 3 and Mausoleum 1),604.81,400.31,labelled on drawing,high
+CRYPT-021,Mausoleum crypt 21,south court (between Mausoleum 3 and Mausoleum 1),603.43,397.32,labelled on drawing,high
+CRYPT-022,Mausoleum crypt 22,south court (between Mausoleum 3 and Mausoleum 1),602.01,394.31,labelled on drawing,high
+CRYPT-023,Mausoleum crypt 23,south court (between Mausoleum 3 and Mausoleum 1),600.59,391.32,labelled on drawing,high
+CRYPT-024,Mausoleum crypt 24,south court (between Mausoleum 3 and Mausoleum 1),599.17,388.31,labelled on drawing,high
+CRYPT-025,Mausoleum crypt 25,south court (between Mausoleum 3 and Mausoleum 1),597.8,385.31,labelled on drawing,high
+CRYPT-026,Mausoleum crypt 26,north court (between Mausoleum 4 and Mausoleum 2),582.91,365.19,labelled on drawing,high
+CRYPT-027,Mausoleum crypt 27,north court (between Mausoleum 4 and Mausoleum 2),584.25,362.17,labelled on drawing,high
+CRYPT-028,Mausoleum crypt 28,north court (between Mausoleum 4 and Mausoleum 2),585.61,359.13,labelled on drawing,high
+CRYPT-029,Mausoleum crypt 29,north court (between Mausoleum 4 and Mausoleum 2),586.98,356.09,labelled on drawing,high
+CRYPT-030,Mausoleum crypt 30,north court (between Mausoleum 4 and Mausoleum 2),588.37,353.07,"numbered by position between labelled neighbours (cell drawn, label missing)",medium
+CRYPT-031,Mausoleum crypt 31,north court (between Mausoleum 4 and Mausoleum 2),589.74,350.07,"numbered by position between labelled neighbours (cell drawn, label missing)",medium
+CRYPT-032,Mausoleum crypt 32,north court (between Mausoleum 4 and Mausoleum 2),591.13,347.04,labelled on drawing,high
+CRYPT-033,Mausoleum crypt 33,north court (between Mausoleum 4 and Mausoleum 2),592.49,344.0,labelled on drawing,high
+CRYPT-034,Mausoleum crypt 34,north court (between Mausoleum 4 and Mausoleum 2),588.55,370.13,labelled on drawing,high
+CRYPT-035,Mausoleum crypt 35,north court (between Mausoleum 4 and Mausoleum 2),589.92,367.09,labelled on drawing,high
+CRYPT-036,Mausoleum crypt 36,north court (between Mausoleum 4 and Mausoleum 2),591.3,364.07,labelled on drawing,high
+CRYPT-037,Mausoleum crypt 37,north court (between Mausoleum 4 and Mausoleum 2),592.69,361.04,labelled on drawing,high
+CRYPT-038,Mausoleum crypt 38,north court (between Mausoleum 4 and Mausoleum 2),594.05,358.0,labelled on drawing,high
+CRYPT-039,Mausoleum crypt 39,north court (between Mausoleum 4 and Mausoleum 2),595.43,355.0,labelled on drawing,high
+CRYPT-040,Mausoleum crypt 40,north court (between Mausoleum 4 and Mausoleum 2),596.79,351.96,labelled on drawing,high
+CRYPT-041,Mausoleum crypt 41,north court (between Mausoleum 4 and Mausoleum 2),598.17,348.94,labelled on drawing,high
+CRYPT-042,Mausoleum crypt 42,north court (between Mausoleum 4 and Mausoleum 2),599.56,345.92,labelled on drawing,high
+CRYPT-043,Mausoleum crypt 43,north court (between Mausoleum 4 and Mausoleum 2),597.43,369.44,labelled on drawing,high
+CRYPT-044,Mausoleum crypt 44,north court (between Mausoleum 4 and Mausoleum 2),598.82,366.42,labelled on drawing,high
+CRYPT-045,Mausoleum crypt 45,north court (between Mausoleum 4 and Mausoleum 2),600.17,363.38,labelled on drawing,high
+CRYPT-046,Mausoleum crypt 46,north court (between Mausoleum 4 and Mausoleum 2),601.55,360.38,labelled on drawing,high
+CRYPT-047,Mausoleum crypt 47,north court (between Mausoleum 4 and Mausoleum 2),602.92,357.34,labelled on drawing,high
+CRYPT-048,Mausoleum crypt 48,north court (between Mausoleum 4 and Mausoleum 2),604.3,354.31,labelled on drawing,high
+CRYPT-049,Mausoleum crypt 49,north court (between Mausoleum 4 and Mausoleum 2),605.69,351.29,labelled on drawing,high
+CRYPT-050,Mausoleum crypt 50,north court (between Mausoleum 4 and Mausoleum 2),607.05,348.25,labelled on drawing,high
+CRYPT-051,Mausoleum crypt 51,row north of the north court (mausoleum not established),564.7,314.56,labelled on drawing,high
+CRYPT-052,Mausoleum crypt 52,row north of the north court (mausoleum not established),569.58,317.1,labelled on drawing,high
+CRYPT-053,Mausoleum crypt 53,row north of the north court (mausoleum not established),570.97,314.25,labelled on drawing,high
+CRYPT-054,Mausoleum crypt 54,row north of the north court (mausoleum not established),576.32,317.31,labelled on drawing,high
+CRYPT-055,Mausoleum crypt 55,row north of the north court (mausoleum not established),581.29,321.3,labelled on drawing,high
+CRYPT-056,Mausoleum crypt 56,row north of the north court (mausoleum not established),582.84,318.04,labelled on drawing,high
+CRYPT-057,Mausoleum crypt 57,row north of the north court (mausoleum not established),587.16,323.88,labelled on drawing,high
+CRYPT-058,Mausoleum crypt 58,row north of the north court (mausoleum not established),588.66,320.58,labelled on drawing,high
+CRYPT-059,Mausoleum crypt 59,row north of the north court (mausoleum not established),590.9,320.74,numbered by position between labelled neighbours 58 and 61; no label and no cell traced,low (position to about 3 units)
+CRYPT-060,Mausoleum crypt 60,row north of the north court (mausoleum not established),593.03,320.82,numbered by position between labelled neighbours 58 and 61; no label and no cell traced,low (position to about 3 units)
+CRYPT-061,Mausoleum crypt 61,row north of the north court (mausoleum not established),595.13,321.13,labelled on drawing,high
+CRYPT-062,Mausoleum crypt 62,row north of the north court (mausoleum not established),599.44,326.35,labelled on drawing,"medium (label only, no cell traced)"
+CRYPT-063,Mausoleum crypt 63,row north of the north court (mausoleum not established),600.92,322.92,labelled on drawing,high
+CRYPT-064,Mausoleum crypt 64,row north of the north court (mausoleum not established),606.04,328.76,labelled on drawing,"medium (label only, no cell traced)"
+CRYPT-065,Mausoleum crypt 65,row north of the north court (mausoleum not established),609.03,328.68,numbered by position between labelled neighbours 64 and 67; no label and no cell traced,low (position to about 3 units)
+CRYPT-066,Mausoleum crypt 66,row north of the north court (mausoleum not established),612.02,328.6,numbered by position between labelled neighbours 64 and 67; no label and no cell traced,low (position to about 3 units)
+CRYPT-067,Mausoleum crypt 67,row north of the north court (mausoleum not established),615.01,328.53,labelled on drawing,"medium (label only, no cell traced)"
+CRYPT-068,Mausoleum crypt 68,row north of the north court (mausoleum not established),616.32,325.48,labelled on drawing,"medium (label only, no cell traced)"
+NICHE-001,Cremains niche 1,east end of the cremains strip (tilted block),987.94,363.68,labelled on drawing,"medium (outline fitted to the block; two openings per column in the drawing, one number per column)"
+NICHE-002,Cremains niche 2,east end of the cremains strip (tilted block),986.22,363.94,numbered by position between labelled neighbours,"medium (outline fitted to the block; two openings per column in the drawing, one number per column)"
+NICHE-003,Cremains niche 3,east end of the cremains strip (tilted block),984.49,364.19,numbered by position between labelled neighbours,"medium (outline fitted to the block; two openings per column in the drawing, one number per column)"
+NICHE-004,Cremains niche 4,east end of the cremains strip (tilted block),982.77,364.45,numbered by position between labelled neighbours,"medium (outline fitted to the block; two openings per column in the drawing, one number per column)"
+NICHE-005,Cremains niche 5,east end of the cremains strip (tilted block),981.05,364.71,labelled on drawing,"medium (outline fitted to the block; two openings per column in the drawing, one number per column)"
+NICHE-006,Cremains niche 6,east end of the cremains strip (tilted block),979.33,364.97,numbered by position between labelled neighbours,"medium (outline fitted to the block; two openings per column in the drawing, one number per column)"
+NICHE-007,Cremains niche 7,east end of the cremains strip (tilted block),977.6,365.23,numbered by position between labelled neighbours,"medium (outline fitted to the block; two openings per column in the drawing, one number per column)"
+NICHE-008,Cremains niche 8,east end of the cremains strip (tilted block),975.88,365.49,numbered by position between labelled neighbours,"medium (outline fitted to the block; two openings per column in the drawing, one number per column)"
+NICHE-009,Cremains niche 9,east end of the cremains strip (tilted block),974.16,365.75,numbered by position between labelled neighbours,"medium (outline fitted to the block; two openings per column in the drawing, one number per column)"
+NICHE-010,Cremains niche 10,cremains strip,970.81,365.26,labelled on drawing,high
+NICHE-011,Cremains niche 11,cremains strip,968.79,365.27,numbered by position between labelled neighbours,high
+NICHE-012,Cremains niche 12,cremains strip,966.71,364.98,numbered by position between labelled neighbours,high
+NICHE-013,Cremains niche 13,cremains strip,964.68,364.9,numbered by position between labelled neighbours,high
+NICHE-014,Cremains niche 14,cremains strip,962.64,364.87,numbered by position between labelled neighbours,high
+NICHE-015,Cremains niche 15,cremains strip,960.6,364.69,labelled on drawing,high
+NICHE-016,Cremains niche 16,cremains strip,958.67,364.63,numbered by position between labelled neighbours,high
+NICHE-017,Cremains niche 17,cremains strip,956.72,364.61,numbered by position between labelled neighbours,high
+NICHE-018,Cremains niche 18,cremains strip,954.76,364.57,numbered by position between labelled neighbours,high
+NICHE-019,Cremains niche 19,cremains strip,952.79,364.43,numbered by position between labelled neighbours,high
+NICHE-020,Cremains niche 20,cremains strip,950.68,364.26,labelled on drawing,high
+NICHE-021,Cremains niche 21,cremains strip,948.57,364.27,numbered by position between labelled neighbours,high
+NICHE-022,Cremains niche 22,cremains strip,946.48,364.21,numbered by position between labelled neighbours,high
+NICHE-023,Cremains niche 23,cremains strip,944.37,363.91,numbered by position between labelled neighbours,high
+NICHE-024,Cremains niche 24,cremains strip,942.34,363.89,numbered by position between labelled neighbours,high
+NICHE-025,Cremains niche 25,cremains strip,940.31,363.8,labelled on drawing,high
+NICHE-026,Cremains niche 26,cremains strip,938.26,363.64,numbered by position between labelled neighbours,high
+NICHE-027,Cremains niche 27,cremains strip,936.29,363.64,numbered by position between labelled neighbours,high
+NICHE-028,Cremains niche 28,cremains strip,934.34,363.58,numbered by position between labelled neighbours,high
+NICHE-029,Cremains niche 29,cremains strip,932.38,363.57,numbered by position between labelled neighbours,high
+NICHE-030,Cremains niche 30,cremains strip,930.44,363.5,labelled on drawing,high
+NICHE-031,Cremains niche 31,cremains strip,928.49,363.29,numbered by position between labelled neighbours,high
+NICHE-032,Cremains niche 32,cremains strip,926.49,363.18,numbered by position between labelled neighbours,high
+NICHE-033,Cremains niche 33,cremains strip,924.42,363.06,numbered by position between labelled neighbours,high
+NICHE-034,Cremains niche 34,cremains strip,922.38,363.05,numbered by position between labelled neighbours,high
+NICHE-035,Cremains niche 35,cremains strip,920.36,362.96,labelled on drawing,high
+NICHE-036,Cremains niche 36,cremains strip,918.31,362.8,numbered by position between labelled neighbours,high
+NICHE-037,Cremains niche 37,cremains strip,916.34,362.8,numbered by position between labelled neighbours,high
+NICHE-038,Cremains niche 38,cremains strip,914.39,362.74,numbered by position between labelled neighbours,high
+NICHE-039,Cremains niche 39,cremains strip,912.44,362.73,numbered by position between labelled neighbours,high
+NICHE-040,Cremains niche 40,cremains strip,910.5,362.66,labelled on drawing,high
+NICHE-041,Cremains niche 41,cremains strip,908.53,362.45,numbered by position between labelled neighbours,high
+NICHE-042,Cremains niche 42,cremains strip,906.62,362.33,numbered by position between labelled neighbours,high
+NICHE-043,Cremains niche 43,cremains strip,904.66,362.21,numbered by position between labelled neighbours,high
+NICHE-044,Cremains niche 44,cremains strip,902.62,362.19,numbered by position between labelled neighbours,high
+NICHE-045,Cremains niche 45,cremains strip,900.6,362.1,labelled on drawing,high
+NICHE-046,Cremains niche 46,cremains strip,898.55,361.94,numbered by position between labelled neighbours,high
+NICHE-047,Cremains niche 47,cremains strip,896.58,361.94,numbered by position between labelled neighbours,high
+NICHE-048,Cremains niche 48,cremains strip,894.63,361.88,numbered by position between labelled neighbours,high
+NICHE-049,Cremains niche 49,cremains strip,892.57,361.77,numbered by position between labelled neighbours,high
+NICHE-050,Cremains niche 50,cremains strip,890.38,361.68,labelled on drawing,high
+NICHE-051,Cremains niche 51,cremains strip,888.17,361.6,numbered by position between labelled neighbours,high
+NICHE-052,Cremains niche 52,cremains strip,885.98,361.48,numbered by position between labelled neighbours,high
+NICHE-053,Cremains niche 53,cremains strip,883.7,361.32,numbered by position between labelled neighbours,high
+NICHE-054,Cremains niche 54,cremains strip,881.36,361.18,numbered by position between labelled neighbours,high
+NICHE-055,Cremains niche 55,cremains strip,879.09,361.07,labelled on drawing,high
+NICHE-056,Cremains niche 56,cremains strip,876.86,360.87,numbered by position between labelled neighbours,high
+NICHE-057,Cremains niche 57,cremains strip,874.65,360.77,numbered by position between labelled neighbours,high
+NICHE-058,Cremains niche 58,cremains strip,872.34,360.73,numbered by position between labelled neighbours,high
+NICHE-059,Cremains niche 59,cremains strip,870.07,360.57,numbered by position between labelled neighbours,high
+NICHE-060,Cremains niche 60,cremains strip,867.83,360.51,labelled on drawing,high
+NICHE-061,Cremains niche 61,cremains strip,865.59,360.48,numbered by position between labelled neighbours,high
+NICHE-062,Cremains niche 62,cremains strip,863.32,360.38,numbered by position between labelled neighbours,high
+NICHE-063,Cremains niche 63,cremains strip,861.06,360.2,numbered by position between labelled neighbours,high
+NICHE-064,Cremains niche 64,cremains strip,858.87,360.05,numbered by position between labelled neighbours,high
+NICHE-065,Cremains niche 65,cremains strip,856.68,360.02,labelled on drawing,high
+NICHE-066,Cremains niche 66,cremains strip,854.47,360.0,numbered by position between labelled neighbours,high
+NICHE-067,Cremains niche 67,cremains strip,852.27,359.98,numbered by position between labelled neighbours,high
+NICHE-068,Cremains niche 68,cremains strip,850.09,359.86,numbered by position between labelled neighbours,high
+NICHE-069,Cremains niche 69,cremains strip,847.88,359.66,numbered by position between labelled neighbours,high
+NICHE-070,Cremains niche 70,cremains strip,845.7,359.47,labelled on drawing,high
+NICHE-071,Cremains niche 71,cremains strip,843.5,359.41,numbered by position between labelled neighbours,high
+NICHE-072,Cremains niche 72,cremains strip,841.26,359.38,numbered by position between labelled neighbours,high
+NICHE-073,Cremains niche 73,cremains strip,838.99,359.28,numbered by position between labelled neighbours,high
+NICHE-074,Cremains niche 74,cremains strip,836.73,359.11,numbered by position between labelled neighbours,high
+NICHE-075,Cremains niche 75,cremains strip,834.54,358.94,labelled on drawing,high
+NICHE-076,Cremains niche 76,cremains strip,832.36,358.92,numbered by position between labelled neighbours,high
+NICHE-077,Cremains niche 77,cremains strip,830.15,358.9,numbered by position between labelled neighbours,high
+NICHE-078,Cremains niche 78,cremains strip,827.94,358.88,numbered by position between labelled neighbours,high
+NICHE-079,Cremains niche 79,cremains strip,825.76,358.76,numbered by position between labelled neighbours,high
+NICHE-080,Cremains niche 80,cremains strip,823.55,358.56,labelled on drawing,high

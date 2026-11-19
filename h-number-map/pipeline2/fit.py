@@ -85,7 +85,7 @@ def run(reg='registry.json', dst='lots_fit.json'):
             else:
                 rec.update(fs=round(b[1], 2), ang=round(b[2], 1), cx=round(b[3], 2), cy=round(b[4], 2))
         else:
-            rec.update(fs=2.4, ang=norm_angle(r['ang']), cx=r['pt'][0], cy=r['pt'][1], poly=None)
+            rec.update(fs=3.0, ang=norm_angle(r['ang']), cx=r['pt'][0], cy=r['pt'][1], poly=None)
         out.append(rec)
     json.dump(out, open(f'{DATA}/{dst}', 'w'))
     fs = np.array([o['fs'] for o in out if o['fs']])

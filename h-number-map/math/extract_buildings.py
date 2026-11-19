@@ -5,7 +5,9 @@ Each footprint gets a type, a wall height and its oriented bounding box (centre,
 import json, numpy as np, cv2, os
 here = os.path.dirname(os.path.abspath(__file__)); os.chdir(here)
 D = json.load(open('../pipeline2/data/ai_raw.json'))['draws']
-L = json.load(open('../pipeline2/data/lots_fit.json')); lc = np.array([[o['cx'], o['cy']] for o in L if o.get('cx') is not None])
+# every drawn lot cell counts as a lot, numbered or not: the building list must not depend on which lots happen to carry an H-number
+from shapely.geometry import Polygon
+lc = np.array([[Polygon(c['poly']).centroid.x, Polygon(c['poly']).centroid.y] for c in json.load(open('../pipeline2/data/cells.json'))])
 def render(x0, y0, x1, y1, S, thick):
     W, H = int((x1 - x0) * S), int((y1 - y0) * S); img = np.full((H, W), 255, np.uint8)
     P = lambda x, y: (int(round((x - x0) * S)), int(round((y - y0) * S)))

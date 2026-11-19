@@ -4,7 +4,7 @@ numbered from the path,15,H002590,M 15,high,"Of the 12 sections that use the lab
 numbered from the path,200,H002403,F 200,high,"The label F-200 decodes to H002403, far from the lots around it on the map, but both path neighbours are close (20 and 15 units away), so the numbering path does reach this lot here."
 numbered from the path,30,H002600,M 30,high,The drawing shows M-30 in 2 places. This one sits where H002600 belongs: both path neighbours are close (11 and 11 units away).
 numbered from the path,35,H002603,M 35,high,The drawing shows M-35 in 2 places. This one sits where H002603 belongs: both path neighbours are close (12 and 10 units away).
-numbered from the path,65,H002625,M 65,high,The drawing shows M-65 in 2 places. This one sits where H002625 belongs: both path neighbours are close (14 and 10 units away).
+numbered from the path,65,H002631,M 65,high,The drawing shows M-65 in 2 places. This one sits where H002631 belongs: both path neighbours are close (14 and 10 units away).
 numbered from the path,204,H002407,F 204,high,"The label F-204 decodes to H002407, far from the lots around it on the map, but both path neighbours are close (13 and 15 units away), so the numbering path does reach this lot here."
 numbered from the path,207,H002410,F 207,high,"The label F-207 decodes to H002410, far from the lots around it on the map, but both path neighbours are close (10 and 18 units away), so the numbering path does reach this lot here."
 numbered from the path,202,H002405,F 202,high,"The label F-202 decodes to H002405, far from the lots around it on the map, but both path neighbours are close (10 and 18 units away), so the numbering path does reach this lot here."
@@ -12,17 +12,17 @@ numbered from the path,210,H002413,F 210,high,"The label F-210 decodes to H00241
 numbered from the path,20,H002594,M 20,high,The drawing shows M-20 in 2 places. This one sits where H002594 belongs: both path neighbours are close (12 and 28 units away).
 numbered from the path,380H,H002341,B 380H,high,"The label B-380H decodes to H002341, far from the lots around it on the map, but both path neighbours are close (19 and 37 units away), so the numbering path does reach this lot here."
 numbered from the path,380,H002340,B 380,medium,"The label B-380 decodes to H002340, far from the lots around it on the map, but the neighbour before it is close (9 units), so the numbering path does reach this lot here."
-numbered from the path,70,H002631,M 70,medium,"The drawing shows M-70 in 2 places. This one sits where H002631 belongs: the neighbour after it is close (9 units), the other is 52 units away."
+numbered from the path,70,H002637,M 70,medium,"The drawing shows M-70 in 2 places. This one sits where H002637 belongs: the neighbour after it is close (9 units), the other is 52 units away."
 numbered from the path,376H,H002336,B 376H,medium,"The label B-376H decodes to H002336, far from the lots around it on the map, but the neighbour after it is close (11 units), so the numbering path does reach this lot here."
 numbered from the path,382,H002343,B 382,medium,"The label B-382 decodes to H002343, far from the lots around it on the map, but the neighbour after it is close (11 units), so the numbering path does reach this lot here."
-numbered from the path,75,H002630,M 75,medium,"The drawing shows M-75 in 2 places. This one sits where H002630 belongs: the neighbour before it is close (12 units), the other is 66 units away."
-numbered from the path,9,H002842,K 9,medium,"The drawing shows K-9 in 2 places. This one sits where H002842 belongs: the neighbour before it is close (12 units), the other is 33 units away."
+numbered from the path,75,H002636,M 75,medium,"The drawing shows M-75 in 2 places. This one sits where H002636 belongs: the neighbour before it is close (12 units), the other is 66 units away."
+numbered from the path,9,H002848,K 9,medium,"The drawing shows K-9 in 2 places. This one sits where H002848 belongs: the neighbour before it is close (12 units), the other is 33 units away."
 numbered from the path,25,H002597,M 25,medium,"The drawing shows M-25 in 2 places. This one sits where H002597 belongs: the neighbour before it is close (13 units), the other is 33 units away."
-numbered from the path,1,H002836,K 1,medium,"The drawing shows K-1 in 2 places. This one sits where H002836 belongs: the neighbour after it is close (10 units), the other is 96 units away."
+numbered from the path,1,H002842,K 1,medium,"The drawing shows K-1 in 2 places. This one sits where H002842 belongs: the neighbour after it is close (10 units), the other is 96 units away."
 numbered from the path,542,H002373,D 542,medium,"The label D-542 decodes to H002373, far from the lots around it on the map, but the neighbour after it is close (11 units), the other is 102 units away, so the numbering path does reach this lot here."
-numbered from the path,1,H003083,I 1,medium,"Of the 11 sections that use the label 1, only Section I puts this lot where H003083 belongs: the neighbour after it is close (17 units), the other is 267 units away."
-numbered from the path,15,H002845,K 15,low,The drawing shows K-15 in 2 places. This one sits where H002845 belongs: both path neighbours are close (9 and 10 units away).
-numbered from the path,16,H002846,K 16,low,The drawing shows K-16 in 2 places. This one sits where H002846 belongs: both path neighbours are close (20 and 18 units away).
+numbered from the path,1,H003089,I 1,medium,"Of the 11 sections that use the label 1, only Section I puts this lot where H003089 belongs: the neighbour after it is close (17 units), the other is 267 units away."
+numbered from the path,15,H002851,K 15,low,The drawing shows K-15 in 2 places. This one sits where H002851 belongs: both path neighbours are close (9 and 10 units away).
+numbered from the path,16,H002852,K 16,low,The drawing shows K-16 in 2 places. This one sits where H002852 belongs: both path neighbours are close (20 and 18 units away).
 numbered from the path,140H,H000265,B 140H,low,"The label B-140H decodes to H000265, far from the lots around it on the map, but the neighbour after it is close (21 units), the other is 482 units away, so the numbering path does reach this lot here."
 numbered from the path,100H,H000177,B 100H,low,"The label B-100H decodes to H000177, far from the lots around it on the map, but the neighbour after it is close (21 units), the other is 483 units away, so the numbering path does reach this lot here."
 numbered from the path,160H,H000309,B 160H,low,"The label B-160H decodes to H000309, far from the lots around it on the map, but the neighbour after it is close (21 units), the other is 483 units away, so the numbering path does reach this lot here."
@@ -93,11 +93,10 @@ numbered from the path,376,H002335,B 376,low,"The label B-376 decodes to H002335
 "no number (mausoleum crypt, numbered 1 to 68 on the drawing)",68,,,,Not part of the H-numbering
 "no number (mausoleum crypt, numbered 1 to 68 on the drawing)",,,,,Not part of the H-numbering
 "no number (mausoleum crypt, numbered 1 to 68 on the drawing)",,,,,Not part of the H-numbering
-loose number kept out of the numbering: Section M lot 56,56,,M 56,,a real Section M lot (it is in the burial records) with no outline traced and no H-number; see section_M_check.md
 "no number (cremains area, niches 1 to 80)",80,,,,"The cremains strip is numbered 1 to 80 on the drawing, every fifth niche written; it is not part of the H-numbering"
-replicated label removed (loose number),75,H002630,M 75,,the label already has its lot
-replicated label removed (loose number),70,H002631,M 70,,the label already has its lot
-replicated label removed (loose number),65,H002625,M 65,,the label already has its lot
+replicated label removed (loose number),75,H002636,M 75,,the label already has its lot
+replicated label removed (loose number),70,H002637,M 70,,the label already has its lot
+replicated label removed (loose number),65,H002631,M 65,,the label already has its lot
 "no number (cremains area, niches 1 to 80)",50,,,,"The cremains strip is numbered 1 to 80 on the drawing, every fifth niche written; it is not part of the H-numbering"
 "no number (cremains area, niches 1 to 80)",60,,,,"The cremains strip is numbered 1 to 80 on the drawing, every fifth niche written; it is not part of the H-numbering"
 "no number (cremains area, niches 1 to 80)",55,,,,"The cremains strip is numbered 1 to 80 on the drawing, every fifth niche written; it is not part of the H-numbering"
@@ -146,13 +145,9 @@ outline without an H-number (not in the numbering table),410,,,,no free H-number
 outline without an H-number (not in the numbering table),412,,,,no free H-number near it
 outline without an H-number (not in the numbering table),413,,,,no free H-number near it
 outline without an H-number (not in the numbering table),414,,,,no free H-number near it
-outline without an H-number (not in the numbering table),372H,,,,no free H-number near it
 outline without an H-number (not in the numbering table),280,,,,no free H-number near it
 outline without an H-number (not in the numbering table),300,,,,no free H-number near it
 outline without an H-number (not in the numbering table),260,,,,no free H-number near it
-outline without an H-number (not in the numbering table),336H,,,,no free H-number near it
-outline without an H-number (not in the numbering table),354H,,,,no free H-number near it
-outline without an H-number (not in the numbering table),318H,,,,no free H-number near it
 outline without an H-number (not in the numbering table),220,,,,no free H-number near it
 outline without an H-number (not in the numbering table),200,,,,no free H-number near it
 outline without an H-number (not in the numbering table),160,,,,no free H-number near it
@@ -197,11 +192,6 @@ outline without an H-number (not in the numbering table),16,,,,no free H-number 
 outline without an H-number (not in the numbering table),17,,,,no free H-number near it
 outline without an H-number (not in the numbering table),18,,,,no free H-number near it
 outline without an H-number (not in the numbering table),19,,,,no free H-number near it
-outline without an H-number (not in the numbering table),69,,,,no free H-number near it
-outline without an H-number (not in the numbering table),68,,,,no free H-number near it
-outline without an H-number (not in the numbering table),63,,,,no free H-number near it
-outline without an H-number (not in the numbering table),62,,,,no free H-number near it
-outline without an H-number (not in the numbering table),57,,,,no free H-number near it
 outline without an H-number (not in the numbering table),A361,,,,no free H-number near it
 outline without an H-number (not in the numbering table),204A,,,,no free H-number near it
 outline without an H-number (not in the numbering table),312A,,,,no free H-number near it

@@ -2,8 +2,10 @@
 
 A single-file Python tool that translates between **legacy plot labels**
 (section + lot, e.g. `B-20H`, `D-384A`, `M-122`) and the cemetery's
-sequential **H-numbering scheme** (`H000001` … `H003185`), in both directions,
+sequential **H-numbering scheme** (`H000001` … `H003191`), in both directions,
 for all of Cedar Grove Cemetery at the University of Notre Dame.
+
+**Map versions.** `s4decoder1.py` is numbering v2 (H000001 – H003191). `s4decoder_v1.py` is the frozen v1 (H000001 – H003185, before Section M lots 56, 57, 62, 63, 68 and 69 were numbered). The before/after list is `h-number-map/crosswalk/crosswalk_v1_to_v2.csv`. Section M lots 11, 12 and 16 are kept (`M_EASTTIP_STATUS = 'active'`) until staff confirm what happened to them.
 
 Everything lives in one script — **`s4decoder1.py`** (the latest version) —
 with no third-party dependencies. It runs as an interactive command-line
@@ -54,7 +56,7 @@ cemetery in one continuous **sweep**. This tool is the bridge:
 - **Graves:** each lot holds up to 9 graves; a grave gets
   `H_lot × 10 + grave_number` → `H0000011`, `H0000012`, …
 
-The system spans **H000001 – H003185** across **13 sections**
+The system spans **H000001 – H003191** across **13 sections**
 (A, B, C, D, E, F, G, H, I, J, K, L, M) and **3,147 lots**.
 
 ---
@@ -85,7 +87,7 @@ Inside interactive mode:
 
 ```
 > lookup M 122
-> reverse H003185
+> reverse H003191
 > test K
 > stats
 > help
@@ -141,15 +143,15 @@ H002332 ┼─ SECTION 2 · THE MARGINS ─────────────�
         │    F margins          H002402 – H002413
         │    G + H (alternating rows)   H002414 – H002586
         │
-H002587 ┼─ SECTION 3 · SECTION M ───────────────────── H002835
+H002587 ┼─ SECTION 3 · SECTION M ───────────────────── H002841
         │
-H002836 ┼─ SECTION 4 · K J I L ─────────────────────── H003185
-        │    K                  H002836 – H002950
-        │    J                  H002951 – H003082
-        │    I                  H003083 – H003146
-        │    L                  H003147 – H003185
+H002842 ┼─ SECTION 4 · K J I L ─────────────────────── H003191
+        │    K                  H002842 – H002956
+        │    J                  H002957 – H003088
+        │    I                  H003089 – H003152
+        │    L                  H003153 – H003191
         │
-H003185 ┴─ SYSTEM MAXIMUM
+H003191 ┴─ SYSTEM MAXIMUM
 ```
 
 ### Exact figures per lettered section (from `full_table()`)
@@ -164,11 +166,11 @@ H003185 ┴─ SYSTEM MAXIMUM
 | **F** | grid + margin | 210 | H001872 – H002413 | Grid ends H002287; margin lots 199–210 |
 | **G** | S2 | 80 | H002414 – H002563 | 4 rows, alternates with H |
 | **H** | S2 | 92 | H002436 – H002586 | 4 rows, alternates with G |
-| **M** | S3 | 249 | H002587 – H002835 | 54 rows, lots 11–279 |
-| **K** | S4 | 115 | H002836 – H002950 | 44 rows |
-| **J** | S4 | 132 | H002951 – H003082 | 28 rows |
-| **I** | S4 | 64 | H003083 – H003146 | 32 rows, 2 lots each |
-| **L** | S4 | 39 | H003147 – H003185 | 7 rows |
+| **M** | S3 | 255 | H002587 – H002841 | 54 rows, lots 11–279 |
+| **K** | S4 | 115 | H002842 – H002956 | 44 rows |
+| **J** | S4 | 132 | H002957 – H003088 | 28 rows |
+| **I** | S4 | 64 | H003089 – H003152 | 32 rows, 2 lots each |
+| **L** | S4 | 39 | H003153 – H003191 | 7 rows |
 
 Interleaved ranges overlap because two sections are woven together
 column-by-column in that pass; the range shown is each section's own min/max,
@@ -218,16 +220,16 @@ _EF_MAX_H  = 2331    # last H of Pass 3  (H002331 = E·214)
 _S2_MAX_H = 2586    # H002586 = H·70
 ```
 
-### Section 3 · Section M (H002587 – H002835)
+### Section 3 · Section M (H002587 – H002841)
 
-54 rows, 249 lots (11–279), no double-rows, no suffixes. Some lot numbers are
+54 rows, 255 lots (11–279), no double-rows, no suffixes. Some lot numbers are
 skipped (the map has gaps) but H-numbers stay sequential.
 
 ```
-_S3_MAX_H = 2835    # H002835 = M·279
+_S3_MAX_H = 2841    # H002841 = M·279
 ```
 
-### Section 4 · K J I L (H002836 – H003185)
+### Section 4 · K J I L (H002842 – H003191)
 
 Swept one after another: **all of K, then J, then I, then L.**
 
@@ -237,7 +239,7 @@ Swept one after another: **all of K, then J, then I, then L.**
 - **L** — 7 rows, 39 lots
 
 ```
-_S4_MAX_H = 3185    # last H in the system  (H003185 = L·107)
+_S4_MAX_H = 3191    # last H in the system  (H003191 = L·107)
 ```
 
 ---
@@ -290,7 +292,7 @@ d = importlib.util.module_from_spec(spec); spec.loader.exec_module(d)
 d.h_lot('B', '20H')    # (1, 'H000001')
 d.h_lot('D', '384A')   # (1690, 'H001690A')
 d.h_lot('M', '122')    # (2678, 'H002678')
-d.h_lot('L', '107')    # (3185, 'H003185')
+d.h_lot('L', '107')    # (3191, 'H003191')
 d.h_lot('Z', '1')      # (None, "Unknown section …")
 ```
 
@@ -310,7 +312,7 @@ d.h_grave('D', '376A', 3)   # (16983, 'H001698A3')
 
 ```python
 d.decode_h(1)      # {'section':'B','lot_label':'20H','c':1,'r':1,…}
-d.decode_h(3185)   # {'section':'L','lot_label':'107',…}
+d.decode_h(3191)   # {'section':'L','lot_label':'107',…}
 d.decode_h(3186)   # None (above system max)
 ```
 
@@ -330,7 +332,7 @@ six grave H-numbers. The export functions write it to CSV.
 |---------|--------------|
 | `lookup <sec> <lot>` | Forward lookup, framed result panel. |
 | `lookup <sec> <lot> <g>` | Same, plus the grave H-number. |
-| `reverse <H>` | Reverse lookup. Accepts `H003185`, `003185`, or `3185`. |
+| `reverse <H>` | Reverse lookup. Accepts `H003191`, `003191`, or `3191`. |
 | `test` | Global validation suite (47 checks). |
 | `test <sec>` | Per-section anchor tests (e.g. `test K`, `test M`). |
 | `table <sec>` | Print every lot in a section. |
@@ -385,7 +387,7 @@ Last run: `test K` 7/7, `test M` 9/9, **`test B` 6/7** (the one failure is the
 `380H` label collision described below).
 
 > The exhaustive property-based suite (round-trip for every lot, continuity
-> for every H from 1…3185, ~5,600 checks) is **not present in this version**.
+> for every H from 1…3191, ~5,600 checks) is **not present in this version**.
 > If wanted, it would be the natural next addition.
 
 ---
@@ -441,9 +443,9 @@ The K/J/I/L data and lookups work, but these were not updated:
 
 - **Module docstring** (lines 1–30) still describes only "Sections A, B, C, D"
   and "two passes".
-- **Interactive banner** says `H000001 – H002835 · Sections: A B C D E F G H M`.
-- **`reverse` out-of-range message** reports `System max: H002835`
-  (uses `_S3_MAX_H`; should be `_S4_MAX_H` = `H003185`).
+- **Interactive banner** says `H000001 – H002841 · Sections: A B C D E F G H M`.
+- **`reverse` out-of-range message** reports `System max: H002841`
+  (uses `_S3_MAX_H`; should be `_S4_MAX_H` = `H003191`).
 - **`table` usage text** lists `A B C D E F G H M` (omits I J K L).
 - `_box()` is defined twice (lines ~1100 and ~1466); the later one wins.
 
@@ -476,8 +478,8 @@ position, with a suffix-resolution branch in `h_lot()`.
 | `_DC_MAX_H` | 1871 — last H of Pass 2 (D+C). |
 | `_EF_MAX_H` | 2331 — last H of Pass 3 and of Section 1. |
 | `_S2_MAX_H` | 2586 — last H of Section 2. |
-| `_S3_MAX_H` | 2835 — last H of Section 3 (M). |
-| `_S4_MAX_H` | 3185 — last H of Section 4 and of the whole system. |
+| `_S3_MAX_H` | 2841 — last H of Section 3 (M). |
+| `_S4_MAX_H` | 3191 — last H of Section 4 and of the whole system. |
 | `B_DECODER`, `A_DECODER`, `F_DECODER`, `E_DECODER` | Formula-based `lot -> (col, row)` maps. |
 | `_D_ROWS`, `_C_ROWS`, `_F_ROWS`, `_E_ROWS` | Row data for the table-driven grids. |
 | `_D_LOT_H`, `_C_LOT_H`, `_F_LOT_H`, `_E_LOT_H` | `lot -> H` maps built from those rows. |

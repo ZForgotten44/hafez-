@@ -19,16 +19,11 @@ kind,reason,h_number_candidate,section,lot,label_on_drawing,map_x,map_y,outline,
 "known H-number, expected spot (no outline drawn)","H000263 sits between H000262 and H000264 on the path, which are 12 units apart.",H000263,A,96H,,1579.5,896.5,,Is there a lot at this spot? Where is A-96H on the ground?
 "known H-number, expected spot (no outline drawn)","H000629 sits between H000627 and H000630 on the path, which are 40 units apart.",H000629,B,289,,1451.8,543.3,,Is there a lot at this spot? Where is B-289 on the ground?
 "known H-number, expected spot (no outline drawn)","H000628 sits between H000627 and H000630 on the path, which are 40 units apart.",H000628,B,290,,1451.5,529.8,,Is there a lot at this spot? Where is B-290 on the ground?
-"known H-number, map position unresolved","H000661 sits between H000660 and H000663 on the path, which are 269 units apart.",H000661,B,320H,,,,,
-"known H-number, map position unresolved","H000705 sits between H000704 and H000707 on the path, which are 289 units apart.",H000705,B,340H,,,,,
-"known H-number, map position unresolved","H000749 sits between H000748 and H000751 on the path, which are 311 units apart.",H000749,B,360H,,,,,
 "known H-number, expected spot (no outline drawn)","H002366 sits between H002363 and H002367 on the path, which are 13 units apart.",H002366,B,390A,,1410.3,394.3,,Is there a lot at this spot? Where is B-390A on the ground?
 "known H-number, expected spot (no outline drawn)","H002365 sits between H002363 and H002367 on the path, which are 13 units apart.",H002365,B,390B,,1413.6,394.5,,Is there a lot at this spot? Where is B-390B on the ground?
 "known H-number, expected spot (no outline drawn)","H002364 sits between H002363 and H002367 on the path, which are 13 units apart.",H002364,B,390C,,1416.9,394.6,,Is there a lot at this spot? Where is B-390C on the ground?
 "known H-number, map position unresolved","H000878 sits between H000877 and H000880 on the path, which are 85 units apart.",H000878,D,1H_2,,,,,
 "known H-number, map position unresolved","H000879 sits between H000877 and H000880 on the path, which are 85 units apart.",H000879,D,1I_2,,,,,
-"known H-number, map position unresolved",internal bookkeeping key for a double-row lot (the map draws its A/B rows),H002230,E,152dr,,,,,
-"known H-number, map position unresolved",internal bookkeeping key for a double-row lot (the map draws its A/B rows),H002258,E,169dr,,,,,
 "known H-number, map position unresolved","H002587 sits between H002586 and H002589 on the path, which are 800 units apart.",H002587,M,11,,,,,
 "known H-number, map position unresolved","H002588 sits between H002586 and H002589 on the path, which are 800 units apart.",H002588,M,12,,,,,
 "known H-number, expected spot (no outline drawn)","H002591 sits between H002590 and H002592 on the path, which are 23 units apart.",H002591,M,16,,1314.0,307.3,,Is there a lot at this spot? Where is M-16 on the ground?

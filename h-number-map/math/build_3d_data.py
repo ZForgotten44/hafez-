@@ -76,6 +76,7 @@ def in_bld(x, y, pad):
 trees = [t for t in trees if not in_bld(t[0], t[1], 8 + 0.8 * t[2])]   # dark blobs hugging a building are its shadow, not a tree
 rng = np.random.default_rng(7)
 WOODS = [(573, 600, 790, 880)]
+n_det0 = len(trees)
 pts = [(t[0], t[1]) for t in trees]
 for (wx0, wy0, wx1, wy1) in WOODS:
     for _ in range(6000):
@@ -90,11 +91,14 @@ for o in L:
         lots.append([o['s'], o['l'], o['hn'], [int(round(v * 10)) for p in o['poly'] for v in p]])
 import place_stones as PS
 R = PS.Road(PS.road_mask(raw))
-n0 = len(trees); trees = [t for t in trees if not R.at(t[0], t[1])]       # no trunk on a road or path
+woodset = {tuple(t[:2]) for t in trees[n_det0:]}
+n0 = len(trees); trees = [t for t in trees if not R.at(t[0], t[1])]
+woods_from = sum(1 for t in trees if tuple(t[:2]) not in woodset)       # trees before this index are detected, the rest is the woods fill (order is kept)       # no trunk on a road or path
 pl, pst = PS.place(lots, R)
 for row, q in zip(lots, pl): row.append(q)
 print('stones placed', pst, '; trees dropped from paths', n0 - len(trees))
-json.dump(dict(tex=tex, ext=[x0, y0, x1, y1], lots=lots, bld=bld, trees=trees), open('three/data3d.json', 'w'), separators=(',', ':'))
+json.dump(dict(tex=tex, ext=[x0, y0, x1, y1], lots=lots, bld=bld, trees=trees, woods_from=woods_from), open('three/data3d.json', 'w'), separators=(',', ':'))
+import export_trees; export_trees.run()
 print(len(lots), 'lots;', len(trees), 'trees; texture', len(buf) // 1024, 'KB')
 vis = clean.copy()
 for x, y, r, t in trees: cv2.circle(vis, P(x, y), int(r * S), (0, 0, 255) if not t else (0, 255, 0), 2)

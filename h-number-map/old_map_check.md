@@ -1,13 +1,16 @@
-# Numbers with no lot drawn: checked against the old section maps
+# Numbers with no lot, outlines with no number: what was checked and what was done
 
-Source: `Cemetery Map - All Sections on Individual Pages` (old sheets A to M, cremains and overall). No decoder record was changed.
+Sources used: the old section sheets (`Cemetery Map - All Sections on Individual Pages`), the 2022 drawing, the burial workbooks for J, K and M, and the numbering tables. No plat, deed index or section ledger is in the repository, so the items that need one are marked **Jon** and have an annotated image in `jon_questions/`. Nothing below was renumbered or relabelled without a source.
 
-| Numbers | What the old sheet shows | What the 2022 drawing shows | Reading |
+| Item | Found | Done | Open |
 |---|---|---|---|
-| Section A "H" lots 20H, 39H, 58H ... 343H (18 numbers) | Only the row-1 lot 1H at the south end of the first row, plus the small H lots inside the rows (5H, 24H, 43H ...). No 20H, 39H, 58H ... lot is drawn | Same | Numbers exist in the table; no lot was ever drawn for them |
-| B 289 (H000629), B 290 (H000628) | The chapel and its entrance circle sit where these would be; no lots drawn | Same (chapel footprint) | Lots under the chapel footprint |
-| B 390A, 390B, 390C (H002364 to H002366) | Three lots stacked north of lot 390 | Blank: only 390 is drawn | Lots on the old sheet, absent from the 2022 drawing |
-| B 320H, 340H, 360H | The last H lots of the row are labelled 318H, 336H, 354H and 372H | Same labels | Label mismatch between table (step 20) and map (step 18): needs the records |
-| M 11, 12, 16 | Drawn at the east tip | Not drawn | See `section_M_check.md` |
-| Cremains strip | Niches numbered 1 to 80, every fifth written | Same | Separate area, not in the H-numbering |
-| Mausoleum crypts | Numbered 1 to 68 between the four mausoleums | Same | Not in the H-numbering |
+| M 56, 57, 62, 63, 68, 69 | real lots (records and drawing), absent from the old sheet and from v1 | numbered in route order, v2 | none (confirmation of the column order is Q2) |
+| M 11, 12, 16 | on the old sheet, absent from 2022 drawing and records | kept reserved, crosswalk for both answers | **Jon, Q1** |
+| A "H" lots 20H, 39H ... 343H (18) | neither the old sheet nor the 2022 drawing draws them; only 1H and the in-row H lots exist | kept as numbers with no lot, listed in `h_numbers_without_lot.csv`, searchable as "location unverified" | **Jon, Q6**: what H means in the ledger |
+| B 289, 290 | the chapel entrance circle stands where they would be; neither source draws them | kept as numbers with no lot | **Jon, Q4** |
+| B 390A, 390B, 390C | three lots north of 390 on the old sheet, blank on the 2022 drawing | kept as numbers with no lot; outlines not restored without a ledger | **Jon, Q3** |
+| B "H" row labels | both sources have 19 H lots in the row, the table has 19; labels 318H, 336H, 354H, 372H vs table 320H, 340H, 360H, 380H, matched by position | table key unchanged; the four lots are listed as label aliases in `crosswalk/label_aliases.csv` so either label finds the lot | **Jon, Q5** (which label is the lot's real name) |
+| B plain lots 20, 40 ... 300 | drawn, no table entry (the table excludes multiples of 20) | drawn grey, no number | **Jon, Q5** |
+| Mausoleum crypts 1-68, cremains niches 1-80 | distinct native numbering, not H-numbers | restored as searchable locations: `special_locations.csv`, the atlas search ("crypt 12", "niche 12"), the overview ranges and `site/pdf/Cedar_Grove_Crypts_and_Cremains_detail.pdf` | which mausoleum each crypt belongs to is not established |
+| Trees 414 vs 415 | one detected tree (710.7, 325.7) dropped because two unnumbered Section I outlines were read as houses | building list now independent of numbering; inventory frozen in `trees.json` (415) | none |
+| Restroom | no evidence in the repository | label removed from the maps | **Jon, Q7** |
