@@ -192,7 +192,7 @@ def run():
           '| Mausoleum crypts (numbered 1 to 68 on the drawing): no number, no review | %d |' % len(gr),
           '| Outline that is not in the numbering table and has no free H-number near it: drawn amber (awaiting a number or an identification), no number | %d |' % len(nu), '',
           'H-numbers with no lot drawn on the map: **%d** (`h_numbers_without_lot.csv`). 18 of them are the Section A "H" lots that start every row.' % len(out['known_unplaced']), '',
-          'Nothing was renumbered: no H-number moved. If the grey outlines should get numbers, say which rule (append after H003185, or insert).', '',
+          'Nothing was renumbered: no H-number moved. If the grey outlines should get numbers, say which rule (append after H003218, or insert).', '',
           '**Numbering v2 (Section M rebuilt).** The six real M lots 56, 57, 62, 63, 68, 69 now have H-numbers in route order (H002618-19, H002621-22, H002628-29); Sections K, J, I and L start six numbers later (K H002842 to L H003191). The before/after list is `crosswalk/crosswalk_v1_to_v2.csv`, searchable in `crosswalk/crosswalk_search.html`. Evidence and the route reconstruction: `section_M_check.md`.',
           '',
           '**Still open (questions for Jon, with annotated images in `jon_questions/`):** M 11, 12, 16 (H002587, H002588, H002591: kept reserved until confirmed; if withdrawn, K to L move up three), B 390A-C, B 289 and 290, the B "H" row labels 318H/336H/354H/372H against the table, the 18 Section A "H" lots, and the Restroom label (removed from the maps until grounds staff confirm it).', '']

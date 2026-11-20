@@ -22,8 +22,8 @@ VIEW_NUM = [335, 215, 1735, 940]                  # lots, road names, the mausol
 VIEW_TREE = [215, 55, 1810, 1045]                 # the whole aerial: the woods west of the cemetery too
 MX, TOP, BOT = 60, 200, 610
 NAVY, GREY, PALE = B.NAVY, (.34, .38, .45), (.93, .92, .88)
-PASSES = [(1, 836, 'Pass 1', 'B, A', '#cfe0f5'), (837, 1871, 'Pass 2', 'D, C', '#d5ecd9'), (1872, 2331, 'Pass 3', 'F, E', '#f6e7b9'),
-          (2332, 2586, 'Pass 4', 'margins, G, H', '#f6d3cf'), (2587, 2841, 'Pass 5', 'M', '#dcd3ee'), (2842, 3191, 'Pass 6', 'K, J, I, L', '#cfe6e4')]
+PASSES = [(1, 836, 'Pass 1', 'B, A', '#cfe0f5'), (837, 1885, 'Pass 2', 'D, C', '#d5ecd9'), (1886, 2345, 'Pass 3', 'F, E', '#f6e7b9'),
+          (2346, 2600, 'Pass 4', 'margins, G, H', '#f6d3cf'), (2601, 2855, 'Pass 5', 'M', '#dcd3ee'), (2856, 3218, 'Pass 6', 'L strip, K, J, I, L', '#cfe6e4')]
 # number, name, note, x, y (drawing units, read off the drawing and the old section maps)
 LANDMARKS = [
     (1, 'Office', 'the cottage', 1378, 358), (2, 'Maintenance building', 'the garage', 1288, 385), (3, 'Chapel', 'in Section B', 1415, 538),

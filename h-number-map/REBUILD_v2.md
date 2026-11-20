@@ -2,7 +2,7 @@
 
 | What | Where |
 |---|---|
-| Production decoder v2 (H000001 to H003191) | `s4/s4decoder1.py` (v1 frozen as `s4/s4decoder_v1.py`) |
+| Production decoder v2 (H000001 to H003218) | `s4/s4decoder1.py` (v1 frozen as `s4/s4decoder_v1.py`) |
 | East-tip switch (M 11, 12, 16) | `M_EASTTIP_STATUS` in `s4/s4decoder1.py`: `'active'` (shipped) or `'withdrawn'` |
 | Section tables | `H-Tables/cedar_grove_section_{M,K,J,I,L}_h_table.csv` regenerated |
 | Formula, explainer | `math/hformula.py`, `giant_formula.js` (3,203 of 3,203 labels match the decoder), `Cedar_Grove_Numbering_Explained.html` |

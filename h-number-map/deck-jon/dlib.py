@@ -92,3 +92,53 @@ def tile(im, n, gap=14):
     h = im.height // n + 1; out = Image.new('RGB', (im.width * n + gap * (n - 1), h), (255, 255, 255))
     for i in range(n): out.paste(im.crop((0, i * h, im.width, min((i + 1) * h, im.height))), (i * (im.width + gap), 0))
     return out
+
+# ---------------------------------------------------------------- deck v2: label beside each mark, no legend
+def _font(px): return ImageFont.truetype(FB, int(px))
+def tagged(d, tip, side, off, text, col, fpx, w, placed=None):
+    f = _font(fpx); f2 = _font(fpx * .85); lines = text.split('\n'); fonts = [f] + [f2] * (len(lines) - 1)
+    bw = max(d.textlength(l, font=ft) for l, ft in zip(lines, fonts)) + fpx * .6; bh = fpx * 1.2 + (len(lines) - 1) * fpx * .95 + fpx * .3
+    dx, dy = DIRS[side]; n = math.hypot(dx, dy) or 1; dx, dy = dx / n, dy / n; W, H = d.im.size
+    cx = tip[0] + dx * (off + (bw / 2 if abs(dx) > .3 else 0)); cy = tip[1] + dy * (off + (bh / 2 if abs(dy) > .3 else 0))
+    if abs(dx) > .3 and abs(dy) <= .3: cy = tip[1]
+    if abs(dy) > .3 and abs(dx) <= .3: cx = tip[0]
+    def rect(cx, cy): return [cx - bw / 2, cy - bh / 2, cx + bw / 2, cy + bh / 2]
+    def clampc(cx, cy): return min(max(cx, bw / 2 + 2), W - bw / 2 - 2), min(max(cy, bh / 2 + 2), H - bh / 2 - 2)
+    cx, cy = clampc(cx, cy)
+    for _ in range(14):
+        r = rect(cx, cy)
+        if not any(not (r[2] < p[0] or r[0] > p[2] or r[3] < p[1] or r[1] > p[3]) for p in (placed or [])): break
+        if abs(dx) > .3 and abs(dy) <= .3: cy += bh * 1.05 * (1 if cy < H / 2 else -1)
+        else: cx += bw * 1.05 * (1 if cx < W / 2 else -1)
+        cx, cy = clampc(cx, cy)
+    r = rect(cx, cy)
+    if placed is not None: placed.append(r)
+    px = min(max(tip[0], r[0]), r[2]); py = min(max(tip[1], r[1]), r[3])
+    arrow(d, tip, (px, py), col, w=w)
+    d.rectangle(r, fill=(255, 255, 255), outline=col, width=max(2, w - 1))
+    y = r[1] + fpx * .15
+    for l, ft in zip(lines, fonts): d.text((cx - d.textlength(l, font=ft) / 2, y), l, fill=col, font=ft); y += fpx * (1.0 if ft is f else .95)
+def render2(box, marks, S, page=None, fpx_override=None, padr=0):
+    pg = page or page_of(box); out = {}
+    W = (box[2] - box[0]) * S; fpx = fpx_override or max(22, .025 * W); lw = max(4, int(.0035 * W) if not fpx_override else 5)
+    for view in ('old', 'new'):
+        im = crop_old(pg, box, S) if view == 'old' else crop_ai(box, S)
+        if padr: big = Image.new('RGB', (im.width + padr, im.height), (255, 255, 255)); big.paste(im, (0, 0)); im = big
+        d = ImageDraw.Draw(im)
+        P = lambda p: ((p[0] - box[0]) * S, (p[1] - box[1]) * S); placed = []
+        for m in marks:
+            col = {'red': RED, 'purple': PURPLE}[m.get('kind', 'red')]; present = m.get('old', True) if view == 'old' else m.get('new', True)
+            if m.get('kind') == 'purple' and not present: continue
+            txt = m['t']
+            if not present: txt += '\n' + ('Approx. former location' if m.get('absent') == 'former' else m.get('note', 'Approx. position, not drawn'))
+            elif m.get('absent') == 'both': txt += ''
+            if m.get('absent') == 'both': txt = m['t'] + '\n' + m.get('note', 'Approx. position, not drawn')
+            if m.get('shape'):
+                shp = [P(p) for p in m['shape']]
+                (d.line(shp + [shp[0]], fill=col, width=lw) if present and m.get('absent') != 'both' else dashed_poly(d, shp, col, w=lw, on=int(fpx * .6), off=int(fpx * .4)))
+                xs = [p[0] for p in shp]; ys = [p[1] for p in shp]; cx, cy = (min(xs) + max(xs)) / 2, (min(ys) + max(ys)) / 2; hw, hh = (max(xs) - min(xs)) / 2, (max(ys) - min(ys)) / 2
+                dx, dy = DIRS[m.get('side', 'N')]; n = math.hypot(dx, dy) or 1; tip = (cx + dx / n * hw, cy + dy / n * hh)
+            else: tip = P(m['at'])
+            tagged(d, tip, m.get('side', 'N'), m.get('off', 40), txt, col, fpx, lw, placed)
+        out[view] = im
+    return out['old'], out['new'], pg

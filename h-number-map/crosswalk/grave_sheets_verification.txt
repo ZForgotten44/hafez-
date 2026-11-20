@@ -2,7 +2,7 @@ a. 2173 workbook graves (J 538, K 546, M 1089); printed exactly once: 2173; miss
 b. 2173 IDs resolve with decoder v2 to the record's section, lot and grave; IDs pointing to the wrong place: 0
 c. printed ID font size: min 6.72 pt, max 9.00 pt over 2173 IDs; below 6.5 pt: 0
    sample of 80 horizontal IDs rendered at 4x: ink height min 7.25 pt, median 8.50 pt (digits of a 6.5 pt font are 4.7 pt)
-d. numbered by the decoder but not drawn (reserved IDs, no lot, no grave sheet): M 11 H002587, M 12 H002588, M 16 H002591
+d. numbered by the decoder but not drawn (reserved IDs, no lot, no grave sheet): M 11 H002601, M 12 H002602, M 16 H002605
    status totals: {'Occupied': 562, 'Available': 680, 'Sold': 552, 'Reserved': 277, 'Tree': 91, 'HOLD': 3, 'Hold - F/S Colubarium': 8}
 
 failures: {'missing': 0, 'duplicate': 0, 'extra': 0, 'wrong': 0, 'small': 0, 'ink': 0}

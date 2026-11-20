@@ -32,7 +32,7 @@ def run():
         for sgn in (-1, 1):
             r = (None, None)
             for g in range(1, maxgap + 1):
-                d = dist(pt, h + sgn * g) if 1 <= h + sgn * g <= 3185 else None
+                d = dist(pt, h + sgn * g) if 1 <= h + sgn * g <= 3218 else None
                 if d is not None: r = (d, g); break
             out.append(r)
         return out

@@ -148,7 +148,7 @@ def build(sec, D, raw, rec, lots_all):
 
 def frame(pg, sec, n, total, win, bb, wins, own, sh, notdrawn, lots_all):
     pg.insert_text((M, 34), 'Grave IDs · Section %s' % sec, fontsize=22, fontname='uib', fontfile=B.UIB, color=NAVY)
-    pg.insert_text((M, 49), 'Cedar Grove Cemetery · page %d of %d · grid squares %s · numbering v2 (H000001 to H003191)' % (n, total, cellref(win)), fontsize=8.5, fontname='ui', fontfile=B.UI, color=(.34, .38, .45))
+    pg.insert_text((M, 49), 'Cedar Grove Cemetery · page %d of %d · grid squares %s · numbering v3 (H000001 to H003218)' % (n, total, cellref(win)), fontsize=8.5, fontname='ui', fontfile=B.UI, color=(.34, .38, .45))
     # legend
     x = M; ky = H - 17
     for cls in ('occupied', 'sold', 'vacant', 'other'):

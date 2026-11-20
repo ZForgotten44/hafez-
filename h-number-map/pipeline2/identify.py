@@ -122,6 +122,11 @@ def run():
         else:
             g['flags'].append('label_not_in_region_section' if tot else 'section_undetermined')
         if o and g['section'] and o['section'] != g['section']: g['flags'].append('old_ocr_disagrees')
+    # ---- the strip north of the oval: lots 1-13 stand inside the SECTION L boundary on the old L sheet (jon_questions Q8), so their printed labels decode in Section L
+    for g in groups:
+        t = ''.join(g['tokens'])
+        if t.isdigit() and 1 <= int(t) <= 13 and 636 <= g['pt'][0] <= 835 and 318 <= g['pt'][1] <= 345 and ('L', t) in g['opts']:
+            g['section'], g['label'] = 'L', t; g['evidence'] = ['inside_L_boundary_old_L_sheet']; g['flags'] = [f for f in g['flags'] if f not in ('label_not_in_region_section', 'section_undetermined', 'old_ocr_disagrees', 'no_region_evidence')]
     # ---- areas with no region evidence (e.g. the mausoleum garden): a connected cluster of labels must all belong to ONE
     #      section, so keep a section only if it is the single section in which every label of the cluster exists
     und = [g for g in groups if 'section_undetermined' in g['flags']]
