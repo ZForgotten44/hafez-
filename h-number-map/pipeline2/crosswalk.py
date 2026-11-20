@@ -22,13 +22,15 @@ def load(path, patch=None):
 V1 = load(os.path.join(REPO, 's4', 's4decoder_v1.py'))
 V2 = load(os.path.join(REPO, 's4', 's4decoder1.py'))
 V2W = load(os.path.join(REPO, 's4', 's4decoder1.py'), ("M_EASTTIP_STATUS = 'active'", "M_EASTTIP_STATUS = 'withdrawn'"))
-SECS = 'MKJIL'
+SECS = 'BDMKJIL'
 
 def lot_tables(dec):
     """section -> {lot_label: (H, route_row)}"""
     rows = dict(M=dec._M_ROWS, K=dec._K_ROWS, J=dec._J_ROWS, I=dec._I_ROWS, L=dec._L_ROWS); lh = dict(M=dec._M_LOT_H, K=dec._K_LOT_H, J=dec._J_LOT_H, I=dec._I_LOT_H, L=dec._L_LOT_H)
     out = {}
-    for s in SECS:
+    out['B'] = {l: (dec.SWEEP * (r - 1) + c, r) for l, (c, r) in dec.B_DECODER.items() if r}
+    out['D'] = {l: (h, None) for l, h in {**dec._D_LOT_H, **dec._D2_LOT_H}.items()}
+    for s in 'MKJIL':
         row_of = {}
         for r, lots in rows[s].items():
             for l in lots: row_of.setdefault(l, r)
@@ -54,6 +56,12 @@ def graves_of(s, lot):
     if REC[s] and lot in REC[s]: return [(g, rid, 'burial workbook lot and grave') for g, rid, st in REC[s][lot]]
     return [(g, '', 'lot position (no burial records for this section; graves 1-6 as in the published tables)' if not REC[s] else 'lot position (lot not in the burial workbook; graves 1-6)') for g in range(1, 7)]
 
+def reason_of(s, lot, o, n):
+    if s == 'B': return ('B v2: plain lot beside its H lot takes the unused place in column 2 of its level' if not o else 'B v2: the v1 last-column rule is removed; this label sits at its own place between its neighbours')
+    if s == 'D': return 'D v2: row 15 listed 274 where 293 belongs (between 294 and 292)'
+    if s == 'M': return ('M v2: real lot (burial workbook, 2022 drawing) numbered in route order' if not o else ('M v2: retired pending confirmation' if not n else 'M v2: moved by the six lots inserted before it'))
+    return 'moved by the six Section M lots inserted before it'
+
 def build_rows(T_old, T_new):
     rows = []
     for s in SECS:
@@ -64,12 +72,12 @@ def build_rows(T_old, T_new):
             elif n: change = 'new lot: no v1 number'
             else: change = 'retired: no v2 number (pending staff confirmation)'
             for g, rid, basis in graves_of(s, lot):
-                rows.append(dict(section=s, lot_label=lot, route_row_v2=(n[1] if n else ''), route_row_v1=(o[1] if o else ''), grave=g, v1_h_lot=hl(o[0]) if o else '', v2_h_lot=hl(n[0]) if n else '',
+                rows.append(dict(reason=reason_of(s, lot, o, n), section=s, lot_label=lot, route_row_v2=(n[1] if n else ''), route_row_v1=(o[1] if o else ''), grave=g, v1_h_lot=hl(o[0]) if o else '', v2_h_lot=hl(n[0]) if n else '',
                                  v1_h_grave=hg(o[0], g) if o else '', v2_h_grave=hg(n[0], g) if n else '', change=change, record_id=rid, anchor=basis))
     return rows
 
 def write_csv(path, rows):
-    cols = ['section', 'lot_label', 'route_row_v2', 'route_row_v1', 'grave', 'v1_h_lot', 'v2_h_lot', 'v1_h_grave', 'v2_h_grave', 'change', 'record_id', 'anchor']
+    cols = ['section', 'lot_label', 'route_row_v2', 'route_row_v1', 'grave', 'v1_h_lot', 'v2_h_lot', 'v1_h_grave', 'v2_h_grave', 'change', 'reason', 'record_id', 'anchor']
     with open(path, 'w', newline='') as f:
         w = csv.DictWriter(f, cols); w.writeheader(); w.writerows(rows)
 
@@ -140,7 +148,7 @@ input{font:22px ui-monospace,Menlo,monospace;padding:12px 14px;width:100%;box-si
 .card{background:#fff;border:1px solid #cfd3da;border-radius:12px;padding:16px 18px;margin:12px 0}.card b.t{display:block;font-size:14px;letter-spacing:.04em;text-transform:uppercase;color:#566;margin-bottom:4px}.big{font:700 26px ui-monospace,Menlo,monospace}.warn{border-color:#c9892f;background:#fdf3e1}.ok{border-color:#3f9a63}.muted{color:#566;font-size:15px}code{font-family:ui-monospace,Menlo,monospace}</style></head><body><main>
 <h1>Cedar Grove H-ID lookup</h1><p class="s">Type an H-ID (H002620, H0026203, 2620) or a section, lot and grave (M 61 3). Both numbering versions are searched: v1 is the numbering before the Section M rebuild, v2 is the current one.</p>
 <input id="q" autofocus placeholder="H0026203   or   M 61 3" autocomplete="off"><div class="row"><button data-q="M 61 3">M 61 3</button><button data-q="H002620">H002620</button><button data-q="H0026203">H0026203</button><button data-q="K 1">K 1</button><button data-q="L 107">L 107</button></div><div id="out"></div>
-<p class="muted">Map versions. <b>v1</b>: H000001 to H003185, Section M without lots 56, 57, 62, 63, 68, 69. <b>v2</b>: H000001 to H003191, those six lots inserted in route order, every number after them moved up. Numbers up to H002617 are the same in both. An old ID can name a different grave in v2, so always say which version a number came from. Burial records are keyed by section, lot and grave, not by H-ID, so a person stays with the same grave when the H-ID changes.</p>
+<p class="muted">Map versions. <b>v1</b>: H000001 to H003185. <b>v2</b>: H000001 to H003191: Section B corrected (the last-column rule removed, plain lots added), Section M's six lots 56, 57, 62, 63, 68, 69 inserted in route order, every number after them moved up. Sections A and C to H are the same in both versions; in B the 19 labels 12, 31, 50 ... moved to their own places and the plain lots 40 ... 360 were added (see the lot list). An old ID can name a different grave in v2, so always say which version a number came from. Burial records are keyed by section, lot and grave, not by H-ID, so a person stays with the same grave when the H-ID changes.</p>
 <script>
 var D=__DATA__;  /* lots: [section, lot, v1 H or 0, v2 H or 0, route row v2, graves in records or 0] ; unchanged ranges are the same in both versions */
 var V1={},V2={},BYL={};D.lots.forEach(function(r){if(r[2])V1[r[2]]=r;if(r[3])V2[r[3]]=r;BYL[r[0]+'|'+r[1]]=r});
@@ -152,10 +160,10 @@ function parse(q){q=q.trim().toUpperCase();var m=q.match(/^H?0*(\d+)$/);if(m){va
   m=q.match(/^([A-Z])[\s\-]*([0-9A-Z]+)(?:[\s\-]+(\d))?$/);if(m)return {sec:m[1],label:m[2],g:m[3]?+m[3]:0};return null}
 function show(){var q=document.getElementById('q').value,o=document.getElementById('out');o.innerHTML='';if(!q.trim())return;var p=parse(q);if(!p){o.innerHTML=card('warn','Not understood','Type H002620, H0026203 or M 61 3.');return}
  var h='';
- if(p.lot!==undefined){var n=p.lot,g=p.g,a=V1[n],b=V2[n],same=(n<2618||n>3191);
+ if(p.lot!==undefined){var n=p.lot,g=p.g,a=V1[n],b=V2[n],same=!(a||b);
   if(n>3191||n<1){o.innerHTML=card('warn','Out of range','H-numbers run from H000001 to H003191 in v2 (H003185 in v1).');return}
   var w=g?' grave '+g:'';var idv=g?H(n,g):L(n);
-  if(same){h+=card('ok','Same in v1 and v2','<span class="big">'+idv+'</span><br>H-numbers below H002618 did not change. Look it up in the decoder or the atlas: this lookup only lists the sections that moved (M, K, J, I, L).');o.innerHTML=h;return}
+  if(same){h+=card('ok','Same in v1 and v2','<span class="big">'+idv+'</span><br>No lot of Section B, M, K, J, I or L carries this number in either version, so it is either a lot of A or C to H (numbers there are identical in v1 and v2: look it up in the decoder or the atlas) or a reserved number with no lot.');o.innerHTML=h;return}
   if(b)h+=card(a&&a[0]==b[0]&&a[1]==b[1]?'ok':'warn','As a v2 (current) ID','<span class="big">'+idv+'</span><br>'+lotText(b)+w+(b[5]?'<br><span class="muted">'+b[5]+' graves in the burial records for this lot</span>':'')+'<br>Its v1 (old) ID was '+(b[2]?(g?H(b[2],g):L(b[2])):'none: this lot had no v1 number')+'.');
   else h+=card('warn','As a v2 (current) ID','<span class="big">'+idv+'</span><br>No lot carries this number in v2 (it is not in a section that moved, or it is retired).');
   if(a)h+=card(b&&a[0]==b[0]&&a[1]==b[1]?'ok':'warn','As a v1 (old) ID','<span class="big">'+idv+'</span><br>'+lotText(a)+w+'<br>In v2 that same lot'+w+' is <b class="big" style="font-size:20px">'+(a[3]?(g?H(a[3],g):L(a[3])):'RETIRED')+'</b>'+(b&&(a[0]!=b[0]||a[1]!=b[1])?'<br><b>Careful:</b> the number '+idv+' now belongs to '+lotText(b)+w+', a different grave.':''));

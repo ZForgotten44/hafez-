@@ -1,0 +1,73 @@
+spans in the number font on the map: 3164
+forward: 3164 numbered lots checked; confirmed lots with no visible ID: 0 []
+backward: 3164 printed numbers; numbers not tied to a lot: 0 []; leaders ending at the wrong place: 0
+identity: outlines still awaiting identification: 69
+   cell 257 grid E4 (650.8, 334.0) label "21": awaiting identification: Jon Q8: Ledger: is lot 21 a Section L lot, and what is the hatched symbol
+   cell 262 grid E4 (686.2, 338.9) label "19": awaiting identification: Jon Q8: Ledger: section and number of lots 14-19, and whether they were added after the old sheet
+   cell 268 grid E4 (695.4, 339.3) label "18": awaiting identification: Jon Q8: Ledger: section and number of lots 14-19, and whether they were added after the old sheet
+   cell 273 grid F4 (704.6, 337.4) label "17": awaiting identification: Jon Q8: Ledger: section and number of lots 14-19, and whether they were added after the old sheet
+   cell 270 grid F4 (714.0, 334.3) label "16": awaiting identification: Jon Q8: Ledger: section and number of lots 14-19, and whether they were added after the old sheet
+   cell 271 grid F4 (723.2, 334.3) label "15": awaiting identification: Jon Q8: Ledger: section and number of lots 14-19, and whether they were added after the old sheet
+   cell 264 grid F4 (732.4, 333.8) label "14": awaiting identification: Jon Q8: Ledger: section and number of lots 14-19, and whether they were added after the old sheet
+   cell 259 grid F4 (741.6, 333.3) label "13": awaiting a number (lot identified): Which route position (before L 69, or appended after H003191) (Jon Q8)
+   cell 263 grid F4 (750.8, 333.6) label "12": awaiting a number (lot identified): Which route position (before L 69, or appended after H003191) (Jon Q8)
+   cell 269 grid F4 (759.4, 333.5) label "11": awaiting a number (lot identified): Which route position (before L 69, or appended after H003191) (Jon Q8)
+   cell 249 grid F4 (768.6, 332.8) label "10": awaiting a number (lot identified): Which route position (before L 69, or appended after H003191) (Jon Q8)
+   cell 251 grid F4 (778.1, 332.1) label "9": awaiting a number (lot identified): Which route position (before L 69, or appended after H003191) (Jon Q8)
+   cell 243 grid F4 (787.3, 331.1) label "8": awaiting a number (lot identified): Which route position (before L 69, or appended after H003191) (Jon Q8)
+   cell 232 grid F4 (796.2, 331.3) label "7": awaiting a number (lot identified): Which route position (before L 69, or appended after H003191) (Jon Q8)
+   cell 290 grid G4 (805.4, 337.6) label "6": awaiting a number (lot identified): Which route position (before L 69, or appended after H003191) (Jon Q8)
+   cell 234 grid G4 (805.9, 326.6) label "5": awaiting a number (lot identified): Which route position (before L 69, or appended after H003191) (Jon Q8)
+   cell 293 grid G4 (814.6, 338.1) label "4": awaiting a number (lot identified): Which route position (before L 69, or appended after H003191) (Jon Q8)
+   cell 221 grid G4 (815.1, 327.0) label "3": awaiting a number (lot identified): Which route position (before L 69, or appended after H003191) (Jon Q8)
+   cell 296 grid G4 (823.7, 338.4) label "2": awaiting a number (lot identified): Which route position (before L 69, or appended after H003191) (Jon Q8)
+   cell 209 grid G4 (824.2, 325.1) label "1": awaiting a number (lot identified): Which route position (before L 69, or appended after H003191) (Jon Q8)
+   cell 371 grid G4 (829.9, 369.8) label "": awaiting identification: Jon Q12: F margin / G ledger: name of this lot
+   cell 517 grid J5 (1100.2, 414.3) label "333": awaiting a number (lot identified): insert D 333 as k=2 of its row (shifts later D/C numbers) (also Jon Q13)
+   cell 523 grid J5 (1115.0, 415.0) label "322": awaiting a number (lot identified): insert D 322 as k=2 of its row (shifts later D/C numbers) (also Jon Q13)
+   cell 528 grid J5 (1129.8, 415.2) label "311": awaiting a number (lot identified): insert D 311 as k=2 of its row (shifts later D/C numbers) (also Jon Q13)
+   cell 502 grid J5 (1143.3, 408.1) label "300H": awaiting identification: Jon Q13: Ledger: does the lot printed NH head column N (then numbers 20H-280H are carried by the neighbouring 
+   cell 1067 grid J5 (1144.6, 489.1) label "293": awaiting a number (lot identified): replace "274" by "293" in _D_ROWS[15]
+   cell 2671 grid J8 (1185.2, 775.9) label "237H": awaiting a number (lot identified): add (237, "b") to CTW row 13 (Jon Q14)
+   cell 2674 grid J8 (1199.5, 776.2) label "218H": awaiting a number (lot identified): add (218, "b") to CTW row 12 (Jon Q14)
+   cell 2953 grid J9 (1197.4, 829.8) label "214H": awaiting a number (lot identified): add (214, "b") to CTW row 12 (Jon Q14)
+   cell 2684 grid K8 (1244.7, 778.2) label "161H": awaiting a number (lot identified): add (161, "b") to CTW row 9 (Jon Q14)
+   cell 2967 grid K9 (1245.0, 832.1) label "157H": awaiting a number (lot identified): add (157, "b") to CTW row 9 (Jon Q14)
+   cell 530 grid L5 (1379.8, 418.4) label "414": awaiting a number (lot identified): Route position for B 395-414
+   cell 635 grid L5 (1380.3, 430.2) label "413": awaiting a number (lot identified): Route position for B 395-414
+   cell 694 grid L5 (1380.6, 440.6) label "412": awaiting a number (lot identified): Route position for B 395-414
+   cell 761 grid L5 (1381.0, 450.3) label "411": awaiting a number (lot identified): Route position for B 395-414
+   cell 839 grid L5 (1381.3, 461.1) label "410": awaiting a number (lot identified): Route position for B 395-414
+   cell 916 grid L5 (1381.6, 471.3) label "409": awaiting a number (lot identified): Route position for B 395-414
+   cell 1000 grid L5 (1382.0, 480.9) label "408": awaiting a number (lot identified): Route position for B 395-414
+   cell 1082 grid L5 (1382.3, 491.3) label "407": awaiting a number (lot identified): Route position for B 395-414
+   cell 1416 grid L6 (1345.9, 534.2) label "9H": awaiting a number (lot identified): Route position of D 9H
+   cell 1171 grid L6 (1382.7, 501.7) label "406": awaiting a number (lot identified): Route position for B 395-414
+   cell 1258 grid L6 (1383.0, 510.5) label "405": awaiting a number (lot identified): Route position for B 395-414
+   cell 1330 grid L6 (1383.3, 519.8) label "404": awaiting a number (lot identified): Route position for B 395-414
+   cell 1469 grid L6 (1384.2, 545.7) label "403": awaiting a number (lot identified): Route position for B 395-414
+   cell 1547 grid L6 (1384.5, 555.8) label "402": awaiting a number (lot identified): Route position for B 395-414
+   cell 1625 grid L6 (1384.8, 564.0) label "401": awaiting a number (lot identified): Route position for B 395-414
+   cell 1689 grid L6 (1385.2, 575.8) label "400": awaiting a number (lot identified): Route position for B 395-414
+   cell 1749 grid L6 (1385.6, 587.4) label "399": awaiting a number (lot identified): Route position for B 395-414
+   cell 1810 grid L6 (1385.9, 596.9) label "398": awaiting a number (lot identified): Route position for B 395-414
+   cell 1467 grid L6 (1392.8, 545.6) label "": awaiting identification: Jon Q9: Ledger: which cell is A361 and which is A362, and what the third cell is
+   cell 1325 grid L6 (1393.7, 519.9) label "362H": awaiting identification: Jon Q9: Ledger name and section of this lot
+   cell 1871 grid L7 (1386.2, 607.1) label "397": awaiting a number (lot identified): Route position for B 395-414
+   cell 1923 grid L7 (1386.6, 618.0) label "396": awaiting a number (lot identified): Route position for B 395-414
+   cell 1977 grid L7 (1387.0, 629.5) label "395": awaiting a number (lot identified): Route position for B 395-414
+   cell 2411 grid L8 (1306.9, 725.9) label "89H": awaiting a number (lot identified): add (89, "b") to CTW row 5 (Jon Q14)
+   cell 2409 grid L8 (1321.7, 726.5) label "70H": awaiting a number (lot identified): add (70, "b") to CTW row 4 (Jon Q14)
+   cell 2703 grid L8 (1349.8, 782.1) label "28H": awaiting a number (lot identified): add (28, "b") to CTW row 2 (Jon Q14)
+   cell 2424 grid L8 (1366.3, 728.2) label "13H": awaiting a number (lot identified): add (13, "b") to CTW row 1 (Jon Q14)
+   cell 1557 grid M6 (1400.2, 556.8) label "A362": awaiting identification: Jon Q9: Ledger: which cell is A361 and which is A362, and what the third cell is
+   cell 1637 grid M6 (1400.7, 565.9) label "A361": awaiting identification: Jon Q9: Ledger: which cell is A361 and which is A362, and what the third cell is
+   cell 1321 grid M6 (1408.6, 519.3) label "344H": awaiting identification: Jon Q9: Ledger name and section of this lot
+   cell 1338 grid M6 (1423.5, 519.9) label "326H": awaiting identification: Jon Q9: Ledger name and section of this lot
+   cell 1326 grid M6 (1438.5, 519.0) label "308H": awaiting identification: Jon Q9: Ledger name and section of this lot
+   cell 2811 grid M9 (1422.4, 807.8) label "312A": awaiting identification: Jon Q11: Ledger: do the A-suffix strips exist as lots, and their names
+   cell 2946 grid M9 (1438.5, 831.2) label "291A": awaiting identification: Jon Q11: Ledger: do the A-suffix strips exist as lots, and their names
+   cell 2874 grid M9 (1438.8, 819.4) label "": awaiting identification: Jon Q11: Ledger: do the A-suffix strips exist as lots, and their names
+   cell 2813 grid M9 (1438.9, 808.1) label "293A": awaiting identification: Jon Q11: Ledger: do the A-suffix strips exist as lots, and their names
+   cell 2371 grid N8 (1515.5, 722.3) label "204A": awaiting identification: Jon Q11: Ledger: do the A-suffix strips exist as lots, and their names
+   cell 653 grid O5 (1656.7, 432.0) label "20": awaiting identification: Jon Q10: Ledger: are 20H, 20 and 19A three lots, and what is 19A

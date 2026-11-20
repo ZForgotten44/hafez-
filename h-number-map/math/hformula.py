@@ -50,9 +50,8 @@ def H_B_grid(n, sf):
     if sf == 'H' and n % 20 == 0 and 1 <= n // 20 <= ROWS: r, c = n // 20, 1                 # H-lots 20H,40H..380H : first column
     elif sf == 'A' and n == 19: r, c = 1, 2                                                  # the one lettered lot "19A"
     elif sf == '':
-        rr = next((x for x in range(1, ROWS + 1) if n == 12 + 19 * (x - 1)), None)
-        if rr is not None: r, c = rr, N                                                       # last column: 12,31,50,... (increment 19 - wins any clash)
-        elif 1 <= n <= 380 and n % 20 != 0: r = (n - 1) // 20 + 1; c = N - (n - 20 * (r - 1))   # body: increment 20, columns 3..21, right-to-left
+        if 40 <= n <= 380 and n % 20 == 0: r, c = n // 20, 2                                  # plain lots 40, 60 ... 380 beside their H-lots: column 2 (v2; v1 had no entry)
+        elif 1 <= n <= 380 and n % 20 != 0: r = (n - 1) // 20 + 1; c = N - (n - 20 * (r - 1))   # body: increment 20, columns 3..21, right-to-left (v2: no 'last column' rule)
         else: return None
     else: return None
     return SW * (r - 1) + c, 'closed'

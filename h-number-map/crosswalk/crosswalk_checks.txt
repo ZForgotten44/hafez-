@@ -1,12 +1,14 @@
-crosswalk_v1_to_v2.csv: 2681 affected graves (574 lots), withdrawn scenario: 2809 graves
-1-2. 2681 crosswalk graves: v2 and v1 IDs decode back to their own section, lot and grave; failures: 0
+crosswalk_v1_to_v2.csv: 2903 affected graves (611 lots), withdrawn scenario: 3031 graves
+1-2. 2903 crosswalk graves: v2 and v1 IDs decode back to their own section, lot and grave; failures: 0
 3. 2173 burial-workbook graves (J, K, M): every one resolves to a v2 lot with the same section and lot; 2063 of them changed ID and 0 of those are missing from the crosswalk
+4. Section B: 399 lots, v2 first H000001 last H000813, v1 first H000001 last H000814, duplicates 0
+4. Section D: 545 lots, v2 first H000837 last H002401, v1 first H000837 last H002401, duplicates 0
 4. Section M: 255 lots, v2 first H002587 last H002841, v1 first H002587 last H002835, duplicates 0
 4. Section K: 115 lots, v2 first H002842 last H002956, v1 first H002836 last H002950, duplicates 0
 4. Section J: 132 lots, v2 first H002957 last H003088, v1 first H002951 last H003082, duplicates 0
 4. Section I: 64 lots, v2 first H003089 last H003152, v1 first H003083 last H003146, duplicates 0
 4. Section L: 39 lots, v2 first H003153 last H003191, v1 first H003147 last H003185, duplicates 0
-5. old lot IDs of M, K, J, I, L under the v2 decoder: {'unchanged': 31, 'old lot ID now names another lot': 568}
+5. old lot IDs of M, K, J, I, L under the v2 decoder: {'unchanged': 938, 'old lot ID now names another lot': 587}
    withdrawn scenario: v2W has 252 M lots, K starts H002839, L ends H003188
 
 failures: 0

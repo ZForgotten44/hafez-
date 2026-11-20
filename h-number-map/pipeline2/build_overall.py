@@ -102,6 +102,81 @@ def road_names(sh, strong):
         p = sh.P(x, y)
         pg.insert_text(p, t, fontsize=fs, fontname='uib', fontfile=B.UIB, color=(.3, .33, .38) if strong else (.45, .48, .52), morph=(p, fitz.Matrix(ang)) if ang else None)
 
+INV = {}            # cell id -> inventory row (grey_inventory.csv, refreshed by refresh_inventory.py)
+AMBER = (.78, .5, .1); AMBER_FILL = (.99, .93, .8)
+
+def load_inventory():
+    p = os.path.join(REPO, 'h-number-map', 'grey_inventory.csv'); INV.clear()
+    if os.path.exists(p):
+        import csv
+        for r in csv.DictReader(open(p)): INV[int(r['cell'])] = r
+
+def draw_unnumbered(sh, D, cells, trees_mode):
+    """every drawn outline without an H-number, by what it is: crypts (own numbering), not graves, lots still awaiting a number or an identification"""
+    pg = sh.page; groups = collections.defaultdict(list)
+    for u in D['reg'].get('unnumbered', []):
+        if u['cell'] is None: continue
+        r = INV.get(u['cell']); st = r['final_status'] if r else 'awaiting identification'
+        groups[st].append((u, r))
+    style = {'native numbering (crypt)': ((.1, .28, .5), (.87, .91, .96), None), 'not a grave': ((.6, .6, .62), (.93, .93, .91), None),
+             'awaiting a number (lot identified)': (AMBER, AMBER_FILL, '[4 3] 0'), 'awaiting identification': (AMBER, (.99, .88, .7), '[4 3] 0')}
+    for st, mem in groups.items():
+        col, fill, dash = style.get(st, style['awaiting identification']); shp = pg.new_shape()
+        for u, r in mem: shp.draw_polyline([sh.P(x, y) for x, y in cells[u['cell']]['poly']] + [sh.P(*cells[u['cell']]['poly'][0])])
+        shp.finish(color=col, fill=fill, width=.9 if dash else .5, dashes=dash, closePath=True, lineJoin=1); shp.commit()
+    if trees_mode: return
+    for st in ('awaiting a number (lot identified)', 'awaiting identification'):         # the old label, in amber: it is NOT an H-number
+        for u, r in groups.get(st, []):
+            t = ''.join(u['tokens'])
+            if not t: continue
+            poly = Polygon(cells[u['cell']]['poly']); c = poly.representative_point(); x0, y0, x1, y1 = poly.bounds
+            fs = min(3.4, .85 * (x1 - x0) / (ADV * len(t)), .75 * (y1 - y0))
+            if fs * sh.s < 5.0: fs = 5.0 / sh.s
+            p = sh.P(c.x, c.y); f = fs * sh.s; w = ADV * len(t) * f
+            pg.insert_text(fitz.Point(p.x - w / 2, p.y + f * .36), t, fontsize=f, fontname='dvsm', fontfile=B.FONT.replace('-Bold', ''), color=AMBER)
+
+CALLOUT_PT = 6.0        # a number that would print smaller than this inside its lot gets a leader and a larger number in free space
+
+CALLOUTS = []
+
+def draw_callouts(sh, small, lots, cells):
+    """lots too small (or with no traced outline): the number is printed larger beside the lot, joined to it by a leader; a lot with no outline gets a dashed box"""
+    pg = sh.page; polys = [Polygon(o['poly']).buffer(0) for o in lots if o['poly'] and len(o['poly']) > 2]; tree = STRtree(polys); placed = []; fs = 8.5
+    for o in sorted(small, key=lambda o: (o['cx'], o['cy'])):
+        t = o['d']; wu = (ADV * len(t) * fs + 8) / sh.s; hu = (fs * 1.5) / sh.s; cx, cy = o['cx'], o['cy']
+        if not o['poly']:
+            b = pg.new_shape(); a = sh.P(cx - 4.5, cy - 6.5); c = sh.P(cx + 4.5, cy + 6.5); b.draw_rect(fitz.Rect(a, c)); b.finish(color=NAVY, width=1.0, dashes='[4 3] 0', fill=None); b.commit()
+        best = None
+        for dist in (13, 18, 24, 32, 42, 56):
+            for k in range(16):
+                ang = k * math.pi / 8; px = cx + dist * math.cos(ang); py = cy + dist * math.sin(ang)
+                r = sbox(px - wu / 2, py - hu / 2, px + wu / 2, py + hu / 2)
+                if r.bounds[0] < sh.view[0] + 3 or r.bounds[2] > sh.view[2] - 3 or r.bounds[1] < sh.view[1] + 3 or r.bounds[3] > sh.view[3] - 3: continue
+                cov = sum(polys[i].intersection(r).area for i in tree.query(r, predicate='intersects')) / r.area
+                over = sum(r.intersects(q) for q in placed)
+                c0 = cov * 300 + over * 200 + dist * .6
+                if best is None or c0 < best[0]: best = (c0, px, py, r)
+        if best is None: continue
+        c0, px, py, r = best; placed.append(r.buffer(1.5)); CALLOUTS.append(dict(h=o['h'], text=t, tx=cx, ty=cy, bx=px, by=py))
+        a = sh.P(cx, cy); q = sh.P(px, py)
+        l = pg.new_shape(); l.draw_line(a, q); l.finish(color=NAVY, width=1.1); l.commit()
+        d = pg.new_shape(); d.draw_circle(a, 2.6); d.finish(color=NAVY, fill=NAVY); d.commit()
+        bw = ADV * len(t) * fs + 8; bh = fs * 1.5
+        s2 = pg.new_shape(); s2.draw_rect(fitz.Rect(q.x - bw / 2, q.y - bh / 2, q.x + bw / 2, q.y + bh / 2), radius=.15); s2.finish(color=NAVY, fill=(1, 1, 1), width=1.0); s2.commit()
+        pg.insert_text(fitz.Point(q.x - ADV * len(t) * fs / 2, q.y + fs * .36), t, fontsize=fs, fontname='dvsmb', fontfile=B.FONT, color=NAVY)
+
+def draw_twins(sh, lots):
+    """one lot drawn as two outlines: a dashed bracket joins them (the number is written once)"""
+    pg = sh.page; by = collections.defaultdict(list)
+    for o in lots:
+        if o.get('twin') or any(p.get('twin') for p in [o]): by[o['h']].append(o)
+    for h, mem in by.items(): pass
+    tw_ = [o for o in lots if o.get('twin')]
+    for o in tw_:
+        mate = next((p for p in lots if p['h'] == o['h'] and not p.get('twin')), None)
+        if not mate: continue
+        l = pg.new_shape(); l.draw_line(sh.P(o['cx'], o['cy']), sh.P(mate['cx'], mate['cy'])); l.finish(color=NAVY, width=1.6, dashes='[3 2] 0'); l.commit()
+
 def draw_trees(sh, trees):
     """crowns at their measured size, lightly filled so the ground shows through; every recorded tree centre is a dot, evergreens a dark triangle"""
     pg = sh.page; crowns = pg.new_shape(); dots = pg.new_shape(); tri = pg.new_shape(); v = sh.view
@@ -146,14 +221,14 @@ def draw_map(sh, D, raw, cells, mode, trees):
         shp = pg.new_shape()
         for o in os_: shp.draw_polyline([sh.P(x, y) for x, y in o['poly']] + [sh.P(*o['poly'][0])])
         shp.finish(color=(.35, .4, .5) if not trees_mode else (.7, .72, .76), fill=rgb(col), width=.5 if not trees_mode else .4, closePath=True, lineJoin=1); shp.commit()
-    shp = pg.new_shape()
-    for u in R.get('unnumbered', []):
-        if u['cell'] is None: continue
-        shp.draw_polyline([sh.P(x, y) for x, y in cells[u['cell']]['poly']] + [sh.P(*cells[u['cell']]['poly'][0])])
-    shp.finish(color=(.55, .57, .6), fill=(.9, .9, .88), width=.5, closePath=True, lineJoin=1); shp.commit()
+    draw_unnumbered(sh, D, cells, trees_mode)
     if not trees_mode:
+        small = [o for o in lots if not o.get('twin') and (not o['fs'] or o['fs'] * sh.s < CALLOUT_PT or not o['poly'])]
+        ids = {id(o) for o in small}
         for o in lots:
-            if o['fs']: B.put_label(sh, o)
+            if o['fs'] and id(o) not in ids: B.put_label(sh, o)
+        draw_callouts(sh, small, lots, cells)
+        draw_twins(sh, lots)
     else:
         draw_trees(sh, trees)
     road_names(sh, trees_mode)
@@ -260,15 +335,21 @@ def key(pg, y0, ky, numbers):
     landmark_list(pg, y0)
     if numbers:
         shp = pg.new_shape(); shp.draw_rect(fitz.Rect(MX, ky - 22, MX + 48, ky + 8)); shp.finish(color=(.55, .57, .6), fill=(.9, .9, .88), width=.6); shp.commit()
-        text(pg, MX + 62, ky, 'grey outline = a drawn lot without an H-number (mausoleum crypts, repeated labels)', 22, False, GREY)
+        x = MX
+        for fill, col, dash, lab in (((.99, .93, .8), AMBER, '[4 3] 0', 'amber dashed = lot not yet numbered (old label in amber)'), ((.87, .91, .96), (.1, .28, .5), None, 'blue = crypt (own numbers)'), ((.93, .93, .91), (.6, .6, .62), None, 'grey = not a grave')):
+            shp = pg.new_shape(); shp.draw_rect(fitz.Rect(x, ky - 22, x + 44, ky + 8)); shp.finish(color=col, fill=fill, width=1, dashes=dash); shp.commit()
+            text(pg, x + 54, ky, lab, 22, False, GREY); x += 54 + tw(lab, 22) * 1.3 + 36
     text(pg, MX, H - 50, 'Source: Cedar Grove Ground Maps drawing (2022) and the old section maps. Positions follow the drawing, which is marked not to scale.', 21, False, GREY)
 
 def build(mode='numbers', trees=None, dest=None):
     view = VIEW_NUM if mode == 'numbers' else VIEW_TREE
+    load_inventory()
     D = svgmap.load(); raw = json.load(open(f'{DATA}/ai_raw.json')); cells = {c['id']: c for c in D['cells']}
     doc = fitz.open(); pg = doc.new_page(width=W, height=H)
     sh = Sheet2(pg, view, MX + 50, TOP, W - MX - 50, H - BOT)
+    CALLOUTS.clear()
     draw_map(sh, D, raw, cells, mode, trees)
+    if mode == 'numbers': json.dump(CALLOUTS, open(os.path.join(DATA, 'callouts.json'), 'w'))
     draw_special_ranges(sh)
     section_tags(sh, D, mode == 'numbers')
     grid_lines(sh)
@@ -281,6 +362,11 @@ def build(mode='numbers', trees=None, dest=None):
     title = 'Cedar Grove Cemetery · H-Number Map' if mode == 'numbers' else 'Cedar Grove Cemetery · Tree Map'
     text(pg, MX, 100, title, 76, True)
     text(pg, MX, 152, 'University of Notre Dame · every lot with its H-number, sorted by the old section letters' if mode == 'numbers' else 'University of Notre Dame · where the trees stand, on the same map and grid as the H-number map', 32, False, GREY)
+    nw = sum(1 for r in INV.values() if r['final_status'].startswith('awaiting'))
+    if nw and mode == 'numbers':
+        msg = 'REVIEW COPY: %d outlines await a number or an identification' % nw
+        bw = tw(msg, 34, True) * 1.3 + 40; shp = pg.new_shape(); shp.draw_rect(fitz.Rect(W - MX - bw, 70, W - MX, 130), radius=.2); shp.finish(color=AMBER, fill=AMBER_FILL, width=2); shp.commit()
+        text(pg, W - MX - bw + 20, 110, msg, 34, True, (.45, .27, .02))
     st = ranges(D)
     if mode == 'numbers': panel_numbers(pg, D, st)
     else: panel_trees(pg, D, st, trees)
