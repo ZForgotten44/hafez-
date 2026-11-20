@@ -10,7 +10,8 @@
 The drawing is clipped to the map frame; the title, grid letters and footer sit in their own clear space."""
 import json, math, os, sys, collections
 import pymupdf as fitz
-from shapely.geometry import Polygon, box as sbox
+import numpy as np
+from shapely.geometry import Polygon, Point, box as sbox
 from shapely.ops import nearest_points, unary_union
 from shapely.strtree import STRtree
 from common import *
@@ -20,7 +21,7 @@ from fit import ADV, INK_MID
 W, H = 3600, 2520
 VIEW_NUM = [335, 215, 1735, 940]                  # lots, road names, the mausoleum corner and the east avenue
 VIEW_TREE = [215, 55, 1810, 1045]                 # the whole aerial: the woods west of the cemetery too
-MX, TOP, BOT = 60, 200, 610
+MX, TOP, BOT = 60, 235, 660
 NAVY, GREY, PALE = B.NAVY, (.34, .38, .45), (.93, .92, .88)
 PASSES = [(1, 836, 'Pass 1', 'B, A', '#cfe0f5'), (837, 1885, 'Pass 2', 'D, C', '#d5ecd9'), (1886, 2345, 'Pass 3', 'F, E', '#f6e7b9'),
           (2346, 2600, 'Pass 4', 'margins, G, H', '#f6d3cf'), (2601, 2855, 'Pass 5', 'M', '#dcd3ee'), (2856, 3218, 'Pass 6', 'L strip, K, J, I, L', '#cfe6e4')]
@@ -45,6 +46,8 @@ def rgb(h): return B.hex2rgb(h)
 def passof(h): return next(p for p in PASSES if p[0] <= h <= p[1])
 def text(pg, x, y, t, fs, bold=False, color=NAVY):
     pg.insert_text((x, y), t, fontsize=fs, fontname='uib' if bold else 'ui', fontfile=B.UIB if bold else B.UI, color=color)
+_FB = fitz.Font(fontfile=B.UIB)
+def twb(t, fs): return _FB.text_length(t, fontsize=fs)
 def tw(t, fs, bold=False): return fitz.get_text_length(t, fontname='helv', fontsize=fs) * (1.06 if bold else 1.0)
 
 def ranges(D):
@@ -79,18 +82,22 @@ def grid_lines(sh):
     shp.finish(color=(.6, .62, .66), width=.8, dashes='[10 8] 0'); shp.commit()
 
 def grid_letters(sh):
-    pg = sh.page; v = sh.view
+    """grid letters and numbers sit in their own bands outside the frame; the bands are opaque so nothing of the drawing can run into them"""
+    pg = sh.page; v = sh.view; bw = 62; c = sh.clip
+    for r in (fitz.Rect(c.x0 - bw, c.y0 - bw, c.x1 + bw, c.y0), fitz.Rect(c.x0 - bw, c.y1, c.x1 + bw, c.y1 + bw), fitz.Rect(c.x0 - bw, c.y0, c.x0, c.y1), fitz.Rect(c.x1, c.y0, c.x1 + bw, c.y1)):
+        shp = pg.new_shape(); shp.draw_rect(r); shp.finish(color=None, fill=(.955, .95, .93)); shp.commit()
+    shp = pg.new_shape(); shp.draw_rect(fitz.Rect(c.x0 - bw, c.y0 - bw, c.x1 + bw, c.y1 + bw)); shp.finish(color=(.6, .62, .66), width=1.2, fill=None); shp.commit()
     c0, c1 = int((v[0] - GX0) // GC), int((v[2] - GX0) // GC); r0, r1 = int((v[1] - GY0) // GC), int((v[3] - GY0) // GC)
     for i in range(c0, c1 + 1):
         x0, x1 = max(v[0], GX0 + i * GC), min(v[2], GX0 + (i + 1) * GC)
         if x1 - x0 < 25: continue
-        t = chr(65 + i); c = sh.P((x0 + x1) / 2, v[1])
-        text(pg, c.x - tw(t, 34, True) / 2, sh.clip.y0 - 16, t, 34, True, GREY); text(pg, c.x - tw(t, 34, True) / 2, sh.clip.y1 + 46, t, 34, True, GREY)
+        t = chr(65 + i); cc = sh.P((x0 + x1) / 2, v[1])
+        text(pg, cc.x - twb(t, 34) / 2, c.y0 - 20, t, 34, True, GREY); text(pg, cc.x - twb(t, 34) / 2, c.y1 + 44, t, 34, True, GREY)
     for j in range(r0, r1 + 1):
         y0, y1 = max(v[1], GY0 + j * GC), min(v[3], GY0 + (j + 1) * GC)
         if y1 - y0 < 25: continue
-        t = str(j + 1); c = sh.P(v[0], (y0 + y1) / 2)
-        text(pg, sh.clip.x0 - 16 - tw(t, 34, True), c.y + 12, t, 34, True, GREY); text(pg, sh.clip.x1 + 16, c.y + 12, t, 34, True, GREY)
+        t = str(j + 1); cc = sh.P(v[0], (y0 + y1) / 2)
+        text(pg, c.x0 - 18 - twb(t, 34), cc.y + 12, t, 34, True, GREY); text(pg, c.x1 + 18, cc.y + 12, t, 34, True, GREY)
 
 def cellref(b):
     c0 = int((b[0] - GX0) // GC); c1 = int((b[2] - GX0) // GC); r0 = int((b[1] - GY0) // GC); r1 = int((b[3] - GY0) // GC)
@@ -103,7 +110,7 @@ def road_names(sh, strong):
         pg.insert_text(p, t, fontsize=fs, fontname='uib', fontfile=B.UIB, color=(.3, .33, .38) if strong else (.45, .48, .52), morph=(p, fitz.Matrix(ang)) if ang else None)
 
 INV = {}            # cell id -> inventory row (grey_inventory.csv, refreshed by refresh_inventory.py)
-AMBER = (.78, .5, .1); AMBER_FILL = (.99, .93, .8)
+AMBER = (.78, .5, .1); AMBER_FILL = (.99, .93, .8); HIST = (.1, .12, .2)   # amber only for outlines; old lot labels are dark
 
 def load_inventory():
     p = os.path.join(REPO, 'h-number-map', 'grey_inventory.csv'); INV.clear()
@@ -133,37 +140,68 @@ def draw_unnumbered(sh, D, cells, trees_mode):
             fs = min(3.4, .85 * (x1 - x0) / (ADV * len(t)), .75 * (y1 - y0))
             if fs * sh.s < 5.0: fs = 5.0 / sh.s
             p = sh.P(c.x, c.y); f = fs * sh.s; w = ADV * len(t) * f
-            pg.insert_text(fitz.Point(p.x - w / 2, p.y + f * .36), t, fontsize=f, fontname='dvsm', fontfile=B.FONT.replace('-Bold', ''), color=AMBER)
+            pg.insert_text(fitz.Point(p.x - w / 2, p.y + f * .36), t, fontsize=f, fontname='dvsm', fontfile=B.FONT.replace('-Bold', ''), color=HIST)
 
 CALLOUT_PT = 6.0        # a number that would print smaller than this inside its lot gets a leader and a larger number in free space
 
 CALLOUTS = []
 
+def _callout_box(pg, sh, q, t, fs, halo=True):
+    bw = ADV * len(t) * fs + 8; bh = fs * 1.5
+    if halo:   # opaque white halo: whatever line runs behind the number (the blue dashed boundary, a road) is broken there
+        h = pg.new_shape(); h.draw_rect(fitz.Rect(q.x - bw / 2 - 4, q.y - bh / 2 - 4, q.x + bw / 2 + 4, q.y + bh / 2 + 4)); h.finish(color=None, fill=(1, 1, 1)); h.commit()
+    s2 = pg.new_shape(); s2.draw_rect(fitz.Rect(q.x - bw / 2, q.y - bh / 2, q.x + bw / 2, q.y + bh / 2), radius=.15); s2.finish(color=NAVY, fill=(1, 1, 1), width=1.0); s2.commit()
+    pg.insert_text(fitz.Point(q.x - ADV * len(t) * fs / 2, q.y + fs * .36), t, fontsize=fs, fontname='dvsmb', fontfile=B.FONT, color=NAVY)
+
 def draw_callouts(sh, small, lots, cells):
-    """lots too small (or with no traced outline): the number is printed larger beside the lot, joined to it by a leader; a lot with no outline gets a dashed box"""
+    """lots too small (or with no traced outline): the number is printed larger outside the lot, joined by a leader that ends inside its own outline.
+    Section M numbers stand in one straight row per run of lots, in plot order (west to east), with the blue boundary broken behind each label."""
     pg = sh.page; polys = [Polygon(o['poly']).buffer(0) for o in lots if o['poly'] and len(o['poly']) > 2]; tree = STRtree(polys); placed = []; fs = 8.5
-    for o in sorted(small, key=lambda o: (o['cx'], o['cy'])):
+    def boxu(px, py, t): return sbox(px - (ADV * len(t) * fs + 14) / 2 / sh.s, py - (fs * 1.5 + 8) / 2 / sh.s, px + (ADV * len(t) * fs + 14) / 2 / sh.s, py + (fs * 1.5 + 8) / 2 / sh.s)
+    def onlab(r): return len(ltree.query(r, predicate='intersects')) if ltree is not None else 0
+    def free(r): return onlab(r) == 0 and sum(polys[i].intersection(r).area for i in tree.query(r, predicate='intersects')) / r.area < .02 and not any(r.intersects(q) for q in placed)
+    small_ids = {id(o) for o in small}; lab = [sbox(o['cx'] - max(ADV * len(o['d']) * o['fs'], o['fs']) * .6, o['cy'] - max(ADV * len(o['d']) * o['fs'], o['fs']) * .6, o['cx'] + max(ADV * len(o['d']) * o['fs'], o['fs']) * .6, o['cy'] + max(ADV * len(o['d']) * o['fs'], o['fs']) * .6) for o in lots if o.get('fs') and id(o) not in small_ids]; ltree = STRtree(lab) if lab else None
+    msm = sorted([o for o in small if o['s'] == 'M' and o['poly']], key=lambda o: o['cx']); rest = [o for o in small if o not in msm]
+    runs = []
+    for o in msm:
+        if runs and o['cx'] - runs[-1][-1]['cx'] < 70: runs[-1].append(o)
+        else: runs.append([o])
+    for run in runs:
+        wmax = max((ADV * len(o['d']) * fs + 14) / sh.s for o in run); xs = [o['cx'] for o in run]
+        for side in (1, -1, 1):     # south of the lots first, then north
+            ok = False
+            for dy in range(10, 90, 2):
+                yr = (max(o['cy'] for o in run) + dy) if side == 1 else (min(o['cy'] for o in run) - dy)
+                px = []
+                for x in xs: px.append(max(x, (px[-1] + wmax) if px else x))
+                sh_ = (sum(px) - sum(xs)) / len(xs); px = [p - sh_ for p in px]
+                for i in range(1, len(px)): px[i] = max(px[i], px[i - 1] + wmax)
+                rs = [boxu(p, yr, o['d']) for p, o in zip(px, run)]
+                if all(free(r) and r.bounds[0] > sh.view[0] + 3 and r.bounds[2] < sh.view[2] - 3 for r in rs): ok = True; break
+            if ok: break
+        if not ok: rest += run; continue
+        for p, o, r in zip(px, run, rs):
+            t = o['d']; placed.append(r.buffer(1.5)); CALLOUTS.append(dict(h=o['h'], text=t, tx=o['cx'], ty=o['cy'], bx=p, by=yr))
+            a = sh.P(o['cx'], o['cy']); q = sh.P(p, yr); l = pg.new_shape(); l.draw_line(a, q); l.finish(color=NAVY, width=1.1); l.commit()
+            d = pg.new_shape(); d.draw_circle(a, 2.6); d.finish(color=NAVY, fill=NAVY); d.commit(); _callout_box(pg, sh, q, t, fs)
+    for o in sorted(rest, key=lambda o: (o['cx'], o['cy'])):
         t = o['d']; wu = (ADV * len(t) * fs + 8) / sh.s; hu = (fs * 1.5) / sh.s; cx, cy = o['cx'], o['cy']
         if not o['poly']:
             b = pg.new_shape(); a = sh.P(cx - 4.5, cy - 6.5); c = sh.P(cx + 4.5, cy + 6.5); b.draw_rect(fitz.Rect(a, c)); b.finish(color=NAVY, width=1.0, dashes='[4 3] 0', fill=None); b.commit()
         best = None
-        for dist in (13, 18, 24, 32, 42, 56):
-            for k in range(16):
-                ang = k * math.pi / 8; px = cx + dist * math.cos(ang); py = cy + dist * math.sin(ang)
+        for dist in (13, 18, 24, 32, 42, 56, 72):
+            for k in range(24):
+                ang = k * math.pi / 12; px = cx + dist * math.cos(ang); py = cy + dist * math.sin(ang)
                 r = sbox(px - wu / 2, py - hu / 2, px + wu / 2, py + hu / 2)
                 if r.bounds[0] < sh.view[0] + 3 or r.bounds[2] > sh.view[2] - 3 or r.bounds[1] < sh.view[1] + 3 or r.bounds[3] > sh.view[3] - 3: continue
                 cov = sum(polys[i].intersection(r).area for i in tree.query(r, predicate='intersects')) / r.area
                 over = sum(r.intersects(q) for q in placed)
-                c0 = cov * 300 + over * 200 + dist * .6
+                c0 = cov * 300 + over * 200 + dist * .6 + onlab(r) * 600
                 if best is None or c0 < best[0]: best = (c0, px, py, r)
         if best is None: continue
         c0, px, py, r = best; placed.append(r.buffer(1.5)); CALLOUTS.append(dict(h=o['h'], text=t, tx=cx, ty=cy, bx=px, by=py))
-        a = sh.P(cx, cy); q = sh.P(px, py)
-        l = pg.new_shape(); l.draw_line(a, q); l.finish(color=NAVY, width=1.1); l.commit()
-        d = pg.new_shape(); d.draw_circle(a, 2.6); d.finish(color=NAVY, fill=NAVY); d.commit()
-        bw = ADV * len(t) * fs + 8; bh = fs * 1.5
-        s2 = pg.new_shape(); s2.draw_rect(fitz.Rect(q.x - bw / 2, q.y - bh / 2, q.x + bw / 2, q.y + bh / 2), radius=.15); s2.finish(color=NAVY, fill=(1, 1, 1), width=1.0); s2.commit()
-        pg.insert_text(fitz.Point(q.x - ADV * len(t) * fs / 2, q.y + fs * .36), t, fontsize=fs, fontname='dvsmb', fontfile=B.FONT, color=NAVY)
+        a = sh.P(cx, cy); q = sh.P(px, py); l = pg.new_shape(); l.draw_line(a, q); l.finish(color=NAVY, width=1.1); l.commit()
+        d = pg.new_shape(); d.draw_circle(a, 2.6); d.finish(color=NAVY, fill=NAVY); d.commit(); _callout_box(pg, sh, q, t, fs)
 
 def draw_twins(sh, lots):
     """one lot drawn as two outlines: a dashed bracket joins them (the number is written once)"""
@@ -202,7 +240,7 @@ def draw_special_ranges(sh):
     for r in json.load(open(p))['ranges']:
         b = r['bbox']; pad = 4; a = sh.P(b[0] - pad, b[1] - pad); c = sh.P(b[2] + pad, b[3] + pad)
         shp = pg.new_shape(); shp.draw_rect(fitz.Rect(a, c)); shp.finish(color=(.1, .28, .5), width=1.8, dashes='[7 5] 0', fill=None); shp.commit()
-        short = ('Crypts 1-68' if r['kind'] == 'crypt' else 'Niches 1-80'); fs = 24; w = tw(short, fs, True) + 16
+        short = ('Detail 1 · Crypts 1-68' if r['kind'] == 'crypt' else 'Detail 2 · Niches 1-80'); fs = 22; w = tw(short, fs, True) + 16
         x = (a.x + c.x) / 2 - w / 2 if r['kind'] == 'niche' else a.x - w - 8; y = c.y + 34 if r['kind'] == 'niche' else (a.y + c.y) / 2 - 6
         q = pg.new_shape(); q.draw_rect(fitz.Rect(x, y - fs, x + w, y + 8), radius=.2); q.finish(color=(.1, .28, .5), fill=(1, 1, 1), fill_opacity=.92, width=1); q.commit()
         text(pg, x + 8, y, short, fs, True, (.1, .28, .5))
@@ -235,34 +273,69 @@ def draw_map(sh, D, raw, cells, mode, trees):
 
 # ------------------------------------------------------------------ section letters, placed in open lanes with a short leader
 def section_tags(sh, D, with_range):
-    st = ranges(D); polys = {}
+    """one bold letter per section in a clear lane; a short leader runs from the letter to the edge of its section and never crosses a printed number"""
+    from shapely.geometry import LineString
+    st = ranges(D); polys = {}; labels = []
     for o in D['lots']:
         if o['poly'] and len(o['poly']) > 2: polys.setdefault(o['s'], []).append(Polygon(o['poly']).buffer(0))
-    allp = [p for v in polys.values() for p in v]; tree = STRtree(allp); v = sh.view
+        if o.get('fs'):
+            hl = ADV * len(o['d']) * o['fs'] / 2 + .8; hw_ = o['fs'] * .5 + .8; vert = abs(abs(o.get('ang', 0)) - 90) < 45
+            labels.append(sbox(o['cx'] - (hw_ if vert else hl), o['cy'] - (hl if vert else hw_), o['cx'] + (hw_ if vert else hl), o['cy'] + (hl if vert else hw_)))
+    allp = [p for v_ in polys.values() for p in v_]; tree = STRtree(allp); ltree = STRtree(labels); v = sh.view
     placed = [sbox(x - 14, y - 14, x + 14, y + 14) for _, _, _, x, y in LANDMARKS] + list(OBST)
+    for c_ in CALLOUTS:
+        wl = (ADV * len(c_['text']) * 8.5 + 16) / sh.s; placed.append(sbox(c_['bx'] - wl / 2, c_['by'] - 9 / sh.s, c_['bx'] + wl / 2, c_['by'] + 9 / sh.s))
+    for cid, r_ in INV.items():
+        if r_['final_status'].startswith('awaiting') and cid in CELLP: placed.append(CELLP[cid].buffer(2))
     for t, x, y, ang, fs in ROADS: placed.append(sbox(x - 15, y - 95, x + 15, y + 5) if ang == -90 else sbox(x - 5, y - 20, x + 90, y + 10))
-    big = 26 if not with_range else 28; tags = []
-    for sec in sorted(st, key=lambda s: -st[s]['n']):
-        e = st[sec]; txt = 'Section %s' % sec; bw = tw(txt, big, True) + big * .9; wu, hu = bw / sh.s, big * 1.5 / sh.s
-        b = e['b']; cx0, cy0 = (b[0] + b[2]) / 2, (b[1] + b[3]) / 2; U = unary_union(polys[sec]); best = None
+    big = 46; tags = []
+    for sec in sorted(st, key=lambda s_: -st[s_]['n']):
+        e = st[sec]; txt = sec; bw = twb(txt, big) + big * .8; bh = big * 1.3; wu, hu = bw / sh.s, bh / sh.s
+        b = e['b']; U = unary_union(polys[sec]); Ub = U.boundary; best = None
+        _g = Ub.segmentize(2.5) if hasattr(Ub, 'segmentize') else Ub; BP[sec] = np.array([c_ for g_ in (_g.geoms if hasattr(_g, 'geoms') else [_g]) for c_ in g_.coords])
         for gx in range(int(b[0] - 220), int(b[2] + 220), 6):
             for gy in range(int(b[1] - 170), int(b[3] + 170), 6):
                 r = sbox(gx - wu / 2, gy - hu / 2, gx + wu / 2, gy + hu / 2)
-                if r.bounds[0] < v[0] + 6 or r.bounds[2] > v[2] - 6 or r.bounds[1] < v[1] + 6 or r.bounds[3] > v[3] - 6: continue
+                if r.bounds[0] < v[0] + 8 or r.bounds[2] > v[2] - 8 or r.bounds[1] < v[1] + 8 or r.bounds[3] > v[3] - 8: continue
                 cov = sum(allp[i].intersection(r).area for i in tree.query(r, predicate='intersects')) / r.area
-                over = sum(r.intersects(q) for q in placed)
-                d = r.distance(U)
-                c = cov * 400 + 120 * over + 0.35 * d + (0 if d < 90 else (d - 90) * 1.5)
-                if best is None or c < best[0]: best = (c, gx, gy, r, d)
-        c, gx, gy, r, d = best; placed.append(r.buffer(3)); tags.append((sec, txt, gx, gy, wu, hu, r, U, d))
-    pg = sh.page
-    for sec, txt, gx, gy, wu, hu, r, U, d in tags:
-        if d > 14:       # short leader from the tag to the nearest lot of the section
-            a, bpt = nearest_points(r, U); l = pg.new_shape(); l.draw_line(sh.P(a.x, a.y), sh.P(bpt.x, bpt.y)); l.finish(color=NAVY, width=2.2); l.commit()
-            dot = pg.new_shape(); dot.draw_circle(sh.P(bpt.x, bpt.y), 4); dot.finish(color=NAVY, fill=NAVY); dot.commit()
-        p = sh.P(gx, gy); bw = wu * sh.s; bh = hu * sh.s
-        shp = pg.new_shape(); shp.draw_rect(fitz.Rect(p.x - bw / 2, p.y - bh / 2, p.x + bw / 2, p.y + bh / 2), radius=.25); shp.finish(color=NAVY, fill=(1, 1, 1), fill_opacity=.94, width=1.6); shp.commit()
-        text(pg, p.x - tw(txt, big, True) / 2, p.y + big * .36, txt, big, True)
+                if cov > .02: continue
+                if any(r.intersects(q) for q in placed): continue
+                lab = len(ltree.query(r, predicate='intersects'))
+                d = r.distance(U); cost = lab * 800 + .35 * d + (0 if d < 70 else (d - 70) * 1.5); cross = 0; seg = None
+                if d > 12:
+                    ctr = np.array([gx, gy]); bp = BP[sec]; dd = np.hypot(bp[:, 0] - gx, bp[:, 1] - gy); order = np.argsort(dd)[:14]; bestseg = None
+                    for j in order:
+                        a_ = r.exterior.interpolate(r.exterior.project(Point(bp[j, 0], bp[j, 1]))); sg = LineString([(a_.x, a_.y), (bp[j, 0], bp[j, 1])])
+                        cr = len(ltree.query(sg, predicate='intersects')) + sum(sg.intersects(q) for q in placed if q is not r)
+                        if bestseg is None or (cr, sg.length) < (bestseg[0], bestseg[1].length): bestseg = (cr, sg)
+                        if cr == 0: break
+                    cross, seg = bestseg; cost += cross * 900 + seg.length * .35 - .35 * d
+                if best is None or cost < best[0]: best = (cost, gx, gy, r, d, seg)
+        if best is None or (best[5] is not None and (len(ltree.query(best[5], predicate='intersects')) or any(best[5].intersects(q) for q in placed))):
+            alt = None      # no clear lane: the letter may sit on empty lot ground of its own section (never on a printed number), so no leader is needed
+            for gx in range(int(b[0]), int(b[2]), 3):
+                for gy in range(int(b[1]), int(b[3]), 3):
+                    r = sbox(gx - wu / 2, gy - hu / 2, gx + wu / 2, gy + hu / 2)
+                    if r.bounds[0] < v[0] + 8 or r.bounds[2] > v[2] - 8 or r.bounds[1] < v[1] + 8 or r.bounds[3] > v[3] - 8: continue
+                    if len(ltree.query(r, predicate='intersects')) or any(r.intersects(q) for q in placed) or r.distance(U) > 0: continue
+                    cov = sum(allp[i].intersection(r).area for i in tree.query(r, predicate='intersects')) / r.area
+                    if alt is None or cov < alt[0]: alt = (cov, gx, gy, r)
+            if alt is not None: best = (0, alt[1], alt[2], alt[3], 0, None)
+        if best is None: continue
+        c, gx, gy, r, d, seg = best; placed.append(r.buffer(3)); tags.append((sec, txt, gx, gy, wu, hu, r, seg, d, bw, bh))
+    pg = sh.page; TAGS.clear()
+    for sec, txt, gx, gy, wu, hu, r, seg, d, bw, bh in tags:
+        TAGS.append(dict(sec=sec, cx=gx, cy=gy, wu=wu, hu=hu, seg=[list(c_) for c_ in seg.coords] if seg is not None and d > 12 else None))
+        if seg is not None and d > 12:
+            (x0, y0), (x1, y1) = list(seg.coords)[0], list(seg.coords)[-1]; l = pg.new_shape(); l.draw_line(sh.P(x0, y0), sh.P(x1, y1)); l.finish(color=NAVY, width=2.4); l.commit()
+            dot = pg.new_shape(); dot.draw_circle(sh.P(x1, y1), 4.5); dot.finish(color=NAVY, fill=NAVY); dot.commit()
+        p = sh.P(gx, gy)
+        shp = pg.new_shape(); shp.draw_rect(fitz.Rect(p.x - bw / 2, p.y - bh / 2, p.x + bw / 2, p.y + bh / 2), radius=.2); shp.finish(color=NAVY, fill=(1, 1, 1), width=1.8); shp.commit()
+        text(pg, p.x - twb(txt, big) / 2, p.y + big * .36, txt, big, True)
+
+CELLP = {}
+BP = {}
+TAGS = []
 
 # ------------------------------------------------------------------ the sheet around the map
 def lot_sample(pg, x, y):
@@ -271,7 +344,7 @@ def lot_sample(pg, x, y):
     fs = 46; t = '1698'; pg.insert_text((x + 75 - fitz.get_text_length(t, 'helv', fs) * .6 / 1.0 * 1.0 * .85, y + 58), t, fontsize=fs, fontname='dvsmb', fontfile=B.FONT, color=NAVY)
 
 def panel_numbers(pg, D, st):
-    y0 = H - BOT + 76
+    y0 = H - BOT + 128
     # index (left): section, the whole H range, lots drawn, grid squares
     text(pg, MX, y0, 'Index of sections', 40, True); text(pg, MX + 400, y0, '(old section letters)', 26, False, GREY)
     names = sorted(st); half = (len(names) + 1) // 2; y = y0 + 52
@@ -300,7 +373,7 @@ def panel_numbers(pg, D, st):
     key(pg, y0, H - 100, True)
 
 def panel_trees(pg, D, st, trees):
-    y0 = H - BOT + 76; ev = sum(1 for t in trees if t[3] in (1, 'e', 'evergreen')); lf = len(trees) - ev
+    y0 = H - BOT + 128; ev = sum(1 for t in trees if t[3] in (1, 'e', 'evergreen')); lf = len(trees) - ev
     text(pg, MX, y0, 'Tree key', 44, True)
     c = fitz.Point(MX + 60, y0 + 100); shp = pg.new_shape(); shp.draw_circle(c, 46); shp.finish(color=(.18, .45, .24), fill=(.55, .78, .5), fill_opacity=.22, width=1.4); shp.commit()
     d = pg.new_shape(); d.draw_circle(c, 5); d.finish(color=None, fill=(.1, .36, .18)); d.commit()
@@ -341,17 +414,52 @@ def key(pg, y0, ky, numbers):
             text(pg, x + 54, ky, lab, 22, False, GREY); x += 54 + tw(lab, 22) * 1.3 + 36
     text(pg, MX, H - 50, 'Source: Cedar Grove Ground Maps drawing (2022) and the old section maps. Positions follow the drawing, which is marked not to scale.', 21, False, GREY)
 
+def inset_rects(sh):
+    x0 = sh.clip.x0 + 12
+    return fitz.Rect(x0, 1090, x0 + 330, 1676), fitz.Rect(x0 + 360, 1090, x0 + 920, 1378), fitz.Rect(x0 + 360, 1400, x0 + 920, 1688)
+
+def native_numbers(sh2, view):
+    """the native numbers of the crypts and niches (they are not H-numbers): small blue figures at their measured places"""
+    import csv
+    p = os.path.join(REPO, 'h-number-map', 'special_locations.csv')
+    if not os.path.exists(p): return
+    for r in csv.DictReader(open(p)):
+        x, y = float(r['map_x']), float(r['map_y'])
+        if not (view[0] <= x <= view[2] and view[1] <= y <= view[3]): continue
+        n = r['name'].split()[-1]; fs = max(2.0, min(3.4, .75 * sh2.s * 0 + 3.0)) * sh2.s / 1.0
+        q = sh2.P(x, y); fs = 6.4 if 'niche' in r['name'].lower() else 9.0
+        sh2.page.insert_text(fitz.Point(q.x - ADV * len(n) * fs / 2, q.y + fs * .35), n, fontsize=fs, fontname='dvsmb', fontfile=B.FONT, color=(.1, .28, .5))
+
+def draw_inset(pg, D, raw, cells, view, rect, title):
+    """an enlarged, framed view of part of the drawing, rendered on a scratch page and placed as vector content"""
+    tmp = fitz.open(); tp = tmp.new_page(width=rect.width, height=rect.height - 46); sh2 = Sheet2(tp, view, 0, 0, rect.width, rect.height - 46)
+    saved = list(CALLOUTS); draw_map(sh2, D, raw, cells, 'numbers', None); CALLOUTS[:] = saved; native_numbers(sh2, view)
+    pg.draw_rect(rect, fill=(1, 1, 1), color=None); pg.show_pdf_page(fitz.Rect(rect.x0, rect.y0 + 46, rect.x1, rect.y1), tmp, 0)
+    shp = pg.new_shape(); shp.draw_rect(fitz.Rect(rect.x0, rect.y0, rect.x1, rect.y0 + 46)); shp.finish(color=None, fill=(.9, .93, .97)); shp.commit()
+    text(pg, rect.x0 + 14, rect.y0 + 33, title, 28, True)
+    shp = pg.new_shape(); shp.draw_rect(rect); shp.finish(color=NAVY, width=2.6, fill=None); shp.commit()
+
 def build(mode='numbers', trees=None, dest=None):
     view = VIEW_NUM if mode == 'numbers' else VIEW_TREE
     load_inventory()
     D = svgmap.load(); raw = json.load(open(f'{DATA}/ai_raw.json')); cells = {c['id']: c for c in D['cells']}
     doc = fitz.open(); pg = doc.new_page(width=W, height=H)
     sh = Sheet2(pg, view, MX + 50, TOP, W - MX - 50, H - BOT)
-    CALLOUTS.clear()
+    CALLOUTS.clear(); CELLP.clear()
+    for cid, c_ in cells.items(): CELLP[cid] = Polygon(c_['poly']).buffer(0)
+    insets = []
+    if mode == 'numbers':    # enlarged views in the open south-west: the crypt court and the cremains strip
+        r1, r2a, r2b = inset_rects(sh)
+        insets = [((553, 303, 627, 418), r1, 'Detail 1 · Crypts 1-68'), ((815, 343, 905, 383), r2a, 'Detail 2a · Niches 1-40'), ((905, 343, 995, 383), r2b, 'Detail 2b · Niches 41-80')]
+        inv = lambda x, y: (sh.view[0] + (x - sh.ox) / sh.s, sh.view[1] + (y - sh.oy) / sh.s)
+        for _, r, _t in insets:
+            (ax, ay), (bx_, by_) = inv(r.x0 - 8, r.y0 - 8), inv(r.x1 + 8, r.y1 + 8); OBST.append(sbox(ax, ay, bx_, by_))
     draw_map(sh, D, raw, cells, mode, trees)
+    for v_, r, t_ in insets: draw_inset(pg, D, raw, cells, v_, r, t_)
     if mode == 'numbers': json.dump(CALLOUTS, open(os.path.join(DATA, 'callouts.json'), 'w'))
     draw_special_ranges(sh)
     section_tags(sh, D, mode == 'numbers')
+    if mode == 'numbers': json.dump(TAGS, open(os.path.join(DATA, 'tags.json'), 'w'))
     grid_lines(sh)
     for n, nm, note, x, y in LANDMARKS:
         if view[0] <= x <= view[2] and view[1] <= y <= view[3]: marker(pg, sh.P(x, y), n, 20)
@@ -364,9 +472,12 @@ def build(mode='numbers', trees=None, dest=None):
     text(pg, MX, 152, 'University of Notre Dame · every lot with its H-number, sorted by the old section letters' if mode == 'numbers' else 'University of Notre Dame · where the trees stand, on the same map and grid as the H-number map', 32, False, GREY)
     nw = sum(1 for r in INV.values() if r['final_status'].startswith('awaiting'))
     if nw and mode == 'numbers':
-        msg = 'REVIEW COPY: %d outlines await a number or an identification' % nw
-        bw = tw(msg, 34, True) * 1.3 + 40; shp = pg.new_shape(); shp.draw_rect(fitz.Rect(W - MX - bw, 70, W - MX, 130), radius=.2); shp.finish(color=AMBER, fill=AMBER_FILL, width=2); shp.commit()
-        text(pg, W - MX - bw + 20, 110, msg, 34, True, (.45, .27, .02))
+        msg = 'Review copy · %d outlines under review' % nw; fsb = 34; bw = twb(msg, fsb) + 44
+        shp = pg.new_shape(); shp.draw_rect(fitz.Rect(W - MX - bw, 62, W - MX, 120), radius=.2); shp.finish(color=AMBER, fill=AMBER_FILL, width=2); shp.commit()
+        text(pg, W - MX - bw + 22, 103, msg, fsb, True, (.35, .2, .02))
+        mean = 'Amber dashed outline = lot or object not yet identified or numbered'; fs2 = 24; mw = twb(mean, fs2) * 1.04
+        sx = W - MX - mw - 76; shp = pg.new_shape(); shp.draw_rect(fitz.Rect(sx, 134, sx + 48, 158)); shp.finish(color=AMBER, fill=AMBER_FILL, width=2, dashes='[6 4] 0'); shp.commit()
+        text(pg, sx + 62, 154, mean, fs2, False, (.2, .2, .25))
     st = ranges(D)
     if mode == 'numbers': panel_numbers(pg, D, st)
     else: panel_trees(pg, D, st, trees)

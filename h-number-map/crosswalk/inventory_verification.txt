@@ -1,9 +1,9 @@
-1. physical lots on the 2022 map with an H-number: 3193 of 3193; lots with a blank H: 0 []
+1. physical lots on the 2022 map with an H-number: 3196 of 3196; lots with a blank H: 0 []
 2. numbers that differ from the decoder for the same section and label: 0 []
-   identified outlines (label read on the drawing) with no H-number: 40: 4, 6, 11, 14, 15, 16, 17, 18, 19, 21, 395, 396, 397, 398, 399, 400, 401, 402, 403, 404, 405, 406, 407, 408, 409, 410, 411, 412, 413, 414, 204A, 291A, 293A, 308H, 312A, 326H, 344H, 362H, A361, A362
+   identified outlines (label read on the drawing) with no H-number: 37: 14, 15, 16, 17, 18, 19, 21, 395, 396, 397, 398, 399, 400, 401, 402, 403, 404, 405, 406, 407, 408, 409, 410, 411, 412, 413, 414, 204A, 291A, 293A, 308H, 312A, 326H, 344H, 362H, A361, A362
    unlabelled outlines (identity unknown or not a lot): 9
 3. workbook graves (sections J, K, M), occupied and vacant alike: a. 2173 workbook graves (J 538, K 546, M 1089); printed exactly once: 2173; missing 0; printed more than once 0; printed but not a workbook grave 0
    grave-ID failures on the detail sheets: {'missing': 0, 'duplicate': 0, 'extra': 0, 'wrong': 0, 'small': 0, 'ink': 0}
    sections without a burial workbook or plat in the repository (A-I, L): grave positions are not established, so no grave is counted or claimed; lots are numbered, the grave digit is not asserted
-   grey-shape inventory: {'native numbering (crypt)': 50, 'awaiting identification': 20, 'numbered': 42, 'awaiting a number (lot identified)': 23, 'not a grave': 4}
-TOTALS: lots with blank H = 0 | identified outlines still without an H-number = 40 | workbook graves without a readable ID = 0 | outlines whose physical identity is unknown = 20
+   grey-shape inventory: {'native numbering (crypt)': 50, 'awaiting identification': 20, 'numbered': 45, 'not a grave': 4, 'awaiting a number (lot identified)': 20}
+TOTALS: lots with blank H = 0 | identified outlines still without an H-number = 37 | workbook graves without a readable ID = 0 | outlines whose physical identity is unknown = 20

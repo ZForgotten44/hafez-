@@ -18,11 +18,13 @@ import build_overall as BO
 sh = BO.Sheet2(pdf, BO.VIEW_NUM, BO.MX + 50, BO.TOP, BO.W - BO.MX - 50, BO.H - BO.BOT)
 inv = lambda x, y: (sh.view[0] + (x - sh.ox) / sh.s, sh.view[1] + (y - sh.oy) / sh.s)
 AMBER_INT = (int(BO.AMBER[0] * 255 + .5) << 16) | (int(BO.AMBER[1] * 255 + .5) << 8) | int(BO.AMBER[2] * 255 + .5)
+insets = BO.inset_rects(sh) if hasattr(BO, 'inset_rects') else ()
+HIST_INT = (int(BO.HIST[0] * 255 + .5) << 16) | (int(BO.HIST[1] * 255 + .5) << 8) | int(BO.HIST[2] * 255 + .5)
 spans = []
 for b in pdf.get_text('dict')['blocks']:
     for l in b.get('lines', []):
         for s in l['spans']:
-            if 'Mono' in s['font'] and s['color'] != AMBER_INT and s['text'].strip() and sh.clip.contains(fitz.Point((s['bbox'][0] + s['bbox'][2]) / 2, (s['bbox'][1] + s['bbox'][3]) / 2)):
+            if 'Mono' in s['font'] and s['color'] not in (AMBER_INT, HIST_INT) and s['text'].strip() and not any(r.intersects(fitz.Rect(s['bbox'])) for r in insets) and sh.clip.contains(fitz.Point((s['bbox'][0] + s['bbox'][2]) / 2, (s['bbox'][1] + s['bbox'][3]) / 2)):
                 x0, y0, x1, y1 = s['bbox']; ux, uy = inv((x0 + x1) / 2, (y0 + y1) / 2); spans.append((s['text'].strip(), ux, uy, s['size']))
 say('spans in the number font on the map: %d' % len(spans))
 callouts = json.load(open(os.path.join(DATA, 'callouts.json'))) if os.path.exists(os.path.join(DATA, 'callouts.json')) else []

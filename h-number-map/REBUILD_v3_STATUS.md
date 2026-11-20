@@ -1,13 +1,14 @@
-# Route-order rebuild v3: what is done and what is not (state at this commit)
+# Route-order rebuild v3 (decoder `s4/s4decoder1.py`, H000001 to H003218)
 
 Done and checked
-- `s4/s4decoder1.py` (production decoder): B 20 inserted (H000002; 19A…1 move one place later inside row 1), D row heads relabelled to the printed lots (20H…300H, plus 20H and 9H in row 1), plain D 311/322/333, nine C H-twins, L strip 1-13 (between M and K). Self-test 50/50.
-- Formula layer (`math/hformula.py`, `gen_giant.py`, `verify.py` 3250/3250, `test_giant.js` 3248/3248) and the explainer rebuilt for the new totals (3,218 route positions).
-- `crosswalk/shift_table_lots.csv` (every physical lot: section, label, review-commit H, new H, shift, reason), `shift_runs.csv` (first/last lot of each continuous run), `shift_boundaries.csv` (net shift at each section boundary), `shift_focus_B20.csv` (20H, 20, 19A and neighbours). Built by `pipeline2/shift_table.py` against commit d990927. Result: 28 lots inserted, 2,360 shifted (+1 within B row 1, +2…+14 through pass 5, +14 for M, +27 for K, J, I, L 69-107).
-- Pipeline rerun with decoder v3 (identify → finalize → fit): `data/registry.json` now has 3,193 numbered lots; 111 outlines unnumbered (64 mausoleum crypts, 10 cremains niches, 47 outlines without a table number).
-- `deck-jon/`: the 22-slide Jon deck (`Cedar_Grove_Questions_for_Jon.pptx` and `.pdf`) with its image generators.
+- Decoder: B 20 inserted (H000002), D row heads relabelled to the printed lots (20H, 9H, 40H … 300H) and plain D 311/322/333, nine C H-twins, L strip 1-13 between M and K. Self-test passes; formula layer, explainer and tables agree (verify.py 3250/3250, test_giant.js 3248/3248).
+- Shift tables against the review commit d990927: `crosswalk/shift_table_lots.csv`, `shift_runs.csv`, `shift_boundaries.csv`, `shift_focus_B20.csv` (`pipeline2/shift_table.py`). 28 lots inserted, 2,360 shifted.
+- H-Tables (all 13 sections) regenerated from the decoder (`pipeline2/export_tables.py`); crosswalk to every section (`crosswalk_v1_to_v2.csv`, `records_h_ids_v2.csv` with v1, review-commit and current IDs per workbook grave, search page); 0 failures.
+- Pipeline rerun with the decoder; L-strip fix (labels 1-13 inside the L boundary decode in Section L; five cells had carried the wrong lot's number). 3,196 numbered lots.
+- Grave sheets J, K, M regenerated from verified lot, row and grave: 2,173 workbook graves, each printed once, 0 missing or wrong.
+- Inventory-first verification (`pipeline2/verify_inventory.py`): blank H fails, workbook grave without a readable ID fails, no grave count is claimed for sections without a workbook or plat.
+- Overview sheet design corrections (`pipeline2/build_overall.py`): single section letters in clear lanes with leaders that cross no number, enlarged framed details (crypt court, cremains strip) in the open south-west with references on the map, displaced M numbers in one straight row per run with the boundary broken behind each label, grid letters in opaque bands, opaque clear band before the footer, status line "Review copy · N outlines under review" with the amber-outline meaning, dark historical lot labels. Print-size crop checks: `pipeline2/verify_crops.py` (F/M, crypt court, B chapel, E/C bottom edge) -> `crosswalk/crop_checks.txt`, `crosswalk/crops/`.
 
-Not done yet
-- B 395-414 (20 lots): analysis only (candidate (a) after H000836 adds 13 route units, candidate (b) before H000001 adds 275); not applied, pending Jon (deck slide Q15).
-- Remaining unnumbered identified outlines (B 308H/326H/344H/362H, A361/A362, A-suffix strips, L 14-19/21, c371) are not in the table.
-- H-Tables, crosswalk_v1_to_v2, search page, grave sheets, maps (PDF/site/3D/poster), the physical-lot/grave-first verification and the overview-sheet design corrections are NOT regenerated in this commit; those files still show the review-commit numbering.
+Not done
+- B 395-414 (20 lots) is analysed, not applied (deck slide Q15). Other identified outlines without a table number (B 308H/326H/344H/362H, A361/A362, A-suffix strips, L 14-19/21, c371, …) wait for Jon.
+- The 3D view and tree map reuse the same base; the tree map was rebuilt, the 3D view was not touched.
