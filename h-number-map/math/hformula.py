@@ -12,17 +12,17 @@ import re
 # ---------------------------------------------------------------- constants
 N, SW, ROWS = 22, 44, 19           # pass 1: 22 columns per section, 44 lots per level, 19 levels
 O1 = SW * ROWS                     # 836 = lots in pass 1 (B + A)
-WD = [43] + [22] * 14 + [20, 20, 20, 21, 21, 21, 21, 21]                                     # D row widths, rows 1..23
-WC = [21, 21, 22, 21, 21, 22, 22, 22, 20, 22, 22, 20, 21, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22]   # C row widths, rows 1..24
+WD = [45] + [22] * 14 + [21, 21, 21, 21, 21, 21, 21, 21]                                     # D row widths, rows 1..23
+WC = [22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22]   # C row widths, rows 1..24
 WF = [18] * 11 + [0]                                                                         # F row widths (F has 11 rows)
 WE = [22] * 8 + [21, 21, 22, 22]                                                             # E row widths, rows 1..12
 WG = [22, 22, 22, 15]; WH = [23, 23, 23, 23]                                                 # G, H row widths
 CT = [19, 38, 57, 76, 95, 114, 133, 152, 171, 190, 209, 228, 247, 263, 279, 295, 311, 330, 349, 368, 384, 400, 416, 432]  # C: top lot of each row
 CTRIO = {14, 15, 16, 17, 21, 22, 23, 24}                                                      # C rows that start with  nC, nB, nA
 # C twins (the 'H' lots), per row: (number, 'b' = H-lot sits before the plain lot, 'a' = after).  Row 8 uses 142 (the decoder has the typo 124H).
-CTW = {1: [(9, 'b'), (5, 'b')], 2: [(32, 'b'), (24, 'b')], 3: [(51, 'b'), (47, 'b'), (43, 'b')], 4: [(66, 'b'), (62, 'b')], 5: [(85, 'b'), (81, 'b')],
-       6: [(108, 'b'), (104, 'b'), (100, 'b')], 7: [(127, 'b'), (123, 'b'), (119, 'b')], 8: [(146, 'b'), (142, 'b'), (138, 'b')], 9: [(165, 'b')],
-       10: [(184, 'b'), (180, 'b'), (176, 'b')], 11: [(203, 'b'), (199, 'b'), (195, 'b')], 12: [(222, 'b')], 13: [(241, 'a'), (233, 'b')],
+CTW = {1: [(13, 'b'), (9, 'b'), (5, 'b')], 2: [(32, 'b'), (28, 'b'), (24, 'b')], 3: [(51, 'b'), (47, 'b'), (43, 'b')], 4: [(70, 'b'), (66, 'b'), (62, 'b')], 5: [(89, 'b'), (85, 'b'), (81, 'b')],
+       6: [(108, 'b'), (104, 'b'), (100, 'b')], 7: [(127, 'b'), (123, 'b'), (119, 'b')], 8: [(146, 'b'), (142, 'b'), (138, 'b')], 9: [(165, 'b'), (161, 'b'), (157, 'b')],
+       10: [(184, 'b'), (180, 'b'), (176, 'b')], 11: [(203, 'b'), (199, 'b'), (195, 'b')], 12: [(222, 'b'), (218, 'b'), (214, 'b')], 13: [(241, 'a'), (237, 'b'), (233, 'b')],
        14: [(260, 'b'), (256, 'b'), (252, 'b')], 15: [(276, 'a'), (272, 'b'), (268, 'b')], 16: [(292, 'b'), (288, 'b'), (284, 'b')], 17: [(308, 'b'), (304, 'b'), (300, 'b')],
        18: [(324, 'b'), (320, 'b'), (316, 'a')], 19: [(343, 'a'), (339, 'b'), (335, 'a')], 20: [(362, 'b'), (358, 'b'), (354, 'a')], 21: [(381, 'b'), (377, 'b'), (373, 'a')],
        22: [(397, 'a'), (393, 'b'), (389, 'a')], 23: [(413, 'b'), (409, 'b'), (405, 'a')], 24: [(429, 'a'), (425, 'b'), (421, 'a')]}
@@ -35,7 +35,7 @@ KORDER = ['1', '2', '3', '6', '7', '8', '9', '13', '14', '15', '16', '22', '5', 
           '177', '185', '186', '195', '196', '205', '206', '215', '216', '225', '226', '235', '236', '246', '247', '256', '257', '258', '259', '268', '269', '270', '271', '280', '281', '282', '283', '293',
           '294', '295', '296', '306', '307', '308', '309', '319', '320', '321', '322', '332', '333', '334', '335', '345', '346', '347', '348', '358', '359', '360', '361']
 # base H (= number of lots swept before the pass starts)
-O_DC, O_EF, O_MARGIN_B, O_MARGIN_D, O_MARGIN_F, O_GH, O_M, O_K, O_J, O_I, O_L = 836, 1871, 2331, 2372, 2401, 2413, 2586, 2841, 2956, 3088, 3152
+O_DC, O_EF, O_MARGIN_B, O_MARGIN_D, O_MARGIN_F, O_GH, O_M, O_K, O_J, O_I, O_L = 836, 1885, 2345, 2386, 2415, 2427, 2600, 2868, 2983, 3115, 3179
 
 def pre(w1, w2, r):
     """lots swept in rows 1..r-1 of a two-section pass whose row widths are w1, w2"""
@@ -48,10 +48,12 @@ def parse(lab):
 # ---------------------------------------------------------------- pass 1 : B and A (pure formulas)
 def H_B_grid(n, sf):
     if sf == 'H' and n % 20 == 0 and 1 <= n // 20 <= ROWS: r, c = n // 20, 1                 # H-lots 20H,40H..380H : first column
-    elif sf == 'A' and n == 19: r, c = 1, 2                                                  # the one lettered lot "19A"
+    elif sf == 'A' and n == 19: r, c = 1, 3                                                  # the one lettered lot "19A" (column 3 of level 1)
     elif sf == '':
-        if 40 <= n <= 380 and n % 20 == 0: r, c = n // 20, 2                                  # plain lots 40, 60 ... 380 beside their H-lots: column 2 (v2; v1 had no entry)
-        elif 1 <= n <= 380 and n % 20 != 0: r = (n - 1) // 20 + 1; c = N - (n - 20 * (r - 1))   # body: increment 20, columns 3..21, right-to-left (v2: no 'last column' rule)
+        if n == 20: r, c = 1, 2                                                               # plain 20: column 2 of level 1 (v3)
+        elif 40 <= n <= 380 and n % 20 == 0: r, c = n // 20, 2                                # plain lots 40, 60 ... 380 beside their H-lots: column 2
+        elif 1 <= n <= 19: r, c = 1, 23 - n                                                   # level 1 body: 19 ... 1 in columns 4 ... 22 (v3)
+        elif 1 <= n <= 380 and n % 20 != 0: r = (n - 1) // 20 + 1; c = N - (n - 20 * (r - 1))   # body: increment 20, columns 3..21, right-to-left
         else: return None
     else: return None
     return SW * (r - 1) + c, 'closed'
@@ -66,7 +68,7 @@ def H_A_grid(n, sf):
 
 # ---------------------------------------------------------------- pass 2 : D and C (rows interleaved: D row r, then C row r)
 # D row structure.  rows 2-15 are regular; rows 16-23 are described by "blocks": (row, first lot k0, top lot, bottom lot) -> k = k0 + top - n
-DBLOCK = [(16, 2, 310, 301), (16, 12, 420, 412), (17, 2, 321, 312), (17, 12, 411, 403), (18, 2, 332, 323), (18, 12, 402, 394),
+DBLOCK = [(16, 3, 310, 301), (16, 13, 420, 412), (17, 3, 321, 312), (17, 13, 411, 403), (18, 3, 332, 323), (18, 13, 402, 394),
           (19, 2, 344, 344), (19, 3, 343, 334), (19, 13, 393, 385), (20, 2, 355, 355), (20, 3, 354, 345), (20, 13, 384, 376),
           (21, 2, 366, 366), (21, 3, 365, 356), (21, 13, 375, 367), (22, 1, 541, 521), (23, 1, 520, 500)]
 DHLOT = {16: 311, 17: 322, 18: 333, 19: 344, 20: 355, 21: 366}            # the H-lot that opens rows 16-21 (k = 1)
@@ -75,13 +77,17 @@ def H_D(pf, n, sf, lab):
     """Section D, main grid (the margin strip 542-563H is handled in H_margin_D)"""
     base = None
     if lab in ('1U', '1T', '1S', '1R', '1Q', '1P', '1O', '1N', '1M', '1L', '1K', '1J', '1I', '1H'): r, k, tier = 1, 1 + (ord('U') - ord(lab[1])), 'rows'
-    elif pf == '' and sf == '' and 1 <= n <= 20: r, k, tier = 1, 15 + (20 - n), 'rows'
-    elif lab in ('1A', '1B', '1C', '1D', '1E'): r, k, tier = 1, 35 + (ord(lab[1]) - ord('A')), 'rows'
-    elif lab == 'F1': r, k, tier = 1, 40, 'rows'
-    elif lab == '1G': r, k, tier = 1, 41, 'rows'
-    elif lab == '1H_2': r, k, tier = 1, 42, 'rows'
-    elif lab == '1I_2': r, k, tier = 1, 43, 'rows'
-    elif pf == '' and sf == 'H' and 20 <= n <= 280 and n % 20 == 0: r, k, tier = n // 20 + 1, 1, 'closed'         # 20H, 40H ... 280H : first lot of rows 2..15
+    elif pf == '' and sf == '' and 10 <= n <= 20: r, k, tier = 1, 16 + (20 - n), 'rows'
+    elif pf == '' and sf == '' and 1 <= n <= 9: r, k, tier = 1, 37 - n, 'rows'
+    elif pf == '' and sf == 'H' and n == 20: r, k, tier = 1, 15, 'rows'
+    elif pf == '' and sf == 'H' and n == 9: r, k, tier = 1, 27, 'rows'
+    elif pf == '' and sf == '' and n in (311, 322, 333): r, k, tier = (n - 300) // 11 + 15, 2, 'rows'
+    elif lab in ('1A', '1B', '1C', '1D', '1E'): r, k, tier = 1, 37 + (ord(lab[1]) - ord('A')), 'rows'
+    elif lab == 'F1': r, k, tier = 1, 42, 'rows'
+    elif lab == '1G': r, k, tier = 1, 43, 'rows'
+    elif lab == '1H_2': r, k, tier = 1, 44, 'rows'
+    elif lab == '1I_2': r, k, tier = 1, 45, 'rows'
+    elif pf == '' and sf == 'H' and 40 <= n <= 300 and n % 20 == 0: r, k, tier = n // 20, 1, 'closed'              # 40H, 60H ... 300H : first lot of rows 2..15 (v3: keyed as printed)
     elif pf == '' and sf == 'H' and 29 <= n <= 289 and n % 20 == 9: r, k, tier = (n + 11) // 20, 13, 'closed'      # 29H, 49H ... 289H : 13th lot
     elif pf == '' and sf == 'H' and any(n == v for v in DHLOT.values()): r = next(x for x, v in DHLOT.items() if v == n); k, tier = 1, 'rows'
     elif pf == '' and sf == '' and 21 <= n <= 300:
@@ -179,13 +185,17 @@ def H_H(pf, n, sf):
 # ---------------------------------------------------------------- pass 5/6 : M, K, J, I, L
 def H_M(pf, n, sf):
     if sf != '' or pf != '': return None
-    if 82 <= n <= 279: return n + 2562, 'closed'
+    if 82 <= n <= 279: return n + 2576, 'closed'
     if str(n) in MFIRST: return O_M + MFIRST.index(str(n)) + 1, 'list'
     return None
 def H_K(pf, n, sf): return (O_K + KORDER.index(str(n)) + 1, 'list') if sf == '' and pf == '' and str(n) in KORDER else None
 def H_J(pf, n, sf): return (O_J + n, 'closed') if sf == '' and pf == '' and 1 <= n <= 132 else None
 def H_I(pf, n, sf): return (O_I + n, 'closed') if sf == '' and pf == '' and 1 <= n <= 64 else None
-def H_L(pf, n, sf): return (O_L + n - 68, 'closed') if sf == '' and pf == '' and 69 <= n <= 107 else None
+def H_L(pf, n, sf):
+    if sf != '' or pf != '': return None
+    if 1 <= n <= 13: return O_M + 255 + n, 'closed'                                                 # strip between M 279 (H002855) and K 1 (v3)
+    if 69 <= n <= 107: return O_L + n - 68, 'closed'
+    return None
 
 # ---------------------------------------------------------------- the master function
 def H(section, label):

@@ -24,11 +24,11 @@ var RV=(function(){var m={};FWD.forEach(function(r){(m[r[2]]=m[r[2]]||[]).push(r
 var pf2=function(w1,w2,r){var s=0;for(var j=0;j<r-1;j++)s+=(w1[j]||0)+(w2[j]||0);return s};
 var PASSES=[
  {n:1,secs:'B, A',lo:1,hi:836,how:'Level by level: one level of B, then the same level of A. 19 levels of 44 lots.'},
- {n:2,secs:'D, C',lo:837,hi:1871,how:'Row by row: row r of D, then row r of C. Rows are uneven, so offsets are running totals.'},
- {n:3,secs:'F, E',lo:1872,hi:2331,how:'Row by row: row r of F, then row r of E.'},
- {n:4,secs:'B, D, F margins; G, H',lo:2332,hi:2586,how:'Three margin lists in order (B 41 lots, D 29, F 12), then rows of G and H woven together.'},
- {n:5,secs:'M',lo:2587,hi:2841,how:'M: the first 57 lots come from a stored list, then lots 82 to 279 in order.'},
- {n:6,secs:'K, J, I, L',lo:2842,hi:3191,how:'K (a stored list of 115 lots), then J 1 to 132, I 1 to 64 and L 69 to 107.'}];
+ {n:2,secs:'D, C',lo:837,hi:1885,how:'Row by row: row r of D, then row r of C. Rows are uneven, so offsets are running totals.'},
+ {n:3,secs:'F, E',lo:1886,hi:2345,how:'Row by row: row r of F, then row r of E.'},
+ {n:4,secs:'B, D, F margins; G, H',lo:2346,hi:2600,how:'Three margin lists in order (B 41 lots, D 29, F 12), then rows of G and H woven together.'},
+ {n:5,secs:'M',lo:2601,hi:2855,how:'M: the first 57 lots come from a stored list, then lots 82 to 279 in order.'},
+ {n:6,secs:'K, J, I, L',lo:2856,hi:3218,how:'L 1 to 13 (the strip between M and K), then K (a stored list of 115 lots), then J 1 to 132, I 1 to 64 and L 69 to 107; L 1 to 13 come first, between M and K.'}];
 var LOTS=X.maplots.filter(function(l){return l[4]}).map(function(l){return {s:l[0],l:l[1],h:l[3],poly:l[4],cx:l[5],cy:l[6]}}).sort(function(a,b){return a.h-b.h});
 
 /* ---------------- presentation controls ---------------- */
@@ -155,8 +155,8 @@ var emphStats;
   var acc={};X.maplots.forEach(function(l){if(l[5]!=null){(acc[l[0]]=acc[l[0]]||[]).push([l[5],l[6]])}});
   Object.keys(acc).forEach(function(s){var a=acc[s].sort(function(x,y){return x[0]-y[0]}),b=acc[s].slice().sort(function(x,y){return x[1]-y[1]});var t=document.createElementNS(NS,'text');t.setAttribute('x',a[a.length>>1][0]);t.setAttribute('y',b[b.length>>1][1]);t.setAttribute('text-anchor','middle');t.setAttribute('style','font:700 26px var(--sans);fill:var(--fg);stroke:var(--bg);stroke-width:5px;paint-order:stroke;pointer-events:none');t.textContent=s;svg.appendChild(t);labs.push(t)});
   function paint(){polys.forEach(function(p){p.setAttribute('fill',color(p._l))});labs.forEach(function(t){t.style.display=mode==='h'?'none':''});
-    $('mapnote').textContent={n:'Colored by the number written on the lot. Neighbouring lots get unrelated colors because every section restarts and skips.',s:'Colored by old section letter. Section letters are drawn on the map.',h:'Colored by H-number: one smooth sweep from blue (H000001) to red (H003191). There are no sections here, only one numbered path.'}[mode];
-    $('maplegend').innerHTML=mode==='s'?SEC.map(function(s){return '<span><i style="background:'+scol(s)+'"></i>'+s+'</span>'}).join(''):mode==='h'?'<span><i style="background:hsl(240,65%,52%)"></i>H000001</span><span><i style="background:hsl(120,65%,52%)"></i>middle</span><span><i style="background:hsl(0,65%,52%)"></i>H003191</span>':'<span>Each color is a label number. Colors repeat because label numbers repeat in every section.</span>'}
+    $('mapnote').textContent={n:'Colored by the number written on the lot. Neighbouring lots get unrelated colors because every section restarts and skips.',s:'Colored by old section letter. Section letters are drawn on the map.',h:'Colored by H-number: one smooth sweep from blue (H000001) to red (H003218). There are no sections here, only one numbered path.'}[mode];
+    $('maplegend').innerHTML=mode==='s'?SEC.map(function(s){return '<span><i style="background:'+scol(s)+'"></i>'+s+'</span>'}).join(''):mode==='h'?'<span><i style="background:hsl(240,65%,52%)"></i>H000001</span><span><i style="background:hsl(120,65%,52%)"></i>middle</span><span><i style="background:hsl(0,65%,52%)"></i>H003218</span>':'<span>Each color is a label number. Colors repeat because label numbers repeat in every section.</span>'}
   [].forEach.call(document.querySelectorAll('button.seg[data-mode]'),function(b){on(b,'click',function(){mode=b.getAttribute('data-mode');[].forEach.call(document.querySelectorAll('button.seg[data-mode]'),function(x){x.classList.toggle('on',x===b)});paint()})});
   var tip=$('maptip'),box=$('mapbox');
   on(svg,'mousemove',function(e){var p=e.target;if(!p._l){tip.style.display='none';return}var l=p._l,r=box.getBoundingClientRect();tip.textContent=l[0]+'-'+l[1]+'  →  '+l[2];tip.style.display='block';tip.style.left=Math.min(e.clientX-r.left+12,r.width-170)+'px';tip.style.top=(e.clientY-r.top+14)+'px'});
@@ -209,9 +209,9 @@ var emphStats;
     $('wscrub').value=Math.round(f*1000);
   }
   function setMode(m){mode=m;focus='';reset();[].forEach.call(document.querySelectorAll('[data-wm]'),function(b){b.classList.toggle('on',b.getAttribute('data-wm')===m)});
-    $('wcap').textContent=m==='old'?'The old way. A is numbered on its own, B on its own, and so on. Every section starts again at its own first lot, so the walkers run side by side and never agree.':'The H-number way. One path through every lot, in one fixed order. The first lot is H000001, the next is H000002, all the way to H003191.';
+    $('wcap').textContent=m==='old'?'The old way. A is numbered on its own, B on its own, and so on. Every section starts again at its own first lot, so the walkers run side by side and never agree.':'The H-number way. One path through every lot, in one fixed order. The first lot is H000001, the next is H000002, all the way to H003218.';
     $('wfocus').style.display=m==='old'?'flex':'none';
-    $('wkey').innerHTML=m==='old'?'<span><i style="background:linear-gradient(90deg,hsl(210,62%,74%),hsl(210,62%,36%))"></i>start → end of one section (each section has its own colour)</span>':'<span><i style="background:linear-gradient(90deg,'+hcol(0)+','+hcol(.5)+','+hcol(1)+')"></i>H000001 → H003191</span>';
+    $('wkey').innerHTML=m==='old'?'<span><i style="background:linear-gradient(90deg,hsl(210,62%,74%),hsl(210,62%,36%))"></i>start → end of one section (each section has its own colour)</span>':'<span><i style="background:linear-gradient(90deg,'+hcol(0)+','+hcol(.5)+','+hcol(1)+')"></i>H000001 → H003218</span>';
     buildFocus();draw()}
   function buildFocus(){var w=$('wfocus');w.innerHTML='<span class="note" style="align-self:center;margin:0 6px 0 0">Show only</span>'+['All'].concat(SECS).map(function(s){return '<button class="chip" type="button" data-f="'+(s==='All'?'':s)+'" aria-pressed="'+((s==='All'?'':s)===focus)+'">'+(s==='All'?'All sections':s)+'</button>'}).join('');
     [].forEach.call(w.querySelectorAll('[data-f]'),function(b){on(b,'click',function(){focus=b.getAttribute('data-f');reset();buildFocus();draw()})})}
@@ -249,7 +249,7 @@ var emphStats;
     var i=Math.max(0,Math.min(N-1,pi-1)),l=LOTS[i];
     cx.lineJoin='round';cx.lineCap='round';cx.strokeStyle=isDark()?'#f4f2ec':'#0b0b0a';cx.lineWidth=2.4;cx.globalAlpha=.55;cx.beginPath();for(var k=Math.max(0,i-60);k<=i;k++){var q=LOTS[k],x=(q.cx-ox)*sc,y=(q.cy-oy)*sc;if(k===Math.max(0,i-60))cx.moveTo(x,y);else cx.lineTo(x,y)}cx.stroke();cx.globalAlpha=1;
     var hx=(l.cx-ox)*sc,hy=(l.cy-oy)*sc;cx.fillStyle='#c5a448';cx.strokeStyle='#0b0b0a';cx.lineWidth=3;cx.beginPath();cx.arc(hx,hy,11,0,7);cx.fill();cx.stroke();
-    $('h2big').innerHTML=pad(l.h)+'<small>of 3,191</small>';var p=PASSES.filter(function(q){return l.h>=q.lo&&l.h<=q.hi})[0];$('h2pass').textContent=p?'Pass '+p.n+' of 6 · sections '+p.secs.replace(/ margins;?/,'')+'':'';
+    $('h2big').innerHTML=pad(l.h)+'<small>of 3,218</small>';var p=PASSES.filter(function(q){return l.h>=q.lo&&l.h<=q.hi})[0];$('h2pass').textContent=p?'Pass '+p.n+' of 6 · sections '+p.secs.replace(/ margins;?/,'')+'':'';
     if(fr++%5===0||pi>=N){var h='';for(var k2=Math.max(0,i-5);k2<=i;k2++)h+='<span>'+LOTS[k2].s+'-'+esc(LOTS[k2].l)+'</span>';$('h2oldlab').innerHTML=h}}
   function tick(now){var f=Math.min(1,(now-t0)/DUR),e=f<.5?2*f*f:1-Math.pow(-2*f+2,2)/2;advance(Math.max(pi,Math.floor(e*N)));if(f>=1)advance(N);show();if(f<1)raf=requestAnimationFrame(tick);else raf=0;$('h2play').textContent='Replay'}
   function play(){if(raf)cancelAnimationFrame(raf);paint.getContext('2d').clearRect(0,0,W0,H0);pi=0;fr=0;if(reduce){advance(N);show();return}t0=performance.now();$('h2play').textContent='Restart';raf=requestAnimationFrame(tick)}
@@ -270,9 +270,9 @@ var emphStats;
     function bar(x0,x1,cls,txt){return '<div class="rb '+cls+'" style="left:'+pc(x0)+';width:calc('+pc(x1+1)+' - '+pc(x0)+')"><span>'+txt+'</span></div>'}
     return '<div class="rng"><b>Grid rule</b><div class="rt">'+bar(lo,hi,'g','labels '+lo+' to '+hi)+'</div><b>Margin list</b><div class="rt">'+bar(373,394,'m','labels 373 to 394')+'</div><div class="rt ov"><div class="rb clash" style="left:'+pc(lo)+';width:calc('+pc(hi+1)+' - '+pc(lo)+')"><span>claimed twice</span></div></div></div><p class="dcap"><i class="sw clash"></i>'+oth.length+' labels ('+lo+' to '+hi+') appear in both lists</p>'}
   /* 2 positions without a label */
-  function v2(){var n=3191,w=1000,t='';X.missingH.forEach(function(h){t+='<rect x="'+(h/n*w).toFixed(1)+'" y="8" width="3" height="34" rx="1.5" fill="var(--bad)"/>'});
+  function v2(){var n=3218,w=1000,t='';X.missingH.forEach(function(h){t+='<rect x="'+(h/n*w).toFixed(1)+'" y="8" width="3" height="34" rx="1.5" fill="var(--bad)"/>'});
     PASSES.forEach(function(p){t+='<rect x="'+(p.lo/n*w).toFixed(1)+'" y="46" width="'+((p.hi-p.lo+1)/n*w-2).toFixed(1)+'" height="10" rx="5" fill="var(--g3)"/><text x="'+((p.lo+p.hi)/2/n*w).toFixed(1)+'" y="78" text-anchor="middle" font-size="22" fill="var(--g5)" font-family="IBM Plex Mono,monospace">'+p.n+'</text>'});
-    return '<svg viewBox="0 0 1000 86" class="dsvg" role="img" aria-label="Positions along the path with no old label">'+t+'</svg><p class="dcap"><i class="sw bad"></i>each red mark is a position on the path (H000001 to H003191) with no old label, '+X.missingH.length+' in all</p>'}
+    return '<svg viewBox="0 0 1000 86" class="dsvg" role="img" aria-label="Positions along the path with no old label">'+t+'</svg><p class="dcap"><i class="sw bad"></i>each red mark is a position on the path (H000001 to H003218) with no old label, '+X.missingH.length+' in all</p>'}
   /* 3 duplicate keys */
   function v3(){return '<div class="dl"><b>Section G, row 1</b><div class="dr">'+cell('17')+cell('18')+cell('19','clash on')+cell('19','clash on')+cell('20')+cell('19H?','ghost')+'</div></div><div class="dl"><b>Section D table</b><div class="dr">'+cell('273')+cell('274','clash on')+cell('274','clash on')+cell('275')+'</div></div><p class="dcap"><i class="sw clash"></i>two lots answer to one label, so the software can only reach one of them</p>'}
   /* 4 typo */

@@ -1,0 +1,6 @@
+section,physical_lot_label,old_H,new_H,shift,status,reason
+B,20H,H000001,H000001,0,unchanged,
+B,20,,H000002,,inserted,"B level 1: the first row of the route is 20H, 20, 19A, 19 ... 1 (drawing y-order, B_20_vs_19A below); distinct lot, inserted"
+B,19A,H000002,H000003,1,shifted,1 lots inserted earlier on the route (last one before it: H000002)
+B,19,H000003,H000004,1,shifted,1 lots inserted earlier on the route (last one before it: H000002)
+B,18,H000004,H000005,1,shifted,1 lots inserted earlier on the route (last one before it: H000002)
